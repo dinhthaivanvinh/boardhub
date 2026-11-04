@@ -7,6 +7,9 @@ const config: NextConfig = {
   reactStrictMode: true,
   // Workspace packages ship TypeScript source.
   transpilePackages: ['@bg/engine', '@bg/ui', '@bg/bots', '@bg/game-caro', '@bg/game-four-in-a-row'],
+  // Let phones and other machines on the home network use `pnpm dev` through the LAN IP
+  // (Next.js blocks dev assets for hosts other than localhost). Dev only; `*` is one label of the hostname.
+  allowedDevOrigins: ['192.168.*.*', '10.*.*.*'],
 };
 
 export default withNextIntl(config);

@@ -1,98 +1,114 @@
 # 05 — Realtime Protocol (`@bg/protocol`)
 
-Transport: Socket.IO, namespace `/play`. Mọi payload được định nghĩa bằng zod trong `packages/protocol/src/events.ts`
-và được **dùng chung** giữa client và server. Không được emit event nào chưa có schema.
+> Cập nhật: 2026-11-05 (M2). Nguồn sự thật là code: `packages/protocol/src/{schemas,events,rest}.ts`.
+
+Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000. Mọi payload client → server được
+định nghĩa bằng zod trong `@bg/protocol` và **dùng chung** giữa client và server. Không được emit event nào chưa có schema.
 
 ## 1. Quy ước
 
 - Tên event: `<domain>:<action>`, ví dụ `room:join`, `move:submit`.
-- Client → server dùng **ack callback**: `socket.emit(event, payload, (res: Ack) => …)`.
-- `Ack = { ok: true, data? } | { ok: false, code: string, params? }`.
-- Mỗi ván có `seq` (số nguyên, tăng 1 sau mỗi thay đổi state). Client gửi `seq` mà nó đang thấy để server phát hiện xung đột.
-- Mỗi nước đi có `clientMoveId` (uuid do client sinh) để chống gửi trùng (idempotency).
+- Client → server **luôn** dùng ack: `socket.emit(event, payload, (res: Ack) => …)`.
+- `Ack<T> = { ok: true, data: T } | { ok: false, code: string, params? }`. Nước đi bị từ chối cũng trả qua ack (không có event riêng).
+- Mỗi ván có `seq` (tăng 1 sau mỗi thay đổi client cần thấy: nước đi, xin hòa, hết giờ…). `move:submit` gửi kèm `seq` client đang thấy; lệch thì `match.stale_seq` → client gọi `match:resync`.
+- Mỗi nước đi có `clientMoveId` (8–64 ký tự, client sinh ngẫu nhiên) để chống áp dụng 2 lần khi gửi lại.
+- Handshake: `auth = { token, protocolVersion }` (`HandshakeAuth`). Sai token → lỗi `auth.required`; sai phiên bản → `protocol.version`.
+- Rate limit: 10 event/giây/socket (`rate.limited`). Payload sai schema → `invalid.payload`.
 
-## 2. Client → Server
+## 2. REST (`/api`)
 
-| Event                        | Payload                                                                                                             | Ghi chú                                               |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `room:create`                | `{ gameId, config, timeControl, visibility: 'private'\|'public', seats }`                                           | Ack trả về `{ roomId, code }`                         |
-| `room:join`                  | `{ code }` hoặc `{ roomId }`                                                                                        | Ack trả về `RoomSnapshot`                             |
-| `room:leave`                 | `{ roomId }`                                                                                                        |                                                       |
-| `room:take-seat`             | `{ roomId, seat }`                                                                                                  |                                                       |
-| `room:set-ready`             | `{ roomId, ready: boolean }`                                                                                        |                                                       |
-| `room:add-bot`               | `{ roomId, seat, level }`                                                                                           | Chỉ chủ phòng                                         |
-| `room:start`                 | `{ roomId }`                                                                                                        | Chỉ chủ phòng, khi đủ người và tất cả đã sẵn sàng     |
-| `move:submit`                | `{ matchId, seq, clientMoveId, move }`                                                                              | `move` được parse bằng `moveSchema` của game ở server |
-| `match:action`               | `{ matchId, action: 'resign'\|'offer-draw'\|'accept-draw'\|'decline-draw'\|'request-takeback'\|'accept-takeback' }` |                                                       |
-| `match:resync`               | `{ matchId }`                                                                                                       | Yêu cầu snapshot đầy đủ sau khi reconnect             |
-| `chat:send`                  | `{ roomId, text }`                                                                                                  | Tối đa 300 ký tự                                      |
-| `queue:join` / `queue:leave` | `{ gameId, variant, ranked }`                                                                                       | Đợt 2                                                 |
+| Method + path             | Body                               | Trả về                                                                                                        |
+| ------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `POST /api/auth/guest`    | `{ displayName? }`                 | `AuthResponse { token, user }`                                                                                |
+| `POST /api/auth/register` | `{ email, password, displayName }` | `AuthResponse`. Có token khách trong `Authorization` thì **nâng cấp** tài khoản khách đó (giữ id, FR-AUTH-03) |
+| `POST /api/auth/login`    | `{ email, password }`              | `AuthResponse`                                                                                                |
+| `GET /api/me`             | —                                  | `PublicUser`                                                                                                  |
+| `PATCH /api/me`           | `{ displayName }`                  | `PublicUser`                                                                                                  |
+| `GET /health`             | —                                  | `{ ok: true }`                                                                                                |
 
-## 3. Server → Client
+Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
 
-| Event             | Payload                                                           | Gửi cho                                          |
-| ----------------- | ----------------------------------------------------------------- | ------------------------------------------------ |
-| `room:updated`    | `RoomSnapshot` (ghế, ready, người xem, cấu hình)                  | Mọi người trong phòng                            |
-| `match:started`   | `{ matchId, seat \| null, snapshot: MatchSnapshot }`              | Từng người (mỗi người một `seat` riêng)          |
-| `match:state`     | `MatchSnapshot`                                                   | Từng người, với `view = playerView(state, seat)` |
-| `move:rejected`   | `{ clientMoveId, code, params? }`                                 | Chỉ người gửi                                    |
-| `match:ended`     | `{ matchId, result, ratingChanges? }`                             | Mọi người                                        |
-| `match:offer`     | `{ type: 'draw'\|'takeback', from: seat }`                        | Đối thủ                                          |
-| `player:presence` | `{ seat, status: 'online'\|'reconnecting'\|'left', graceUntil? }` | Mọi người                                        |
-| `chat:message`    | `{ id, from, text, at }`                                          | Mọi người                                        |
-| `error`           | `{ code }`                                                        | Lỗi chung, không gắn với ack                     |
+## 3. Client → Server
+
+| Event             | Payload                                                                            | Ack `data`                      | Ai được gọi                                                                     |
+| ----------------- | ---------------------------------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------- |
+| `room:create`     | `{ gameId, config?, timeControl?, disconnectPolicy?, hostSeat? }`                  | `{ room }`                      | Mọi người                                                                       |
+| `room:join`       | `{ code }` (6 ký tự, tự viết hoa)                                                  | `{ room, match \| null, chat }` | Mọi người (chưa ngồi = người xem)                                               |
+| `room:leave`      | `{ roomId }`                                                                       | `{}`                            |                                                                                 |
+| `room:take-seat`  | `{ roomId, seat \| null }` (`null` = đứng dậy)                                     | `{}`                            | Chỉ khi phòng ở `lobby`                                                         |
+| `room:set-ready`  | `{ roomId, ready }`                                                                | `{}`                            | Người đang ngồi                                                                 |
+| `room:add-bot`    | `{ roomId, seat, level }`                                                          | `{}`                            | Chủ phòng, `lobby`                                                              |
+| `room:remove-bot` | `{ roomId, seat }`                                                                 | `{}`                            | Chủ phòng, `lobby`                                                              |
+| `room:start`      | `{ roomId }`                                                                       | `{}`                            | Chủ phòng; ghế liền nhau từ 0, đủ `minPlayers`, mọi người khác đã sẵn sàng      |
+| `room:rematch`    | `{ roomId }`                                                                       | `{}`                            | Người chơi hoặc chủ phòng, khi `finished`; ghế xoay vòng để người khác đi trước |
+| `move:submit`     | `{ matchId, seq, clientMoveId, move }`                                             | `{ seq }`                       | Người chơi của ván                                                              |
+| `match:action`    | `{ matchId, action: 'resign' \| 'offer-draw' \| 'accept-draw' \| 'decline-draw' }` | `{}`                            | Người chơi của ván                                                              |
+| `match:resync`    | `{ matchId }`                                                                      | `{ match }`                     | Người trong phòng                                                               |
+| `chat:send`       | `{ roomId, text }` (1–300 ký tự, server che từ ngữ thô tục)                        | `{}`                            | Người trong phòng                                                               |
+
+`timeControl`: `{type:'none'}` · `{type:'fischer', baseMs, incrementMs}` · `{type:'per-move', moveMs}`; preset ở `TIME_CONTROL_PRESETS`.
+`disconnectPolicy`: `'forfeit'` (mặc định, xử thua với reason `abandon`) hoặc `'bot'` (máy cấp `medium` đánh thay).
+
+## 4. Server → Client
+
+| Event          | Payload         | Gửi cho                                                                                                           |
+| -------------- | --------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `room:updated` | `RoomSnapshot`  | Mọi socket trong phòng. Gồm ghế (kèm `ready`, `connected`, `graceUntil`), số người xem, trạng thái                |
+| `match:state`  | `MatchSnapshot` | **Từng người chơi riêng** (kênh `user:{id}`) với `view = playerView(state, seat)`; người xem nhận bản `spectator` |
+| `chat:message` | `ChatMessage`   | Mọi socket trong phòng                                                                                            |
 
 ```ts
 interface MatchSnapshot {
   matchId: string;
+  roomId: string;
   gameId: string;
   rulesVersion: number;
   seq: number;
-  view: unknown; // playerView của người nhận
-  activeSeats: Seat[];
-  lastMove?: { seat: Seat; move: unknown }; // chỉ có khi game là perfect-info, hoặc nước đi đã được làm sạch
-  clocks?: { seat: Seat; remainingMs: number; running: boolean }[];
-  serverTime: number; // để client tự tính lại đồng hồ
-  result: GameResult | null;
+  moveCount: number;
+  view: unknown; // playerView của người nhận, không bao giờ là full state
+  mySeat: number | null; // null = người xem
+  activeSeats: number[];
+  clocks: { seat: number; remainingMs: number; running: boolean }[] | null;
+  serverTime: number; // để client tự đếm ngược
+  result: { kind: 'win'; winners: number[]; reason: string } | { kind: 'draw'; reason: string } | null;
+  pendingOffer: { type: 'draw'; from: number } | null;
 }
 ```
 
-## 4. Vòng đời phòng (state machine)
+Seed của ván **không bao giờ** nằm trong snapshot (có test kiểm tra).
+
+## 5. Vòng đời phòng
 
 ```
-          create
-            │
-            ▼
-   ┌──── LOBBY ◄─────────────┐
-   │        │ start          │ rematch
-   │        ▼                │
-   │    PLAYING ──── end ──► FINISHED ── timeout 10' ──► CLOSED
-   │        │                                              ▲
-   └─ all leave ───────────────────────────────────────────┘
+   create ──► LOBBY ──start──► PLAYING ──(thắng/hòa/đầu hàng/hết giờ/bỏ cuộc)──► FINISHED
+                ▲                                                                   │
+                └────────────────────────── rematch ────────────────────────────────┘
 ```
 
-- `LOBBY`: chọn ghế, thêm bot, đổi cấu hình.
-- `PLAYING`: chỉ nhận `move:submit`, `match:action`, `chat:send`.
-- `FINISHED`: hiển thị kết quả; "Chơi lại" đưa phòng về `LOBBY`, giữ nguyên người chơi, đổi lượt đi trước.
+Phòng (và ván) sống trong live store 24 giờ kể từ lần thay đổi cuối.
 
-## 5. Reconnect
+## 6. Mất kết nối và kết nối lại
 
-1. Socket.IO tự kết nối lại → client gửi `match:resync`.
-2. Server trả về `MatchSnapshot` đầy đủ; client **thay thế** state cục bộ (không merge).
-3. Nếu `seq` trong `match:state` nhảy cóc (lớn hơn `local.seq + 1`), client tự gửi `match:resync`.
-4. Server giữ ghế trong `graceMs` (mặc định 60000). Đồng hồ của người mất kết nối **vẫn chạy**.
+1. Khi socket **cuối cùng** của một người trong phòng ngắt: người ngồi ghế được đánh dấu `connected=false`, `graceUntil = now + GRACE_MS` (mặc định 60 s); người xem bị bỏ khỏi danh sách xem.
+2. Đồng hồ của người mất kết nối **vẫn chạy**.
+3. Kết nối lại trong thời gian chờ: client tự gửi lại `room:join` khi socket `connect` → giữ nguyên ghế, nhận lại snapshot đầy đủ.
+4. Hết thời gian chờ: `lobby/finished` → ghế được giải phóng (chủ phòng chuyển cho người khác); `playing` → áp dụng `disconnectPolicy`.
+5. `match:state` có `seq` nhỏ hơn bản đang có thì client bỏ qua; `match.stale_seq` thì client gọi `match:resync`.
 
-## 6. Mã lỗi chung
+## 7. Mã lỗi chung
 
-| Code                                                                 | Ý nghĩa                                     |
-| -------------------------------------------------------------------- | ------------------------------------------- |
-| `auth.required`                                                      | Chưa xác thực                               |
-| `rate.limited`                                                       | Gửi quá nhiều message                       |
-| `room.not_found`, `room.full`, `room.not_host`, `room.invalid_state` | Lỗi phòng                                   |
-| `match.stale_seq`                                                    | `seq` của client đã cũ → client cần resync  |
-| `engine.*`, `<gameId>.*`                                             | Lỗi luật (xem [04](04-game-engine-spec.md)) |
+| Code                                                                                                            | Ý nghĩa                                     |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `auth.required`, `auth.invalid_credentials`, `auth.email_taken`                                                 | Xác thực                                    |
+| `protocol.version`, `rate.limited`, `invalid.payload`, `internal`                                               | Chung                                       |
+| `room.not_found`, `room.not_host`, `room.invalid_state`, `room.seat_taken`, `room.not_seated`, `room.not_ready` | Phòng                                       |
+| `game.not_found`                                                                                                | `gameId` không có trong registry server     |
+| `match.not_found`, `match.stale_seq`, `match.not_player`, `match.no_offer`                                      | Ván                                         |
+| `engine.*`, `<gameId>.*`                                                                                        | Lỗi luật (xem [04](04-game-engine-spec.md)) |
 
-## 7. Thay đổi protocol
+Client map mã lỗi sang i18n bằng `apps/web/src/game-runtime/error-key.ts` (`errors.*`, `engine.*`, `games.<id>.errors.*`).
 
-- Chỉ được **thêm** field optional. Đổi hoặc xóa field thì phải tăng `PROTOCOL_VERSION`, và server phải hỗ trợ song song phiên bản cũ trong ít nhất một lần release.
-- Client gửi `protocolVersion` trong handshake; server từ chối và yêu cầu tải lại trang nếu phiên bản không tương thích.
+## 8. Thay đổi protocol
+
+- Chỉ được **thêm** field optional. Đổi hoặc xóa field thì tăng `PROTOCOL_VERSION`, và server phải hỗ trợ song song phiên bản cũ ít nhất một lần release.
+- Chưa có (để sau): ghép trận (`queue:*`), xin đi lại online, xem trận công khai.

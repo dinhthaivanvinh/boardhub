@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
+import { AccountLink } from '@/features/account/AccountLink';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
 import { TIME_ZONE } from '@/i18n/messages';
 import './globals.css';
@@ -37,7 +38,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 </span>
                 {t('name')}
               </Link>
-              <LanguageSwitcher />
+              <div className="flex items-center gap-4">
+                <AccountLink />
+                <LanguageSwitcher />
+              </div>
             </div>
           </header>
           <main>{children}</main>

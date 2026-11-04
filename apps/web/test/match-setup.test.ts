@@ -68,7 +68,10 @@ describe('errorKey', () => {
   it('maps codes to i18n keys', () => {
     expect(errorKey('caro.cell_occupied')).toBe('games.caro.errors.cell_occupied');
     expect(errorKey('engine.not_your_turn')).toBe('engine.not_your_turn');
-    expect(errorKey('weird')).toBe('engine.weird');
+    expect(errorKey('network')).toBe('errors.network');
+    expect(errorKey('room.not_found')).toBe('errors.room.not_found');
+    expect(errorKey('match.stale_seq')).toBe('errors.match.stale_seq');
+    expect(errorKey('four-in-a-row.column_full')).toBe('games.four-in-a-row.errors.column_full');
   });
 });
 

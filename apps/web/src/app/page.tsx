@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { JoinRoomForm } from '@/features/home/JoinRoomForm';
 import { GAME_IDS, GAMES, UPCOMING_GAMES } from '@/games/catalog';
 
 export default async function HomePage() {
@@ -8,6 +9,9 @@ export default async function HomePage() {
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-bold tracking-tight">{t('catalog.title')}</h1>
       <p className="mt-2 text-[var(--muted)]">{t('app.tagline')}</p>
+      <div className="mt-6 max-w-xl">
+        <JoinRoomForm />
+      </div>
 
       <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {GAME_IDS.map((id) => {

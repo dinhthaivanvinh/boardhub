@@ -1,0 +1,37 @@
+{
+  "name": "@bg/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p .",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
+  },
+  "dependencies": {
+    "@bg/bots": "workspace:*",
+    "@bg/engine": "workspace:*",
+    "@bg/game-caro": "workspace:*",
+    "@bg/game-four-in-a-row": "workspace:*",
+    "@bg/protocol": "workspace:*",
+    "@fastify/cors": "catalog:",
+    "@socket.io/redis-adapter": "catalog:",
+    "fastify": "catalog:",
+    "ioredis": "catalog:",
+    "jose": "catalog:",
+    "kysely": "catalog:",
+    "pg": "catalog:",
+    "socket.io": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/pg": "catalog:",
+    "socket.io-client": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

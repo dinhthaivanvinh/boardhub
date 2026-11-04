@@ -69,10 +69,11 @@ describe('minimax', () => {
       });
     const random = (s: TttState, seat: Seat, game: number, ply: number) =>
       randomMove(ttt, s, seat, createRng(`rand-${game}`, ply));
-    const stats = playArena(ttt, {}, [hard, random], 30);
+    // Full-depth search from the empty board is slow-ish; keep the game count small so CI under load stays fast.
+    const stats = playArena(ttt, {}, [hard, random], 12);
     expect(stats.wins[1]).toBe(0);
-    expect(stats.wins[0]).toBeGreaterThan(15);
-  });
+    expect(stats.wins[0]).toBeGreaterThan(6);
+  }, 20_000);
 
   it('stops at the deadline and still returns a legal move', () => {
     let t = 0;

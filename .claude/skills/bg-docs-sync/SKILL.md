@@ -1,6 +1,6 @@
 ---
 name: bg-docs-sync
-description: Keep docs/ in sync with code after changes to contracts — engine interface, protocol events, data model, architecture, game rules, roadmap status — and write ADRs for breaking decisions. Use at the end of any task that touched packages/engine, packages/protocol, prisma schema, a game's rules, or project structure, or when asked to "cập nhật tài liệu".
+description: Keep docs/ in sync with code after changes to contracts — engine interface, protocol events, data model, architecture, game rules, roadmap status — and write ADRs for breaking decisions. Use at the end of any task that touched packages/engine, packages/protocol, the database schema (apps/server/src/db), a game's rules, or project structure, or when asked to "cập nhật tài liệu".
 ---
 
 # Đồng bộ tài liệu
@@ -13,7 +13,7 @@ Docs là hợp đồng giữa các agent. Docs sai còn tệ hơn không có doc
 | ------------------------------------------------------ | ------------------------------------------------------------------------ |
 | `packages/engine` (types, runner, testing helpers)     | `docs/04-game-engine-spec.md` + ADR nếu là breaking change               |
 | `packages/protocol` (event, payload, mã lỗi)           | `docs/05-realtime-protocol.md`                                           |
-| `prisma/schema.prisma`, Redis keys                     | `docs/06-data-model.md`                                                  |
+| `apps/server/src/db/database.ts`, Redis keys           | `docs/06-data-model.md`                                                  |
 | `packages/bots` interface hoặc thuật toán              | `docs/07-bots.md`                                                        |
 | `BoardProps`, `useMatch`, primitive của `@bg/ui/board` | `docs/08-frontend-guidelines.md`                                         |
 | Cấu trúc thư mục, package mới, tech stack              | `docs/03-architecture.md`, `docs/09-conventions.md`, `CLAUDE.md`         |

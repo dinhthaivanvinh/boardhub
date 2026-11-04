@@ -5,7 +5,8 @@
   },
   "nav": {
     "home": "Home",
-    "language": "Language"
+    "language": "Language",
+    "account": "Account"
   },
   "catalog": {
     "title": "Pick a game",
@@ -24,13 +25,30 @@
     "mode": "Mode",
     "modes": {
       "bot": "Play the computer",
-      "local": "Two players, one device"
+      "local": "Two players, one device",
+      "online": "Play online with friends"
     },
     "level": "Difficulty",
     "side": "You play",
     "movesFirst": "moves first",
     "variant": "Rule options",
-    "start": "Start"
+    "start": "Start",
+    "online": "Online room",
+    "createRoom": "Create room",
+    "timeControl": "Time",
+    "timeControls": {
+      "none": "No limit",
+      "blitz": "3 min + 2 s/move",
+      "rapid": "10 min + 5 s/move",
+      "perMove30": "30 s per move",
+      "fischer": "{m} min + {s} s/move",
+      "perMove": "{s} s per move"
+    },
+    "disconnectPolicy": "If a player is gone for 60 s",
+    "disconnectPolicies": {
+      "forfeit": "They lose",
+      "bot": "Computer takes over"
+    }
   },
   "bot": {
     "level": {
@@ -65,7 +83,8 @@
   "reasons": {
     "resign": "opponent resigned",
     "timeout": "time ran out",
-    "agreement": "agreed"
+    "agreement": "agreed",
+    "abandon": "opponent left"
   },
   "engine": {
     "game_over": "The game is over.",
@@ -75,5 +94,103 @@
   "notFound": {
     "title": "Page not found",
     "back": "Back to home"
+  },
+  "online": {
+    "joinTitle": "Got a room code? Join your friends",
+    "codePlaceholder": "6-character code",
+    "join": "Join room",
+    "connecting": "Connecting to the server…",
+    "reconnecting": "Connection lost, reconnecting…",
+    "creating": "Creating room…"
+  },
+  "room": {
+    "code": "Room code",
+    "invite": "Send this link to your friends:",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "players": "Players",
+    "empty": "Empty seat",
+    "sitHere": "Sit here",
+    "standUp": "Stand up",
+    "addBot": "Add computer",
+    "removeBot": "Remove computer",
+    "host": "host",
+    "you": "you",
+    "bot": "Computer ({level})",
+    "ready": "Ready",
+    "notReady": "Not ready",
+    "setReady": "I'm ready",
+    "unsetReady": "Not ready yet",
+    "start": "Start game",
+    "waitingHost": "Waiting for the host to start…",
+    "needPlayers": "Fill the seats (or add a computer) to start.",
+    "needReady": "Waiting for everyone to be ready.",
+    "timeControl": "Time: {tc}",
+    "spectators": "{n} watching",
+    "leave": "Leave room",
+    "rematch": "Play again",
+    "offline": "disconnected ({s}s)",
+    "offerDraw": "Offer draw",
+    "acceptDraw": "Accept draw",
+    "declineDraw": "Decline",
+    "drawOffered": "{player} offers a draw",
+    "drawSent": "Draw offered",
+    "notFound": "Room {code} not found. It may have closed.",
+    "spectating": "You are watching this game."
+  },
+  "chat": {
+    "title": "Chat",
+    "placeholder": "Type a message…",
+    "send": "Send",
+    "empty": "No messages yet."
+  },
+  "account": {
+    "title": "Account",
+    "guestNote": "You are playing as a guest. Sign up to keep your name and game history across devices.",
+    "registeredAs": "Signed in as {email}",
+    "displayName": "Display name",
+    "save": "Save",
+    "saved": "Saved.",
+    "register": "Sign up",
+    "login": "Log in",
+    "email": "Email",
+    "password": "Password",
+    "logout": "Log out"
+  },
+  "errors": {
+    "network": "Cannot reach the game server.",
+    "internal": "Something went wrong, please try again.",
+    "rate": {
+      "limited": "Too fast, please wait a moment."
+    },
+    "invalid": {
+      "payload": "Invalid data."
+    },
+    "room": {
+      "not_found": "Room not found.",
+      "full": "The room is full.",
+      "not_host": "Only the host can do that.",
+      "invalid_state": "You can't do that right now.",
+      "seat_taken": "That seat is taken.",
+      "not_seated": "You haven't taken a seat.",
+      "not_ready": "Not enough players or someone is not ready."
+    },
+    "match": {
+      "not_found": "Game not found.",
+      "stale_seq": "The board just changed, please move again.",
+      "not_player": "You're not playing in this game.",
+      "no_offer": "There is no draw offer."
+    },
+    "auth": {
+      "required": "Please sign in again.",
+      "invalid_credentials": "Wrong email or password.",
+      "email_taken": "That email is already used."
+    },
+    "game": {
+      "not_found": "Unknown game."
+    },
+    "protocol": {
+      "version": "This page is out of date, please reload."
+    }
   }
 }

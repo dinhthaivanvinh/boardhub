@@ -15,11 +15,13 @@
     "@bg/engine": "workspace:*",
     "@bg/game-caro": "workspace:*",
     "@bg/game-four-in-a-row": "workspace:*",
+    "@bg/protocol": "workspace:*",
     "@bg/ui": "workspace:*",
     "next": "catalog:",
     "next-intl": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "socket.io-client": "catalog:",
     "zustand": "catalog:"
   },
   "devDependencies": {

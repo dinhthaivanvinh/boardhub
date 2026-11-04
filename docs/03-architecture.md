@@ -21,7 +21,7 @@
 | Realtime           | Socket.IO (Node) + `@socket.io/redis-adapter`                                        | Reconnect, room, fallback sẵn có. Xem [ADR-0003](adr/0003-realtime-transport.md) |
 | API server         | Fastify                                                                              | Nhanh, có sẵn schema validation                                                  |
 | Validation         | zod (dùng chung qua `@bg/protocol`)                                                  | Một schema dùng cho cả hai phía                                                  |
-| Database           | PostgreSQL + Prisma                                                                  | Dữ liệu quan hệ (user, match, rating)                                            |
+| Database           | PostgreSQL + Kysely (ADR-0004); không có `DATABASE_URL` thì dùng bộ nhớ khi dev      | Dữ liệu quan hệ (user, match, rating)                                            |
 | Cache / live state | Redis                                                                                | Lưu state phòng đang chơi, pub/sub, khóa phân tán, hàng đợi ghép trận            |
 | Bot                | Chạy trong worker thread (server) / Web Worker (client)                              | Không chặn event loop                                                            |
 | Test               | Vitest, fast-check (property test), Playwright (E2E)                                 |                                                                                  |
@@ -74,7 +74,8 @@ boardgame/
 │        ├─ http/               # Fastify routes
 │        ├─ realtime/           # socket gateway, handlers
 │        ├─ rooms/  matches/  bots/  matchmaking/
-│        ├─ persistence/        # prisma, redis repositories
+│        ├─ hub/                # GameHub: phòng, ván, đồng hồ, bot, mất kết nối
+│        ├─ store/  db/         # live store (memory | Redis), repos (memory | Postgres/Kysely)
 │        └─ registry.ts         # danh sách game được bật
 ├─ packages/
 │  ├─ engine/                   # @bg/engine: types, runMove, rng, test harness

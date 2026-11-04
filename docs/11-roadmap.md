@@ -22,11 +22,13 @@
 
 ## M2 — Online phòng riêng (3 tuần)
 
-- [ ] `@bg/protocol`, `apps/server` (Fastify + Socket.IO)
-- [ ] Tài khoản khách + đăng ký, JWT
-- [ ] RoomService, MatchService, đồng hồ, reconnect
-- [ ] Lưu Match/MatchMove vào PostgreSQL
-- [ ] Chat
+- [x] `@bg/protocol`, `apps/server` (Fastify + Socket.IO, Redis adapter)
+- [x] Tài khoản khách + đăng ký/đăng nhập email, nâng cấp khách giữ lịch sử, JWT (Google OAuth: để sau, cần client ID)
+- [x] `GameHub`: phòng, ghế, sẵn sàng, bot trong phòng, đồng hồ (Fischer / mỗi nước), xin hòa, đầu hàng, chơi lại, reconnect + thời gian chờ
+- [x] Lưu users / matches / match_players / match_moves vào PostgreSQL (Kysely, ADR-0004)
+- [x] Chat (lọc từ ngữ cơ bản)
+- [x] Web: tạo phòng, link mời, vào bằng mã, sảnh chờ, ván online, trang tài khoản
+- [ ] Hẹn giờ dùng chung qua Redis (hiện hẹn giờ nằm trong từng process, xem docs/06 §4)
 - **Demo:** 2 người ở 2 máy chơi Caro qua link mời.
 
 ## M3 — Mở rộng game (3 tuần)

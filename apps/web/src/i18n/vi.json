@@ -5,7 +5,8 @@
   },
   "nav": {
     "home": "Trang chủ",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "account": "Tài khoản"
   },
   "catalog": {
     "title": "Chọn một game",
@@ -24,13 +25,30 @@
     "mode": "Cách chơi",
     "modes": {
       "bot": "Chơi với máy",
-      "local": "Hai người, chung một máy"
+      "local": "Hai người, chung một máy",
+      "online": "Chơi online với bạn bè"
     },
     "level": "Độ khó",
     "side": "Bạn cầm quân",
     "movesFirst": "đi trước",
     "variant": "Tùy chọn luật",
-    "start": "Bắt đầu"
+    "start": "Bắt đầu",
+    "online": "Phòng online",
+    "createRoom": "Tạo phòng",
+    "timeControl": "Thời gian",
+    "timeControls": {
+      "none": "Không giới hạn",
+      "blitz": "3 phút + 2 giây/nước",
+      "rapid": "10 phút + 5 giây/nước",
+      "perMove30": "30 giây mỗi nước",
+      "fischer": "{m} phút + {s} giây/nước",
+      "perMove": "{s} giây mỗi nước"
+    },
+    "disconnectPolicy": "Khi mất kết nối quá 60 giây",
+    "disconnectPolicies": {
+      "forfeit": "Xử thua",
+      "bot": "Máy đánh thay"
+    }
   },
   "bot": {
     "level": {
@@ -65,7 +83,8 @@
   "reasons": {
     "resign": "đối thủ đầu hàng",
     "timeout": "hết giờ",
-    "agreement": "hai bên đồng ý"
+    "agreement": "hai bên đồng ý",
+    "abandon": "đối thủ rời trận"
   },
   "engine": {
     "game_over": "Ván đã kết thúc.",
@@ -75,5 +94,103 @@
   "notFound": {
     "title": "Không tìm thấy trang",
     "back": "Về trang chủ"
+  },
+  "online": {
+    "joinTitle": "Có mã phòng? Vào chơi cùng bạn bè",
+    "codePlaceholder": "Mã 6 ký tự",
+    "join": "Vào phòng",
+    "connecting": "Đang kết nối máy chủ…",
+    "reconnecting": "Mất kết nối, đang thử kết nối lại…",
+    "creating": "Đang tạo phòng…"
+  },
+  "room": {
+    "code": "Mã phòng",
+    "invite": "Gửi link này cho bạn bè:",
+    "copy": "Sao chép",
+    "copied": "Đã chép!",
+    "players": "Người chơi",
+    "empty": "Ghế trống",
+    "sitHere": "Ngồi vào đây",
+    "standUp": "Đứng dậy",
+    "addBot": "Thêm máy",
+    "removeBot": "Bỏ máy",
+    "host": "chủ phòng",
+    "you": "bạn",
+    "bot": "Máy ({level})",
+    "ready": "Sẵn sàng",
+    "notReady": "Chưa sẵn sàng",
+    "setReady": "Tôi sẵn sàng",
+    "unsetReady": "Hủy sẵn sàng",
+    "start": "Bắt đầu ván",
+    "waitingHost": "Chờ chủ phòng bắt đầu ván…",
+    "needPlayers": "Cần đủ người chơi (hoặc thêm máy) để bắt đầu.",
+    "needReady": "Chờ mọi người bấm sẵn sàng.",
+    "timeControl": "Thời gian: {tc}",
+    "spectators": "{n} người đang xem",
+    "leave": "Rời phòng",
+    "rematch": "Chơi lại",
+    "offline": "mất kết nối ({s}s)",
+    "offerDraw": "Xin hòa",
+    "acceptDraw": "Đồng ý hòa",
+    "declineDraw": "Từ chối",
+    "drawOffered": "{player} xin hòa",
+    "drawSent": "Đã xin hòa",
+    "notFound": "Không tìm thấy phòng {code}. Có thể phòng đã đóng.",
+    "spectating": "Bạn đang xem trận này."
+  },
+  "chat": {
+    "title": "Trò chuyện",
+    "placeholder": "Nhập tin nhắn…",
+    "send": "Gửi",
+    "empty": "Chưa có tin nhắn nào."
+  },
+  "account": {
+    "title": "Tài khoản",
+    "guestNote": "Bạn đang chơi với tư cách khách. Đăng ký để giữ tên và lịch sử ván đấu khi đổi máy.",
+    "registeredAs": "Đã đăng nhập: {email}",
+    "displayName": "Tên hiển thị",
+    "save": "Lưu",
+    "saved": "Đã lưu.",
+    "register": "Đăng ký",
+    "login": "Đăng nhập",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "logout": "Đăng xuất"
+  },
+  "errors": {
+    "network": "Không kết nối được máy chủ trò chơi.",
+    "internal": "Có lỗi xảy ra, hãy thử lại.",
+    "rate": {
+      "limited": "Bạn thao tác quá nhanh, chờ một chút."
+    },
+    "invalid": {
+      "payload": "Dữ liệu không hợp lệ."
+    },
+    "room": {
+      "not_found": "Không tìm thấy phòng.",
+      "full": "Phòng đã đủ người.",
+      "not_host": "Chỉ chủ phòng mới làm được việc này.",
+      "invalid_state": "Không thể làm việc này lúc này.",
+      "seat_taken": "Ghế này đã có người.",
+      "not_seated": "Bạn chưa ngồi vào ghế nào.",
+      "not_ready": "Chưa đủ người hoặc có người chưa sẵn sàng."
+    },
+    "match": {
+      "not_found": "Không tìm thấy ván đấu.",
+      "stale_seq": "Bàn cờ vừa thay đổi, hãy đi lại.",
+      "not_player": "Bạn không chơi trong ván này.",
+      "no_offer": "Không có lời xin hòa nào."
+    },
+    "auth": {
+      "required": "Hãy đăng nhập lại.",
+      "invalid_credentials": "Email hoặc mật khẩu không đúng.",
+      "email_taken": "Email này đã được dùng."
+    },
+    "game": {
+      "not_found": "Game không tồn tại."
+    },
+    "protocol": {
+      "version": "Trang đã cũ, hãy tải lại trang."
+    }
   }
 }

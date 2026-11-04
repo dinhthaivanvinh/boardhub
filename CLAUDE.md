@@ -50,6 +50,8 @@ Giao tiếp với người dùng bằng **tiếng Việt**. Code, tên biến v�
 
 ```bash
 pnpm dev            # web http://localhost:3000
+pnpm dev:server     # game server http://localhost:4000 (bộ nhớ; thêm REDIS_URL/DATABASE_URL để dùng Redis/Postgres)
+docker compose up -d && pnpm --filter @bg/server test:integration
 pnpm test | pnpm lint | pnpm typecheck
 pnpm e2e            # Playwright (tự build + chạy server ở cổng 3123)
 pnpm --filter @bg/game-<id> test

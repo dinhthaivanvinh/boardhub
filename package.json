@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "pnpm --filter @bg/web dev",
+    "dev:server": "pnpm --filter @bg/server dev",
     "build": "pnpm --filter @bg/web build",
     "lint": "eslint .",
     "typecheck": "turbo run typecheck",

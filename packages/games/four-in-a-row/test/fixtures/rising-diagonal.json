@@ -1,0 +1,22 @@
+{
+  "name": "Yellow wins with a rising diagonal built through real play",
+  "config": {},
+  "seed": "fixture-diag",
+  "moves": [
+    { "col": 0 },
+    { "col": 1 },
+    { "col": 1 },
+    { "col": 2 },
+    { "col": 3 },
+    { "col": 2 },
+    { "col": 2 },
+    { "col": 3 },
+    { "col": 6 },
+    { "col": 3 },
+    { "col": 3 }
+  ],
+  "expected": {
+    "result": { "kind": "win", "winners": [0], "reason": "four_in_row" },
+    "winLine": [17, 23, 29, 35]
+  }
+}

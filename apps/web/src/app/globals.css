@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 /* Each game ships its own board styles (docs/08 §7). */
 @import '@bg/game-caro/theme.css';
+@import '@bg/game-four-in-a-row/theme.css';
 /* Tailwind classes used inside workspace packages. */
 @source '../../../../packages';
 

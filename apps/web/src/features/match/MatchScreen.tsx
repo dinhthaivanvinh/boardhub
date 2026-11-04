@@ -14,7 +14,7 @@ import { errorKey } from '@/game-runtime/error-key';
 export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSetup }) {
   const t = useTranslations();
   const { definition } = GAMES[gameId];
-  const { Board } = CLIENT_GAMES[gameId];
+  const { Board, PieceIcon } = CLIENT_GAMES[gameId];
   const controllers = useMemo(() => controllersFor(setup, definition.meta.minPlayers), [setup, definition]);
   const match = useLocalMatch(gameId, definition, setup.config, controllers);
   const settings = useSettings();
@@ -55,7 +55,10 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
 
   return (
     // Mobile: title + status above the board, everything else below. Desktop: board left, panel right.
-    <div className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:py-6">
+    <div
+      data-game={gameId}
+      className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:py-6"
+    >
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
         <h1 className="text-xl font-bold tracking-tight lg:text-2xl">{t(`games.${gameId}.name`)}</h1>
         <p
@@ -99,9 +102,12 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
                     className="inline-flex size-8 items-center justify-center rounded-full border border-[var(--border)] font-bold"
                     style={{ color: `var(--piece-p${seat})` }}
                   >
-                    {pieceName(seat)}
+                    {PieceIcon ? <PieceIcon seat={seat} size={22} /> : pieceName(seat)}
                   </span>
-                  {seatName(seat)}
+                  <span>
+                    {seatName(seat)}
+                    <span className="text-[var(--muted)]"> · {pieceName(seat)}</span>
+                  </span>
                 </span>
                 {isActive && match.botThinking && controllers[seat]?.kind === 'bot' && (
                   <span className="size-2 animate-ping rounded-full bg-[var(--accent)]" aria-hidden="true" />

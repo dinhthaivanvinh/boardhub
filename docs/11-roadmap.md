@@ -12,7 +12,7 @@
 ## M1 — Chơi local (2 tuần)
 
 - [x] `@bg/game-caro` đầy đủ (rules, UI, bot 3 cấp, test, i18n)
-- [ ] `@bg/game-four-in-a-row`
+- [x] `@bg/game-four-in-a-row` (rules, UI, bot 3 cấp, test, E2E)
 - [x] `apps/web`: trang danh mục, trang game, màn chơi với `LocalMatch` / `useLocalMatch`
 - [x] `@bg/ui`: `GridBoard`, `BoardProps`, `VisuallyHidden`; i18n vi/en (next-intl, cookie)
 - [x] `@bg/bots`: random / greedy / minimax (alpha-beta, iterative deepening), `playArena`

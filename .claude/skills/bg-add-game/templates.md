@@ -128,7 +128,7 @@ export const definition: GameDefinition<<Name>State, <Name>Move, <Name>Config> =
 ```ts
 export { definition } from './rules/definition';
 export type * from './rules/types';
-export { Board } from './ui/Board';
+export { Board, PieceIcon } from './ui/Board';
 export { bot } from './bot';
 export { default as vi } from './i18n/vi.json';
 export { default as en } from './i18n/en.json';

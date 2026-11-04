@@ -1,0 +1,22 @@
+{
+  "name": "Bốn trong hàng",
+  "shortDescription": "Thả quân vào cột, ai xếp được 4 quân liên tiếp trước sẽ thắng.",
+  "rules": "Khung đứng có 7 cột, 6 hàng. Hai người lần lượt chọn một cột để thả quân; quân rơi xuống ô trống thấp nhất của cột đó. Vàng đi trước.\n\nAi có **4 quân liên tiếp** theo hàng ngang, dọc hoặc chéo trước sẽ thắng.\n\nKhung đầy mà không ai thắng thì hòa.",
+  "pieces": { "0": "Vàng", "1": "Đỏ" },
+  "empty": "trống",
+  "boardLabel": "Khung {columns} cột × {rows} hàng",
+  "cellLabel": "Cột {col}, hàng {row}: {piece}",
+  "lastMove": "{piece} thả vào cột {col}",
+  "errors": {
+    "out_of_bounds": "Cột này không tồn tại.",
+    "column_full": "Cột này đã đầy."
+  },
+  "reasons": {
+    "four_in_row": "4 quân liên tiếp",
+    "board_full": "khung đã đầy"
+  },
+  "config": {
+    "columns": "Số cột",
+    "rows": "Số hàng"
+  }
+}

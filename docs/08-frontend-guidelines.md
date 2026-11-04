@@ -75,5 +75,7 @@ Desktop                                   Mobile
 
 ## 7. Theme
 
-- Màu dùng CSS variables (`--board-light`, `--board-dark`, `--piece-p0`, …). Mỗi game có thể override trong file `theme.css` riêng.
+- Màu dùng CSS variables (`--board-bg`, `--board-line`, `--piece-p0`, `--piece-p1`, …) định nghĩa ở `apps/web/src/app/globals.css`.
+- Mỗi game có `src/ui/theme.css` riêng (export `./theme.css`, được `@import` trong `globals.css`). Màn chơi có thuộc tính `data-game="<id>"`, nên game đổi màu quân bằng `[data-game='<id>'] { --piece-p0: …; }` mà không ảnh hưởng game khác.
+- Mỗi game export thêm `PieceIcon({ seat, size })`: hình quân nhỏ dùng trong thẻ người chơi (đăng ký trong `client-registry.ts`). Không có thì app hiển thị tên quân.
 - Hỗ trợ light và dark mode.

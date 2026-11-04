@@ -3,6 +3,9 @@
 import { definition as caro } from '@bg/game-caro/rules';
 import caroEn from '@bg/game-caro/i18n/en.json';
 import caroVi from '@bg/game-caro/i18n/vi.json';
+import { definition as fourInARow } from '@bg/game-four-in-a-row/rules';
+import fourEn from '@bg/game-four-in-a-row/i18n/en.json';
+import fourVi from '@bg/game-four-in-a-row/i18n/vi.json';
 import type { AnyGameDefinition } from '@bg/engine';
 
 export interface CatalogEntry {
@@ -10,11 +13,14 @@ export interface CatalogEntry {
   messages: { vi: Record<string, unknown>; en: Record<string, unknown> };
 }
 
-export const GAMES = {
+const ENTRIES = {
   caro: { definition: caro, messages: { vi: caroVi, en: caroEn } },
+  'four-in-a-row': { definition: fourInARow, messages: { vi: fourVi, en: fourEn } },
 } satisfies Record<string, CatalogEntry>;
 
-export type GameId = keyof typeof GAMES;
+export type GameId = keyof typeof ENTRIES;
+/** Typed by the shared contract, so screens work the same for every game. */
+export const GAMES: Record<GameId, CatalogEntry> = ENTRIES;
 export const GAME_IDS = Object.keys(GAMES) as GameId[];
 
 export function isGameId(id: string): id is GameId {
@@ -22,4 +28,4 @@ export function isGameId(id: string): id is GameId {
 }
 
 /** MVP games not built yet, shown as "coming soon" on the home page (docs/01 §4). */
-export const UPCOMING_GAMES = ['four-in-a-row', 'reversi', 'xiangqi'] as const;
+export const UPCOMING_GAMES = ['reversi', 'xiangqi'] as const;

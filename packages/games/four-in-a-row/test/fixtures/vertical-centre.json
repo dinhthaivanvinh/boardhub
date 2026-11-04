@@ -1,0 +1,9 @@
+{
+  "name": "Yellow stacks four in the centre column while Red plays next to it",
+  "config": {},
+  "seed": "fixture-vertical",
+  "moves": [{ "col": 3 }, { "col": 4 }, { "col": 3 }, { "col": 4 }, { "col": 3 }, { "col": 4 }, { "col": 3 }],
+  "expected": {
+    "result": { "kind": "win", "winners": [0], "reason": "four_in_row" }
+  }
+}

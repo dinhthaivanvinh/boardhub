@@ -1,0 +1,22 @@
+{
+  "name": "Four in a Row",
+  "shortDescription": "Drop pieces into the columns. The first to line up 4 wins.",
+  "rules": "The upright frame has 7 columns and 6 rows. Players take turns choosing a column to drop a piece into; it falls to the lowest empty cell. Yellow moves first.\n\nThe first to get **4 in a row** horizontally, vertically or diagonally wins.\n\nIf the frame fills up with no winner, the game is a draw.",
+  "pieces": { "0": "Yellow", "1": "Red" },
+  "empty": "empty",
+  "boardLabel": "Frame of {columns} columns × {rows} rows",
+  "cellLabel": "Column {col}, row {row}: {piece}",
+  "lastMove": "{piece} dropped into column {col}",
+  "errors": {
+    "out_of_bounds": "That column does not exist.",
+    "column_full": "That column is full."
+  },
+  "reasons": {
+    "four_in_row": "four in a row",
+    "board_full": "the frame is full"
+  },
+  "config": {
+    "columns": "Columns",
+    "rows": "Rows"
+  }
+}

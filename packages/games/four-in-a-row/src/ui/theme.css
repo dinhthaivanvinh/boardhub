@@ -1,0 +1,63 @@
+/* Four in a row: blue frame with round holes. Seat colours are scoped to this game's screens. */
+[data-game='four-in-a-row'] {
+  --piece-p0: #eab308;
+  --piece-p1: #dc2626;
+  --fiar-frame: #1d4ed8;
+}
+@media (prefers-color-scheme: dark) {
+  [data-game='four-in-a-row'] {
+    --piece-p0: #facc15;
+    --piece-p1: #ef4444;
+    --fiar-frame: #1e3a8a;
+  }
+}
+
+.fiar-board .bg-board {
+  fill: var(--fiar-frame, #1d4ed8);
+}
+.fiar-board .bg-grid-lines {
+  display: none;
+}
+.fiar-hole {
+  fill: var(--bg, #fff);
+}
+.fiar-p0 .fiar-disc {
+  fill: var(--piece-p0, #eab308);
+}
+.fiar-p1 .fiar-disc {
+  fill: var(--piece-p1, #dc2626);
+}
+.fiar-mark {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.6);
+  stroke-width: 2.5;
+}
+.fiar-ghost {
+  opacity: 0.4;
+}
+.fiar-last {
+  fill: none;
+  stroke: var(--highlight-last-ring, #ffffff);
+  stroke-width: 2.5;
+}
+.fiar-win {
+  fill: none;
+  stroke: var(--highlight-win-line, #15803d);
+  stroke-width: 4;
+}
+.fiar-drop {
+  animation: fiar-drop 0.32s cubic-bezier(0.45, 0, 0.75, 1);
+}
+@keyframes fiar-drop {
+  from {
+    transform: translateY(var(--fiar-drop));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fiar-drop {
+    animation: none;
+  }
+}

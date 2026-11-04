@@ -46,7 +46,7 @@ Dùng skill **`bg-bot`**. Tối thiểu phải có cấp `easy` (randomBot hoặ
 
 ## Bước 8 — Đăng ký
 
-- Web (3 file trong `apps/web/src/games/`): `catalog.ts` (definition + i18n, không React), `client-registry.ts` (Board + configFields), `bots.ts` (bot, chạy trong Web Worker).
+- Web (3 file trong `apps/web/src/games/`): `catalog.ts` (definition + i18n, không React), `client-registry.ts` (Board + configFields + PieceIcon), `bots.ts` (bot, chạy trong Web Worker).
 - Web: thêm `@import '@bg/game-<id>/theme.css';` vào `apps/web/src/app/globals.css` và id vào `transpilePackages` trong `apps/web/next.config.ts`.
 - Server (từ M2): thêm vào `apps/server/src/registry.ts`.
 - Seed `GameSetting` cho game (enabled = false nếu chưa muốn công khai).

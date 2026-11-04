@@ -36,6 +36,15 @@ function Piece({
   );
 }
 
+/** Small piece used outside the board (player cards). */
+export function PieceIcon({ seat, size = 24 }: { seat: number; size?: number }) {
+  return (
+    <svg viewBox="0 0 40 40" width={size} height={size} aria-hidden="true">
+      <Piece piece={seat === 0 ? 0 : 1} cell={{ x: 0, y: 0, size: 40 }} />
+    </svg>
+  );
+}
+
 export function Board({ view, isMyTurn, disabled, onMove, settings, t }: CaroBoardProps) {
   const { size } = view.config;
   const [hover, setHover] = useState<number | null>(null);

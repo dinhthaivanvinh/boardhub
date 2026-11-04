@@ -32,6 +32,11 @@ export function Board(props: BoardProps<View, Move>): JSX.Element;
 8. Animation: chỉ dùng transform/opacity; tắt khi `!settings.animations` hoặc khi `prefers-reduced-motion`.
 9. Màu: dùng CSS variables (`--board-*`, `--piece-p0`…) trong `theme.css`; kiểm tra cả light và dark.
 
+## PieceIcon và màu theo game
+
+- Export `PieceIcon({ seat, size })` cạnh `Board` (SVG nhỏ, `aria-hidden`), dùng cho thẻ người chơi.
+- Màu quân riêng của game: đặt trong `theme.css` dưới selector `[data-game='<id>']` (xem `packages/games/four-in-a-row/src/ui/theme.css`).
+
 ## Mobile
 
 - Vùng chạm ≥ 32 px. Nếu ô quá nhỏ (Caro 19×19 ở 360 px) thì bật pinch-zoom/pan và `confirmMove`.

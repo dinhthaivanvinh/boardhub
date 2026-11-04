@@ -1,0 +1,25 @@
+{
+  "name": "Reversi",
+  "shortDescription": "Trap your opponent's discs to flip them to your colour. Most discs when no one can move wins.",
+  "rules": "8×8 board, starting with 4 discs in the centre. Black moves first.\n\nEach move must **trap** at least one line of opponent discs (horizontal, vertical or diagonal) between the new disc and one of yours. Every trapped line is **flipped** to your colour.\n\nIf you have no legal move, you **pass**. When neither side can move, the game ends and the side with **more discs** wins.",
+  "pieces": { "0": "Black", "1": "White" },
+  "empty": "empty",
+  "playable": "empty, playable",
+  "boardLabel": "Reversi board {size} × {size}",
+  "cellLabel": "Row {row}, column {col}: {piece}",
+  "score": "Black {black}, White {white}",
+  "passed": "{piece} has no move and passes.",
+  "errors": {
+    "out_of_bounds": "That cell is outside the board.",
+    "cell_occupied": "That cell is already taken.",
+    "no_flips": "That move doesn't flip any disc."
+  },
+  "reasons": {
+    "more_discs": "more discs",
+    "equal_discs": "equal discs"
+  },
+  "config": {
+    "size": "Board size",
+    "sizeOptions": { "6": "6 × 6", "8": "8 × 8", "10": "10 × 10" }
+  }
+}

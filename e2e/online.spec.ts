@@ -56,6 +56,24 @@ test('two guests play Caro online through an invite link', async ({ browser }) =
   await bob.reload();
   await expect(bob.locator('[data-win="true"]')).toHaveCount(5);
   await expect(bob.getByRole('button', { name: 'Chơi lại' })).toBeVisible();
+
+  // Replay: starts at the end, can go back to the empty board.
+  await alice.getByRole('link', { name: 'Xem lại ván' }).click();
+  await expect(alice).toHaveURL(/\/replay\//);
+  await expect(alice.getByTestId('replay-position')).toHaveText('Nước 9 / 9');
+  await expect(alice.locator('[data-win="true"]')).toHaveCount(5);
+  await alice.keyboard.press('Home');
+  await expect(alice.getByTestId('replay-position')).toHaveText('Nước 0 / 9');
+  await expect(alice.locator('[data-piece]')).toHaveCount(0);
+  await alice.getByRole('button', { name: 'Nước sau' }).click();
+  await expect(alice.locator('[data-piece]')).toHaveCount(1);
+
+  // Profile: Alice won her only online game; Bob lost his.
+  await alice.goto('/profile');
+  await expect(alice.getByTestId('stat-wins')).toHaveText('1');
+  await expect(alice.getByTestId('history-row')).toContainText('Thắng');
+  await bob.goto('/profile');
+  await expect(bob.getByTestId('stat-losses')).toHaveText('1');
 });
 
 test('play Four in a Row online against a computer added by the host', async ({ browser }) => {

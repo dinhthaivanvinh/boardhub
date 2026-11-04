@@ -163,5 +163,6 @@ export const ERROR_CODES = [
   'match.stale_seq',
   'match.not_player',
   'match.no_offer',
+  'match.not_finished',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];

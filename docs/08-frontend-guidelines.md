@@ -15,7 +15,7 @@ const match = useLocalMatch(gameId, definition, config, controllers); // apps/we
 | -------------------------------- | ------------------------------------- | ---------------------------------------------- |
 | `LocalMatch` (+ `useLocalMatch`) | local, bot (offline)                  | Engine chạy ngay trong browser ✅ đã có        |
 | `OnlineMatchClient`              | private-room, quick, ranked, spectate | Server; client có optimistic update + rollback |
-| `ReplayRunner`                   | replay                                | Dựng lại state từ danh sách nước đi            |
+| `buildReplay` + `ReplayScreen`   | replay                                | Dựng lại mọi thế cờ từ seed + nước đi ✅ đã có |
 
 ## 2. Hợp đồng component bàn cờ
 
@@ -38,6 +38,10 @@ export interface BoardProps<V, M> {
 **Board component không biết gì về socket, store hay route.** Nó chỉ nhận props và gọi `onMove`.
 
 ## 3. Rendering
+
+- `GridBoard` (`@bg/ui`): lưới ô có `role="grid"`, phím mũi tên, `aria-label` từng ô. Tuỳ chọn `gridLines={false}` và `background` cho game chơi trên giao điểm (Cờ tướng vẽ sông/cung ở đó), `overlay` cho đường thắng.
+- **Nội dung trong ô không nhận sự kiện chuột** (GridBoard bọc trong `pointer-events: none`). Lý do: quân mờ/chấm gợi ý thay nhau xuất hiện khi hover; nếu phần tử nhận `mousedown` bị gỡ khỏi DOM trước `mouseup` thì trình duyệt bỏ luôn `click` (lỗi thật đã gặp ở Reversi).
+- Bàn cờ cần xoay theo phe (Cờ tướng): đổi chỉ số hiển thị ↔ chỉ số bàn trong component game (`display = 89 - index`), không xoay SVG (để chữ không bị lộn ngược).
 
 - Mặc định dùng **SVG** với `viewBox` cố định, co giãn theo container (`width: 100%`, `aspect-ratio`).
 - Dùng primitive từ `@bg/ui/board`: `<GridBoard>`, `<Cell>`, `<Piece>`, `<HighlightLayer>`, `<Arrow>`, `<CoordinateLabels>`.

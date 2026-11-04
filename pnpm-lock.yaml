@@ -134,6 +134,12 @@ importers:
       '@bg/game-four-in-a-row':
         specifier: workspace:*
         version: link:../../packages/games/four-in-a-row
+      '@bg/game-reversi':
+        specifier: workspace:*
+        version: link:../../packages/games/reversi
+      '@bg/game-xiangqi':
+        specifier: workspace:*
+        version: link:../../packages/games/xiangqi
       '@bg/protocol':
         specifier: workspace:*
         version: link:../../packages/protocol
@@ -198,6 +204,12 @@ importers:
       '@bg/game-four-in-a-row':
         specifier: workspace:*
         version: link:../../packages/games/four-in-a-row
+      '@bg/game-reversi':
+        specifier: workspace:*
+        version: link:../../packages/games/reversi
+      '@bg/game-xiangqi':
+        specifier: workspace:*
+        version: link:../../packages/games/xiangqi
       '@bg/protocol':
         specifier: workspace:*
         version: link:../../packages/protocol
@@ -330,6 +342,104 @@ importers:
         version: 5.1.0(@types/node@22.20.5)(@vitest/coverage-v8@5.1.0)(jsdom@30.1.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
 
   packages/games/four-in-a-row:
+    dependencies:
+      '@bg/bots':
+        specifier: workspace:*
+        version: link:../../bots
+      '@bg/engine':
+        specifier: workspace:*
+        version: link:../../engine
+      '@bg/ui':
+        specifier: workspace:*
+        version: link:../../ui
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
+    devDependencies:
+      '@testing-library/dom':
+        specifier: 'catalog:'
+        version: 10.4.2
+      '@testing-library/react':
+        specifier: 'catalog:'
+        version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.20.5
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.3.0(@types/react@19.3.0)
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 5.1.0(vitest@5.1.0)
+      jsdom:
+        specifier: 'catalog:'
+        version: 30.1.3
+      react:
+        specifier: 'catalog:'
+        version: 19.3.1
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.3.1(react@19.3.1)
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 5.1.0(@types/node@22.20.5)(@vitest/coverage-v8@5.1.0)(jsdom@30.1.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+
+  packages/games/reversi:
+    dependencies:
+      '@bg/bots':
+        specifier: workspace:*
+        version: link:../../bots
+      '@bg/engine':
+        specifier: workspace:*
+        version: link:../../engine
+      '@bg/ui':
+        specifier: workspace:*
+        version: link:../../ui
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
+    devDependencies:
+      '@testing-library/dom':
+        specifier: 'catalog:'
+        version: 10.4.2
+      '@testing-library/react':
+        specifier: 'catalog:'
+        version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.20.5
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.3.0(@types/react@19.3.0)
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 5.1.0(vitest@5.1.0)
+      jsdom:
+        specifier: 'catalog:'
+        version: 30.1.3
+      react:
+        specifier: 'catalog:'
+        version: 19.3.1
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.3.1(react@19.3.1)
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 5.1.0(@types/node@22.20.5)(@vitest/coverage-v8@5.1.0)(jsdom@30.1.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+
+  packages/games/xiangqi:
     dependencies:
       '@bg/bots':
         specifier: workspace:*

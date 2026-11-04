@@ -6,6 +6,16 @@ import {
   configFields as fourFields,
   PieceIcon as FourPiece,
 } from '@bg/game-four-in-a-row';
+import {
+  Board as ReversiBoard,
+  configFields as reversiFields,
+  PieceIcon as ReversiPiece,
+} from '@bg/game-reversi';
+import {
+  Board as XiangqiBoard,
+  configFields as xiangqiFields,
+  PieceIcon as XiangqiPiece,
+} from '@bg/game-xiangqi';
 import type { BoardProps, ConfigFieldSpec } from '@bg/ui';
 import type { GameId } from './catalog';
 
@@ -23,5 +33,15 @@ export const CLIENT_GAMES: Record<GameId, ClientGameEntry> = {
     Board: FourBoard as ClientGameEntry['Board'],
     configFields: fourFields,
     PieceIcon: FourPiece,
+  },
+  reversi: {
+    Board: ReversiBoard as ClientGameEntry['Board'],
+    configFields: reversiFields,
+    PieceIcon: ReversiPiece,
+  },
+  xiangqi: {
+    Board: XiangqiBoard as ClientGameEntry['Board'],
+    configFields: xiangqiFields,
+    PieceIcon: XiangqiPiece,
   },
 };

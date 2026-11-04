@@ -1,0 +1,12 @@
+{
+  "name": "Four opening moves flip the expected discs (worked out by hand)",
+  "config": {},
+  "seed": "fixture-opening",
+  "moves": [{ "cell": 19 }, { "cell": 18 }, { "cell": 17 }, { "cell": 20 }],
+  "expected": {
+    "result": null,
+    "discs": [4, 4],
+    "black": [17, 18, 19, 35],
+    "white": [20, 27, 28, 36]
+  }
+}

@@ -2,6 +2,8 @@
 /* Each game ships its own board styles (docs/08 §7). */
 @import '@bg/game-caro/theme.css';
 @import '@bg/game-four-in-a-row/theme.css';
+@import '@bg/game-xiangqi/theme.css';
+@import '@bg/game-reversi/theme.css';
 /* Tailwind classes used inside workspace packages. */
 @source '../../../../packages';
 

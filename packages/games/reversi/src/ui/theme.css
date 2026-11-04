@@ -1,0 +1,94 @@
+/* Reversi: green felt board, black and white discs. */
+[data-game='reversi'] {
+  --piece-p0: #111111;
+  --piece-p1: #f5f5f4;
+  --rv-board: #15803d;
+  --rv-line: #0f5f2d;
+}
+@media (prefers-color-scheme: dark) {
+  [data-game='reversi'] {
+    --piece-p0: #0a0a0a;
+    --piece-p1: #e7e5e4;
+    --rv-board: #166534;
+    --rv-line: #0b3d1d;
+  }
+}
+
+.rv-board .bg-board {
+  fill: var(--rv-board, #15803d);
+}
+.rv-board .bg-grid-lines line {
+  stroke: var(--rv-line, #0f5f2d);
+  stroke-width: 1.5;
+}
+.rv-p0 {
+  fill: var(--piece-p0, #111);
+  stroke: #000;
+  stroke-width: 1;
+}
+.rv-p1 {
+  fill: var(--piece-p1, #f5f5f4);
+  stroke: #57534e;
+  stroke-width: 1.5;
+}
+.rv-ghost {
+  opacity: 0.45;
+}
+.rv-hint {
+  fill: rgb(0 0 0 / 0.3);
+}
+.rv-last {
+  fill: #ef4444;
+}
+.rv-score {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.rv-score span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.rv-pass {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted, #6b665e);
+}
+.rv-flip {
+  animation: rv-flip 0.3s ease-in-out;
+}
+.rv-enter {
+  animation: rv-enter 0.18s ease-out;
+}
+@keyframes rv-flip {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+@keyframes rv-enter {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rv-flip,
+  .rv-enter {
+    animation: none;
+  }
+}

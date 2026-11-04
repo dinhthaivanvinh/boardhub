@@ -6,6 +6,12 @@ import caroVi from '@bg/game-caro/i18n/vi.json';
 import { definition as fourInARow } from '@bg/game-four-in-a-row/rules';
 import fourEn from '@bg/game-four-in-a-row/i18n/en.json';
 import fourVi from '@bg/game-four-in-a-row/i18n/vi.json';
+import { definition as reversi } from '@bg/game-reversi/rules';
+import reversiEn from '@bg/game-reversi/i18n/en.json';
+import reversiVi from '@bg/game-reversi/i18n/vi.json';
+import { definition as xiangqi } from '@bg/game-xiangqi/rules';
+import xiangqiEn from '@bg/game-xiangqi/i18n/en.json';
+import xiangqiVi from '@bg/game-xiangqi/i18n/vi.json';
 import type { AnyGameDefinition } from '@bg/engine';
 
 export interface CatalogEntry {
@@ -16,6 +22,8 @@ export interface CatalogEntry {
 const ENTRIES = {
   caro: { definition: caro, messages: { vi: caroVi, en: caroEn } },
   'four-in-a-row': { definition: fourInARow, messages: { vi: fourVi, en: fourEn } },
+  reversi: { definition: reversi, messages: { vi: reversiVi, en: reversiEn } },
+  xiangqi: { definition: xiangqi, messages: { vi: xiangqiVi, en: xiangqiEn } },
 } satisfies Record<string, CatalogEntry>;
 
 export type GameId = keyof typeof ENTRIES;
@@ -28,4 +36,4 @@ export function isGameId(id: string): id is GameId {
 }
 
 /** MVP games not built yet, shown as "coming soon" on the home page (docs/01 §4). */
-export const UPCOMING_GAMES = ['reversi', 'xiangqi'] as const;
+export const UPCOMING_GAMES: readonly string[] = [];

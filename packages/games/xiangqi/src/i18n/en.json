@@ -1,0 +1,35 @@
+{
+  "name": "Xiangqi",
+  "shortDescription": "Chinese chess: checkmate the opposing general to win.",
+  "rules": "9 × 10 points; pieces stand on the intersections. Red moves first.\n\nThe **general** and **advisors** stay in the palace. **Elephants** move two points diagonally, cannot cross the river and are blocked by a piece in between. **Horses** move like an L and are blocked by a piece right next to them. **Chariots** move any distance in a straight line. **Cannons** move like chariots but capture by jumping exactly one piece. **Soldiers** move forward, and also sideways once across the river.\n\nThe two generals may not face each other on an open file. You may not leave your general in check.\n\nA side that is **checkmated** or has **no legal move** loses. The same position three times, or 60 moves each without a capture, is a draw.",
+  "pieces": { "0": "Red", "1": "Black" },
+  "pieceNames": {
+    "K": "General",
+    "A": "Advisor",
+    "E": "Elephant",
+    "H": "Horse",
+    "R": "Chariot",
+    "C": "Cannon",
+    "P": "Soldier"
+  },
+  "pieceLabel": "{color} {type}",
+  "empty": "empty",
+  "boardLabel": "Xiangqi board",
+  "cellLabel": "Column {col}, row {row}: {piece}",
+  "lastMove": "{piece} moved from {from} to {to}.",
+  "check": "Check!",
+  "errors": {
+    "out_of_bounds": "That move is off the board.",
+    "no_piece": "There is no piece there.",
+    "not_your_piece": "That is your opponent's piece.",
+    "illegal_move": "That piece cannot move like that.",
+    "self_check": "That move leaves your general in check."
+  },
+  "reasons": {
+    "checkmate": "checkmate",
+    "stalemate": "opponent has no legal move",
+    "repetition": "position repeated three times",
+    "move_limit": "60 moves without a capture"
+  },
+  "config": {}
+}

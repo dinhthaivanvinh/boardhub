@@ -180,6 +180,17 @@ describe('Postgres repos', () => {
       .orderBy('seat')
       .execute();
     expect(players.map((p) => p.user_id)).toEqual([a.userId, b.userId]);
+
+    // Read side used by the profile and replay pages.
+    const listed = await history.listForUser(a.userId, 50);
+    expect(listed.find((m) => m.id === matchId)).toMatchObject({
+      status: 'finished',
+      gameId: 'four-in-a-row',
+    });
+    const stored = await history.getMatch(matchId);
+    expect(stored?.moves.map((m) => m.move)).toEqual(cols.map((col) => ({ col })));
+    expect(stored?.players.map((p) => p.userId)).toEqual([a.userId, b.userId]);
+    expect(await history.getMatch('00000000-0000-4000-8000-000000000000')).toBeNull();
   });
 });
 

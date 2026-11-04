@@ -15,10 +15,7 @@
     "play": "Play now",
     "comingSoon": "Coming soon"
   },
-  "upcoming": {
-    "reversi": "Reversi",
-    "xiangqi": "Xiangqi"
-  },
+  "upcoming": {},
   "setup": {
     "title": "New game",
     "rules": "Rules",
@@ -136,7 +133,8 @@
     "drawOffered": "{player} offers a draw",
     "drawSent": "Draw offered",
     "notFound": "Room {code} not found. It may have closed.",
-    "spectating": "You are watching this game."
+    "spectating": "You are watching this game.",
+    "replay": "Replay"
   },
   "chat": {
     "title": "Chat",
@@ -179,7 +177,8 @@
       "not_found": "Game not found.",
       "stale_seq": "The board just changed, please move again.",
       "not_player": "You're not playing in this game.",
-      "no_offer": "There is no draw offer."
+      "no_offer": "There is no draw offer.",
+      "not_finished": "This game is not over yet."
     },
     "auth": {
       "required": "Please sign in again.",
@@ -192,5 +191,44 @@
     "protocol": {
       "version": "This page is out of date, please reload."
     }
+  },
+  "profile": {
+    "title": "Profile",
+    "guest": "Guest account",
+    "settings": "Account settings",
+    "history": "Recent online games",
+    "empty": "You haven't played any online games yet.",
+    "localNote": "Games on this device (two players, or against the computer outside online rooms) are not saved.",
+    "vs": "vs {names}",
+    "replay": "Replay",
+    "rejoin": "Back to room",
+    "stats": {
+      "played": "Played",
+      "wins": "Won",
+      "losses": "Lost",
+      "draws": "Drawn"
+    },
+    "outcome": {
+      "win": "Won",
+      "loss": "Lost",
+      "draw": "Draw",
+      "playing": "Playing"
+    }
+  },
+  "replay": {
+    "pageTitle": "Replay",
+    "title": "Replay: {game}",
+    "when": "Played {date}",
+    "loading": "Loading…",
+    "position": "Move {n} / {total}",
+    "slider": "Pick a move",
+    "first": "Start",
+    "prev": "Previous move",
+    "next": "Next move",
+    "last": "End",
+    "play": "Play",
+    "pause": "Pause",
+    "back": "Back to profile",
+    "broken": "This game cannot be replayed (the rules may have changed)."
   }
 }

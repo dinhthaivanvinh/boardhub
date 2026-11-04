@@ -1,0 +1,25 @@
+{
+  "name": "Reversi",
+  "shortDescription": "Đặt quân kẹp quân đối thủ để lật chúng thành của mình. Bên nhiều quân hơn khi hết nước sẽ thắng.",
+  "rules": "Bàn 8×8, khởi đầu với 4 quân ở giữa. Đen đi trước.\n\nMỗi nước, đặt một quân sao cho **kẹp** được ít nhất một dãy quân đối thủ (ngang, dọc hoặc chéo) giữa quân mới và một quân của mình. Mọi dãy bị kẹp đều bị **lật** sang màu của bạn.\n\nNếu không có nước đi hợp lệ, bạn **mất lượt**. Khi cả hai bên đều không đi được, ván kết thúc và bên **nhiều quân hơn** thắng.",
+  "pieces": { "0": "Đen", "1": "Trắng" },
+  "empty": "trống",
+  "playable": "trống, đi được",
+  "boardLabel": "Bàn Reversi {size} × {size}",
+  "cellLabel": "Hàng {row}, cột {col}: {piece}",
+  "score": "Đen {black}, Trắng {white}",
+  "passed": "{piece} không có nước đi nên mất lượt.",
+  "errors": {
+    "out_of_bounds": "Ô này nằm ngoài bàn cờ.",
+    "cell_occupied": "Ô này đã có quân.",
+    "no_flips": "Nước này không lật được quân nào."
+  },
+  "reasons": {
+    "more_discs": "nhiều quân hơn",
+    "equal_discs": "số quân bằng nhau"
+  },
+  "config": {
+    "size": "Kích thước bàn",
+    "sizeOptions": { "6": "6 × 6", "8": "8 × 8", "10": "10 × 10" }
+  }
+}

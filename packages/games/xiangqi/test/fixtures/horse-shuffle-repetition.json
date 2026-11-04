@@ -1,0 +1,16 @@
+{
+  "name": "Both sides shuffle a horse out and back twice: the starting position appears a third time, draw",
+  "config": {},
+  "seed": "fixture-repetition",
+  "moves": [
+    { "from": 82, "to": 65 },
+    { "from": 1, "to": 20 },
+    { "from": 65, "to": 82 },
+    { "from": 20, "to": 1 },
+    { "from": 82, "to": 65 },
+    { "from": 1, "to": 20 },
+    { "from": 65, "to": 82 },
+    { "from": 20, "to": 1 }
+  ],
+  "expected": { "result": { "kind": "draw", "reason": "repetition" } }
+}

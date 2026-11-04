@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import type { z } from 'zod';
 import { GuestRequest, LoginRequest, RegisterRequest, RenameRequest } from '@bg/protocol';
 import type { AuthService } from '../auth/auth-service';
+import type { HistoryService } from '../history/history-service';
 import { HubError } from '../errors';
 
 const STATUS: Record<string, number> = {
@@ -9,6 +10,8 @@ const STATUS: Record<string, number> = {
   'auth.required': 401,
   'auth.invalid_credentials': 401,
   'auth.email_taken': 409,
+  'match.not_found': 404,
+  'match.not_finished': 409,
   'rate.limited': 429,
 };
 
@@ -23,7 +26,7 @@ function parse<S extends z.ZodType>(schema: S, body: unknown): z.output<S> {
   return res.data;
 }
 
-export function registerRoutes(app: FastifyInstance, auth: AuthService) {
+export function registerRoutes(app: FastifyInstance, auth: AuthService, history: HistoryService) {
   app.setErrorHandler((err, _req, reply: FastifyReply) => {
     if (err instanceof HubError) return reply.status(STATUS[err.code] ?? 400).send({ code: err.code });
     if ((err as { statusCode?: number }).statusCode === 429)
@@ -54,5 +57,16 @@ export function registerRoutes(app: FastifyInstance, auth: AuthService) {
   app.patch('/api/me', async (req) => {
     const user = await requireUser(req);
     return auth.rename(user.id, parse(RenameRequest, req.body).displayName);
+  });
+
+  app.get<{ Querystring: { limit?: string } }>('/api/me/matches', async (req) => {
+    const user = await requireUser(req);
+    return { matches: await history.listForUser(user.id, Number(req.query.limit ?? 30) || 30) };
+  });
+
+  // Finished matches are public by id (the link is shared to show a replay).
+  app.get<{ Params: { id: string } }>('/api/matches/:id', async (req) => {
+    if (!/^[0-9a-f-]{36}$/i.test(req.params.id)) throw new HubError('match.not_found');
+    return history.getFinished(req.params.id);
   });
 }

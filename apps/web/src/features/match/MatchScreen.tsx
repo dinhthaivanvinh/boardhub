@@ -80,7 +80,8 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           mySeat={viewer}
           isMyTurn={isMyTurn}
           disabled={match.botThinking}
-          orientation={viewer}
+          // Hot-seat keeps one orientation; turning the board every move is disorienting.
+          orientation={setup.mode === 'bot' ? setup.humanSeat : 0}
           onMove={match.play}
           settings={settings}
           t={t}

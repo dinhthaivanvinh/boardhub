@@ -48,7 +48,10 @@ Dùng skill **`bg-bot`**. Tối thiểu phải có cấp `easy` (randomBot hoặ
 
 - Web (3 file trong `apps/web/src/games/`): `catalog.ts` (definition + i18n, không React), `client-registry.ts` (Board + configFields + PieceIcon), `bots.ts` (bot, chạy trong Web Worker).
 - Web: thêm `@import '@bg/game-<id>/theme.css';` vào `apps/web/src/app/globals.css` và id vào `transpilePackages` trong `apps/web/next.config.ts`.
-- Server (từ M2): thêm vào `apps/server/src/registry.ts`.
+- Server: thêm definition và bot vào 2 map trong `apps/server/src/registry.ts`.
+- Thêm dependency `@bg/game-<id>` vào `apps/web` và `apps/server` (`pnpm --filter @bg/web add "@bg/game-<id>@workspace:*"`, tương tự cho server).
+- Nếu game đang nằm trong `UPCOMING_GAMES` (`apps/web/src/games/catalog.ts`) thì xoá khỏi đó và xoá key `upcoming.<id>` trong i18n của web.
+- Thêm một file E2E `e2e/<id>.spec.ts` (ít nhất: một nước đi ở chế độ 2 người, bot trả lời).
 - Seed `GameSetting` cho game (enabled = false nếu chưa muốn công khai).
 
 ## Bước 9 — Hoàn thành khi

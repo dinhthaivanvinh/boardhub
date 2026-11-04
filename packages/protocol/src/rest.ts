@@ -1,3 +1,4 @@
+import type { GameResultView } from './schemas';
 import { z } from 'zod';
 
 const DisplayName = z.string().trim().min(2).max(24);
@@ -30,4 +31,33 @@ export interface AuthResponse {
 
 export interface ApiError {
   code: string;
+}
+
+export interface MatchPlayerInfo {
+  seat: number;
+  userId: string | null;
+  /** Display name for users, null for bots. */
+  name: string | null;
+  botLevel: string | null;
+}
+
+/** One row of a player's match history (GET /api/me/matches). */
+export interface MatchSummary {
+  id: string;
+  roomCode: string;
+  gameId: string;
+  status: 'playing' | 'finished';
+  result: GameResultView | null;
+  startedAt: number;
+  endedAt: number | null;
+  players: MatchPlayerInfo[];
+}
+
+/** A finished match with everything needed to replay it (GET /api/matches/:id). */
+export interface MatchDetail extends MatchSummary {
+  rulesVersion: number;
+  config: Record<string, unknown>;
+  /** Revealed only once the match is over. */
+  seed: string;
+  moves: { seat: number; move: unknown }[];
 }

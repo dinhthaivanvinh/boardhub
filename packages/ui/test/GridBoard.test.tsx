@@ -70,6 +70,23 @@ describe('GridBoard', () => {
     expect(document.activeElement?.getAttribute('aria-label')).toBe('cell 4');
   });
 
+  it('can hide cell borders and draw a custom background under the cells', () => {
+    const { container } = render(
+      <GridBoard
+        rows={2}
+        cols={2}
+        label="b"
+        cellLabel={(i) => String(i)}
+        renderCell={() => null}
+        onActivate={() => {}}
+        gridLines={false}
+        background={<circle data-testid="river" />}
+      />,
+    );
+    expect(container.querySelector('.bg-grid-lines')).toBeNull();
+    expect(screen.getByTestId('river')).toBeTruthy();
+  });
+
   it('VisuallyHidden can announce changes politely', () => {
     render(<VisuallyHidden live>hello</VisuallyHidden>);
     expect(screen.getByText('hello').getAttribute('aria-live')).toBe('polite');

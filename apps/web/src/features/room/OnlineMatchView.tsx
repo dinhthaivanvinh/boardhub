@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
@@ -121,9 +122,14 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
         )}
 
         {room.status === 'finished' && (
-          <button type="button" className="btn btn-primary" onClick={() => api.rematch()}>
-            {t('room.rematch')}
-          </button>
+          <div className="grid grid-cols-2 gap-2">
+            <button type="button" className="btn btn-primary" onClick={() => api.rematch()}>
+              {t('room.rematch')}
+            </button>
+            <Link href={`/replay/${m.matchId}`} className="btn">
+              {t('room.replay')}
+            </Link>
+          </div>
         )}
       </aside>
     </div>

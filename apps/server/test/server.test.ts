@@ -5,7 +5,9 @@ import {
   type Ack,
   type AuthResponse,
   type ClientToServerEvents,
+  type MatchDetail,
   type MatchSnapshot,
+  type MatchSummary,
   type RoomSnapshot,
   type ServerToClientEvents,
 } from '@bg/protocol';
@@ -205,6 +207,26 @@ describe('online match over sockets', () => {
     const chat = next(sa, 'chat:message');
     await ok(sb, 'chat:send', { roomId: room.id, text: 'gg' });
     expect(await chat).toMatchObject({ text: 'gg', from: { name: 'Bob' } });
+
+    // The finished match is in both players' history and can be replayed.
+    const history = await api<{ matches: MatchSummary[] }>('GET', '/api/me/matches', undefined, b.token);
+    expect(history.body.matches).toHaveLength(1);
+    expect(history.body.matches[0]).toMatchObject({
+      id: ma.matchId,
+      roomCode: room.code,
+      gameId: 'caro',
+      status: 'finished',
+      result: { kind: 'win', winners: [0] },
+      players: [
+        { seat: 0, userId: a.user.id, name: 'Alice', botLevel: null },
+        { seat: 1, userId: b.user.id, name: 'Bob', botLevel: null },
+      ],
+    });
+    const detail = await api<MatchDetail>('GET', `/api/matches/${ma.matchId}`);
+    expect(detail.status).toBe(200);
+    expect(detail.body.moves.map((m) => m.move)).toEqual(cells.map((cell) => ({ cell })));
+    expect(detail.body.seed.length).toBeGreaterThan(0);
+    expect((await api('GET', '/api/me/matches')).status).toBe(401);
   });
 
   it('a rejected move comes back in the ack with the rule code', async () => {
@@ -239,6 +261,14 @@ describe('online match over sockets', () => {
       ok: false,
       code: 'engine.not_your_turn',
     });
+
+    // A running match cannot be fetched: its seed and moves must stay private until the end.
+    expect(await api('GET', `/api/matches/${m.matchId}`)).toMatchObject({
+      status: 409,
+      body: { code: 'match.not_finished' },
+    });
+    expect((await api('GET', '/api/matches/00000000-0000-4000-8000-000000000000')).status).toBe(404);
+    expect((await api('GET', '/api/matches/not-an-id')).status).toBe(404);
   });
 
   it('validates payloads and rate-limits floods', async () => {

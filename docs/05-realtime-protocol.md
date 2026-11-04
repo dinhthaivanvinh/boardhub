@@ -17,14 +17,16 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 
 ## 2. REST (`/api`)
 
-| Method + path             | Body                               | Trả về                                                                                                        |
-| ------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `POST /api/auth/guest`    | `{ displayName? }`                 | `AuthResponse { token, user }`                                                                                |
-| `POST /api/auth/register` | `{ email, password, displayName }` | `AuthResponse`. Có token khách trong `Authorization` thì **nâng cấp** tài khoản khách đó (giữ id, FR-AUTH-03) |
-| `POST /api/auth/login`    | `{ email, password }`              | `AuthResponse`                                                                                                |
-| `GET /api/me`             | —                                  | `PublicUser`                                                                                                  |
-| `PATCH /api/me`           | `{ displayName }`                  | `PublicUser`                                                                                                  |
-| `GET /health`             | —                                  | `{ ok: true }`                                                                                                |
+| Method + path                | Body                               | Trả về                                                                                                                        |
+| ---------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/auth/guest`       | `{ displayName? }`                 | `AuthResponse { token, user }`                                                                                                |
+| `POST /api/auth/register`    | `{ email, password, displayName }` | `AuthResponse`. Có token khách trong `Authorization` thì **nâng cấp** tài khoản khách đó (giữ id, FR-AUTH-03)                 |
+| `POST /api/auth/login`       | `{ email, password }`              | `AuthResponse`                                                                                                                |
+| `GET /api/me`                | —                                  | `PublicUser`                                                                                                                  |
+| `PATCH /api/me`              | `{ displayName }`                  | `PublicUser`                                                                                                                  |
+| `GET /api/me/matches?limit=` | —                                  | `{ matches: MatchSummary[] }` ván của người gọi, mới nhất trước (tối đa 100)                                                  |
+| `GET /api/matches/:id`       | —                                  | `MatchDetail` (gồm `seed` + danh sách nước) **chỉ khi ván đã kết thúc**; đang chơi → 409 `match.not_finished`; không có → 404 |
+| `GET /health`                | —                                  | `{ ok: true }`                                                                                                                |
 
 Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
 
@@ -103,7 +105,7 @@ Phòng (và ván) sống trong live store 24 giờ kể từ lần thay đổi c
 | `protocol.version`, `rate.limited`, `invalid.payload`, `internal`                                               | Chung                                       |
 | `room.not_found`, `room.not_host`, `room.invalid_state`, `room.seat_taken`, `room.not_seated`, `room.not_ready` | Phòng                                       |
 | `game.not_found`                                                                                                | `gameId` không có trong registry server     |
-| `match.not_found`, `match.stale_seq`, `match.not_player`, `match.no_offer`                                      | Ván                                         |
+| `match.not_found`, `match.stale_seq`, `match.not_player`, `match.no_offer`, `match.not_finished`                | Ván                                         |
 | `engine.*`, `<gameId>.*`                                                                                        | Lỗi luật (xem [04](04-game-engine-spec.md)) |
 
 Client map mã lỗi sang i18n bằng `apps/web/src/game-runtime/error-key.ts` (`errors.*`, `engine.*`, `games.<id>.errors.*`).

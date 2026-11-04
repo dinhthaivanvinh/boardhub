@@ -37,6 +37,13 @@ export function Board(props: BoardProps<View, Move>): JSX.Element;
 - Export `PieceIcon({ seat, size })` cạnh `Board` (SVG nhỏ, `aria-hidden`), dùng cho thẻ người chơi.
 - Màu quân riêng của game: đặt trong `theme.css` dưới selector `[data-game='<id>']` (xem `packages/games/four-in-a-row/src/ui/theme.css`).
 
+## Bẫy đã gặp
+
+- Nội dung `renderCell` không nhận sự kiện chuột (GridBoard lo việc này). Đừng gắn `onClick` lên quân hay chấm gợi ý; mọi tương tác đi qua `onActivate` của ô.
+- Game chơi trên giao điểm: `gridLines={false}` + `background` (xem `packages/games/xiangqi/src/ui/Board.tsx`).
+- Cần xoay bàn theo phe: đổi chỉ số trong component, không xoay cả SVG (chữ sẽ bị ngược).
+- Unit test với jsdom không phát hiện lỗi hit-testing; luôn có E2E Playwright bấm thật trên bàn cờ.
+
 ## Mobile
 
 - Vùng chạm ≥ 32 px. Nếu ô quá nhỏ (Caro 19×19 ở 360 px) thì bật pinch-zoom/pan và `confirmMove`.

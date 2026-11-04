@@ -15,10 +15,7 @@
     "play": "Chơi ngay",
     "comingSoon": "Sắp ra mắt"
   },
-  "upcoming": {
-    "reversi": "Reversi",
-    "xiangqi": "Cờ tướng"
-  },
+  "upcoming": {},
   "setup": {
     "title": "Ván mới",
     "rules": "Luật chơi",
@@ -136,7 +133,8 @@
     "drawOffered": "{player} xin hòa",
     "drawSent": "Đã xin hòa",
     "notFound": "Không tìm thấy phòng {code}. Có thể phòng đã đóng.",
-    "spectating": "Bạn đang xem trận này."
+    "spectating": "Bạn đang xem trận này.",
+    "replay": "Xem lại ván"
   },
   "chat": {
     "title": "Trò chuyện",
@@ -179,7 +177,8 @@
       "not_found": "Không tìm thấy ván đấu.",
       "stale_seq": "Bàn cờ vừa thay đổi, hãy đi lại.",
       "not_player": "Bạn không chơi trong ván này.",
-      "no_offer": "Không có lời xin hòa nào."
+      "no_offer": "Không có lời xin hòa nào.",
+      "not_finished": "Ván này chưa kết thúc."
     },
     "auth": {
       "required": "Hãy đăng nhập lại.",
@@ -192,5 +191,44 @@
     "protocol": {
       "version": "Trang đã cũ, hãy tải lại trang."
     }
+  },
+  "profile": {
+    "title": "Hồ sơ",
+    "guest": "Tài khoản khách",
+    "settings": "Cài đặt tài khoản",
+    "history": "Ván online gần đây",
+    "empty": "Bạn chưa chơi ván online nào.",
+    "localNote": "Ván chơi trên máy (2 người hoặc với máy ngoài phòng online) không được lưu.",
+    "vs": "với {names}",
+    "replay": "Xem lại",
+    "rejoin": "Vào lại phòng",
+    "stats": {
+      "played": "Đã chơi",
+      "wins": "Thắng",
+      "losses": "Thua",
+      "draws": "Hòa"
+    },
+    "outcome": {
+      "win": "Thắng",
+      "loss": "Thua",
+      "draw": "Hòa",
+      "playing": "Đang chơi"
+    }
+  },
+  "replay": {
+    "pageTitle": "Xem lại ván",
+    "title": "Xem lại: {game}",
+    "when": "Chơi lúc {date}",
+    "loading": "Đang tải…",
+    "position": "Nước {n} / {total}",
+    "slider": "Chọn nước",
+    "first": "Về đầu ván",
+    "prev": "Nước trước",
+    "next": "Nước sau",
+    "last": "Đến cuối ván",
+    "play": "Tự chạy",
+    "pause": "Tạm dừng",
+    "back": "Về hồ sơ",
+    "broken": "Không dựng lại được ván này (luật chơi có thể đã thay đổi)."
   }
 }

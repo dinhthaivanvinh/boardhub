@@ -1,7 +1,14 @@
 import type { Kysely, Selectable } from 'kysely';
 import type { GameResult } from '@bg/engine';
-import type { HistoryRepo, NewMatchRow, UserRecord, UserRepo } from '../store/repos';
-import type { Database, UsersTable } from './database';
+import type {
+  HistoryRepo,
+  NewMatchRow,
+  StoredMatch,
+  StoredMatchSummary,
+  UserRecord,
+  UserRepo,
+} from '../store/repos';
+import type { Database, MatchesTable, UsersTable } from './database';
 
 const json = (value: unknown) => JSON.stringify(value);
 
@@ -42,6 +49,12 @@ export class PgUserRepo implements UserRepo {
   async findByEmail(email: string) {
     const row = await this.db.selectFrom('users').selectAll().where('email', '=', email).executeTakeFirst();
     return row ? toUser(row) : null;
+  }
+
+  async findManyByIds(ids: string[]) {
+    if (ids.length === 0) return [];
+    const rows = await this.db.selectFrom('users').selectAll().where('id', 'in', ids).execute();
+    return rows.map(toUser);
   }
 
   async update(id: string, patch: Partial<Omit<UserRecord, 'id' | 'createdAt'>>) {
@@ -120,4 +133,69 @@ export class PgHistoryRepo implements HistoryRepo {
       .where('id', '=', matchId)
       .execute();
   }
+
+  async listForUser(userId: string, limit: number): Promise<StoredMatchSummary[]> {
+    const rows = await this.db
+      .selectFrom('matches')
+      .innerJoin('match_players as me', 'me.match_id', 'matches.id')
+      .selectAll('matches')
+      .where('me.user_id', '=', userId)
+      .orderBy('matches.started_at', 'desc')
+      .limit(limit)
+      .execute();
+    const players = await this.playersOf(rows.map((r) => r.id));
+    return rows.map((r) => toSummary(r, players.get(r.id) ?? []));
+  }
+
+  async getMatch(id: string): Promise<StoredMatch | null> {
+    const row = await this.db.selectFrom('matches').selectAll().where('id', '=', id).executeTakeFirst();
+    if (!row) return null;
+    const players = await this.playersOf([id]);
+    const moves = await this.db
+      .selectFrom('match_moves')
+      .select(['seat', 'move'])
+      .where('match_id', '=', id)
+      .orderBy('idx')
+      .execute();
+    return {
+      ...toSummary(row, players.get(id) ?? []),
+      rulesVersion: row.rules_version,
+      config: row.config as Record<string, unknown>,
+      seed: row.seed,
+      moves: moves.map((m) => ({ seat: m.seat, move: m.move })),
+    };
+  }
+
+  private async playersOf(matchIds: string[]) {
+    const byMatch = new Map<string, StoredMatchSummary['players']>();
+    if (matchIds.length === 0) return byMatch;
+    const rows = await this.db
+      .selectFrom('match_players')
+      .selectAll()
+      .where('match_id', 'in', matchIds)
+      .orderBy('seat')
+      .execute();
+    for (const p of rows) {
+      const list = byMatch.get(p.match_id) ?? [];
+      list.push({ seat: p.seat, userId: p.user_id, botLevel: p.bot_level });
+      byMatch.set(p.match_id, list);
+    }
+    return byMatch;
+  }
+}
+
+function toSummary(
+  row: Selectable<MatchesTable>,
+  players: StoredMatchSummary['players'],
+): StoredMatchSummary {
+  return {
+    id: row.id,
+    roomCode: row.room_code,
+    gameId: row.game_id,
+    status: row.status,
+    result: (row.result as GameResult | null) ?? null,
+    startedAt: row.started_at.getTime(),
+    endedAt: row.ended_at?.getTime() ?? null,
+    players,
+  };
 }

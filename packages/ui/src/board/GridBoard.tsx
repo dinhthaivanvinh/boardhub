@@ -21,6 +21,10 @@ export interface GridBoardProps {
   cellData?(index: number): Record<`data-${string}`, string | undefined>;
   /** Drawn on top of the cells (win lines, arrows). Not interactive. */
   overlay?: ReactNode;
+  /** Drawn under the cells, above the board colour (river, palace lines…). Not interactive. */
+  background?: ReactNode;
+  /** Draw cell borders (default true). Turn off for games played on intersections. */
+  gridLines?: boolean;
   className?: string;
 }
 
@@ -72,14 +76,21 @@ export function GridBoard(props: GridBoardProps) {
       onPointerLeave={() => props.onHover?.(null)}
     >
       <rect className="bg-board" x={0} y={0} width={width} height={height} />
-      <g className="bg-grid-lines" aria-hidden="true">
-        {Array.from({ length: cols + 1 }, (_, i) => (
-          <line key={`v${i}`} x1={i * CELL} y1={0} x2={i * CELL} y2={height} />
-        ))}
-        {Array.from({ length: rows + 1 }, (_, i) => (
-          <line key={`h${i}`} x1={0} y1={i * CELL} x2={width} y2={i * CELL} />
-        ))}
-      </g>
+      {props.gridLines !== false && (
+        <g className="bg-grid-lines" aria-hidden="true">
+          {Array.from({ length: cols + 1 }, (_, i) => (
+            <line key={`v${i}`} x1={i * CELL} y1={0} x2={i * CELL} y2={height} />
+          ))}
+          {Array.from({ length: rows + 1 }, (_, i) => (
+            <line key={`h${i}`} x1={0} y1={i * CELL} x2={width} y2={i * CELL} />
+          ))}
+        </g>
+      )}
+      {props.background && (
+        <g aria-hidden="true" pointerEvents="none">
+          {props.background}
+        </g>
+      )}
       <g role="grid" aria-label={props.label} aria-rowcount={rows} aria-colcount={cols}>
         {Array.from({ length: rows }, (_, r) => (
           <g role="row" key={r} aria-rowindex={r + 1}>
@@ -111,7 +122,9 @@ export function GridBoard(props: GridBoardProps) {
                     height={CELL}
                     fill="transparent"
                   />
-                  {props.renderCell(index, geom)}
+                  {/* Content never receives pointer events: pieces and hints appear and disappear on hover,
+                      and a click whose mousedown target was removed is dropped by the browser. */}
+                  <g pointerEvents="none">{props.renderCell(index, geom)}</g>
                 </g>
               );
             })}

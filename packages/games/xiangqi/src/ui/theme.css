@@ -1,0 +1,95 @@
+/* Cờ tướng: wooden board, round pieces with traditional glyphs. */
+[data-game='xiangqi'] {
+  --piece-p0: #b91c1c;
+  --piece-p1: #1c1917;
+  --xq-board: #e9c98b;
+  --xq-line: #6b4f2a;
+  --xq-piece-bg: #fdf3dc;
+}
+@media (prefers-color-scheme: dark) {
+  [data-game='xiangqi'] {
+    --piece-p0: #ef4444;
+    --piece-p1: #e7e5e4;
+    --xq-board: #5a4527;
+    --xq-line: #c9a46a;
+    --xq-piece-bg: #2b2117;
+  }
+}
+
+.xq-board .bg-board {
+  fill: var(--xq-board, #e9c98b);
+}
+.xq-lines line {
+  stroke: var(--xq-line, #6b4f2a);
+  stroke-width: 1.2;
+}
+.xq-river {
+  fill: var(--xq-line, #6b4f2a);
+  font-size: 18px;
+  opacity: 0.7;
+}
+.xq-disc {
+  fill: var(--xq-piece-bg, #fdf3dc);
+  stroke-width: 2;
+}
+.xq-ring {
+  fill: none;
+  stroke-width: 1;
+}
+.xq-r .xq-disc,
+.xq-r .xq-ring {
+  stroke: var(--piece-p0, #b91c1c);
+}
+.xq-b .xq-disc,
+.xq-b .xq-ring {
+  stroke: var(--piece-p1, #1c1917);
+}
+.xq-glyph {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'KaiTi', 'STKaiti', 'Noto Serif CJK SC', 'Microsoft YaHei', serif;
+  pointer-events: none;
+}
+.xq-r .xq-glyph {
+  fill: var(--piece-p0, #b91c1c);
+}
+.xq-b .xq-glyph {
+  fill: var(--piece-p1, #1c1917);
+}
+.xq-selected .xq-disc {
+  stroke: var(--focus-ring, #0284c7);
+  stroke-width: 3.5;
+}
+.xq-check .xq-disc {
+  stroke: #dc2626;
+  stroke-width: 4;
+}
+.xq-target {
+  fill: var(--focus-ring, #0284c7);
+  opacity: 0.8;
+}
+.xq-capture {
+  fill: none;
+  stroke: var(--focus-ring, #0284c7);
+  stroke-width: 2.5;
+  stroke-dasharray: 5 3;
+}
+.xq-last {
+  fill: var(--highlight-last, rgb(250 204 21 / 0.45));
+}
+.xq-enter {
+  animation: xq-enter 0.2s ease-out;
+}
+@keyframes xq-enter {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xq-enter {
+    animation: none;
+  }
+}

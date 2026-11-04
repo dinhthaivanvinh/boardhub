@@ -14,6 +14,7 @@ export interface UserRepo {
   create(user: Omit<UserRecord, 'createdAt'>): Promise<UserRecord>;
   findById(id: string): Promise<UserRecord | null>;
   findByEmail(email: string): Promise<UserRecord | null>;
+  findManyByIds(ids: string[]): Promise<UserRecord[]>;
   update(id: string, patch: Partial<Omit<UserRecord, 'id' | 'createdAt'>>): Promise<UserRecord | null>;
 }
 
@@ -29,6 +30,24 @@ export interface NewMatchRow {
   players: { seat: number; userId: string | null; botLevel: string | null }[];
 }
 
+export interface StoredMatchSummary {
+  id: string;
+  roomCode: string;
+  gameId: string;
+  status: 'playing' | 'finished';
+  result: GameResult | null;
+  startedAt: number;
+  endedAt: number | null;
+  players: { seat: number; userId: string | null; botLevel: string | null }[];
+}
+
+export interface StoredMatch extends StoredMatchSummary {
+  rulesVersion: number;
+  config: Record<string, unknown>;
+  seed: string;
+  moves: { seat: number; move: unknown }[];
+}
+
 /** Finished and running matches kept forever (docs/06 §1). */
 export interface HistoryRepo {
   createMatch(match: NewMatchRow): Promise<void>;
@@ -41,6 +60,9 @@ export interface HistoryRepo {
     at: number,
   ): Promise<void>;
   finishMatch(matchId: string, result: GameResult, endedAt: number): Promise<void>;
+  /** Matches the user played in, newest first. */
+  listForUser(userId: string, limit: number): Promise<StoredMatchSummary[]>;
+  getMatch(id: string): Promise<StoredMatch | null>;
 }
 
 export class MemoryUserRepo implements UserRepo {
@@ -61,6 +83,13 @@ export class MemoryUserRepo implements UserRepo {
   async findByEmail(email: string) {
     for (const u of this.users.values()) if (u.email === email) return { ...u };
     return null;
+  }
+
+  async findManyByIds(ids: string[]) {
+    return ids.flatMap((id) => {
+      const u = this.users.get(id);
+      return u ? [{ ...u }] : [];
+    });
   }
 
   async update(id: string, patch: Partial<Omit<UserRecord, 'id' | 'createdAt'>>) {
@@ -92,5 +121,40 @@ export class MemoryHistoryRepo implements HistoryRepo {
   async finishMatch(matchId: string, result: GameResult, endedAt: number) {
     const m = this.matches.get(matchId);
     if (m) Object.assign(m, { result, endedAt });
+  }
+
+  async listForUser(userId: string, limit: number): Promise<StoredMatchSummary[]> {
+    return [...this.matches.values()]
+      .filter((m) => m.players.some((p) => p.userId === userId))
+      .sort((a, b) => b.startedAt - a.startedAt)
+      .slice(0, limit)
+      .map((m) => this.summary(m));
+  }
+
+  async getMatch(id: string): Promise<StoredMatch | null> {
+    const m = this.matches.get(id);
+    if (!m) return null;
+    return {
+      ...this.summary(m),
+      rulesVersion: m.rulesVersion,
+      config: structuredClone(m.config),
+      seed: m.seed,
+      moves: [...m.moves]
+        .sort((a, b) => a.index - b.index)
+        .map(({ seat, move }) => ({ seat, move: structuredClone(move) })),
+    };
+  }
+
+  private summary(m: MemoryMatchRow): StoredMatchSummary {
+    return {
+      id: m.id,
+      roomCode: m.roomCode,
+      gameId: m.gameId,
+      status: m.endedAt === null ? 'playing' : 'finished',
+      result: m.result,
+      startedAt: m.startedAt,
+      endedAt: m.endedAt,
+      players: structuredClone(m.players),
+    };
   }
 }

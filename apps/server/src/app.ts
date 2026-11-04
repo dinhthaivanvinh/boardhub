@@ -11,6 +11,7 @@ import { createDb, migrateToLatest } from './db/database';
 import { PgHistoryRepo, PgUserRepo } from './db/pg-repos';
 import { GameHub } from './hub/game-hub';
 import { TimerScheduler, type Scheduler } from './hub/scheduler';
+import { HistoryService } from './history/history-service';
 import { registerRoutes } from './http/routes';
 import { attachGateway, createNotifier, type IoServer } from './realtime/gateway';
 import { GAME_DEFS } from './registry';
@@ -88,7 +89,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     botDelayMs: config.BOT_DELAY_MS,
   });
   const auth = new AuthService(users, new TokenService(config.JWT_SECRET));
-  registerRoutes(app, auth);
+  registerRoutes(app, auth, new HistoryService(history, users));
   attachGateway(io, hub, auth, log);
 
   const close = async () => {

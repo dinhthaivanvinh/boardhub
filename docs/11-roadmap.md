@@ -33,9 +33,11 @@
 
 ## M3 — Mở rộng game (3 tuần)
 
-- [ ] `@bg/game-reversi` (kiểm chứng lượt bỏ qua)
-- [ ] `@bg/game-xiangqi` (kiểm chứng luật phức tạp, bot minimax)
-- [ ] Replay, lịch sử ván, hồ sơ người chơi
+- [x] `@bg/game-reversi` (mất lượt tự động, 6/8/10)
+- [x] `@bg/game-xiangqi` (đủ luật đi quân, lộ mặt tướng, chiếu bí/hết nước; lặp lại 3 lần và 60 nước không ăn quân = hòa, xem spec)
+- [x] Xem lại ván (`/replay/[id]`), lịch sử và thống kê (`/profile`), API `GET /api/me/matches`, `GET /api/matches/:id`
+- [ ] Luật chiếu/đuổi liên tục chính thức của Cờ tướng (hiện: lặp lại 3 lần = hòa)
+- [ ] Lưu ván local / với máy vào IndexedDB (hiện: không lưu)
 - **Demo:** 4 game MVP chơi được ở mọi mode → **phát hành MVP**.
 
 ## M4 — Cạnh tranh (3 tuần)

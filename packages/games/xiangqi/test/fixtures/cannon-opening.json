@@ -1,0 +1,15 @@
+{
+  "name": "Central cannon opening: Red cannon takes the central soldier, giving check",
+  "config": {},
+  "seed": "fixture-cannon",
+  "moves": [
+    { "from": 64, "to": 67 },
+    { "from": 19, "to": 22 },
+    { "from": 67, "to": 31 }
+  ],
+  "expected": {
+    "result": null,
+    "captured": ["bP"],
+    "inCheck": 1
+  }
+}

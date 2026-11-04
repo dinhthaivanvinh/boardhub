@@ -1,0 +1,27 @@
+{
+  "name": "Cờ tướng",
+  "shortDescription": "Bày binh bố trận, chiếu bí Tướng đối phương để giành chiến thắng.",
+  "rules": "Bàn 9 × 10 giao điểm, quân đặt trên giao điểm. Đỏ đi trước.\n\n**Tướng** và **Sĩ** chỉ đi trong cung. **Tượng** đi chéo 2 bước, không qua sông và bị chặn nếu có quân ở giữa. **Mã** đi chữ L, bị chặn nếu có quân ngay cạnh theo hướng đi. **Xe** đi thẳng bao xa cũng được. **Pháo** đi như Xe nhưng khi ăn phải nhảy qua đúng một quân. **Tốt** đi thẳng; qua sông được đi ngang.\n\nHai Tướng không được đối mặt trên cùng một cột trống. Không được đi nước làm Tướng mình bị chiếu.\n\nBên bị **chiếu bí** hoặc **hết nước đi** thì thua. Cùng một thế cờ lặp lại 3 lần, hoặc 60 nước mỗi bên không ăn quân, thì hòa.",
+  "pieces": { "0": "Đỏ", "1": "Đen" },
+  "pieceNames": { "K": "Tướng", "A": "Sĩ", "E": "Tượng", "H": "Mã", "R": "Xe", "C": "Pháo", "P": "Tốt" },
+  "pieceLabel": "{type} {color}",
+  "empty": "trống",
+  "boardLabel": "Bàn cờ tướng",
+  "cellLabel": "Cột {col}, hàng {row}: {piece}",
+  "lastMove": "{piece} đi từ {from} đến {to}.",
+  "check": "Chiếu tướng!",
+  "errors": {
+    "out_of_bounds": "Nước đi nằm ngoài bàn cờ.",
+    "no_piece": "Không có quân ở đó.",
+    "not_your_piece": "Đó là quân của đối thủ.",
+    "illegal_move": "Quân này không đi được như vậy.",
+    "self_check": "Nước này để Tướng của bạn bị chiếu."
+  },
+  "reasons": {
+    "checkmate": "chiếu bí",
+    "stalemate": "đối thủ hết nước đi",
+    "repetition": "lặp lại thế cờ 3 lần",
+    "move_limit": "60 nước không ăn quân"
+  },
+  "config": {}
+}

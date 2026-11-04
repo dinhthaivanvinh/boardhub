@@ -1,0 +1,9 @@
+export { definition } from './rules/definition';
+export { countDiscs, flipsFor, legalCells } from './rules/board';
+export type * from './rules/types';
+export { Board, PieceIcon } from './ui/Board';
+export type { ReversiBoardProps } from './ui/Board';
+export { configFields } from './ui/config-fields';
+export { bot } from './bot';
+export { default as vi } from './i18n/vi.json';
+export { default as en } from './i18n/en.json';

@@ -1,0 +1,25 @@
+{
+  "name": "Caro",
+  "shortDescription": "Đặt 5 quân liên tiếp theo hàng ngang, dọc hoặc chéo để thắng.",
+  "rules": "Hai người lần lượt đặt quân X và O vào ô trống. X đi trước.\n\nAi có **5 quân liên tiếp** theo hàng ngang, dọc hoặc chéo trước sẽ thắng.\n\n**Luật chặn hai đầu:** nếu bật, chuỗi 5 quân bị chặn ở cả hai đầu (bởi quân đối thủ hoặc mép bàn) không được tính là thắng.\n\nBàn đầy mà không ai thắng thì hòa.",
+  "pieces": { "0": "X", "1": "O" },
+  "empty": "trống",
+  "boardLabel": "Bàn cờ Caro {size} × {size}",
+  "cellLabel": "Hàng {row}, cột {col}: {piece}",
+  "lastMove": "{piece} vừa đánh hàng {row}, cột {col}",
+  "errors": {
+    "out_of_bounds": "Ô này nằm ngoài bàn cờ.",
+    "cell_occupied": "Ô này đã có quân."
+  },
+  "reasons": {
+    "five_in_row": "5 quân liên tiếp",
+    "board_full": "bàn cờ đã đầy"
+  },
+  "config": {
+    "size": "Kích thước bàn",
+    "sizeOptions": { "15": "15 × 15", "19": "19 × 19" },
+    "winLength": "Số quân để thắng",
+    "blockedEndsRule": "Chặn hai đầu không tính thắng",
+    "exactLength": "Chỉ đúng 5 quân (6 quân trở lên không tính)"
+  }
+}

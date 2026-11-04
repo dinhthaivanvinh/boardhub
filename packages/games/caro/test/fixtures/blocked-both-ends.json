@@ -1,0 +1,19 @@
+{
+  "name": "Five blocked on both ends by O does not win (Vietnamese rule), game goes on",
+  "config": { "blockedEndsRule": true },
+  "seed": "fixture-2",
+  "moves": [
+    { "cell": 108 },
+    { "cell": 107 },
+    { "cell": 109 },
+    { "cell": 113 },
+    { "cell": 110 },
+    { "cell": 0 },
+    { "cell": 111 },
+    { "cell": 2 },
+    { "cell": 112 }
+  ],
+  "expected": {
+    "result": null
+  }
+}

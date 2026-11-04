@@ -1,0 +1,19 @@
+{
+  "name": "X wins with an open vertical five in the centre",
+  "config": {},
+  "seed": "fixture-1",
+  "moves": [
+    { "cell": 112 },
+    { "cell": 113 },
+    { "cell": 127 },
+    { "cell": 128 },
+    { "cell": 142 },
+    { "cell": 143 },
+    { "cell": 157 },
+    { "cell": 0 },
+    { "cell": 97 }
+  ],
+  "expected": {
+    "result": { "kind": "win", "winners": [0], "reason": "five_in_row" }
+  }
+}

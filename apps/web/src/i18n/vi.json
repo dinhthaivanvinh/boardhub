@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "BoardHub",
+    "tagline": "Chơi board game với bạn bè hoặc với máy, ngay trên trình duyệt."
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "language": "Ngôn ngữ"
+  },
+  "catalog": {
+    "title": "Chọn một game",
+    "players": "{players} người chơi",
+    "minutes": "~{n} phút",
+    "play": "Chơi ngay",
+    "comingSoon": "Sắp ra mắt"
+  },
+  "upcoming": {
+    "four-in-a-row": "Bốn trong hàng",
+    "reversi": "Reversi",
+    "xiangqi": "Cờ tướng"
+  },
+  "setup": {
+    "title": "Ván mới",
+    "rules": "Luật chơi",
+    "mode": "Cách chơi",
+    "modes": {
+      "bot": "Chơi với máy",
+      "local": "Hai người, chung một máy"
+    },
+    "level": "Độ khó",
+    "side": "Bạn cầm quân",
+    "movesFirst": "đi trước",
+    "variant": "Tùy chọn luật",
+    "start": "Bắt đầu"
+  },
+  "bot": {
+    "level": {
+      "easy": "Dễ",
+      "medium": "Vừa",
+      "hard": "Khó"
+    }
+  },
+  "match": {
+    "you": "Bạn",
+    "player": "Người chơi {n}",
+    "bot": "Máy ({level})",
+    "turn": "Lượt của {player}",
+    "thinking": "{player} đang nghĩ…",
+    "result": {
+      "win": "{player} thắng ({reason})",
+      "draw": "Hòa ({reason})"
+    },
+    "actions": {
+      "undo": "Đi lại",
+      "newGame": "Ván mới",
+      "resign": "Đầu hàng",
+      "changeSetup": "Đổi chế độ / luật"
+    },
+    "settings": {
+      "title": "Cài đặt",
+      "confirmMove": "Chạm 2 lần để xác nhận nước đi",
+      "animations": "Hiệu ứng"
+    },
+    "loading": "Đang tải bàn cờ…"
+  },
+  "reasons": {
+    "resign": "đối thủ đầu hàng",
+    "timeout": "hết giờ",
+    "agreement": "hai bên đồng ý"
+  },
+  "engine": {
+    "game_over": "Ván đã kết thúc.",
+    "not_your_turn": "Chưa đến lượt bạn.",
+    "invalid_move_shape": "Nước đi không hợp lệ."
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "back": "Về trang chủ"
+  }
+}

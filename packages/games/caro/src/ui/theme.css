@@ -1,0 +1,50 @@
+/* Caro board styles. Colours come from CSS variables defined by the app (docs/08 §7). */
+.caro-x line {
+  stroke: var(--piece-p0);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.caro-o {
+  fill: none;
+  stroke: var(--piece-p1);
+  stroke-width: 4;
+}
+.caro-ghost {
+  opacity: 0.35;
+}
+.caro-last {
+  fill: var(--highlight-last);
+}
+.caro-win {
+  fill: var(--highlight-win);
+}
+.caro-pending {
+  fill: none;
+  stroke: var(--focus-ring);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+.caro-win-line {
+  stroke: var(--highlight-win-line);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+.caro-enter {
+  animation: caro-pop 0.18s ease-out;
+}
+@keyframes caro-pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .caro-enter {
+    animation: none;
+  }
+}

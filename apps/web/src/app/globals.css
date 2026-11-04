@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+/* Each game ships its own board styles (docs/08 §7). */
+@import '@bg/game-caro/theme.css';
+/* Tailwind classes used inside workspace packages. */
+@source '../../../../packages';
+
+:root {
+  --bg: #f7f5f0;
+  --fg: #1d1b18;
+  --muted: #6b665e;
+  --card: #ffffff;
+  --border: #e3ded4;
+  --accent: #c2410c;
+  --accent-fg: #ffffff;
+  --danger: #b91c1c;
+
+  --board-bg: #f1dfb4;
+  --board-line: #b8995a;
+  --piece-p0: #1d4ed8;
+  --piece-p1: #b91c1c;
+  --highlight-last: rgb(250 204 21 / 0.45);
+  --highlight-win: rgb(34 197 94 / 0.4);
+  --highlight-win-line: #15803d;
+  --focus-ring: #0284c7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15140f;
+    --fg: #ece7dc;
+    --muted: #a39d90;
+    --card: #1f1d18;
+    --border: #34312a;
+    --accent: #fb923c;
+    --accent-fg: #1d1b18;
+    --danger: #f87171;
+
+    --board-bg: #3a3122;
+    --board-line: #75633f;
+    --piece-p0: #93c5fd;
+    --piece-p1: #fca5a5;
+    --highlight-last: rgb(250 204 21 / 0.25);
+    --highlight-win: rgb(34 197 94 / 0.3);
+    --highlight-win-line: #4ade80;
+    --focus-ring: #38bdf8;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+/* Shared board primitives from @bg/ui (GridBoard). */
+.bg-board {
+  fill: var(--board-bg);
+}
+.bg-grid-lines line {
+  stroke: var(--board-line);
+  stroke-width: 1;
+}
+.bg-cell {
+  cursor: pointer;
+  outline: none;
+}
+.bg-cell:focus-visible .bg-cell-hit {
+  stroke: var(--focus-ring);
+  stroke-width: 3;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  border-color: var(--border);
+  background: var(--card);
+}
+.btn:not(:disabled):hover {
+  border-color: var(--muted);
+}
+.btn-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+.btn-primary:not(:disabled):hover {
+  border-color: var(--accent);
+  filter: brightness(1.08);
+}
+.card {
+  @apply rounded-xl border p-5;
+  border-color: var(--border);
+  background: var(--card);
+}
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}

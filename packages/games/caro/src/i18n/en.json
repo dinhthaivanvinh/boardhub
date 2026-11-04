@@ -1,0 +1,25 @@
+{
+  "name": "Gomoku",
+  "shortDescription": "Get 5 in a row horizontally, vertically or diagonally to win.",
+  "rules": "Two players take turns placing X and O on empty cells. X moves first.\n\nThe first to get **5 in a row** horizontally, vertically or diagonally wins.\n\n**Blocked ends rule:** when on, a line of 5 that is blocked on both ends (by an opponent piece or the board edge) does not win.\n\nIf the board fills up with no winner, the game is a draw.",
+  "pieces": { "0": "X", "1": "O" },
+  "empty": "empty",
+  "boardLabel": "Gomoku board {size} × {size}",
+  "cellLabel": "Row {row}, column {col}: {piece}",
+  "lastMove": "{piece} played row {row}, column {col}",
+  "errors": {
+    "out_of_bounds": "That cell is outside the board.",
+    "cell_occupied": "That cell is already taken."
+  },
+  "reasons": {
+    "five_in_row": "five in a row",
+    "board_full": "the board is full"
+  },
+  "config": {
+    "size": "Board size",
+    "sizeOptions": { "15": "15 × 15", "19": "19 × 19" },
+    "winLength": "Pieces in a row to win",
+    "blockedEndsRule": "Lines blocked on both ends don't win",
+    "exactLength": "Exactly 5 (overlines don't win)"
+  }
+}

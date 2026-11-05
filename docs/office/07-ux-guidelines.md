@@ -27,19 +27,20 @@ Mỗi mode có hai pha: **build-up** (chưa biết kết quả, có thể lặp)
 kết thúc đúng người thắng). Mọi số ngẫu nhiên của hiệu ứng lấy từ `createRng(seed, 'anim')` sau reveal, hoặc từ
 `drawId` trong build-up ⇒ giống nhau trên mọi màn.
 
-| Mode        | Build-up                                                               | Landing                                                               | Đợt   |
-| ----------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------- | ----- |
-| `wheel`     | Vòng quay chia ô theo con vật, quay nhanh dần                          | Giảm tốc theo đường cong, kim dừng ở ô người thắng, ô phóng to        | MVP   |
-| `race`      | Thú xếp vạch xuất phát, chạy với tốc độ dao động, dẫn đầu đổi liên tục | Người thắng tăng tốc về đích; với N > 1, N người về trước theo thứ tự | MVP   |
-| `spotlight` | Đèn sân khấu quét qua đàn thú, nhanh dần                               | Đèn chậm lại, dừng trên người thắng, các con khác tối đi              | Đợt 2 |
-| `claw`      | Gắp thú di chuyển qua lại trên đàn thú                                 | Hạ càng, gắp người thắng lên                                          | Đợt 2 |
+| Mode        | Build-up                                                               | Landing                                                               | Đợt |
+| ----------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------- | --- |
+| `wheel`     | Vòng quay chia ô theo con vật, quay nhanh dần                          | Giảm tốc theo đường cong, kim dừng ở ô người thắng, ô phóng to        | MVP |
+| `race`      | Thú xếp vạch xuất phát, chạy với tốc độ dao động, dẫn đầu đổi liên tục | Người thắng tăng tốc về đích; với N > 1, N người về trước theo thứ tự | MVP |
+| `spotlight` | Đèn sân khấu quét qua đàn thú, nhanh dần                               | Đèn chậm lại, dừng trên người thắng, các con khác tối đi              | O4  |
+| `claw`      | Gắp thú di chuyển qua lại trên đàn thú                                 | Hạ càng, gắp người thắng lên                                          | O4  |
 
 Với nhiều người (> 60) `wheel` chuyển thành vòng quay theo **nhóm 12** rồi phóng to nhóm thắng (đọc được), `race`
 chỉ chạy 12 con có thứ hạng ngẫu nhiên trong build-up, người thắng luôn có mặt trong landing.
 
-> Trạng thái O3: `race` 12 con đã làm (người thắng không có trên đường đua thay chỗ con cuối lúc reveal). `wheel`
-> hiện vẫn một vòng: ≤ 16 người có con vật trên ô, ≤ 24 có tên, đông hơn chỉ còn ô màu (thẻ kết quả ghi tên).
-> Quay theo nhóm 12 dời sang O4.
+> Đã làm: `race` 12 con (người thắng không có trên đường đua thay chỗ con cuối lúc reveal). `wheel` ≤ 60 người: một
+> vòng (≤ 16 người có con vật trên ô, ≤ 24 có tên); > 60 người: nửa đầu landing vòng quay các nhóm 12 dừng ở nhóm
+> thắng, nửa sau vòng quay của nhóm đó dừng ở người thắng. `spotlight`/`claw` chơi trên lưới đàn thú; với N > 1 đèn/
+> càng chỉ dừng ở người thắng đầu tiên, thẻ kết quả ghi đủ N người.
 
 ## 4. Kết quả
 
@@ -64,7 +65,9 @@ chỉ chạy 12 con có thứ hạng ngẫu nhiên trong build-up, người th�
 ## 7. Âm thanh (đợt 2)
 
 Trống dồn khi build-up, "ting" khi về đích, tiếng reo; chỉ phát ở Sân khấu/Chủ trì, mặc định tắt, nút 🔇/🔊 nhớ trong
-localStorage. Âm thanh tự tạo hoặc giấy phép CC0, ghi nguồn trong `docs/office/assets.md`.
+localStorage. Âm thanh tự tạo hoặc giấy phép CC0, ghi nguồn trong [assets.md](assets.md) (hiện tại: tổng hợp bằng
+Web Audio, không có tệp âm thanh). Cảm xúc từ điện thoại bay lên trên sân khấu kèm con vật người gửi, có tiếng "pop" nhỏ
+khi bật âm thanh.
 
 ## 8. Truy cập
 

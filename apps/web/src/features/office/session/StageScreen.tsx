@@ -1,17 +1,43 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useOfficeSession } from '@/office/use-office-session';
+import type { ReactNode } from 'react';
+import type { OfficeSnapshot } from '@bg/protocol';
+import { useOfficeSession, type LiveReaction } from '@/office/use-office-session';
 import { DrawPlayer } from '../draw-player/DrawPlayer';
+import { useOfficeSound } from '../draw-player/sounds';
+import { SoundToggle } from '../draw-player/SoundToggle';
 import { isRevealed } from '../draw-player/timeline';
+import { ReactionLayer } from './Reactions';
 import { Connecting, Herd, herdSize, joinUrl, OfficeError, QrCode } from './shared';
 
 /** The projector: big title, code and QR, and everyone's animal (docs/office/07 §2). No controls. */
 export function StageScreen({ code }: { code: string }) {
-  const t = useTranslations('officeSession');
-  const { session, joinError, serverOffset } = useOfficeSession(code, 'stage', true);
+  const { session, joinError, serverOffset, reactions } = useOfficeSession(code, 'stage', true);
   if (joinError && !session) return <OfficeError code={joinError} />;
   if (!session) return <Connecting />;
+  return <StageView code={code} session={session} serverOffset={serverOffset} reactions={reactions} />;
+}
+
+/**
+ * What the room sees: on the projector, and in the host's presentation mode (with `corner` controls).
+ * The only control on the projector itself is the sound switch (a click is needed to allow sound).
+ */
+export function StageView({
+  code,
+  session,
+  serverOffset,
+  reactions,
+  corner,
+}: {
+  code: string;
+  session: OfficeSnapshot;
+  serverOffset: number;
+  reactions: LiveReaction[];
+  corner?: ReactNode;
+}) {
+  const t = useTranslations('officeSession');
+  const sound = useOfficeSound((s) => s.on);
   const people = session.participants;
   const url = joinUrl(code);
 
@@ -48,6 +74,7 @@ export function StageScreen({ code }: { code: string }) {
           code={code}
           draw={session.draw}
           serverOffset={serverOffset}
+          sound={sound}
           big
         />
       )}
@@ -56,6 +83,11 @@ export function StageScreen({ code }: { code: string }) {
       ) : (
         <Herd people={people} size={herdSize(people.length)} showNames={people.length <= 60} />
       )}
+      <ReactionLayer reactions={reactions} people={people} />
+      <div className="office-stage-corner">
+        {corner}
+        <SoundToggle />
+      </div>
     </div>
   );
 }

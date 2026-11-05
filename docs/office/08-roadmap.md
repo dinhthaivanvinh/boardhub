@@ -33,9 +33,10 @@
 
 ## O4 — Hoàn thiện trải nghiệm
 
-- [ ] Hiệu ứng `spotlight`, `claw`; thả cảm xúc; âm thanh (tắt mặc định); tải thẻ con vật PNG
-- [ ] Chế độ trình chiếu ở màn Chủ trì (phím Space đã quay được từ O3)
-- [ ] `wheel` > 60 người quay theo nhóm 12 (O-07 §3); `GET /api/office/:code/draws`
+- [x] Hiệu ứng `spotlight`, `claw`; thả cảm xúc; âm thanh (tắt mặc định, tổng hợp bằng Web Audio); tải thẻ con vật PNG
+- [x] Chế độ trình chiếu ở màn Chủ trì (toàn màn hình, Space quay, Esc thoát)
+- [x] `wheel` > 60 người quay theo nhóm 12 (O-07 §3); `GET /api/office/:code/draws`
+- [x] Điện thoại: sau lượt đầu hiện "Chờ chủ trì quay lượt tiếp theo"
 
 ## O5 — Thêm hoạt động
 

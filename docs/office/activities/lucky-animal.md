@@ -6,18 +6,18 @@
 
 - Mục đích: chọn ngẫu nhiên N người trong phiên, mỗi người đại diện bằng con vật của mình.
 - Người tham gia: 2–200. Chủ trì mặc định không tham gia bốc (`hostParticipates = false`).
-- Mode MVP: `wheel`, `race`. Đợt 2: `spotlight`, `claw`.
+- Mode: `race`, `wheel` (O3); `spotlight`, `claw` (O4).
 
 ## 2. Cài đặt (`settingsSchema`)
 
 Tiêu đề ("Ai mua trà sữa?") thuộc **phiên** (`office:create { title }`), không nằm trong cài đặt của hoạt động.
 
-| Field              | Kiểu            | Mặc định | Mô tả                                                |
-| ------------------ | --------------- | -------- | ---------------------------------------------------- |
-| `mode`             | `wheel \| race` | `race`   | Kiểu hiệu ứng mặc định (đổi được trước mỗi lần quay) |
-| `n`                | 1–20            | 1        | Số người được chọn mỗi lần                           |
-| `excludePrevious`  | boolean         | true     | Người đã được chọn ở lần trước không vào lần sau     |
-| `hostParticipates` | boolean         | false    | Chủ trì có trong danh sách ứng viên                  |
+| Field              | Kiểu                                           | Mặc định | Mô tả                                                |
+| ------------------ | ---------------------------------------------- | -------- | ---------------------------------------------------- |
+| `mode`             | một trong `race`, `wheel`, `spotlight`, `claw` | `race`   | Kiểu hiệu ứng mặc định (đổi được trước mỗi lần quay) |
+| `n`                | 1–20                                           | 1        | Số người được chọn mỗi lần                           |
+| `excludePrevious`  | boolean                                        | true     | Người đã được chọn ở lần trước không vào lần sau     |
+| `hostParticipates` | boolean                                        | false    | Chủ trì có trong danh sách ứng viên                  |
 
 ## 3. State
 

@@ -77,6 +77,8 @@ export interface OfficeRepo {
   /** A revealed draw, kept for history and verification (30 days). */
   drawRevealed(code: string, record: OfficeDrawRecord): Promise<void>;
   getDraw(code: string, drawId: string): Promise<OfficeDrawRecord | null>;
+  /** Revealed draws of a session, newest first. */
+  listDraws(code: string, limit: number): Promise<OfficeDrawRecord[]>;
 }
 
 export class MemoryOfficeRepo implements OfficeRepo {
@@ -90,6 +92,13 @@ export class MemoryOfficeRepo implements OfficeRepo {
   }
   async getDraw(code: string, drawId: string) {
     return this.draws.get(`${code}:${drawId}`) ?? null;
+  }
+  async listDraws(code: string, limit: number) {
+    return [...this.draws.entries()]
+      .filter(([key]) => key.startsWith(`${code}:`))
+      .map(([, d]) => structuredClone(d))
+      .sort((a, b) => b.round - a.round)
+      .slice(0, limit);
   }
   async statusChanged(code: string, status: OfficeStatus, at: number) {
     const row = this.rows.get(code);

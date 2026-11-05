@@ -11,7 +11,7 @@ import type {
 import type { OfficeDrawRecord } from '@bg/protocol';
 import type { OfficeRepo } from '../office/store';
 import { fresh, type RatingRepo, type StoredRating } from '../ratings/rating-service';
-import type { Database, MatchesTable, RatingsTable, UsersTable } from './database';
+import type { Database, MatchesTable, OfficeDrawsTable, RatingsTable, UsersTable } from './database';
 
 const json = (value: unknown) => JSON.stringify(value);
 
@@ -356,20 +356,18 @@ export class PgOfficeRepo implements OfficeRepo {
       .where('id', '=', drawId)
       .where('session_code', '=', code)
       .executeTakeFirst();
-    if (!row) return null;
-    return {
-      drawId: row.id,
-      round: row.round,
-      mode: row.mode,
-      n: row.n,
-      candidates: row.candidates as OfficeDrawRecord['candidates'],
-      commitment: row.commitment,
-      seed: row.seed,
-      winners: row.winners,
-      startsAt: row.starts_at.getTime(),
-      revealAt: row.reveal_at.getTime(),
-      revealedAt: row.revealed_at.getTime(),
-    };
+    return row ? drawFromRow(row) : null;
+  }
+
+  async listDraws(code: string, limit: number): Promise<OfficeDrawRecord[]> {
+    const rows = await this.db
+      .selectFrom('office_draws')
+      .selectAll()
+      .where('session_code', '=', code)
+      .orderBy('round', 'desc')
+      .limit(limit)
+      .execute();
+    return rows.map(drawFromRow);
   }
 
   async statusChanged(code: string, status: string, at: number) {
@@ -379,4 +377,21 @@ export class PgOfficeRepo implements OfficeRepo {
       .where('code', '=', code)
       .execute();
   }
+}
+
+type DrawRow = Selectable<OfficeDrawsTable>;
+function drawFromRow(row: DrawRow): OfficeDrawRecord {
+  return {
+    drawId: row.id,
+    round: row.round,
+    mode: row.mode,
+    n: row.n,
+    candidates: row.candidates as OfficeDrawRecord['candidates'],
+    commitment: row.commitment,
+    seed: row.seed,
+    winners: row.winners,
+    startsAt: row.starts_at.getTime(),
+    revealAt: row.reveal_at.getTime(),
+    revealedAt: row.revealed_at.getTime(),
+  };
 }

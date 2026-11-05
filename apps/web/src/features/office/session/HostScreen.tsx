@@ -1,12 +1,15 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Avatar, randomAvatar } from '@bg/avatars';
 import type { Rng } from '@bg/engine';
 import { errorKey } from '@/game-runtime/error-key';
 import { useOfficeSession } from '@/office/use-office-session';
+import { SoundToggle } from '../draw-player/SoundToggle';
 import { DrawPanel } from './DrawPanel';
+import { PresentationMode } from './PresentationMode';
+import { ReactionLayer } from './Reactions';
 import { animalLabel, Connecting, joinUrl, OfficeError, QrCode } from './shared';
 
 const uiRng: Rng = {
@@ -24,6 +27,8 @@ export function HostScreen({ code }: { code: string }) {
   const [error, setError] = useState<string | null>(null);
   const [absentName, setAbsentName] = useState('');
   const [copied, setCopied] = useState(false);
+  const [presenting, setPresenting] = useState(false);
+  const stopPresenting = useCallback(() => setPresenting(false), []);
   const { session } = api;
   if (api.joinError && !session) return <OfficeError code={api.joinError} />;
   if (!session) return <Connecting />;
@@ -34,8 +39,22 @@ export function HostScreen({ code }: { code: string }) {
   const closed = session.status === 'closed';
   const locked = session.status === 'locked';
 
+  if (presenting) {
+    return (
+      <PresentationMode
+        code={code}
+        session={session}
+        serverOffset={api.serverOffset}
+        reactions={api.reactions}
+        onAction={api.action}
+        onExit={stopPresenting}
+      />
+    );
+  }
+
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <div className="relative mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      <ReactionLayer reactions={api.reactions} people={session.participants} />
       <section className="flex flex-col gap-4">
         <div>
           <p className="chip chip-accent">{t(`activity.${session.activityId}`)}</p>
@@ -131,6 +150,21 @@ export function HostScreen({ code }: { code: string }) {
           >
             📺 {t('openStage')}
           </a>
+          {!closed && (
+            <button
+              type="button"
+              className="btn w-full"
+              onClick={() => setPresenting(true)}
+              data-testid="host-present"
+            >
+              🖥️ {t('present.start')}
+            </button>
+          )}
+          <p className="text-xs text-[var(--muted)]">{t('present.hint')}</p>
+          <div className="flex w-full items-center justify-between text-sm">
+            <span>{t('sound.label')}</span>
+            <SoundToggle />
+          </div>
         </div>
         {!closed && (
           <div className="card flex flex-col gap-2">

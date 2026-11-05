@@ -33,3 +33,9 @@ export function phaseAt(
 
 /** Slows down towards the end, like a wheel or a runner easing off. */
 export const easeOutCubic = (x: number) => 1 - (1 - Math.min(1, Math.max(0, x))) ** 3;
+
+/** Slow start, fast middle, slow end: one hop of a light or a claw. */
+export const easeInOut = (x: number) => {
+  const v = Math.min(1, Math.max(0, x));
+  return v < 0.5 ? 2 * v * v : 1 - (-2 * v + 2) ** 2 / 2;
+};

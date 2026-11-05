@@ -309,6 +309,8 @@ describe('the fair draw', () => {
     });
     expect(await t.hub.getDraw(code, record.drawId)).toEqual(record);
     expect(await t.repo.getDraw(code, record.drawId)).toEqual(record);
+    expect(await t.hub.listDraws(code)).toEqual([record]);
+    expect(await t.hub.listDraws('NOPE00')).toBeNull();
   });
 
   it('one draw at a time; only the host; never more winners than people', async () => {

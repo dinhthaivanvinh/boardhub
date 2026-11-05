@@ -6,6 +6,7 @@ import {
   OfficeCreate,
   OfficeHostOp,
   OfficeJoin,
+  OfficeReact,
   OfficeRef,
   OfficeUpdateMe,
   PROTOCOL_VERSION,
@@ -82,6 +83,8 @@ export function attachOfficeGateway(ns: OfficeNamespace, hub: OfficeHub, auth: A
     const { actor } = socket.data;
     void socket.join(user(actor.userId));
     const limiter = new RateLimiter();
+    // Reactions are fun, not spam: at most 3 per 2 seconds per socket (docs/office/06 §1).
+    const reactions = new RateLimiter(3, 2_000);
 
     const on = <S extends z.ZodType, R>(
       event: keyof OfficeClientToServerEvents,
@@ -131,6 +134,17 @@ export function attachOfficeGateway(ns: OfficeNamespace, hub: OfficeHub, auth: A
     on('office:resync', OfficeRef, async ({ code }) => ({
       session: await hub.resync(actor, code, socket.data.screens[code] ?? 'stage'),
     }));
+
+    on('office:react', OfficeReact, async ({ code, emoji }) => {
+      // Only someone who joined this session from their phone can react.
+      if (socket.data.screens[code] !== 'participant') throw new HubError('office.not_participant');
+      if (!reactions.allow()) throw new HubError('rate.limited');
+      ns.to([screenChannel(code, 'stage'), screenChannel(code, 'host')]).emit('office:reaction', {
+        code,
+        from: actor.userId,
+        emoji,
+      });
+    });
 
     // When the user's last participant screen of a session goes away, they show as offline.
     socket.on('disconnecting', () => {

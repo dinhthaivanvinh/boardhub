@@ -8,7 +8,9 @@ import { errorKey } from '@/game-runtime/error-key';
 import { fetchMyAvatar } from '@/office/avatar-api';
 import { useOfficeSession } from '@/office/use-office-session';
 import { ensureToken, useSession } from '@/online/session';
+import { downloadAnimalCard } from '../animal-card';
 import { ParticipantDraw } from './ParticipantDraw';
+import { ReactionBar } from './Reactions';
 import { animalLabel, Connecting, OfficeError } from './shared';
 
 /** The phone: your animal, the "Join" button, then "waiting for the host" (docs/office/07 §6). */
@@ -22,6 +24,7 @@ export function ParticipantScreen({ code }: { code: string }) {
   const [error, setError] = useState<string | null>(null);
   const [joining, setJoining] = useState(false);
   const rejoined = useRef(false);
+  const portrait = useRef<HTMLDivElement>(null);
 
   // Your saved animal (or your default one).
   useEffect(() => {
@@ -62,7 +65,7 @@ export function ParticipantScreen({ code }: { code: string }) {
         <p className="chip chip-accent">{t(`activity.${session.activityId}`)}</p>
         <h1 className="mt-3 text-2xl font-bold tracking-tight">{session.title || t('untitled')}</h1>
       </div>
-      <div className={joined ? 'office-me office-me-in' : 'office-me'}>
+      <div ref={portrait} className={joined ? 'office-me office-me-in' : 'office-me'}>
         <Avatar avatar={me?.avatar ?? avatar} size={200} label={label} />
       </div>
       <p className="text-xl font-semibold" data-testid="my-name">
@@ -83,14 +86,35 @@ export function ParticipantScreen({ code }: { code: string }) {
               meId={session.me.id}
             />
           )}
+          <ReactionBar onReact={api.react} />
           <p className="card w-full text-[var(--muted)]" role="status" data-testid="participant-status">
             ✓ {t('youAreIn')} · {t('count', { n: session.participants.length })}
             <br />
-            {t('waitHost')}
+            {session.history.length > 0 ? t('waitNext') : t('waitHost')}
           </p>
           <Link href={`/office/avatar?back=/office/s/${code}`} className="btn w-full">
             🐾 {t('changeAnimal')}
           </Link>
+          <button
+            type="button"
+            className="btn w-full"
+            onClick={() => {
+              const svg = portrait.current?.querySelector('svg');
+              const mine = me ?? { name: user.displayName, avatar };
+              if (svg)
+                void downloadAnimalCard(
+                  svg,
+                  {
+                    name: mine.name,
+                    line: tAvatar(`species.${mine.avatar.species}`),
+                    brand: 'BoardHub',
+                  },
+                  `${mine.name.replace(/[^p{L}p{N}]+/gu, '-')}-animal.png`,
+                );
+            }}
+          >
+            📸 {t('downloadCard')}
+          </button>
         </>
       ) : (
         <>

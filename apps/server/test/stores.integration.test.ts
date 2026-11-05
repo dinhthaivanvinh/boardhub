@@ -424,5 +424,11 @@ describe('office draws in Postgres', () => {
     expect(await repo.getDraw(code, record.drawId)).toEqual(record);
     expect(await repo.getDraw('OTHER1', record.drawId)).toBeNull();
     expect(await repo.getDraw(code, 'not-a-uuid')).toBeNull();
+
+    const second = { ...record, drawId: randomUUID(), round: 2 };
+    await repo.drawRevealed(code, second);
+    expect(await repo.listDraws(code, 10)).toEqual([second, record]);
+    expect(await repo.listDraws(code, 1)).toEqual([second]);
+    expect(await repo.listDraws('OTHER1', 10)).toEqual([]);
   });
 });

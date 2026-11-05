@@ -45,6 +45,10 @@ export const OfficeHostOp = z.discriminatedUnion('op', [
   z.strictObject({ code: OfficeCode, op: z.literal('transfer'), id: Id }),
 ]);
 export const OfficeAction = z.strictObject({ code: OfficeCode, action: z.unknown() });
+/** Emoji people can send from their phone (docs/office/07 §6). */
+export const OFFICE_REACTIONS = ['👏', '😂', '😮', '🎉', '❤️', '🙈'] as const;
+export type OfficeReactionEmoji = (typeof OFFICE_REACTIONS)[number];
+export const OfficeReact = z.strictObject({ code: OfficeCode, emoji: z.enum(OFFICE_REACTIONS) });
 
 // ---------- Server → client ----------
 
@@ -121,6 +125,8 @@ export interface OfficeClientToServerEvents {
   'office:host': Handler<typeof OfficeHostOp>;
   'office:action': Handler<typeof OfficeAction>;
   'office:resync': Handler<typeof OfficeRef, { session: OfficeSnapshot }>;
+  /** Fire-and-forget: not stored, no `seq`; at most 3 per 2 seconds per socket. */
+  'office:react': Handler<typeof OfficeReact>;
 }
 
 export interface OfficeServerToClientEvents {
@@ -138,4 +144,6 @@ export interface OfficeServerToClientEvents {
   'office:draw-revealed': (e: { code: string; seq: number; draw: OfficeDrawRecord }) => void;
   /** Sent to the person who was removed by the host. */
   'office:kicked': (e: { code: string }) => void;
+  /** A reaction from a participant, sent to the stage and host screens only. */
+  'office:reaction': (e: { code: string; from: string; emoji: OfficeReactionEmoji }) => void;
 }

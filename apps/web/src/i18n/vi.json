@@ -570,7 +570,9 @@
       "mode": "Kiểu bốc",
       "modes": {
         "race": "Đua thú",
-        "wheel": "Vòng quay"
+        "wheel": "Vòng quay",
+        "spotlight": "Đèn sân khấu",
+        "claw": "Máy gắp thú"
       },
       "howMany": "Số người chọn",
       "fewer": "Bớt một người",
@@ -609,6 +611,24 @@
       "notFound": "Không tìm thấy lượt bốc này (hoặc chưa quay xong).",
       "loadFailed": "Không tải được dữ liệu. Thử lại sau nhé.",
       "back": "Về Văn phòng"
-    }
+    },
+    "sound": {
+      "label": "Âm thanh",
+      "on": "Bật âm thanh",
+      "off": "Tắt âm thanh"
+    },
+    "present": {
+      "start": "Trình chiếu màn này",
+      "hint": "Chiếu luôn laptop của bạn: ẩn bảng điều khiển, Space để quay, Esc để thoát.",
+      "spin": "Quay! (Space)",
+      "spinning": "Đang quay…",
+      "exit": "Thoát (Esc)"
+    },
+    "reactions": {
+      "label": "Thả cảm xúc lên màn chiếu",
+      "send": "Gửi {emoji}"
+    },
+    "waitNext": "Chờ chủ trì quay lượt tiếp theo nhé!",
+    "downloadCard": "Tải thẻ con vật (PNG)"
   }
 }

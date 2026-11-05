@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { ActivityContext, ActivityDefinition } from '@bg/office-core';
 
 /** Thú may mắn (docs/office/activities/lucky-animal.md): pick N people at random with an animal race or a wheel. */
-export const MODES = ['race', 'wheel'] as const;
+export const MODES = ['race', 'wheel', 'spotlight', 'claw'] as const;
 
 export const settingsSchema = z.strictObject({
   mode: z.enum(MODES).default('race'),

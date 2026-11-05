@@ -155,6 +155,47 @@ describe('office namespace', () => {
   });
 });
 
+describe('reactions', () => {
+  it("a participant's emoji reaches the stage and host, not other phones; others cannot react", async () => {
+    const host = await open((await guest('Host')).token);
+    const { session } = await ok<{ session: OfficeSnapshot }>(host, 'office:create', {
+      activityId: 'lucky-animal',
+    });
+    const code = session.code;
+    const stage = await open((await guest('Projector')).token);
+    await ok(stage, 'office:join', { code, screen: 'stage' });
+    const an = await guest('An');
+    const phone = await open(an.token);
+    await ok(phone, 'office:join', { code, screen: 'participant' });
+    const other = await open((await guest('Bình')).token);
+    await ok(other, 'office:join', { code, screen: 'participant' });
+    let otherPhoneGotIt = false;
+    other.on('office:reaction', () => {
+      otherPhoneGotIt = true;
+    });
+
+    const onStage = next(stage, 'office:reaction');
+    const onHost = next(host, 'office:reaction');
+    await ok(phone, 'office:react', { code, emoji: '🎉' });
+    expect(await onStage).toEqual({ code, from: an.user.id, emoji: '🎉' });
+    expect((await onHost).emoji).toBe('🎉');
+
+    expect(await emit(phone, 'office:react', { code, emoji: '💩' })).toEqual({
+      ok: false,
+      code: 'invalid.payload',
+    });
+    expect(await emit(stage, 'office:react', { code, emoji: '👏' })).toEqual({
+      ok: false,
+      code: 'office.not_participant',
+    });
+    // At most 3 per 2 seconds.
+    const burst = [];
+    for (let i = 0; i < 5; i++) burst.push(await emit(phone, 'office:react', { code, emoji: '👏' }));
+    expect(burst.filter((r) => !r.ok).length).toBeGreaterThanOrEqual(1);
+    expect(otherPhoneGotIt).toBe(false);
+  });
+});
+
 describe('a draw over sockets', () => {
   it('everyone gets the start (no seed), then the reveal; the record can be fetched for verification', async () => {
     const host = await open((await guest('Host')).token);
@@ -187,5 +228,10 @@ describe('a draw over sockets', () => {
     expect(res.json()).toEqual(revealed.draw);
     const missing = await server.app.inject({ method: 'GET', url: `/api/office/${code}/draws/nope` });
     expect(missing.statusCode).toBe(404);
+
+    const list = await server.app.inject({ method: 'GET', url: `/api/office/${code}/draws` });
+    expect(list.json()).toEqual({ draws: [revealed.draw] });
+    const none = await server.app.inject({ method: 'GET', url: '/api/office/ZZZZZZ/draws' });
+    expect(none.statusCode).toBe(404);
   }, 15_000);
 });

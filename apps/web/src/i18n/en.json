@@ -570,7 +570,9 @@
       "mode": "Draw style",
       "modes": {
         "race": "Animal race",
-        "wheel": "Wheel"
+        "wheel": "Wheel",
+        "spotlight": "Spotlight",
+        "claw": "Claw machine"
       },
       "howMany": "How many",
       "fewer": "One fewer",
@@ -609,6 +611,24 @@
       "notFound": "This draw wasn't found (or hasn't finished yet).",
       "loadFailed": "Couldn't load the data. Please try again later.",
       "back": "Back to Office"
-    }
+    },
+    "sound": {
+      "label": "Sound",
+      "on": "Turn sound on",
+      "off": "Turn sound off"
+    },
+    "present": {
+      "start": "Present this screen",
+      "hint": "Project your laptop directly: hides the controls, Space to spin, Esc to leave.",
+      "spin": "Spin! (Space)",
+      "spinning": "Spinning…",
+      "exit": "Exit (Esc)"
+    },
+    "reactions": {
+      "label": "Send a reaction to the screen",
+      "send": "Send {emoji}"
+    },
+    "waitNext": "Waiting for the host to spin the next round!",
+    "downloadCard": "Download animal card (PNG)"
   }
 }

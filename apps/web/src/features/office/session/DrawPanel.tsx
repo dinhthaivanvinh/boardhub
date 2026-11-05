@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
-import type { LuckyAnimalSettings, LuckyAnimalView } from '@bg/office-lucky-animal';
+import { MODES, type LuckyAnimalSettings, type LuckyAnimalView } from '@bg/office-lucky-animal';
 import type { OfficeSnapshot } from '@bg/protocol';
 import { DrawPlayer } from '../draw-player/DrawPlayer';
+import { useOfficeSound } from '../draw-player/sounds';
 import { isRevealed } from '../draw-player/timeline';
 
 /** Who the next draw picks from — the same rule as the server's candidatesOf, from the live list. */
@@ -15,6 +16,37 @@ function candidateCount(session: OfficeSnapshot, view: LuckyAnimalView): number 
     (p) =>
       (s.hostParticipates || p.id !== session.hostId) && !(s.excludePrevious && view.excluded.includes(p.id)),
   ).length;
+}
+
+const MODE_ICONS: Record<(typeof MODES)[number], string> = {
+  race: '🏁',
+  wheel: '🎡',
+  spotlight: '🔦',
+  claw: '🧸',
+};
+
+/** Can the host spin now? Shared by the panel and the presentation mode. */
+export function drawReadiness(session: OfficeSnapshot) {
+  const view = session.activity as LuckyAnimalView;
+  const closed = session.status === 'closed';
+  const running = session.draw !== null && !isRevealed(session.draw);
+  const pool = candidateCount(session, view);
+  return { view, closed, running, pool, canDraw: !closed && !running && pool >= view.settings.n };
+}
+
+/** Space spins, unless you are typing or on a button (docs/office/07 §3). */
+export function useSpaceToSpin(canDraw: boolean, spin: () => void) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== ' ' || e.repeat || !canDraw) return;
+      const el = e.target as HTMLElement | null;
+      if (el && el.closest('input, textarea, button, select, a, [contenteditable="true"]')) return;
+      e.preventDefault();
+      spin();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [canDraw, spin]);
 }
 
 /** The host's draw controls (Thú may mắn): mode, how many, exclusions, the big "Spin!" button, history. */
@@ -30,29 +62,15 @@ export function DrawPanel({
   onAction(action: unknown): void;
 }) {
   const t = useTranslations('officeSession.draw');
-  const view = session.activity as LuckyAnimalView;
+  const { view, closed, running, pool, canDraw } = drawReadiness(session);
   const s = view.settings;
-  const closed = session.status === 'closed';
-  const running = session.draw !== null && !isRevealed(session.draw);
-  const pool = candidateCount(session, view);
-  const canDraw = !closed && !running && pool >= s.n;
+  const sound = useOfficeSound((x) => x.on);
   const configure = (patch: Partial<LuckyAnimalSettings>) => onAction({ kind: 'configure', patch });
   const spin = () => onAction({ kind: 'draw' });
   // The current draw is in the player above (its result shows when the animation lands).
   const past = session.history.filter((d) => d.drawId !== session.draw?.drawId);
 
-  // Space spins, unless you are typing or on a button (docs/office/07 §3).
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== ' ' || !canDraw) return;
-      const el = e.target as HTMLElement | null;
-      if (el && el.closest('input, textarea, button, select, a, [contenteditable="true"]')) return;
-      e.preventDefault();
-      onAction({ kind: 'draw' });
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [canDraw, onAction]);
+  useSpaceToSpin(canDraw, spin);
 
   return (
     <section className="card flex flex-col gap-4" aria-labelledby="draw-heading">
@@ -63,7 +81,7 @@ export function DrawPanel({
       {!closed && (
         <fieldset className="flex flex-col gap-3" disabled={running}>
           <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('mode')}>
-            {(['race', 'wheel'] as const).map((mode) => (
+            {MODES.map((mode) => (
               <button
                 key={mode}
                 type="button"
@@ -72,7 +90,7 @@ export function DrawPanel({
                 className={s.mode === mode ? 'btn btn-primary' : 'btn'}
                 onClick={() => s.mode !== mode && configure({ mode })}
               >
-                {mode === 'race' ? '🏁' : '🎡'} {t(`modes.${mode}`)}
+                {MODE_ICONS[mode]} {t(`modes.${mode}`)}
               </button>
             ))}
           </div>
@@ -154,7 +172,13 @@ export function DrawPanel({
       )}
 
       {session.draw && (
-        <DrawPlayer key={session.draw.drawId} code={code} draw={session.draw} serverOffset={serverOffset} />
+        <DrawPlayer
+          key={session.draw.drawId}
+          code={code}
+          draw={session.draw}
+          serverOffset={serverOffset}
+          sound={sound}
+        />
       )}
 
       {past.length > 0 && (

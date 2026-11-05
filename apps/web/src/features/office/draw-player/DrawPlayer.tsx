@@ -2,11 +2,14 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useRef, type CSSProperties } from 'react';
+import { useEffect, useRef, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { Avatar } from '@bg/avatars';
 import type { OfficeDrawRecord, OfficeDrawStarted } from '@bg/protocol';
 import { animalLabel } from '../session/shared';
+import { ClawMachine } from './ClawMachine';
 import { RaceTrack } from './RaceTrack';
+import { playWin, startDrumroll } from './sounds';
+import { Spotlight } from './Spotlight';
 import type { DrawPhase } from './timeline';
 import { useDrawAnimations, useDrawClock } from './use-draw-clock';
 import { Wheel } from './Wheel';
@@ -20,17 +23,21 @@ export function DrawPlayer({
   draw,
   serverOffset,
   big = false,
+  sound = false,
 }: {
   code: string;
   draw: OfficeDrawStarted | OfficeDrawRecord;
   serverOffset: number;
   /** The projector: huge names, readable from the back of the room. */
   big?: boolean;
+  /** Drumroll and "ting" (stage and host only, when the sound is on). */
+  sound?: boolean;
 }) {
   const t = useTranslations('officeSession.draw');
   const animate = useDrawAnimations();
   const writer = useRef<((p: DrawPhase) => void) | null>(null);
   const phase = useDrawClock(draw, serverOffset, animate, (p) => writer.current?.(p));
+  useDrawSounds(phase.kind, sound);
 
   return (
     <div
@@ -49,18 +56,62 @@ export function DrawPlayer({
               t('drawing')
             )}
           </p>
-          {animate &&
-            (draw.mode === 'wheel' ? (
-              <Wheel draw={draw} writer={writer} />
-            ) : (
-              <RaceTrack draw={draw} writer={writer} />
-            ))}
+          {animate && modeView(draw, writer, big)}
         </>
       )}
       <div aria-live="assertive">
         {phase.kind === 'done' && <WinnerCard code={code} record={phase.record} big={big} />}
       </div>
     </div>
+  );
+}
+
+function modeView(
+  draw: OfficeDrawStarted | OfficeDrawRecord,
+  writer: RefObject<((p: DrawPhase) => void) | null>,
+  big: boolean,
+): ReactNode {
+  switch (draw.mode) {
+    case 'wheel':
+      return <Wheel draw={draw} writer={writer} />;
+    case 'spotlight':
+      return <Spotlight draw={draw} writer={writer} big={big} />;
+    case 'claw':
+      return <ClawMachine draw={draw} writer={writer} big={big} />;
+    default:
+      return <RaceTrack draw={draw} writer={writer} />;
+  }
+}
+
+/**
+ * Drumroll while the draw runs, "ting" when it lands — only for phases that happen while this screen
+ * watches (opening a page on a finished draw stays quiet).
+ */
+function useDrawSounds(kind: DrawPhase['kind'], on: boolean) {
+  const previous = useRef(kind);
+  const roll = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    const before = previous.current;
+    previous.current = kind;
+    if (!on) {
+      roll.current?.();
+      roll.current = null;
+      return;
+    }
+    if (kind === 'buildUp' && !roll.current) {
+      roll.current = startDrumroll();
+    }
+    if (kind === 'done') {
+      roll.current?.();
+      roll.current = null;
+      if (before !== 'done') playWin();
+    }
+  }, [kind, on]);
+  useEffect(
+    () => () => {
+      roll.current?.();
+    },
+    [],
   );
 }
 

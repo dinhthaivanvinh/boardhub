@@ -7,6 +7,7 @@ import type {
   OfficeDrawStarted,
   OfficeHostOpInput,
   OfficeParticipant,
+  OfficeReactionEmoji,
   OfficeScreen,
   OfficeSessionInfo,
   OfficeSnapshot,
@@ -22,6 +23,16 @@ export type HostOp = OfficeHostOpInput extends infer T
 
 export type OfficeConnection = 'connecting' | 'online' | 'offline';
 
+/** A reaction on screen: it floats up and disappears after REACTION_MS. */
+export interface LiveReaction {
+  key: number;
+  from: string;
+  emoji: OfficeReactionEmoji;
+}
+export const REACTION_MS = 3_000;
+/** Never more than this many on screen at once (200 people can tap a lot). */
+const MAX_REACTIONS = 40;
+
 export interface OfficeSessionApi {
   session: OfficeSnapshot | null;
   /** Error code while joining (e.g. office.not_found, office.locked). */
@@ -35,6 +46,10 @@ export interface OfficeSessionApi {
   updateMe(input: { name?: string; avatar?: AvatarData }): Promise<string | null>;
   host(op: HostOp): Promise<string | null>;
   action(action: unknown): Promise<string | null>;
+  /** Participants: send an emoji to the stage. */
+  react(emoji: OfficeReactionEmoji): Promise<string | null>;
+  /** Stage and host: reactions floating up right now. */
+  reactions: LiveReaction[];
   leave(): Promise<void>;
 }
 
@@ -51,6 +66,8 @@ export function useOfficeSession(code: string, screen: OfficeScreen, autoJoin: b
   const [kicked, setKicked] = useState(false);
   const [connection, setConnection] = useState<OfficeConnection>('connecting');
   const [serverOffset, setServerOffset] = useState(0);
+  const [reactions, setReactions] = useState<LiveReaction[]>([]);
+  const reactionKey = useRef(0);
   const socketRef = useRef<OfficeSocket | null>(null);
   const joinedWith = useRef<{ name?: string; avatar?: AvatarData } | null>(autoJoin ? {} : null);
   const seq = useRef(0);
@@ -136,6 +153,13 @@ export function useOfficeSession(code: string, screen: OfficeScreen, autoJoin: b
             draw: e.draw,
             history: [e.draw, ...prev.history.filter((d) => d.drawId !== e.draw.drawId)].slice(0, 50),
           })),
+        'office:reaction': (e: { code: string; from: string; emoji: OfficeReactionEmoji }) => {
+          if (!mine(e)) return;
+          const key = ++reactionKey.current;
+          setReactions((prev) => [...prev, { key, from: e.from, emoji: e.emoji }].slice(-MAX_REACTIONS));
+          // Only how long it stays on screen; nothing else depends on this timer.
+          window.setTimeout(() => setReactions((prev) => prev.filter((r) => r.key !== key)), REACTION_MS);
+        },
         'office:kicked': (e: { code: string }) => {
           if (!mine(e)) return;
           joinedWith.current = null;
@@ -186,7 +210,7 @@ export function useOfficeSession(code: string, screen: OfficeScreen, autoJoin: b
   }, [accept, autoJoin, code, joinError, screen, session]);
 
   const call = useCallback(
-    async (event: 'office:update-me' | 'office:host' | 'office:action', payload: object) => {
+    async (event: 'office:update-me' | 'office:host' | 'office:action' | 'office:react', payload: object) => {
       const s = socketRef.current ?? (await getOfficeSocket());
       const res = await officeRequest(s, event, { code, ...payload });
       return res.ok ? null : res.code;
@@ -204,6 +228,8 @@ export function useOfficeSession(code: string, screen: OfficeScreen, autoJoin: b
     updateMe: (input) => call('office:update-me', input),
     host: (op) => call('office:host', op),
     action: (action) => call('office:action', { action }),
+    react: (emoji) => call('office:react', { emoji }),
+    reactions,
     leave: async () => {
       joinedWith.current = null;
       const s = socketRef.current;

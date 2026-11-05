@@ -8,16 +8,16 @@
 
 ### 1.1 Client → server
 
-| Sự kiện            | Payload                                                                                              | Ai gửi         | Ack trả về                        |
-| ------------------ | ---------------------------------------------------------------------------------------------------- | -------------- | --------------------------------- |
-| `office:create`    | `{ activityId, title, settings }`                                                                    | bất kỳ         | `OfficeSnapshot` (bạn là chủ trì) |
-| `office:join`      | `{ code, screen: 'participant' \| 'stage' \| 'host', name?, avatar? }`                               | bất kỳ         | `OfficeSnapshot`                  |
-| `office:leave`     | `{ code }`                                                                                           | người tham gia | `{}`                              |
-| `office:update-me` | `{ code, name?, avatar? }`                                                                           | người tham gia | `{}`                              |
-| `office:host`      | `{ code, op: 'lock' \| 'unlock' \| 'close' \| 'kick' \| 'rename' \| 'add-absent' \| 'transfer', … }` | chủ trì        | `{}`                              |
-| `office:action`    | `{ code, action }` (`action` theo `actionSchema` của hoạt động)                                      | tùy hoạt động  | `{}`                              |
-| `office:react`     | `{ code, emoji }` (emoji thuộc danh sách cho phép) — **O4**                                          | người tham gia | `{}`                              |
-| `office:resync`    | `{ code }`                                                                                           | bất kỳ         | `OfficeSnapshot`                  |
+| Sự kiện            | Payload                                                                                                        | Ai gửi         | Ack trả về                        |
+| ------------------ | -------------------------------------------------------------------------------------------------------------- | -------------- | --------------------------------- |
+| `office:create`    | `{ activityId, title, settings }`                                                                              | bất kỳ         | `OfficeSnapshot` (bạn là chủ trì) |
+| `office:join`      | `{ code, screen: 'participant' \| 'stage' \| 'host', name?, avatar? }`                                         | bất kỳ         | `OfficeSnapshot`                  |
+| `office:leave`     | `{ code }`                                                                                                     | người tham gia | `{}`                              |
+| `office:update-me` | `{ code, name?, avatar? }`                                                                                     | người tham gia | `{}`                              |
+| `office:host`      | `{ code, op: 'lock' \| 'unlock' \| 'close' \| 'kick' \| 'rename' \| 'add-absent' \| 'transfer', … }`           | chủ trì        | `{}`                              |
+| `office:action`    | `{ code, action }` (`action` theo `actionSchema` của hoạt động)                                                | tùy hoạt động  | `{}`                              |
+| `office:react`     | `{ code, emoji }`, emoji ∈ `OFFICE_REACTIONS` (👏 😂 😮 🎉 ❤️ 🙈); chỉ socket đang ở màn participant của phiên | người tham gia | `{}`                              |
+| `office:resync`    | `{ code }`                                                                                                     | bất kỳ         | `OfficeSnapshot`                  |
 
 Màn `stage` và `host` không chiếm chỗ người tham gia (chủ trì muốn tham gia thì vào thêm bằng điện thoại, hoặc bật
 `hostParticipates`).
@@ -33,7 +33,7 @@ Màn `stage` và `host` không chiếm chỗ người tham gia (chủ trì muố
 | `office:kicked`              | `{ code }` chỉ gửi cho người bị mời ra; socket của họ rời các kênh của phiên                                                            |
 | `office:draw-started`        | `{ code, seq, draw: { drawId, round, mode, n, candidates: [{ id, name, avatar }], commitment, startsAt, revealAt } }` — không có `seed` |
 | `office:draw-revealed`       | `{ code, seq, draw: DrawRecord }` = phần trên + `seed, winners, revealedAt`; landing kết thúc ở `revealAt + DRAW_LANDING_MS`            |
-| `office:reaction`            | `{ from, emoji }` (không có `seq`, không lưu) — **O4**                                                                                  |
+| `office:reaction`            | `{ code, from, emoji }` chỉ gửi tới màn stage và host (không có `seq`, không lưu)                                                       |
 
 Kênh Socket.IO: `office:{code}` (mọi màn), `office:{code}:{screen}` (view theo màn), `office-user:{userId}`.
 Người tham gia chưa bấm "Vào phiên" xem trước bằng màn `stage`.
@@ -55,13 +55,13 @@ Người tham gia chưa bấm "Vào phiên" xem trước bằng màn `stage`.
 
 ## 2. REST
 
-| Method + path                         | Trả về                                                               |
-| ------------------------------------- | -------------------------------------------------------------------- |
-| `GET /api/office/:code`               | `{ exists, status }` — ô nhập mã ở cổng thử mã phiên trước           |
-| `GET /api/me/avatar`                  | `{ avatar: Avatar \| null }`                                         |
-| `PUT /api/me/avatar`                  | body `{ avatar }` → `{ avatar }` (zod, chỉ catalog)                  |
-| `GET /api/office/:code/draws`         | lịch sử lần bốc đã reveal — **chưa làm** (lịch sử đi trong snapshot) |
-| `GET /api/office/:code/draws/:drawId` | `DrawRecord` đầy đủ cho trang kiểm chứng (404 nếu chưa reveal)       |
+| Method + path                         | Trả về                                                                                                                        |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `GET /api/office/:code`               | `{ exists, status }` — ô nhập mã ở cổng thử mã phiên trước                                                                    |
+| `GET /api/me/avatar`                  | `{ avatar: Avatar \| null }`                                                                                                  |
+| `PUT /api/me/avatar`                  | body `{ avatar }` → `{ avatar }` (zod, chỉ catalog)                                                                           |
+| `GET /api/office/:code/draws`         | `{ draws: DrawRecord[] }` mới nhất trước: phiên còn sống lấy từ snapshot, phiên đã hết hạn lấy từ Postgres (404 nếu không có) |
+| `GET /api/office/:code/draws/:drawId` | `DrawRecord` đầy đủ cho trang kiểm chứng (404 nếu chưa reveal)                                                                |
 
 ## 3. Mã lỗi
 

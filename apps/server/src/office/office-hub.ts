@@ -377,6 +377,14 @@ export class OfficeHub {
     return live ?? this.o.repo.getDraw(code, drawId);
   }
 
+  /** Revealed draws of a session, newest first: live sessions first, then long-term storage. */
+  async listDraws(code: string): Promise<OfficeDrawRecord[] | null> {
+    const session = await this.o.store.get(code);
+    if (session) return session.history ?? [];
+    const stored = await this.o.repo.listDraws(code, 200);
+    return stored.length > 0 ? stored : null;
+  }
+
   /** Job entry point for office jobs. */
   runJob = async (
     job: { kind: 'office-expire'; code: string } | { kind: 'office-reveal'; code: string; drawId: string },

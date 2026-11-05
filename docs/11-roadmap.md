@@ -53,6 +53,10 @@
 - [x] Bắn tàu (`ban-tau`, hidden-info) → kiểm chứng `playerView` và test chống lộ thông tin (bot ở web cũng chỉ nhận view)
 - [ ] Correspondence mode + thông báo
 
+## Khu "Văn phòng"
+
+Lộ trình riêng: [docs/office/08-roadmap.md](office/08-roadmap.md) (O0–O5: điều hướng hai khu, con vật đại diện, phiên văn phòng, Thú may mắn, hoàn thiện, thêm hoạt động).
+
 ## Sau đó
 
 Tournament · Tiến lên · PWA offline · Cấu hình biến thể luật nâng cao.

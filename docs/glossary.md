@@ -19,3 +19,19 @@ Dùng **đúng** các từ này trong code, docs và giao diện để tránh nh
 | **Ply**          | Một nước đi của một người. Một "turn" có thể gồm nhiều ply ở một số game                                   |                                         |
 | **seq**          | Số thứ tự phiên bản state của Match, dùng để đồng bộ client–server                                         |                                         |
 | **Time control** | Cấu hình đồng hồ: `{ type: 'none' \| 'per-move' \| 'fischer', baseMs, incrementMs }`                       |                                         |
+
+## Khu "Văn phòng" (docs/office)
+
+| Thuật ngữ              | Định nghĩa                                                                                                  | Không dùng                  |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **Activity**           | Một loại hoạt động văn phòng (Thú may mắn, Chia đội). Định danh `activityId`, hợp đồng `ActivityDefinition` | "game" (game là board game) |
+| **Session** (phiên)    | Một lần tổ chức activity, có mã 6 ký tự, một chủ trì, tới 200 người tham gia                                | "room" (room là board game) |
+| **Host** (chủ trì)     | Người điều khiển phiên; quyền kiểm tra ở server                                                             | "admin"                     |
+| **Participant**        | Người tham gia phiên (một `userId`), có tên + avatar; có thể là người vắng mặt do chủ trì thêm              | "player"                    |
+| **Screen** (màn)       | `host` · `stage` (sân khấu, máy chiếu) · `participant` (điện thoại)                                         |                             |
+| **Avatar**             | Con vật đại diện: dữ liệu `Avatar` v1 trong `@bg/avatars`, chỉ chứa id thuộc catalog                        | "ảnh đại diện"              |
+| **Draw** (lần bốc)     | Một lần chọn ngẫu nhiên có `commitment`, `seed`, `candidates`, `winners`                                    | "spin" (spin là hiệu ứng)   |
+| **Commitment**         | `sha256(seed)` công bố trước khi quay                                                                       |                             |
+| **Reveal**             | Thời điểm server công bố `seed` và `winners`                                                                |                             |
+| **Draw mode**          | Kiểu hiệu ứng bốc: `wheel`, `race`, `spotlight`, `claw`                                                     | "variant"                   |
+| **Build-up / Landing** | Hai pha hiệu ứng: chưa biết kết quả / về đích ở người thắng                                                 |                             |

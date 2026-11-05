@@ -1,8 +1,10 @@
 # CLAUDE.md
 
-Nền tảng web chơi nhiều board game với nhiều cách chơi (local, bot, online, replay).
+Nền tảng web có **hai khu**: **Board game** (nhiều game, chơi local/bot/online/replay) và **Văn phòng** (hoạt động cho
+nhân viên: con vật đại diện, bốc thăm công bằng, chia đội…).
 TypeScript monorepo: `apps/web` (Next.js), `apps/server` (Fastify + Socket.IO), `packages/engine`, `packages/protocol`,
-`packages/ui`, `packages/bots`, `packages/games/<id>`.
+`packages/ui`, `packages/bots`, `packages/games/<id>`; khu Văn phòng: `packages/avatars`, `packages/office-core`,
+`packages/office/<id>`.
 
 Giao tiếp với người dùng bằng **tiếng Việt**. Code, tên biến và commit message viết bằng tiếng Anh.
 
@@ -17,18 +19,28 @@ Giao tiếp với người dùng bằng **tiếng Việt**. Code, tên biến v�
 | Bot                                                    | [docs/07-bots.md](docs/07-bots.md)                                                       |
 | UI, bàn cờ                                             | [docs/08-frontend-guidelines.md](docs/08-frontend-guidelines.md)                         |
 | Test                                                   | [docs/10-testing-strategy.md](docs/10-testing-strategy.md)                               |
+| Khu Văn phòng (bất kỳ việc gì)                         | [docs/office/README.md](docs/office/README.md) (mục lục O-01…O-08)                       |
+| Hoạt động văn phòng, `@bg/office-core`, bốc thăm       | [docs/office/04-activity-spec.md](docs/office/04-activity-spec.md), ADR-0005, ADR-0006   |
+| Con vật đại diện, `@bg/avatars`                        | [docs/office/05-avatar-system.md](docs/office/05-avatar-system.md)                       |
+| Phiên văn phòng, socket `/office`                      | [docs/office/06-protocol-and-data.md](docs/office/06-protocol-and-data.md)               |
+| Màn chủ trì / sân khấu / điện thoại, hiệu ứng bốc      | [docs/office/07-ux-guidelines.md](docs/office/07-ux-guidelines.md)                       |
 
 ## Skills — dùng skill tương ứng thay vì tự làm theo cách riêng
 
-| Skill           | Khi nào                                                                      |
-| --------------- | ---------------------------------------------------------------------------- |
-| `bg-add-game`   | Thêm một game mới (từ spec đến lúc đăng ký vào registry)                     |
-| `bg-game-rules` | Viết hoặc sửa luật trong `rules/`, hoặc sửa `@bg/engine`                     |
-| `bg-board-ui`   | Viết hoặc sửa component bàn cờ, primitives trong `@bg/ui/board`              |
-| `bg-realtime`   | Thêm hoặc sửa socket event, RoomService, MatchService, reconnect, đồng hồ    |
-| `bg-bot`        | Viết hoặc tinh chỉnh bot                                                     |
-| `bg-testing`    | Viết test cho game hoặc lõi; sửa bug luật                                    |
-| `bg-docs-sync`  | Sau mọi thay đổi chạm đến hợp đồng (engine, protocol, data model, kiến trúc) |
+| Skill                 | Khi nào                                                                        |
+| --------------------- | ------------------------------------------------------------------------------ |
+| `bg-add-game`         | Thêm một game mới (từ spec đến lúc đăng ký vào registry)                       |
+| `bg-game-rules`       | Viết hoặc sửa luật trong `rules/`, hoặc sửa `@bg/engine`                       |
+| `bg-board-ui`         | Viết hoặc sửa component bàn cờ, primitives trong `@bg/ui/board`                |
+| `bg-realtime`         | Thêm hoặc sửa socket event, RoomService, MatchService, reconnect, đồng hồ      |
+| `bg-bot`              | Viết hoặc tinh chỉnh bot                                                       |
+| `bg-testing`          | Viết test cho game hoặc lõi; sửa bug luật                                      |
+| `office-add-activity` | Thêm một hoạt động văn phòng mới (spec → gói → đăng ký → test)                 |
+| `office-avatar`       | Thêm/sửa loài, phụ kiện, màu, renderer hoặc studio con vật                     |
+| `office-realtime`     | `OfficeHub`, socket `/office`, phiên, quyền chủ trì, lưu trữ, quy mô 200 người |
+| `office-fair-draw`    | Bất cứ thứ gì chọn ngẫu nhiên trong khu Văn phòng: commit–reveal, kiểm chứng   |
+| `office-stage-ui`     | Màn sân khấu/chủ trì/điện thoại, hiệu ứng bốc đồng bộ thời gian                |
+| `bg-docs-sync`        | Sau mọi thay đổi chạm đến hợp đồng (engine, protocol, data model, kiến trúc)   |
 
 ## Quy tắc vàng (không được vi phạm)
 
@@ -41,6 +53,10 @@ Giao tiếp với người dùng bằng **tiếng Việt**. Code, tên biến v�
 7. **Sửa bug luật thì viết fixture tái hiện bug trước.**
 8. Đổi hợp đồng (engine interface, protocol, schema DB) thì phải cập nhật docs, và viết ADR nếu là breaking change.
 9. Chỉ làm game có luật chơi dân gian/phổ thông hoặc tự thiết kế; không dùng tên thương hiệu hay tài sản của game thương mại.
+10. **Văn phòng — ngẫu nhiên chỉ ở server, có commit–reveal:** hoạt động không tự random; xin hub `draw`; không gửi `seed` trước reveal; kết quả đã reveal không sửa/huỷ (ADR-0006).
+11. **Văn phòng — hoạt động là plugin thuần** theo `ActivityDefinition` (như quy tắc 1); thêm hoạt động không sửa `OfficeHub`, chỉ thêm một dòng registry (ADR-0005).
+12. **Văn phòng — gửi thay đổi, không gửi lại cả phiên** (200 người); quyền chủ trì luôn kiểm tra ở server.
+13. **Avatar chỉ chứa id/màu thuộc catalog** (zod); không tải ảnh lên, không nhân vật thương mại.
 
 ## Game tham chiếu
 

@@ -1,6 +1,6 @@
 ---
 name: bg-docs-sync
-description: Keep docs/ in sync with code after changes to contracts — engine interface, protocol events, data model, architecture, game rules, roadmap status — and write ADRs for breaking decisions. Use at the end of any task that touched packages/engine, packages/protocol, the database schema (apps/server/src/db), a game's rules, or project structure, or when asked to "cập nhật tài liệu".
+description: Keep docs/ in sync with code after changes to contracts — engine interface, protocol events, data model, architecture, game rules, office activities/avatars/draws, roadmap status — and write ADRs for breaking decisions. Use at the end of any task that touched packages/engine, packages/protocol, packages/office-core, packages/avatars, the database schema (apps/server/src/db), a game's or activity's rules, or project structure, or when asked to "cập nhật tài liệu".
 ---
 
 # Đồng bộ tài liệu
@@ -9,19 +9,24 @@ Docs là hợp đồng giữa các agent. Docs sai còn tệ hơn không có doc
 
 ## Ánh xạ thay đổi → file cần cập nhật
 
-| Bạn đã thay đổi…                                       | Cập nhật                                                                 |
-| ------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `packages/engine` (types, runner, testing helpers)     | `docs/04-game-engine-spec.md` + ADR nếu là breaking change               |
-| `packages/protocol` (event, payload, mã lỗi)           | `docs/05-realtime-protocol.md`                                           |
-| `apps/server/src/db/database.ts`, Redis keys           | `docs/06-data-model.md`                                                  |
-| `packages/bots` interface hoặc thuật toán              | `docs/07-bots.md`                                                        |
-| `BoardProps`, `useMatch`, primitive của `@bg/ui/board` | `docs/08-frontend-guidelines.md`                                         |
-| Cấu trúc thư mục, package mới, tech stack              | `docs/03-architecture.md`, `docs/09-conventions.md`, `CLAUDE.md`         |
-| Luật hoặc config của game                              | `docs/games/<id>.md`                                                     |
-| Thêm game                                              | `docs/01-product-analysis.md` (bảng lộ trình game), `docs/11-roadmap.md` |
-| Hoàn thành một mục roadmap                             | Đánh dấu `[x]` trong `docs/11-roadmap.md`                                |
-| Thuật ngữ mới                                          | `docs/glossary.md`                                                       |
-| Quy trình làm việc thay đổi                            | Skill tương ứng trong `.claude/skills/`                                  |
+| Bạn đã thay đổi…                                       | Cập nhật                                                                              |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `packages/engine` (types, runner, testing helpers)     | `docs/04-game-engine-spec.md` + ADR nếu là breaking change                            |
+| `packages/protocol` (event, payload, mã lỗi)           | `docs/05-realtime-protocol.md`                                                        |
+| `apps/server/src/db/database.ts`, Redis keys           | `docs/06-data-model.md`                                                               |
+| `packages/bots` interface hoặc thuật toán              | `docs/07-bots.md`                                                                     |
+| `BoardProps`, `useMatch`, primitive của `@bg/ui/board` | `docs/08-frontend-guidelines.md`                                                      |
+| Cấu trúc thư mục, package mới, tech stack              | `docs/03-architecture.md`, `docs/09-conventions.md`, `CLAUDE.md`                      |
+| Luật hoặc config của game                              | `docs/games/<id>.md`                                                                  |
+| Thêm game                                              | `docs/01-product-analysis.md` (bảng lộ trình game), `docs/11-roadmap.md`              |
+| Hoàn thành một mục roadmap                             | Đánh dấu `[x]` trong `docs/11-roadmap.md`                                             |
+| Thuật ngữ mới                                          | `docs/glossary.md`                                                                    |
+| Quy trình làm việc thay đổi                            | Skill tương ứng trong `.claude/skills/`                                               |
+| `@bg/office-core` (hợp đồng hoạt động, bốc thăm)       | `docs/office/04-activity-spec.md` + ADR nếu breaking (đổi `drawWinners` luôn cần ADR) |
+| `@bg/avatars` (schema, catalog)                        | `docs/office/05-avatar-system.md`                                                     |
+| Sự kiện `office:*`, REST văn phòng, bảng `office_*`    | `docs/office/06-protocol-and-data.md`                                                 |
+| Màn văn phòng, hiệu ứng bốc                            | `docs/office/07-ux-guidelines.md`                                                     |
+| Thêm/sửa hoạt động văn phòng                           | `docs/office/activities/<id>.md`, `docs/office/08-roadmap.md`                         |
 
 ## Khi nào phải viết ADR
 

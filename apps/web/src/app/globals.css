@@ -107,3 +107,131 @@ body {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
+
+/* ---------- Look & feel (home, cards, header) ---------- */
+body {
+  background:
+    radial-gradient(1200px 500px at 85% -10%, rgb(251 146 60 / 0.12), transparent 60%),
+    radial-gradient(900px 400px at -10% 10%, rgb(59 130 246 / 0.08), transparent 60%), var(--bg);
+  background-attachment: fixed;
+}
+.btn-lg {
+  @apply rounded-xl px-5 py-3 text-base;
+}
+.card {
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+.chip {
+  @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium;
+  border-color: var(--border);
+  background: var(--bg);
+  color: var(--muted);
+}
+.chip-accent {
+  @apply text-sm;
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
+
+.site-header {
+  @apply sticky top-0 z-30 border-b backdrop-blur-md;
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+}
+.nav-link {
+  @apply rounded-md px-2.5 py-1.5 transition-colors;
+  color: var(--muted);
+}
+.nav-link:hover {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+
+.hero {
+  background:
+    radial-gradient(600px 300px at 80% 40%, rgb(251 146 60 / 0.18), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--card) 60%, transparent), transparent);
+}
+.hero-collage {
+  position: relative;
+  aspect-ratio: 1 / 0.85;
+}
+.hero-tile {
+  position: absolute;
+  width: 62%;
+  height: auto;
+  border-radius: 1rem;
+  box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.45);
+  transition: transform 0.4s ease;
+}
+.hero-tile:hover {
+  z-index: 10;
+}
+.hero-tile-0 {
+  left: 0;
+  top: 2%;
+  transform: rotate(-6deg);
+}
+.hero-tile-1 {
+  right: 0;
+  top: 0;
+  transform: rotate(5deg);
+}
+.hero-tile-2 {
+  left: 6%;
+  bottom: 0;
+  transform: rotate(4deg);
+}
+.hero-tile-3 {
+  right: 3%;
+  bottom: 4%;
+  transform: rotate(-4deg);
+  z-index: 1;
+}
+
+.feature-icon {
+  @apply grid size-11 shrink-0 place-items-center rounded-xl;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+}
+
+.game-card {
+  @apply flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-300;
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+.game-card:hover,
+.game-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -16px rgb(0 0 0 / 0.35);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+.game-card-cover {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--border);
+}
+.game-card-cta {
+  @apply inline-flex items-center gap-1 text-sm font-semibold whitespace-nowrap;
+  color: var(--accent);
+}
+
+.game-banner {
+  @apply relative overflow-hidden rounded-2xl border;
+  border-color: var(--border);
+  aspect-ratio: 2 / 1;
+  box-shadow: 0 20px 40px -20px rgb(0 0 0 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-card,
+  .hero-tile,
+  .game-card-cover img {
+    transition: none;
+  }
+  .game-card:hover {
+    transform: none;
+  }
+}

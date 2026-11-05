@@ -1,7 +1,8 @@
 {
   "app": {
     "name": "BoardHub",
-    "tagline": "Chơi board game với bạn bè hoặc với máy, ngay trên trình duyệt."
+    "tagline": "Chơi board game với bạn bè hoặc với máy, ngay trên trình duyệt.",
+    "footer": "Board game dân gian và phổ thông, chơi miễn phí trên trình duyệt."
   },
   "nav": {
     "home": "Trang chủ",
@@ -9,7 +10,8 @@
     "account": "Tài khoản",
     "label": "Điều hướng",
     "live": "Đang diễn ra",
-    "leaderboard": "Xếp hạng"
+    "leaderboard": "Xếp hạng",
+    "menu": "Menu"
   },
   "catalog": {
     "title": "Chọn một game",
@@ -275,5 +277,30 @@
     "subtitle": "Các ván ghép trận đang được chơi. Bấm để vào xem.",
     "empty": "Hiện không có ván nào đang diễn ra.",
     "watch": "Xem"
+  },
+  "home": {
+    "badge": "{n} game · Miễn phí · Không cần cài đặt",
+    "title": "Bàn cờ của bạn, ở bất cứ đâu",
+    "browse": "Chọn game",
+    "watchLive": "Xem ván đang diễn ra",
+    "featuresLabel": "Bạn có thể làm gì",
+    "features": {
+      "bot": {
+        "title": "Chơi với máy",
+        "text": "Ba mức độ, từ dễ đến khó. Chạy ngay trên máy bạn."
+      },
+      "online": {
+        "title": "Chơi với bạn bè",
+        "text": "Tạo phòng, gửi mã hoặc link mời là chơi được."
+      },
+      "ranked": {
+        "title": "Xếp hạng",
+        "text": "Ghép trận nhanh với người lạ và leo bảng xếp hạng."
+      },
+      "replay": {
+        "title": "Xem lại ván",
+        "text": "Tua lại từng nước đi của các ván đã chơi."
+      }
+    }
   }
 }

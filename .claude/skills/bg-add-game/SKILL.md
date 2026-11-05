@@ -48,7 +48,8 @@ Dùng skill **`bg-bot`**. Tối thiểu phải có cấp `easy` (randomBot hoặ
 
 ## Bước 8 — Đăng ký
 
-- Web (3 file trong `apps/web/src/games/`): `catalog.ts` (definition + i18n, không React), `client-registry.ts` (Board + configFields + PieceIcon), `bots.ts` (bot, chạy trong Web Worker).
+- Web (4 file trong `apps/web/src/games/`): `catalog.ts` (definition + i18n, không React), `client-registry.ts` (Board + configFields + PieceIcon), `bots.ts` (bot, chạy trong Web Worker), `covers.ts` (ảnh bìa).
+- Ảnh bìa: `src/ui/cover.svg` (640×400, tự vẽ, màu cố định, không dùng hình của game thương mại), export `./cover.svg` trong `package.json`. Xem docs/08 §7.
 - Web: thêm `@import '@bg/game-<id>/theme.css';` vào `apps/web/src/app/globals.css` và id vào `transpilePackages` trong `apps/web/next.config.ts`.
 - Server: thêm definition và bot vào 2 map trong `apps/server/src/registry.ts`.
 - Thêm dependency `@bg/game-<id>` vào `apps/web` và `apps/server` (`pnpm --filter @bg/web add "@bg/game-<id>@workspace:*"`, tương tự cho server).

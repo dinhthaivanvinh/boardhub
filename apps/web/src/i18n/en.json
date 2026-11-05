@@ -1,7 +1,8 @@
 {
   "app": {
     "name": "BoardHub",
-    "tagline": "Play board games with friends or against the computer, right in your browser."
+    "tagline": "Play board games with friends or against the computer, right in your browser.",
+    "footer": "Folk and classic board games, free to play in your browser."
   },
   "nav": {
     "home": "Home",
@@ -9,7 +10,8 @@
     "account": "Account",
     "label": "Navigation",
     "live": "Live",
-    "leaderboard": "Leaderboard"
+    "leaderboard": "Leaderboard",
+    "menu": "Menu"
   },
   "catalog": {
     "title": "Pick a game",
@@ -275,5 +277,30 @@
     "subtitle": "Matchmade games being played right now. Click to watch.",
     "empty": "No games in progress right now.",
     "watch": "Watch"
+  },
+  "home": {
+    "badge": "{n} games · Free · Nothing to install",
+    "title": "Your game board, anywhere",
+    "browse": "Pick a game",
+    "watchLive": "Watch live games",
+    "featuresLabel": "What you can do",
+    "features": {
+      "bot": {
+        "title": "Play the computer",
+        "text": "Three levels, from easy to hard. Runs right on your device."
+      },
+      "online": {
+        "title": "Play with friends",
+        "text": "Create a room, share the code or invite link, and play."
+      },
+      "ranked": {
+        "title": "Ranked play",
+        "text": "Quick match against other players and climb the leaderboard."
+      },
+      "replay": {
+        "title": "Replays",
+        "text": "Step through every move of the games you played."
+      }
+    }
   }
 }

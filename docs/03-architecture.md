@@ -66,7 +66,7 @@ boardgame/
 │  │  └─ src/
 │  │     ├─ app/                # routes: /, /games/[gameId], /play/[matchId], /room/[code]
 │  │     ├─ features/           # lobby, match, profile, auth...
-│  │     ├─ games/              # catalog.ts, client-registry.ts, bots.ts: đăng ký game
+│  │     ├─ games/              # catalog.ts, client-registry.ts, bots.ts, covers.ts: đăng ký game
 │  │     ├─ game-runtime/       # LocalMatch, useLocalMatch, bot worker; sau này OnlineMatchClient
 │  │     └─ i18n/
 │  └─ server/

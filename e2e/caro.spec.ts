@@ -60,7 +60,7 @@ test('the board works with the keyboard', async ({ page }) => {
 test('the language switcher changes the UI to English', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('combobox', { name: 'Ngôn ngữ' }).selectOption('en');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pick a game');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your game board, anywhere');
   await page.getByRole('combobox', { name: 'Language' }).selectOption('vi');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Chọn một game');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bàn cờ của bạn, ở bất cứ đâu');
 });

@@ -1,5 +1,5 @@
 // Server-safe game list: rules and translations only, no React.
-// Adding a game = one entry here + one in client-registry.ts + one in bots.ts.
+// Adding a game = one entry here + one in client-registry.ts + one in bots.ts + one in covers.ts.
 import { definition as caro } from '@bg/game-caro/rules';
 import caroEn from '@bg/game-caro/i18n/en.json';
 import caroVi from '@bg/game-caro/i18n/vi.json';

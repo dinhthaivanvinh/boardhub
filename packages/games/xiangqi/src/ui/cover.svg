@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Cờ tướng">
+<title>Cờ tướng</title>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#991b1b"/><stop offset="1" stop-color="#450a0a"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6dfaa"/><stop offset="1" stop-color="#e2b86b"/></linearGradient>
+<radialGradient id="ivory" cx="0.35" cy="0.3" r="0.85"><stop offset="0" stop-color="#fffbeb"/><stop offset="1" stop-color="#f1d28f"/></radialGradient>
+<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#fecaca" opacity="0.12"/></pattern><filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000" flood-opacity="0.5"/></filter></defs>
+
+<rect width="640" height="400" fill="url(#bg)"/>
+<rect width="640" height="400" fill="url(#dots)"/>
+<circle cx="560" cy="70" r="130" fill="#fbbf24" opacity="0.14"/>
+<g transform="translate(320 204) rotate(-3)">
+  <rect x="-218" y="-149" width="436" height="298" rx="14" fill="url(#wood)" filter="url(#sh)"/>
+  <g stroke="#7c4a1e" stroke-width="1.8"><line x1="-184" y1="-115" x2="184" y2="-115"/><line x1="-184" y1="-69" x2="184" y2="-69"/><line x1="-184" y1="-23" x2="184" y2="-23"/><line x1="-184" y1="23" x2="184" y2="23"/><line x1="-184" y1="69" x2="184" y2="69"/><line x1="-184" y1="115" x2="184" y2="115"/><line x1="-184" y1="-115" x2="-184" y2="115"/><line x1="-138" y1="-115" x2="-138" y2="-23"/><line x1="-138" y1="23" x2="-138" y2="115"/><line x1="-92" y1="-115" x2="-92" y2="-23"/><line x1="-92" y1="23" x2="-92" y2="115"/><line x1="-46" y1="-115" x2="-46" y2="-23"/><line x1="-46" y1="23" x2="-46" y2="115"/><line x1="0" y1="-115" x2="0" y2="-23"/><line x1="0" y1="23" x2="0" y2="115"/><line x1="46" y1="-115" x2="46" y2="-23"/><line x1="46" y1="23" x2="46" y2="115"/><line x1="92" y1="-115" x2="92" y2="-23"/><line x1="92" y1="23" x2="92" y2="115"/><line x1="138" y1="-115" x2="138" y2="-23"/><line x1="138" y1="23" x2="138" y2="115"/><line x1="184" y1="-115" x2="184" y2="115"/></g>
+  <text x="-92" y="0" text-anchor="middle" dominant-baseline="central" font-size="26" fill="#7c4a1e" opacity="0.8" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','SimSun',serif" letter-spacing="14">楚河</text>
+  <text x="92" y="0" text-anchor="middle" dominant-baseline="central" font-size="26" fill="#7c4a1e" opacity="0.8" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','SimSun',serif" letter-spacing="14">漢界</text>
+  <g><circle cx="-138" cy="-112" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="-138" cy="-115" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="-138" cy="-115" r="17.296" fill="none" stroke="#1f2937" stroke-width="2"/>
+<text x="-138" y="-115" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#1f2937" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">馬</text></g><g><circle cx="0" cy="-66" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="0" cy="-69" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="0" cy="-69" r="17.296" fill="none" stroke="#1f2937" stroke-width="2"/>
+<text x="0" y="-69" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#1f2937" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">卒</text></g><g><circle cx="138" cy="-112" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="138" cy="-115" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="138" cy="-115" r="17.296" fill="none" stroke="#1f2937" stroke-width="2"/>
+<text x="138" y="-115" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#1f2937" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">砲</text></g><g><circle cx="-92" cy="-66" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="-92" cy="-69" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="-92" cy="-69" r="17.296" fill="none" stroke="#1f2937" stroke-width="2"/>
+<text x="-92" y="-69" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#1f2937" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">卒</text></g>
+  <g><circle cx="92" cy="72" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="92" cy="69" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="92" cy="69" r="17.296" fill="none" stroke="#b91c1c" stroke-width="2"/>
+<text x="92" y="69" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#b91c1c" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">兵</text></g><g><circle cx="-138" cy="72" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="-138" cy="69" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="-138" cy="69" r="17.296" fill="none" stroke="#b91c1c" stroke-width="2"/>
+<text x="-138" y="69" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#b91c1c" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">炮</text></g><g><circle cx="0" cy="118" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="0" cy="115" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="0" cy="115" r="17.296" fill="none" stroke="#b91c1c" stroke-width="2"/>
+<text x="0" y="115" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#b91c1c" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">傌</text></g><g><circle cx="-46" cy="26" r="21.619999999999997" fill="#000" opacity="0.3"/>
+<circle cx="-46" cy="23" r="21.619999999999997" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="-46" cy="23" r="17.296" fill="none" stroke="#b91c1c" stroke-width="2"/>
+<text x="-46" y="23" text-anchor="middle" dominant-baseline="central" font-size="22.700999999999997" font-weight="700" fill="#b91c1c" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">俥</text></g>
+</g>
+<g transform="translate(568 328) rotate(12)"><g><circle cx="0" cy="3" r="28.52" fill="#000" opacity="0.3"/>
+<circle cx="0" cy="0" r="28.52" fill="url(#ivory)" stroke="#7c5a2a" stroke-width="1.5"/>
+<circle cx="0" cy="0" r="22.816000000000003" fill="none" stroke="#b91c1c" stroke-width="2"/>
+<text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-size="29.946" font-weight="700" fill="#b91c1c" font-family="'KaiTi','STKaiti','Noto Serif CJK SC','Noto Serif SC','SimSun','Microsoft YaHei',serif">帥</text></g></g>
+</svg>

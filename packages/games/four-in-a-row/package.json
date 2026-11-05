@@ -8,7 +8,8 @@
     "./rules": "./src/rules/definition.ts",
     "./bot": "./src/bot/index.ts",
     "./i18n/*": "./src/i18n/*",
-    "./theme.css": "./src/ui/theme.css"
+    "./theme.css": "./src/ui/theme.css",
+    "./cover.svg": "./src/ui/cover.svg"
   },
   "scripts": {
     "typecheck": "tsc -p .",

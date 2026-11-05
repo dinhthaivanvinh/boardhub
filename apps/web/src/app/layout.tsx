@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { AccountLink } from '@/features/account/AccountLink';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
+import { MobileNav } from '@/features/settings/MobileNav';
 import { TIME_ZONE } from '@/i18n/messages';
 import './globals.css';
 
@@ -31,31 +32,52 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={locale}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={TIME_ZONE}>
-          <header className="border-b border-[var(--border)] bg-[var(--card)]">
+          <header className="site-header">
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-              <Link href="/" className="text-lg font-bold tracking-tight">
-                <span aria-hidden="true" className="mr-1.5">
-                  ◆
-                </span>
+              <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
+                <Logo />
                 {t('name')}
               </Link>
-              <div className="flex items-center gap-4">
-                <nav className="hidden items-center gap-4 text-sm sm:flex" aria-label={nav('label')}>
-                  <Link href="/live" className="underline-offset-4 hover:underline">
+              <div className="flex items-center gap-2 sm:gap-4">
+                <nav className="hidden items-center gap-1 text-sm sm:flex" aria-label={nav('label')}>
+                  <Link href="/live" className="nav-link">
                     {nav('live')}
                   </Link>
-                  <Link href="/leaderboard" className="underline-offset-4 hover:underline">
+                  <Link href="/leaderboard" className="nav-link">
                     {nav('leaderboard')}
                   </Link>
                 </nav>
                 <AccountLink />
                 <LanguageSwitcher />
+                <MobileNav />
               </div>
             </div>
           </header>
-          <main>{children}</main>
+          <main className="min-h-[calc(100vh-8rem)]">{children}</main>
+          <footer className="border-t border-[var(--border)]">
+            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-[var(--muted)]">
+              <span className="flex items-center gap-2">
+                <Logo size={18} />
+                {t('name')}
+              </span>
+              <span>{t('footer')}</span>
+            </div>
+          </footer>
         </NextIntlClientProvider>
       </body>
     </html>
+  );
+}
+
+/** Four tiles in the colours of the pieces: the BoardHub mark. */
+function Logo({ size = 26 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden="true">
+      <rect x="2" y="2" width="13" height="13" rx="4" fill="#f97316" />
+      <rect x="17" y="2" width="13" height="13" rx="4" fill="#1d4ed8" />
+      <rect x="2" y="17" width="13" height="13" rx="4" fill="#15803d" />
+      <rect x="17" y="17" width="13" height="13" rx="4" fill="#b91c1c" />
+      <circle cx="23.5" cy="23.5" r="3.5" fill="#fff" opacity="0.9" />
+    </svg>
   );
 }

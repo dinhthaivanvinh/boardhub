@@ -171,6 +171,7 @@ export type Ack<T = Record<string, never>> =
 /** Error codes shared by server and client (docs/05 §6). */
 export const ERROR_CODES = [
   'auth.required',
+  'office.invalid_avatar',
   'protocol.version',
   'rate.limited',
   'invalid.payload',

@@ -235,6 +235,9 @@
     },
     "queue": {
       "unsupported": "Quick match is not available for this game yet."
+    },
+    "office": {
+      "invalid_avatar": "That animal is not valid."
     }
   },
   "profile": {
@@ -389,6 +392,106 @@
         "name": "Prize draw",
         "text": "Several prizes, several rounds, one win per person."
       }
+    }
+  },
+  "avatar": {
+    "title": "My animal",
+    "intro": "This animal represents you in every office session. Dress it up your way; every change is saved automatically.",
+    "preview": "{name}: {species}",
+    "name": "Display name",
+    "random": "Random",
+    "undo": "Undo",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "saveFailed": "Not saved yet, retrying…",
+    "loading": "Loading your animal…",
+    "tabs": {
+      "species": "Animal",
+      "colors": "Colours",
+      "face": "Face",
+      "accessory": "Accessory",
+      "background": "Background"
+    },
+    "groups": {
+      "body": "Main colour",
+      "accent": "Second colour",
+      "pattern": "Pattern",
+      "eyes": "Eyes",
+      "mouth": "Mouth",
+      "accessory": "Accessory",
+      "accessoryColor": "Accessory colour",
+      "background": "Background colour"
+    },
+    "species": {
+      "cat": "Cat",
+      "dog": "Dog",
+      "fox": "Fox",
+      "panda": "Panda",
+      "rabbit": "Rabbit",
+      "bear": "Bear",
+      "penguin": "Penguin",
+      "frog": "Frog",
+      "owl": "Owl",
+      "tiger": "Tiger"
+    },
+    "pattern": {
+      "plain": "Plain",
+      "stripes": "Stripes",
+      "spots": "Spots",
+      "patch": "Patch"
+    },
+    "eyes": {
+      "round": "Round",
+      "happy": "Happy",
+      "sleepy": "Sleepy",
+      "wink": "Wink",
+      "star": "Stars",
+      "surprised": "Surprised"
+    },
+    "mouth": {
+      "smile": "Smile",
+      "grin": "Grin",
+      "tongue": "Tongue",
+      "o": "O",
+      "cat": "Cat mouth"
+    },
+    "accessory": {
+      "none": "None",
+      "cap": "Cap",
+      "beanie": "Beanie",
+      "crown": "Crown",
+      "glasses": "Glasses",
+      "sunglasses": "Sunglasses",
+      "bow": "Bow",
+      "scarf": "Scarf",
+      "headphones": "Headphones",
+      "flower": "Flower"
+    },
+    "colors": {
+      "0": "Ginger",
+      "1": "Brown",
+      "2": "Dark brown",
+      "3": "Cream",
+      "4": "White",
+      "5": "Light grey",
+      "6": "Grey",
+      "7": "Black",
+      "8": "Blush",
+      "9": "Lavender",
+      "10": "Sky",
+      "11": "Mint",
+      "12": "Lemon",
+      "13": "Peach",
+      "14": "Lilac",
+      "15": "Aqua",
+      "16": "Red",
+      "17": "Orange",
+      "18": "Yellow",
+      "19": "Green",
+      "20": "Cyan",
+      "21": "Blue",
+      "22": "Violet",
+      "23": "Pink"
     }
   }
 }

@@ -42,6 +42,20 @@ export class PgUserRepo implements UserRepo {
     return toUser(row);
   }
 
+  async getAvatar(id: string) {
+    const row = await this.db.selectFrom('users').select('avatar').where('id', '=', id).executeTakeFirst();
+    return row?.avatar ?? null;
+  }
+
+  async setAvatar(id: string, avatar: unknown) {
+    const res = await this.db
+      .updateTable('users')
+      .set({ avatar: JSON.stringify(avatar) })
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return Number(res.numUpdatedRows) > 0;
+  }
+
   async findById(id: string) {
     const row = await this.db.selectFrom('users').selectAll().where('id', '=', id).executeTakeFirst();
     return row ? toUser(row) : null;

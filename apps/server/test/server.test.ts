@@ -157,6 +157,44 @@ describe('REST auth', () => {
       },
     });
     expect(res.headers['access-control-allow-methods']).toContain('PATCH');
+    expect(res.headers['access-control-allow-methods']).toContain('PUT');
+  });
+});
+
+describe('office avatar', () => {
+  const avatar = {
+    v: 1,
+    species: 'fox',
+    body: '#f97316',
+    accent: '#f8fafc',
+    pattern: 'plain',
+    eyes: 'happy',
+    mouth: 'smile',
+    accessory: 'glasses',
+    accessoryColor: '#3b82f6',
+    background: '#bae6fd',
+  };
+
+  it('starts empty, is saved, and comes back', async () => {
+    const { body: guest } = await api<{ token: string }>('POST', '/api/auth/guest', {});
+    expect((await api('GET', '/api/me/avatar', undefined, guest.token)).body).toEqual({ avatar: null });
+    expect((await api('PUT', '/api/me/avatar', { avatar }, guest.token)).body).toEqual({ avatar });
+    expect((await api('GET', '/api/me/avatar', undefined, guest.token)).body).toEqual({ avatar });
+  });
+
+  it('only accepts catalog avatars, and only for a signed-in user', async () => {
+    const { body: guest } = await api<{ token: string }>('POST', '/api/auth/guest', {});
+    for (const bad of [
+      { ...avatar, species: 'dragon' },
+      { ...avatar, body: '#123456' },
+      { ...avatar, image: 'https://example.com/x.png' },
+    ]) {
+      const res = await api<{ code: string }>('PUT', '/api/me/avatar', { avatar: bad }, guest.token);
+      expect(res.status).toBe(400);
+      expect(res.body.code).toBe('office.invalid_avatar');
+    }
+    expect((await api('PUT', '/api/me/avatar', { avatar })).status).toBe(401);
+    expect((await api('GET', '/api/me/avatar')).status).toBe(401);
   });
 });
 

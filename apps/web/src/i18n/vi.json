@@ -235,6 +235,9 @@
     },
     "queue": {
       "unsupported": "Game này chưa hỗ trợ ghép trận nhanh."
+    },
+    "office": {
+      "invalid_avatar": "Con vật này không hợp lệ."
     }
   },
   "profile": {
@@ -389,6 +392,106 @@
         "name": "Bốc quà",
         "text": "Nhiều giải, nhiều vòng, mỗi người trúng tối đa một lần."
       }
+    }
+  },
+  "avatar": {
+    "title": "Thú của tôi",
+    "intro": "Con vật này đại diện cho bạn trong mọi phiên văn phòng. Trang trí theo ý bạn, mọi thay đổi được lưu tự động.",
+    "preview": "{name}: {species}",
+    "name": "Tên hiển thị",
+    "random": "Ngẫu nhiên",
+    "undo": "Hoàn tác",
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu",
+    "saveFailed": "Chưa lưu được, đang thử lại…",
+    "loading": "Đang tải con vật của bạn…",
+    "tabs": {
+      "species": "Loài",
+      "colors": "Màu",
+      "face": "Mặt",
+      "accessory": "Phụ kiện",
+      "background": "Nền"
+    },
+    "groups": {
+      "body": "Màu chính",
+      "accent": "Màu phụ",
+      "pattern": "Hoa văn",
+      "eyes": "Mắt",
+      "mouth": "Miệng",
+      "accessory": "Phụ kiện",
+      "accessoryColor": "Màu phụ kiện",
+      "background": "Màu nền"
+    },
+    "species": {
+      "cat": "Mèo",
+      "dog": "Chó",
+      "fox": "Cáo",
+      "panda": "Gấu trúc",
+      "rabbit": "Thỏ",
+      "bear": "Gấu",
+      "penguin": "Chim cánh cụt",
+      "frog": "Ếch",
+      "owl": "Cú",
+      "tiger": "Hổ"
+    },
+    "pattern": {
+      "plain": "Trơn",
+      "stripes": "Sọc",
+      "spots": "Đốm",
+      "patch": "Mảng"
+    },
+    "eyes": {
+      "round": "Tròn",
+      "happy": "Cười",
+      "sleepy": "Buồn ngủ",
+      "wink": "Nháy mắt",
+      "star": "Ngôi sao",
+      "surprised": "Ngạc nhiên"
+    },
+    "mouth": {
+      "smile": "Mỉm cười",
+      "grin": "Cười tươi",
+      "tongue": "Lè lưỡi",
+      "o": "Chữ O",
+      "cat": "Miệng mèo"
+    },
+    "accessory": {
+      "none": "Không có",
+      "cap": "Mũ lưỡi trai",
+      "beanie": "Mũ len",
+      "crown": "Vương miện",
+      "glasses": "Kính",
+      "sunglasses": "Kính râm",
+      "bow": "Nơ",
+      "scarf": "Khăn quàng",
+      "headphones": "Tai nghe",
+      "flower": "Hoa"
+    },
+    "colors": {
+      "0": "Cam vàng",
+      "1": "Nâu",
+      "2": "Nâu sẫm",
+      "3": "Kem",
+      "4": "Trắng",
+      "5": "Xám nhạt",
+      "6": "Xám",
+      "7": "Đen",
+      "8": "Hồng phấn",
+      "9": "Tím oải hương",
+      "10": "Xanh da trời nhạt",
+      "11": "Xanh bạc hà",
+      "12": "Vàng chanh",
+      "13": "Cam đào",
+      "14": "Tím nhạt",
+      "15": "Xanh ngọc nhạt",
+      "16": "Đỏ",
+      "17": "Cam",
+      "18": "Vàng",
+      "19": "Xanh lá",
+      "20": "Xanh lơ",
+      "21": "Xanh dương",
+      "22": "Tím",
+      "23": "Hồng"
     }
   }
 }

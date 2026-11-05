@@ -8,6 +8,7 @@ const PROTOCOL_NAMESPACES = new Set([
   'game',
   'protocol',
   'queue',
+  'office',
 ]);
 
 /**

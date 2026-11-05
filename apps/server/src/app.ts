@@ -42,7 +42,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   await app.register(cors, {
     origin: config.corsOrigins,
     credentials: true,
-    methods: ['GET', 'HEAD', 'POST', 'PATCH'],
+    methods: ['GET', 'HEAD', 'POST', 'PATCH', 'PUT'],
   });
 
   const cleanups: (() => Promise<void>)[] = [];
@@ -115,7 +115,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     botDelayMs: config.BOT_DELAY_MS,
   });
   const auth = new AuthService(users, new TokenService(config.JWT_SECRET));
-  registerRoutes(app, auth, new HistoryService(history, users));
+  registerRoutes(app, auth, new HistoryService(history, users), users);
   registerCompetitiveRoutes(app, { auth, ratings: ratingRepo, users, store, games: GAME_DEFS });
   const matchmaker = new Matchmaker({
     store,

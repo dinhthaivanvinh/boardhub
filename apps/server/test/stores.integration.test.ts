@@ -122,6 +122,22 @@ describe('Postgres repos', () => {
     ).rejects.toThrow();
   });
 
+  it('stores the office avatar as JSON on the user', async () => {
+    const users = new PgUserRepo(db);
+    const u = await users.create({
+      id: randomUUID(),
+      kind: 'guest',
+      displayName: 'Ava',
+      email: null,
+      passwordHash: null,
+    });
+    expect(await users.getAvatar(u.id)).toBeNull();
+    const avatar = { v: 1, species: 'owl', body: '#b45309', accent: '#fef3c7' };
+    expect(await users.setAvatar(u.id, avatar)).toBe(true);
+    expect(await users.getAvatar(u.id)).toEqual(avatar);
+    expect(await users.setAvatar(randomUUID(), avatar)).toBe(false);
+  });
+
   it('a full match through the hub lands in Redis and Postgres', async () => {
     const history = new PgHistoryRepo(db);
     const a = { userId: uuidFor(alice.userId), name: 'Alice' };

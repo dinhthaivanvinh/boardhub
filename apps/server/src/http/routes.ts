@@ -1,9 +1,13 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import type { z } from 'zod';
+import { z } from 'zod';
+import { AvatarSchema } from '@bg/avatars/schema';
 import { GuestRequest, LoginRequest, RegisterRequest, RenameRequest } from '@bg/protocol';
 import type { AuthService } from '../auth/auth-service';
 import type { HistoryService } from '../history/history-service';
 import { HubError } from '../errors';
+import type { UserRepo } from '../store/repos';
+
+const AvatarRequest = z.strictObject({ avatar: AvatarSchema });
 
 const STATUS: Record<string, number> = {
   'invalid.payload': 400,
@@ -26,7 +30,12 @@ function parse<S extends z.ZodType>(schema: S, body: unknown): z.output<S> {
   return res.data;
 }
 
-export function registerRoutes(app: FastifyInstance, auth: AuthService, history: HistoryService) {
+export function registerRoutes(
+  app: FastifyInstance,
+  auth: AuthService,
+  history: HistoryService,
+  users: UserRepo,
+) {
   app.setErrorHandler((err, _req, reply: FastifyReply) => {
     if (err instanceof HubError) return reply.status(STATUS[err.code] ?? 400).send({ code: err.code });
     if ((err as { statusCode?: number }).statusCode === 429)
@@ -57,6 +66,21 @@ export function registerRoutes(app: FastifyInstance, auth: AuthService, history:
   app.patch('/api/me', async (req) => {
     const user = await requireUser(req);
     return auth.rename(user.id, parse(RenameRequest, req.body).displayName);
+  });
+
+  // Office avatar (docs/office/06 §2). Only catalog avatars are accepted (CLAUDE.md rule 13).
+  app.get('/api/me/avatar', async (req) => {
+    const user = await requireUser(req);
+    const stored = AvatarSchema.safeParse(await users.getAvatar(user.id));
+    return { avatar: stored.success ? stored.data : null };
+  });
+
+  app.put('/api/me/avatar', async (req) => {
+    const user = await requireUser(req);
+    const body = AvatarRequest.safeParse(req.body);
+    if (!body.success) throw new HubError('office.invalid_avatar');
+    await users.setAvatar(user.id, body.data.avatar);
+    return { avatar: body.data.avatar };
   });
 
   app.get<{ Querystring: { limit?: string } }>('/api/me/matches', async (req) => {

@@ -11,6 +11,7 @@
     "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
+    "@bg/avatars": "workspace:*",
     "@bg/bots": "workspace:*",
     "@bg/engine": "workspace:*",
     "@bg/game-ban-tau": "workspace:*",

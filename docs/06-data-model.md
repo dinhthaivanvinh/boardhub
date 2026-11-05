@@ -14,6 +14,7 @@ users
   display_name   text
   email          text      UNIQUE, null với khách
   password_hash  text      scrypt$N$r$p$salt$hash, null với khách
+  avatar         jsonb     con vật đại diện (khu Văn phòng, Avatar v1 — docs/office/05), null nếu chưa tạo
   created_at     timestamptz default now()
 
 matches

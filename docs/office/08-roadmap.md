@@ -11,9 +11,9 @@
 
 ## O1 — Con vật đại diện
 
-- [ ] `@bg/avatars`: schema, catalog (10 loài, 6 mắt, 5 miệng, 10 phụ kiện, 24 màu), renderer theo lớp, `randomAvatar`
-- [ ] `users.avatar` + `GET/PUT /api/me/avatar`
-- [ ] Studio `/office/avatar` (điện thoại + máy tính), lưu tự động
+- [x] `@bg/avatars`: schema, catalog (10 loài, 6 mắt, 5 miệng, 10 phụ kiện, 24 màu), renderer theo lớp, `randomAvatar`
+- [x] `users.avatar` + `GET/PUT /api/me/avatar`
+- [x] Studio `/office/avatar` (điện thoại + máy tính), lưu tự động; sửa tên hiển thị ngay trong studio
 - **Demo:** mỗi người tạo và lưu con vật của mình; mở trên máy khác (cùng tài khoản) vẫn thấy.
 
 ## O2 — Phiên văn phòng

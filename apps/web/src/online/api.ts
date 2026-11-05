@@ -9,7 +9,7 @@ export function serverUrl(): string {
 export type ApiResult<T> = { ok: true; data: T } | { ok: false; code: string };
 
 export async function apiRequest<T>(
-  method: 'GET' | 'POST' | 'PATCH',
+  method: 'GET' | 'POST' | 'PATCH' | 'PUT',
   path: string,
   body?: unknown,
   token?: string | null,

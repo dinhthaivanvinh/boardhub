@@ -24,6 +24,8 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 | `POST /api/auth/login`         | `{ email, password }`              | `AuthResponse`                                                                                                                |
 | `GET /api/me`                  | —                                  | `PublicUser`                                                                                                                  |
 | `PATCH /api/me`                | `{ displayName }`                  | `PublicUser`                                                                                                                  |
+| `GET /api/me/avatar`           | —                                  | `{ avatar: Avatar                                                                                                             | null }` con vật đại diện (docs/office/05) |
+| `PUT /api/me/avatar`           | `{ avatar }`                       | `{ avatar }`; chỉ nhận avatar thuộc catalog, sai → 400 `office.invalid_avatar`                                                |
 | `GET /api/me/matches?limit=`   | —                                  | `{ matches: MatchSummary[] }` ván của người gọi, mới nhất trước (tối đa 100)                                                  |
 | `GET /api/matches/:id`         | —                                  | `MatchDetail` (gồm `seed` + danh sách nước) **chỉ khi ván đã kết thúc**; đang chơi → 409 `match.not_finished`; không có → 404 |
 | `GET /api/leaderboard/:gameId` | —                                  | `{ gameId, minGames, entries: LeaderboardEntry[] }`: điểm cao nhất, chỉ người có ≥ 5 ván tính điểm                            |
@@ -32,7 +34,7 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 | `GET /health`                  | —                                  | `{ ok: true }`                                                                                                                |
 
 Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
-CORS cho phép `GET, HEAD, POST, PATCH`.
+CORS cho phép `GET, HEAD, POST, PATCH, PUT`.
 
 **Danh tính khách:** web lưu token trong `localStorage` (`bg-session`), nên mọi tab của một trình duyệt là
 **cùng một người** (mở link mời ở tab mới vẫn giữ ghế). Muốn thêm người chơi trên cùng máy: dùng trình duyệt

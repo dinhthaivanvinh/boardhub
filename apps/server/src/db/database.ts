@@ -1,4 +1,4 @@
-import { Kysely, PostgresDialect, sql, type Generated } from 'kysely';
+import { Kysely, PostgresDialect, sql, type ColumnType, type Generated } from 'kysely';
 import { Migrator, type Migration } from 'kysely/migration';
 import pg from 'pg';
 
@@ -9,6 +9,8 @@ export interface UsersTable {
   email: string | null;
   password_hash: string | null;
   created_at: Generated<Date>;
+  /** Office avatar (docs/office/05), validated by @bg/avatars before it is written. Written as JSON text. */
+  avatar: ColumnType<unknown, never, string | null>;
 }
 
 export interface MatchesTable {
@@ -162,6 +164,14 @@ const MIGRATIONS: Record<string, Migration> = {
       await db.schema.alterTable('match_players').dropColumn('rating_before').execute();
       await db.schema.alterTable('matches').dropColumn('ranked').execute();
       await db.schema.dropTable('ratings').execute();
+    },
+  },
+  '2026_11_07_001_avatars': {
+    async up(db) {
+      await db.schema.alterTable('users').addColumn('avatar', 'jsonb').execute();
+    },
+    async down(db) {
+      await db.schema.alterTable('users').dropColumn('avatar').execute();
     },
   },
 };

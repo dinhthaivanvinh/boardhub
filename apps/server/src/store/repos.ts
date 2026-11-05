@@ -16,6 +16,10 @@ export interface UserRepo {
   findByEmail(email: string): Promise<UserRecord | null>;
   findManyByIds(ids: string[]): Promise<UserRecord[]>;
   update(id: string, patch: Partial<Omit<UserRecord, 'id' | 'createdAt'>>): Promise<UserRecord | null>;
+  /** The user's office avatar as stored (callers validate it), or null. */
+  getAvatar(id: string): Promise<unknown>;
+  /** Returns false if the user does not exist. */
+  setAvatar(id: string, avatar: unknown): Promise<boolean>;
 }
 
 export interface NewMatchRow {
@@ -72,6 +76,17 @@ export interface HistoryRepo {
 
 export class MemoryUserRepo implements UserRepo {
   readonly users = new Map<string, UserRecord>();
+  readonly avatars = new Map<string, unknown>();
+
+  async getAvatar(id: string) {
+    return this.avatars.get(id) ?? null;
+  }
+
+  async setAvatar(id: string, avatar: unknown) {
+    if (!this.users.has(id)) return false;
+    this.avatars.set(id, structuredClone(avatar));
+    return true;
+  }
 
   async create(user: Omit<UserRecord, 'createdAt'>) {
     if (user.email && (await this.findByEmail(user.email))) throw new Error('duplicate email');

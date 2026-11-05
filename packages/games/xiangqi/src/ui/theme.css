@@ -77,19 +77,3 @@
 .xq-last {
   fill: var(--highlight-last, rgb(250 204 21 / 0.45));
 }
-.xq-enter {
-  animation: xq-enter 0.2s ease-out;
-}
-@keyframes xq-enter {
-  from {
-    opacity: 0.3;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .xq-enter {
-    animation: none;
-  }
-}

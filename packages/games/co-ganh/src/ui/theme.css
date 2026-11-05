@@ -60,33 +60,49 @@
   font-size: 0.875rem;
   color: #b45309;
 }
+/* Captured stones keep their old colour while the mover slides in, then turn over. */
 .cg-flip {
-  animation: cg-flip 0.45s ease-out;
+  animation: cg-flip 1s ease-in-out;
   transform-box: fill-box;
   transform-origin: center;
 }
 @keyframes cg-flip {
-  0% {
-    transform: scaleX(0.1);
+  0%,
+  62% {
+    transform: scaleX(1);
+  }
+  80% {
+    transform: scaleX(0.05);
   }
   100% {
     transform: scaleX(1);
   }
 }
-.cg-enter {
-  animation: cg-enter 0.2s ease-out;
+.cg-p0.cg-flip .cg-stone-body {
+  animation: cg-was-p1 1s step-end;
 }
-@keyframes cg-enter {
-  from {
-    opacity: 0.3;
+.cg-p1.cg-flip .cg-stone-body {
+  animation: cg-was-p0 1s step-end;
+}
+@keyframes cg-was-p1 {
+  0% {
+    fill: var(--piece-p1, #2563eb);
   }
-  to {
-    opacity: 1;
+  80% {
+    fill: var(--piece-p0, #dc2626);
+  }
+}
+@keyframes cg-was-p0 {
+  0% {
+    fill: var(--piece-p0, #dc2626);
+  }
+  80% {
+    fill: var(--piece-p1, #2563eb);
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .cg-flip,
-  .cg-enter {
+  .cg-flip .cg-stone-body {
     animation: none;
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CELL, GridBoard, VisuallyHidden, type BoardProps } from '@bg/ui';
+import { CELL, GridBoard, SlidingPiece, VisuallyHidden, type BoardProps } from '@bg/ui';
 import { isStrongPoint, POINTS, SIZE } from '../rules/board';
 import { legalMoves } from '../rules/rules';
 import type { CoGanhMove, CoGanhSeat, CoGanhState } from '../rules/types';
@@ -105,6 +105,11 @@ export function Board({
   };
 
   const mover = last ? view.board[last.to] : null;
+  /** Centre of a board point on screen. */
+  const centre = (p: number) => {
+    const d = displayOf(p);
+    return { x: (d % SIZE) * CELL + HALF, y: Math.floor(d / SIZE) * CELL + HALF };
+  };
 
   return (
     <div className="cg-board">
@@ -122,6 +127,23 @@ export function Board({
           });
         }}
         onActivate={activate}
+        overlay={
+          last && mover !== null && mover !== undefined ? (
+            <SlidingPiece
+              key={view.moveCount}
+              from={centre(last.from)}
+              to={centre(last.to)}
+              animate={settings.animations}
+            >
+              <Stone
+                seat={mover}
+                cx={centre(last.to).x}
+                cy={centre(last.to).y}
+                className={last.to === selected ? 'cg-selected' : ''}
+              />
+            </SlidingPiece>
+          ) : undefined
+        }
         cellData={(display) => {
           const p = toBoard(display);
           const v = view.board[p];
@@ -145,7 +167,7 @@ export function Board({
             <>
               {isLast && <circle className="cg-last" cx={cx} cy={cy} r={CELL * 0.44} />}
               {view.forced === p && <circle className="cg-forced" cx={cx} cy={cy} r={CELL * 0.4} />}
-              {v !== null && v !== undefined && (
+              {v !== null && v !== undefined && !(last && p === last.to) && (
                 <Stone
                   seat={v}
                   cx={cx}
@@ -153,7 +175,6 @@ export function Board({
                   className={[
                     p === selected && 'cg-selected',
                     settings.animations && changed.has(p) && 'cg-flip',
-                    settings.animations && last && p === last.to && 'cg-enter',
                   ]
                     .filter(Boolean)
                     .join(' ')}

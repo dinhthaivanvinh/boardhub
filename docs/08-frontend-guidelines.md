@@ -89,6 +89,9 @@ Desktop                                   Mobile
 
 - Màu dùng CSS variables (`--board-bg`, `--board-line`, `--piece-p0`, `--piece-p1`, …) định nghĩa ở `apps/web/src/app/globals.css`.
 - Mỗi game có `src/ui/theme.css` riêng (export `./theme.css`, được `@import` trong `globals.css`). Màn chơi có thuộc tính `data-game="<id>"`, nên game đổi màu quân bằng `[data-game='<id>'] { --piece-p0: …; }` mà không ảnh hưởng game khác.
+- **Quân di chuyển phải trượt tới chỗ mới**, không hiện ra ngay: dùng `SlidingPiece` của `@bg/ui` trong `overlay` của
+  `GridBoard` (key = `moveCount`, `animate = settings.animations`) và không vẽ quân đó trong ô đích. CSS `.bg-slide` ở
+  `globals.css` (0,6 giây, tắt khi giảm chuyển động). Hiệu ứng phụ (lật, đổi màu) chờ quân trượt xong mới chạy.
 - Mỗi game có ảnh bìa `src/ui/cover.svg` (640×400, export `./cover.svg`, đăng ký trong `apps/web/src/games/covers.ts`), hiện ở trang chủ và trang game. Ảnh tự vẽ bằng SVG (bàn cờ + vài quân đang chơi), màu cố định vì được nạp bằng `<img>` nên không dùng được biến CSS; chữ trong ảnh chỉ là trang trí (`alt=""`).
 - Mỗi game export thêm `PieceIcon({ seat, size })`: hình quân nhỏ dùng trong thẻ người chơi (đăng ký trong `client-registry.ts`). Không có thì app hiển thị tên quân.
 - Hỗ trợ light và dark mode.

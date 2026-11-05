@@ -98,6 +98,44 @@ describe('Xiangqi board', () => {
     expect(screen.getByText(/games\.xiangqi\.check/)).toBeTruthy();
   });
 
+  it('the moved piece slides from its old point, drawn once', () => {
+    const s = fromDiagram(['....k....', E, E, E, E, E, E, E, E, '...K...R.'], 0);
+    const moved: XiangqiState = {
+      ...s,
+      board: s.board.map((p, i) => (i === at(9, 7) ? null : i === at(0, 7) ? 'rR' : p)),
+      lastMove: { from: at(9, 7), to: at(0, 7) },
+      moveCount: 1,
+      turn: 1,
+    };
+    renderBoard(moved, { isMyTurn: false });
+    const slide = document.querySelector('[data-sliding="true"]') as SVGGElement;
+    // Nine rows up: it starts 9 × 40 below where it ends.
+    expect(slide.style.getPropertyValue('--bg-slide-dx')).toBe('0px');
+    expect(slide.style.getPropertyValue('--bg-slide-dy')).toBe('360px');
+    expect(screen.getAllByText('俥')).toHaveLength(1);
+    cleanup();
+    // Seen from Black the same move runs the other way.
+    renderBoard(moved, { mySeat: 1, isMyTurn: true });
+    const flipped = document.querySelector('[data-sliding="true"]') as SVGGElement;
+    expect(flipped.style.getPropertyValue('--bg-slide-dy')).toBe('-360px');
+  });
+
+  it('no sliding when animations are off', () => {
+    const view = { ...play([[at(7, 1), at(7, 4)]]) };
+    render(
+      <Board
+        view={view}
+        mySeat={0}
+        isMyTurn={false}
+        onMove={vi.fn()}
+        settings={{ ...DEFAULT_BOARD_SETTINGS, animations: false }}
+        t={t}
+      />,
+    );
+    expect(document.querySelector('[data-sliding="true"]')).toBeNull();
+    expect(screen.getAllByText('炮')).toHaveLength(2);
+  });
+
   it('PieceIcon shows the general glyph of each side', () => {
     render(
       <>

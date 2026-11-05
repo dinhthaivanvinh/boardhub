@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_BOARD_SETTINGS } from '@bg/ui';
 import { Board, PieceIcon } from '../src/ui/Board';
+import { definition } from '../src/rules/definition';
 import type { CoGanhState } from '../src/rules/types';
 import { at, fromDiagram, play } from './helpers';
 
@@ -103,6 +104,27 @@ describe('Cờ gánh board', () => {
     expect(shown(5, 3).getAttribute('data-changed')).toBe('true');
     expect(screen.getByText('games.co-ganh.mustOpen')).toBeTruthy();
     expect(screen.getByText(/games\.co-ganh\.carried n=1/)).toBeTruthy();
+  });
+
+  it('the moved stone slides in; carried stones turn over after it lands', () => {
+    const s = play([[at(4, 2), at(3, 3)]]); // diagonal step up and to the right
+    renderBoard(s, { isMyTurn: false });
+    const slide = document.querySelector('[data-sliding="true"]') as SVGGElement;
+    expect(slide.style.getPropertyValue('--bg-slide-dx')).toBe('-40px');
+    expect(slide.style.getPropertyValue('--bg-slide-dy')).toBe('40px');
+    // The stone is drawn once: in the overlay, not also in its point.
+    expect(document.querySelectorAll('.cg-p0')).toHaveLength(8);
+    cleanup();
+    const before = fromDiagram(['....B', '.....', 'B.B..', '.R...', '.....'], 0);
+    const after = definition.applyMove(
+      before,
+      0,
+      { from: at(3, 1), to: at(2, 1) },
+      { rng: undefined as never },
+    );
+    renderBoard(after, { isMyTurn: false });
+    // Both carried stones are now Red and play the turn-over animation.
+    expect(document.querySelectorAll('.cg-p0.cg-flip')).toHaveLength(2);
   });
 
   it('PieceIcon draws a stone of each colour', () => {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CELL, GridBoard, VisuallyHidden, type BoardProps } from '@bg/ui';
+import { CELL, GridBoard, SlidingPiece, VisuallyHidden, type BoardProps } from '@bg/ui';
 import { colorOfSeat, COLS, kingSquare, legalMovesFor, ROWS } from '../rules/board';
 import type { PieceCode, PieceType, XiangqiMove, XiangqiState } from '../rules/types';
 
@@ -135,6 +135,13 @@ export function Board({
 
   const last = view.lastMove;
   const lastPiece = last ? view.board[last.to] : null;
+  /** Centre of a board point on screen. */
+  const centre = (sq: number) => {
+    const d = displayOf(sq);
+    return { x: (d % COLS) * CELL + HALF, y: Math.floor(d / COLS) * CELL + HALF };
+  };
+  const pieceClass = (sq: number) =>
+    [sq === selected && 'xq-selected', sq === checkedKing && 'xq-check'].filter(Boolean).join(' ');
 
   return (
     <div className="xq-board">
@@ -153,6 +160,23 @@ export function Board({
           });
         }}
         onActivate={activate}
+        overlay={
+          last && lastPiece ? (
+            <SlidingPiece
+              key={view.moveCount}
+              from={centre(last.from)}
+              to={centre(last.to)}
+              animate={settings.animations}
+            >
+              <Piece
+                code={lastPiece}
+                cx={centre(last.to).x}
+                cy={centre(last.to).y}
+                className={pieceClass(last.to)}
+              />
+            </SlidingPiece>
+          ) : undefined
+        }
         cellData={(display) => {
           const sq = toBoard(display);
           const piece = view.board[sq];
@@ -173,19 +197,8 @@ export function Board({
           return (
             <>
               {isLast && <rect className="xq-last" x={cx - 18} y={cy - 18} width={36} height={36} rx={4} />}
-              {piece && (
-                <Piece
-                  code={piece}
-                  cx={cx}
-                  cy={cy}
-                  className={[
-                    sq === selected && 'xq-selected',
-                    sq === checkedKing && 'xq-check',
-                    settings.animations && last && sq === last.to && 'xq-enter',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                />
+              {piece && !(last && sq === last.to) && (
+                <Piece code={piece} cx={cx} cy={cy} className={pieceClass(sq)} />
               )}
               {targets.has(sq) &&
                 (piece ? (

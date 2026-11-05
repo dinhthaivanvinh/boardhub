@@ -5,7 +5,9 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e',
-  timeout: 30_000,
+  // CI runners are slower (one worker, two cores): long flows such as a whole online game need more time.
+  timeout: process.env.CI ? 60_000 : 30_000,
+  expect: { timeout: process.env.CI ? 10_000 : 5_000 },
   fullyParallel: true,
   reporter: process.env.CI ? 'github' : 'list',
   use: {

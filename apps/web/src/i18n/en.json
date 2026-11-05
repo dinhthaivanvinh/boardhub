@@ -6,7 +6,10 @@
   "nav": {
     "home": "Home",
     "language": "Language",
-    "account": "Account"
+    "account": "Account",
+    "label": "Navigation",
+    "live": "Live",
+    "leaderboard": "Leaderboard"
   },
   "catalog": {
     "title": "Pick a game",
@@ -23,7 +26,8 @@
     "modes": {
       "bot": "Play the computer",
       "local": "Two players, one device",
-      "online": "Play online with friends"
+      "online": "Play online with friends",
+      "quick": "Quick match with a stranger"
     },
     "level": "Difficulty",
     "side": "You play",
@@ -45,7 +49,10 @@
     "disconnectPolicies": {
       "forfeit": "They lose",
       "bot": "Computer takes over"
-    }
+    },
+    "quick": "Quick match",
+    "ranked": "Rated game",
+    "findMatch": "Find an opponent"
   },
   "bot": {
     "level": {
@@ -190,6 +197,9 @@
     },
     "protocol": {
       "version": "This page is out of date, please reload."
+    },
+    "queue": {
+      "unsupported": "Quick match is not available for this game yet."
     }
   },
   "profile": {
@@ -213,7 +223,9 @@
       "loss": "Lost",
       "draw": "Draw",
       "playing": "Playing"
-    }
+    },
+    "ratings": "Ratings",
+    "noRatings": "No rated games yet."
   },
   "replay": {
     "pageTitle": "Replay",
@@ -238,5 +250,27 @@
     "thisGame": "Options for this game",
     "on": "On",
     "off": "Off"
+  },
+  "queue": {
+    "pageTitle": "Finding an opponent",
+    "title": "Finding an opponent: {game}",
+    "ranked": "Rated",
+    "casual": "Casual",
+    "waiting": "Waiting",
+    "cancel": "Cancel"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "games": "Pick a game",
+    "player": "Player",
+    "rating": "Rating",
+    "record": "Won/Lost/Drawn",
+    "empty": "Nobody has played {n} rated games of this yet."
+  },
+  "live": {
+    "title": "Live games",
+    "subtitle": "Matchmade games being played right now. Click to watch.",
+    "empty": "No games in progress right now.",
+    "watch": "Watch"
   }
 }

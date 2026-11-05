@@ -1,5 +1,5 @@
 import type { GameResult, Seat } from '@bg/engine';
-import type { DisconnectPolicy, RoomStatus, SeatOccupant, TimeControl } from '@bg/protocol';
+import type { DisconnectPolicy, RatingChange, RoomStatus, SeatOccupant, TimeControl } from '@bg/protocol';
 
 export interface Actor {
   userId: string;
@@ -22,6 +22,10 @@ export interface Room {
   spectators: string[];
   /** Current match, or the last one while status is 'finished'. */
   matchId: string | null;
+  /** Results change ratings (rooms made by the matchmaker). */
+  ranked: boolean;
+  /** Listed on the live games page. */
+  public: boolean;
   createdAt: number;
   updatedAt: number;
 }
@@ -53,6 +57,16 @@ export interface MatchRecord {
   pendingOffer: { type: 'draw'; from: Seat } | null;
   startedAt: number;
   lastMoveAt: number;
+  /** Set once when a ranked match ends. */
+  ratingChanges?: RatingChange[];
+}
+
+/** A player waiting for a quick match. */
+export interface QueueEntry {
+  userId: string;
+  name: string;
+  rating: number;
+  joinedAt: number;
 }
 
 export type UserOccupant = Extract<SeatOccupant, { kind: 'user' }>;

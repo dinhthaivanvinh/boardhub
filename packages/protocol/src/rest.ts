@@ -61,3 +61,32 @@ export interface MatchDetail extends MatchSummary {
   seed: string;
   moves: { seat: number; move: unknown }[];
 }
+
+export interface UserRating {
+  gameId: string;
+  rating: number;
+  rd: number;
+  /** Not enough games yet for the rating to be reliable. */
+  provisional: boolean;
+  games: number;
+  wins: number;
+  losses: number;
+  draws: number;
+}
+
+export interface LeaderboardEntry extends UserRating {
+  rank: number;
+  userId: string;
+  name: string;
+}
+
+/** A public game being played now (GET /api/live). */
+export interface LiveRoom {
+  roomId: string;
+  code: string;
+  gameId: string;
+  ranked: boolean;
+  startedAt: number;
+  spectatorCount: number;
+  players: { seat: number; name: string; rating: number | null }[];
+}

@@ -8,7 +8,10 @@ import { TokenService } from './auth/tokens';
 import { InlineBotRunner, WorkerBotRunner, type BotRunner } from './bots/bot-runner';
 import type { ServerConfig } from './config';
 import { createDb, migrateToLatest } from './db/database';
-import { PgHistoryRepo, PgUserRepo } from './db/pg-repos';
+import { PgHistoryRepo, PgRatingRepo, PgUserRepo } from './db/pg-repos';
+import { registerCompetitiveRoutes } from './http/competitive-routes';
+import { Matchmaker } from './matchmaking/matchmaker';
+import { MemoryRatingRepo, RatingService, type RatingRepo } from './ratings/rating-service';
 import { GameHub } from './hub/game-hub';
 import { RedisJobScheduler, TimerJobScheduler, type JobScheduler } from './hub/scheduler';
 import { HistoryService } from './history/history-service';
@@ -25,6 +28,9 @@ export interface ServerOverrides {
   history?: HistoryRepo;
   bots?: BotRunner;
   jobs?: JobScheduler;
+  ratings?: RatingRepo;
+  /** How often waiting quick-match players are re-checked (widening rating windows). */
+  matchSweepMs?: number;
 }
 
 /** Builds the HTTP + Socket.IO server. Tests pass overrides to run fully in memory. */
@@ -39,15 +45,19 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
 
   let users = overrides.users;
   let history = overrides.history;
-  if ((!users || !history) && config.DATABASE_URL) {
+  let ratingRepo = overrides.ratings;
+  if ((!users || !history || !ratingRepo) && config.DATABASE_URL) {
     const db = createDb(config.DATABASE_URL);
     await migrateToLatest(db);
     users ??= new PgUserRepo(db);
     history ??= new PgHistoryRepo(db);
+    ratingRepo ??= new PgRatingRepo(db);
     cleanups.push(() => db.destroy());
   }
   users ??= new MemoryUserRepo();
   history ??= new MemoryHistoryRepo();
+  ratingRepo ??= new MemoryRatingRepo();
+  const ratings = new RatingService(ratingRepo);
 
   const io: IoServer = new Server(app.server, {
     cors: { origin: config.corsOrigins, credentials: true },
@@ -92,15 +102,32 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     jobs,
     notifier: createNotifier(io),
     log,
+    ratings,
     graceMs: config.GRACE_MS,
     botDelayMs: config.BOT_DELAY_MS,
   });
   const auth = new AuthService(users, new TokenService(config.JWT_SECRET));
   registerRoutes(app, auth, new HistoryService(history, users));
-  attachGateway(io, hub, auth, log);
+  registerCompetitiveRoutes(app, { auth, ratings: ratingRepo, users, store, games: GAME_DEFS });
+  const matchmaker = new Matchmaker({
+    store,
+    hub,
+    games: GAME_DEFS,
+    ratings,
+    log,
+    notify: (userId, match) => io.to(`user:${userId}`).emit('queue:matched', match),
+  });
+  attachGateway(io, hub, auth, log, matchmaker);
   jobs.start(hub.runJob);
+  // Periodic re-check so ranked rating windows widen for players who are still waiting.
+  const sweep = setInterval(
+    () => void matchmaker.sweep().catch((err: unknown) => log.error({ err }, 'matchmaking sweep failed')),
+    overrides.matchSweepMs ?? 2_000,
+  );
+  sweep.unref();
 
   const close = async () => {
+    clearInterval(sweep);
     await jobs.stop();
     await new Promise<void>((resolve) => io.close(() => resolve()));
     await app.close();
@@ -108,5 +135,5 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     for (const fn of cleanups.reverse()) await fn().catch(() => undefined);
   };
 
-  return { app, io, hub, auth, close };
+  return { app, io, hub, auth, matchmaker, ratings, close };
 }

@@ -8,6 +8,8 @@ import {
   type MatchDetail,
   type MatchSnapshot,
   type MatchSummary,
+  type LiveRoom,
+  type UserRating,
   type RoomSnapshot,
   type ServerToClientEvents,
 } from '@bg/protocol';
@@ -316,5 +318,82 @@ describe('online match over sockets', () => {
     const rejoined = await ok<{ match: MatchSnapshot | null }>(sb, 'room:join', { code: room.code });
     expect(rejoined.match?.mySeat).toBe(1);
     await back;
+  });
+});
+
+describe('quick match over sockets', () => {
+  it('two guests are paired, play a ranked game, and see their new ratings', async () => {
+    const [a, b] = [await guest('Quick A'), await guest('Quick B')];
+    const [sa, sb] = [await open(a.token), await open(b.token)];
+    const matchedA = next(sa, 'queue:matched');
+    const matchedB = next(sb, 'queue:matched');
+    await ok(sa, 'queue:join', { gameId: 'four-in-a-row', timeControl: 'rapid', ranked: true });
+    await ok(sb, 'queue:join', { gameId: 'four-in-a-row', timeControl: 'rapid', ranked: true });
+    const [ma, mb] = [await matchedA, await matchedB];
+    expect(ma.roomCode).toBe(mb.roomCode);
+
+    // The game is already running; it is listed for spectators.
+    const live = await api<{ rooms: LiveRoom[] }>('GET', '/api/live');
+    expect(live.body.rooms.find((r) => r.code === ma.roomCode)).toMatchObject({
+      gameId: 'four-in-a-row',
+      ranked: true,
+    });
+
+    const ja = await ok<{ room: RoomSnapshot; match: MatchSnapshot }>(sa, 'room:join', { code: ma.roomCode });
+    const jb = await ok<{ room: RoomSnapshot; match: MatchSnapshot }>(sb, 'room:join', { code: mb.roomCode });
+    expect(ja.room).toMatchObject({ status: 'playing', ranked: true, public: true });
+    const players = { [ja.match.mySeat!]: sa, [jb.match.mySeat!]: sb };
+
+    // Seat 0 stacks column 0, seat 1 column 1: seat 0 wins.
+    let seq = 0;
+    let last: MatchSnapshot | undefined;
+    for (let i = 0; i < 7; i++) {
+      const expected = seq + 1;
+      const update = next(sa, 'match:state', (m) => m.seq === expected);
+      seq = (
+        await ok<{ seq: number }>(players[i % 2]!, 'move:submit', {
+          matchId: ja.match.matchId,
+          seq,
+          clientMoveId: `quick-${i}-${ja.match.matchId}`,
+          move: { col: i % 2 },
+        })
+      ).seq;
+      last = await update;
+    }
+    expect(last?.result).toMatchObject({ kind: 'win', winners: [0] });
+    expect(last?.ratingChanges).toHaveLength(2);
+    expect(last!.ratingChanges![0]!.after).toBeGreaterThan(last!.ratingChanges![0]!.before);
+
+    const winner = ja.match.mySeat === 0 ? a : b;
+    const mine = await api<{ ratings: UserRating[] }>('GET', '/api/me/ratings', undefined, winner.token);
+    expect(mine.body.ratings).toEqual([
+      expect.objectContaining({ gameId: 'four-in-a-row', games: 1, wins: 1, provisional: true }),
+    ]);
+    // Leaderboard needs 5 games; and the finished game left the live list.
+    const board = await api<{ entries: unknown[]; minGames: number }>(
+      'GET',
+      '/api/leaderboard/four-in-a-row',
+    );
+    expect(board.body).toMatchObject({ minGames: 5, entries: [] });
+    expect((await api('GET', '/api/leaderboard/nope')).status).toBe(400);
+    const after = await api<{ rooms: LiveRoom[] }>('GET', '/api/live');
+    expect(after.body.rooms.find((r) => r.code === ma.roomCode)).toBeUndefined();
+  });
+
+  it('leaving the queue, or disconnecting, takes you out of it', async () => {
+    const [a, b] = [await guest('Leaver'), await guest('Stayer')];
+    const sa = await open(a.token);
+    await ok(sa, 'queue:join', { gameId: 'caro', timeControl: 'blitz', ranked: false });
+    await ok(sa, 'queue:leave', {});
+    let sb = await open(b.token);
+    await ok(sb, 'queue:join', { gameId: 'caro', timeControl: 'blitz', ranked: false });
+    sb.disconnect();
+    await new Promise((r) => setTimeout(r, 100));
+    expect(await server.hub['o'].store.queueBuckets()).toEqual([]);
+    sb = await open(b.token);
+    expect(await emit(sb, 'queue:join', { gameId: 'caro', timeControl: 'none', ranked: false })).toEqual({
+      ok: false,
+      code: 'invalid.payload',
+    });
   });
 });

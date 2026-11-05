@@ -17,16 +17,19 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 
 ## 2. REST (`/api`)
 
-| Method + path                | Body                               | Trả về                                                                                                                        |
-| ---------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `POST /api/auth/guest`       | `{ displayName? }`                 | `AuthResponse { token, user }`                                                                                                |
-| `POST /api/auth/register`    | `{ email, password, displayName }` | `AuthResponse`. Có token khách trong `Authorization` thì **nâng cấp** tài khoản khách đó (giữ id, FR-AUTH-03)                 |
-| `POST /api/auth/login`       | `{ email, password }`              | `AuthResponse`                                                                                                                |
-| `GET /api/me`                | —                                  | `PublicUser`                                                                                                                  |
-| `PATCH /api/me`              | `{ displayName }`                  | `PublicUser`                                                                                                                  |
-| `GET /api/me/matches?limit=` | —                                  | `{ matches: MatchSummary[] }` ván của người gọi, mới nhất trước (tối đa 100)                                                  |
-| `GET /api/matches/:id`       | —                                  | `MatchDetail` (gồm `seed` + danh sách nước) **chỉ khi ván đã kết thúc**; đang chơi → 409 `match.not_finished`; không có → 404 |
-| `GET /health`                | —                                  | `{ ok: true }`                                                                                                                |
+| Method + path                  | Body                               | Trả về                                                                                                                        |
+| ------------------------------ | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/auth/guest`         | `{ displayName? }`                 | `AuthResponse { token, user }`                                                                                                |
+| `POST /api/auth/register`      | `{ email, password, displayName }` | `AuthResponse`. Có token khách trong `Authorization` thì **nâng cấp** tài khoản khách đó (giữ id, FR-AUTH-03)                 |
+| `POST /api/auth/login`         | `{ email, password }`              | `AuthResponse`                                                                                                                |
+| `GET /api/me`                  | —                                  | `PublicUser`                                                                                                                  |
+| `PATCH /api/me`                | `{ displayName }`                  | `PublicUser`                                                                                                                  |
+| `GET /api/me/matches?limit=`   | —                                  | `{ matches: MatchSummary[] }` ván của người gọi, mới nhất trước (tối đa 100)                                                  |
+| `GET /api/matches/:id`         | —                                  | `MatchDetail` (gồm `seed` + danh sách nước) **chỉ khi ván đã kết thúc**; đang chơi → 409 `match.not_finished`; không có → 404 |
+| `GET /api/leaderboard/:gameId` | —                                  | `{ gameId, minGames, entries: LeaderboardEntry[] }`: điểm cao nhất, chỉ người có ≥ 5 ván tính điểm                            |
+| `GET /api/me/ratings`          | —                                  | `{ ratings: UserRating[] }` điểm của người gọi theo từng game                                                                 |
+| `GET /api/live`                | —                                  | `{ rooms: LiveRoom[] }` các ván công khai (ghép trận) đang chơi, mới nhất trước                                               |
+| `GET /health`                  | —                                  | `{ ok: true }`                                                                                                                |
 
 Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
 
@@ -47,17 +50,20 @@ Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗ
 | `match:action`    | `{ matchId, action: 'resign' \| 'offer-draw' \| 'accept-draw' \| 'decline-draw' }` | `{}`                            | Người chơi của ván                                                              |
 | `match:resync`    | `{ matchId }`                                                                      | `{ match }`                     | Người trong phòng                                                               |
 | `chat:send`       | `{ roomId, text }` (1–300 ký tự, server che từ ngữ thô tục)                        | `{}`                            | Người trong phòng                                                               |
+| `queue:join`      | `{ gameId, timeControl: 'blitz'\|'rapid'\|'perMove30', ranked }` (luôn có đồng hồ) | `{}`                            | Mọi người. Vào hàng đợi ghép trận; vào lại thì chuyển sang hàng mới             |
+| `queue:leave`     | `{}`                                                                               | `{}`                            | Rời hàng đợi (đóng tab cuối cùng cũng vậy)                                      |
 
 `timeControl`: `{type:'none'}` · `{type:'fischer', baseMs, incrementMs}` · `{type:'per-move', moveMs}`; preset ở `TIME_CONTROL_PRESETS`.
 `disconnectPolicy`: `'forfeit'` (mặc định, xử thua với reason `abandon`) hoặc `'bot'` (máy cấp `medium` đánh thay).
 
 ## 4. Server → Client
 
-| Event          | Payload         | Gửi cho                                                                                                           |
-| -------------- | --------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `room:updated` | `RoomSnapshot`  | Mọi socket trong phòng. Gồm ghế (kèm `ready`, `connected`, `graceUntil`), số người xem, trạng thái                |
-| `match:state`  | `MatchSnapshot` | **Từng người chơi riêng** (kênh `user:{id}`) với `view = playerView(state, seat)`; người xem nhận bản `spectator` |
-| `chat:message` | `ChatMessage`   | Mọi socket trong phòng                                                                                            |
+| Event           | Payload                | Gửi cho                                                                                                           |
+| --------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `room:updated`  | `RoomSnapshot`         | Mọi socket trong phòng. Gồm ghế (kèm `ready`, `connected`, `graceUntil`), số người xem, trạng thái                |
+| `match:state`   | `MatchSnapshot`        | **Từng người chơi riêng** (kênh `user:{id}`) với `view = playerView(state, seat)`; người xem nhận bản `spectator` |
+| `chat:message`  | `ChatMessage`          | Mọi socket trong phòng                                                                                            |
+| `queue:matched` | `{ roomId, roomCode }` | Hai người vừa được ghép. Ván **đã bắt đầu**; client chuyển tới `/room/<roomCode>`                                 |
 
 ```ts
 interface MatchSnapshot {
@@ -74,12 +80,21 @@ interface MatchSnapshot {
   serverTime: number; // để client tự đếm ngược
   result: { kind: 'win'; winners: number[]; reason: string } | { kind: 'draw'; reason: string } | null;
   pendingOffer: { type: 'draw'; from: number } | null;
+  ratingChanges: { seat: number; before: number; after: number }[] | null; // ván tính điểm, khi đã kết thúc
 }
 ```
 
 Seed của ván **không bao giờ** nằm trong snapshot (có test kiểm tra).
 
-## 5. Vòng đời phòng
+## 5. Ghép trận và xếp hạng
+
+- Hàng đợi chia theo `game + thời gian + tính điểm/không`. Người chờ lâu nhất được ghép trước, với người có điểm gần nhất.
+- Ván tính điểm chỉ ghép khi chênh lệch điểm ≤ cửa sổ của **cả hai** người: 150 điểm, cộng 50 mỗi 5 giây chờ, tối đa 600. Ván không tính điểm ghép ngay.
+- Phòng do ghép trận tạo: `ranked` theo yêu cầu, `public = true` (hiện ở `/api/live`), luật mặc định của game, xử thua khi mất kết nối, không thêm bot được. Ai đi trước được bốc thăm.
+- Điểm: Glicko-2 (`apps/server/src/ratings/glicko2.ts`), mỗi ván là một kỳ tính điểm. Điểm "tạm" (`provisional`, hiện kèm "?") khi RD > 110.
+- `RoomSnapshot` có thêm `ranked`, `public`; ghế người chơi có thể có `rating`.
+
+## 6. Vòng đời phòng
 
 ```
    create ──► LOBBY ──start──► PLAYING ──(thắng/hòa/đầu hàng/hết giờ/bỏ cuộc)──► FINISHED
@@ -89,7 +104,7 @@ Seed của ván **không bao giờ** nằm trong snapshot (có test kiểm tra).
 
 Phòng (và ván) sống trong live store 24 giờ kể từ lần thay đổi cuối.
 
-## 6. Mất kết nối và kết nối lại
+## 7. Mất kết nối và kết nối lại
 
 1. Khi socket **cuối cùng** của một người trong phòng ngắt: người ngồi ghế được đánh dấu `connected=false`, `graceUntil = now + GRACE_MS` (mặc định 60 s); người xem bị bỏ khỏi danh sách xem.
 2. Đồng hồ của người mất kết nối **vẫn chạy**.
@@ -97,7 +112,7 @@ Phòng (và ván) sống trong live store 24 giờ kể từ lần thay đổi c
 4. Hết thời gian chờ: `lobby/finished` → ghế được giải phóng (chủ phòng chuyển cho người khác); `playing` → áp dụng `disconnectPolicy`.
 5. `match:state` có `seq` nhỏ hơn bản đang có thì client bỏ qua; `match.stale_seq` thì client gọi `match:resync`.
 
-## 7. Mã lỗi chung
+## 8. Mã lỗi chung
 
 | Code                                                                                                            | Ý nghĩa                                     |
 | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
@@ -106,11 +121,12 @@ Phòng (và ván) sống trong live store 24 giờ kể từ lần thay đổi c
 | `room.not_found`, `room.not_host`, `room.invalid_state`, `room.seat_taken`, `room.not_seated`, `room.not_ready` | Phòng                                       |
 | `game.not_found`                                                                                                | `gameId` không có trong registry server     |
 | `match.not_found`, `match.stale_seq`, `match.not_player`, `match.no_offer`, `match.not_finished`                | Ván                                         |
+| `queue.unsupported`                                                                                             | Game hoặc thời gian không hỗ trợ ghép trận  |
 | `engine.*`, `<gameId>.*`                                                                                        | Lỗi luật (xem [04](04-game-engine-spec.md)) |
 
 Client map mã lỗi sang i18n bằng `apps/web/src/game-runtime/error-key.ts` (`errors.*`, `engine.*`, `games.<id>.errors.*`).
 
-## 8. Thay đổi protocol
+## 9. Thay đổi protocol
 
 - Chỉ được **thêm** field optional. Đổi hoặc xóa field thì tăng `PROTOCOL_VERSION`, và server phải hỗ trợ song song phiên bản cũ ít nhất một lần release.
-- Chưa có (để sau): ghép trận (`queue:*`), xin đi lại online, xem trận công khai.
+- Chưa có (để sau): xin đi lại online.

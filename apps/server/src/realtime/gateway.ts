@@ -2,6 +2,8 @@ import type { Server, Socket } from 'socket.io';
 import type { z } from 'zod';
 import {
   ChatSend,
+  QueueJoin,
+  QueueLeave,
   MatchAction,
   MatchRef,
   MoveSubmit,
@@ -22,6 +24,7 @@ import type { AuthService } from '../auth/auth-service';
 import type { Actor } from '../domain/types';
 import { HubError } from '../errors';
 import type { GameHub, Logger, Notifier } from '../hub/game-hub';
+import type { Matchmaker } from '../matchmaking/matchmaker';
 import { RateLimiter } from './rate-limit';
 
 interface SocketData {
@@ -52,7 +55,13 @@ export function createNotifier(io: IoServer): Notifier {
   };
 }
 
-export function attachGateway(io: IoServer, hub: GameHub, auth: AuthService, log: Logger) {
+export function attachGateway(
+  io: IoServer,
+  hub: GameHub,
+  auth: AuthService,
+  log: Logger,
+  matchmaker?: Matchmaker,
+) {
   io.use(async (socket, next) => {
     const { token, protocolVersion } = (socket.handshake.auth ?? {}) as Partial<HandshakeAuth>;
     if (protocolVersion !== PROTOCOL_VERSION) return next(new Error('protocol.version'));
@@ -115,6 +124,11 @@ export function attachGateway(io: IoServer, hub: GameHub, auth: AuthService, log
     on('match:action', MatchAction, ({ matchId, action }) => hub.matchAction(actor, matchId, action));
     on('match:resync', MatchRef, async ({ matchId }) => ({ match: await hub.resync(actor, matchId) }));
     on('chat:send', ChatSend, ({ roomId, text }) => hub.chat(actor, roomId, text));
+    on('queue:join', QueueJoin, async (input) => {
+      if (!matchmaker) throw new HubError('queue.unsupported');
+      await matchmaker.join(actor, input);
+    });
+    on('queue:leave', QueueLeave, async () => matchmaker?.leave(actor.userId));
 
     // When the user's last socket in a room goes away, start their grace period.
     socket.on('disconnecting', () => {
@@ -125,6 +139,8 @@ export function attachGateway(io: IoServer, hub: GameHub, auth: AuthService, log
           const stillThere = others.some((s) => s.id !== socket.id && s.rooms.has(channel));
           if (!stillThere) await hub.disconnected(actor.userId, channel.slice('room:'.length));
         }
+        // Closing the last tab also leaves the quick-match queue.
+        if (!others.some((s) => s.id !== socket.id)) await matchmaker?.leave(actor.userId);
       })().catch((err: unknown) => log.error({ err, userId: actor.userId }, 'disconnect handling failed'));
     });
   });

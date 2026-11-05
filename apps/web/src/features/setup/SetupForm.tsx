@@ -18,7 +18,7 @@ import {
   type TimeControlPreset,
 } from '@bg/protocol';
 
-type Mode = PlayMode | 'online';
+type Mode = PlayMode | 'online' | 'quick';
 const PRESETS = Object.keys(TIME_CONTROL_PRESETS) as TimeControlPreset[];
 
 function Choice({
@@ -58,6 +58,7 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
 
   const [mode, setMode] = useState<Mode>('bot');
   const [preset, setPreset] = useState<TimeControlPreset>('none');
+  const [ranked, setRanked] = useState(true);
   const [policy, setPolicy] = useState<DisconnectPolicy>('forfeit');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,6 +97,7 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
       onSubmit={(e) => {
         e.preventDefault();
         if (mode === 'online') void createRoom();
+        else if (mode === 'quick') router.push(`/queue?game=${gameId}&tc=${preset}&ranked=${ranked ? 1 : 0}`);
         else router.push(buildPlayUrl(gameId, { mode, level, humanSeat, config }));
       }}
     >
@@ -103,8 +105,17 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
 
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 text-sm font-medium">{t('setup.mode')}</legend>
-        {(['bot', 'local', 'online'] as const).map((m) => (
-          <Choice key={m} name="mode" checked={mode === m} onChange={() => setMode(m)}>
+        {(['bot', 'local', 'online', 'quick'] as const).map((m) => (
+          <Choice
+            key={m}
+            name="mode"
+            checked={mode === m}
+            onChange={() => {
+              setMode(m);
+              // Quick-match games always have a clock.
+              if (m === 'quick' && preset === 'none') setPreset('blitz');
+            }}
+          >
             {t(`setup.modes.${m}`)}
           </Choice>
         ))}
@@ -141,9 +152,22 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
         </>
       )}
 
-      {mode === 'online' && (
+      {(mode === 'online' || mode === 'quick') && (
         <fieldset className="flex flex-col gap-3">
-          <legend className="mb-2 text-sm font-medium">{t('setup.online')}</legend>
+          <legend className="mb-2 text-sm font-medium">
+            {t(mode === 'quick' ? 'setup.quick' : 'setup.online')}
+          </legend>
+          {mode === 'quick' && (
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                className="size-4 accent-[var(--accent)]"
+                checked={ranked}
+                onChange={(e) => setRanked(e.target.checked)}
+              />
+              {t('setup.ranked')}
+            </label>
+          )}
           <label className="flex items-center justify-between gap-3 text-sm">
             {t('setup.timeControl')}
             <select
@@ -151,31 +175,33 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
               value={preset}
               onChange={(e) => setPreset(e.target.value as TimeControlPreset)}
             >
-              {PRESETS.map((p) => (
+              {PRESETS.filter((p) => mode !== 'quick' || p !== 'none').map((p) => (
                 <option key={p} value={p}>
                   {t(`setup.timeControls.${p}`)}
                 </option>
               ))}
             </select>
           </label>
-          <label className="flex items-center justify-between gap-3 text-sm">
-            {t('setup.disconnectPolicy')}
-            <select
-              className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2 py-1"
-              value={policy}
-              onChange={(e) => setPolicy(e.target.value as DisconnectPolicy)}
-            >
-              {(['forfeit', 'bot'] as const).map((p) => (
-                <option key={p} value={p}>
-                  {t(`setup.disconnectPolicies.${p}`)}
-                </option>
-              ))}
-            </select>
-          </label>
+          {mode === 'online' && (
+            <label className="flex items-center justify-between gap-3 text-sm">
+              {t('setup.disconnectPolicy')}
+              <select
+                className="rounded-md border border-[var(--border)] bg-[var(--card)] px-2 py-1"
+                value={policy}
+                onChange={(e) => setPolicy(e.target.value as DisconnectPolicy)}
+              >
+                {(['forfeit', 'bot'] as const).map((p) => (
+                  <option key={p} value={p}>
+                    {t(`setup.disconnectPolicies.${p}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
         </fieldset>
       )}
 
-      {configFields.length > 0 && (
+      {configFields.length > 0 && mode !== 'quick' && (
         <fieldset className="flex flex-col gap-3">
           <legend className="mb-2 text-sm font-medium">{t('setup.variant')}</legend>
           {configFields.map((field) => {
@@ -222,7 +248,13 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
         </p>
       )}
       <button type="submit" className="btn btn-primary w-full py-3 text-base" disabled={busy}>
-        {busy ? t('online.creating') : mode === 'online' ? t('setup.createRoom') : t('setup.start')}
+        {busy
+          ? t('online.creating')
+          : mode === 'online'
+            ? t('setup.createRoom')
+            : mode === 'quick'
+              ? t('setup.findMatch')
+              : t('setup.start')}
       </button>
     </form>
   );

@@ -27,6 +27,7 @@ export interface NewMatchRow {
   timeControl: TimeControl;
   seed: string;
   startedAt: number;
+  ranked: boolean;
   players: { seat: number; userId: string | null; botLevel: string | null }[];
 }
 
@@ -60,6 +61,10 @@ export interface HistoryRepo {
     at: number,
   ): Promise<void>;
   finishMatch(matchId: string, result: GameResult, endedAt: number): Promise<void>;
+  setRatingChanges(
+    matchId: string,
+    changes: { seat: number; before: number; after: number }[],
+  ): Promise<void>;
   /** Matches the user played in, newest first. */
   listForUser(userId: string, limit: number): Promise<StoredMatchSummary[]>;
   getMatch(id: string): Promise<StoredMatch | null>;
@@ -103,6 +108,7 @@ export class MemoryUserRepo implements UserRepo {
 
 export interface MemoryMatchRow extends NewMatchRow {
   moves: { index: number; seat: number; move: unknown; elapsedMs: number }[];
+  ratingChanges?: { seat: number; before: number; after: number }[];
   result: GameResult | null;
   endedAt: number | null;
 }
@@ -121,6 +127,11 @@ export class MemoryHistoryRepo implements HistoryRepo {
   async finishMatch(matchId: string, result: GameResult, endedAt: number) {
     const m = this.matches.get(matchId);
     if (m) Object.assign(m, { result, endedAt });
+  }
+
+  async setRatingChanges(matchId: string, changes: { seat: number; before: number; after: number }[]) {
+    const m = this.matches.get(matchId);
+    if (m) m.ratingChanges = structuredClone(changes);
   }
 
   async listForUser(userId: string, limit: number): Promise<StoredMatchSummary[]> {

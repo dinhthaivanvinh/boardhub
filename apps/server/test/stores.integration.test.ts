@@ -265,3 +265,56 @@ describe('two server processes sharing Redis', () => {
     expect((await bobSees).mySeat).toBe(1);
   });
 });
+
+describe('M4a storage', () => {
+  it('Redis keeps the quick-match queue and the live list', async () => {
+    const bucket = `test|${randomUUID()}|ranked`;
+    const other = `test|${randomUUID()}|casual`;
+    const [u1, u2] = [randomUUID(), randomUUID()];
+    await store.queuePut(bucket, { userId: u1, name: 'One', rating: 1500, joinedAt: 1 });
+    await store.queuePut(bucket, { userId: u2, name: 'Two', rating: 1600, joinedAt: 2 });
+    expect((await store.queueEntries(bucket)).map((e) => e.userId).sort()).toEqual([u1, u2].sort());
+    expect(await store.queueBuckets()).toContain(bucket);
+    // Joining another bucket moves the user.
+    await store.queuePut(other, { userId: u1, name: 'One', rating: 1500, joinedAt: 3 });
+    expect((await store.queueEntries(bucket)).map((e) => e.userId)).toEqual([u2]);
+    expect(await store.queueRemove(u2)).toBe(bucket);
+    expect(await store.queueBuckets()).not.toContain(bucket);
+    expect(await store.queueRemove(u2)).toBeNull();
+    await store.queueRemove(u1);
+
+    const room = randomUUID();
+    await store.setLive(room, true);
+    expect(await store.liveRoomIds()).toContain(room);
+    await store.setLive(room, false);
+    expect(await store.liveRoomIds()).not.toContain(room);
+  });
+
+  it('Postgres stores ratings and ranks the leaderboard', async () => {
+    const { PgRatingRepo } = await import('../src/db/pg-repos');
+    const repo = new PgRatingRepo(db);
+    const users = new PgUserRepo(db);
+    const game = `test-${randomUUID()}`;
+    const ids = [randomUUID(), randomUUID(), randomUUID()];
+    for (const id of ids) {
+      await users.create({
+        id,
+        kind: 'guest',
+        displayName: `R${id.slice(0, 4)}`,
+        email: null,
+        passwordHash: null,
+      });
+    }
+    expect(await repo.get(ids[0]!, game)).toMatchObject({ rating: 1500, rd: 350, games: 0 });
+    const base = { gameId: game, rd: 80, volatility: 0.06, wins: 0, losses: 0, draws: 0 };
+    await repo.save({ ...base, userId: ids[0]!, rating: 1700, games: 6 });
+    await repo.save({ ...base, userId: ids[1]!, rating: 1800, games: 2 });
+    await repo.save({ ...base, userId: ids[2]!, rating: 1600, games: 9 });
+    await repo.save({ ...base, userId: ids[2]!, rating: 1650, games: 10 }); // upsert
+    expect((await repo.top(game, 10, 5)).map((r) => [r.userId, r.rating])).toEqual([
+      [ids[0], 1700],
+      [ids[2], 1650],
+    ]);
+    expect(await repo.forUser(ids[2]!)).toEqual([expect.objectContaining({ gameId: game, games: 10 })]);
+  });
+});

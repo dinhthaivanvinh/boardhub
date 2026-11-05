@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import type { MatchSummary } from '@bg/protocol';
+import type { MatchSummary, UserRating } from '@bg/protocol';
 import { errorKey } from '@/game-runtime/error-key';
 import { outcomeFor, type Outcome } from '@/game-runtime/replay';
 import { isGameId } from '@/games/catalog';
@@ -23,13 +23,17 @@ export function ProfileScreen() {
   const user = useSession((s) => s.user);
   const [matches, setMatches] = useState<MatchSummary[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ratings, setRatings] = useState<UserRating[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     ensureToken()
-      .then((token) =>
-        apiRequest<{ matches: MatchSummary[] }>('GET', '/api/me/matches?limit=50', undefined, token),
-      )
+      .then((token) => {
+        void apiRequest<{ ratings: UserRating[] }>('GET', '/api/me/ratings', undefined, token).then(
+          (r) => !cancelled && r.ok && setRatings(r.data.ratings),
+        );
+        return apiRequest<{ matches: MatchSummary[] }>('GET', '/api/me/matches?limit=50', undefined, token);
+      })
       .then((res) => {
         if (cancelled) return;
         if (res.ok) setMatches(res.data.matches);
@@ -75,6 +79,36 @@ export function ProfileScreen() {
           </div>
         ))}
       </dl>
+
+      <section className="flex flex-col gap-2" aria-label={t('profile.ratings')}>
+        <h2 className="font-semibold">{t('profile.ratings')}</h2>
+        {ratings.length === 0 ? (
+          <p className="text-sm text-[var(--muted)]">{t('profile.noRatings')}</p>
+        ) : (
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {ratings
+              .filter((r) => isGameId(r.gameId))
+              .map((r) => (
+                <li
+                  key={r.gameId}
+                  className="card flex items-center justify-between py-3"
+                  data-testid="rating-row"
+                >
+                  <span>{t(`games.${r.gameId}.name`)}</span>
+                  <span className="text-right">
+                    <span className="text-xl font-bold tabular-nums">
+                      {r.rating}
+                      {r.provisional ? '?' : ''}
+                    </span>
+                    <span className="block text-xs text-[var(--muted)] tabular-nums">
+                      {r.wins}/{r.losses}/{r.draws}
+                    </span>
+                  </span>
+                </li>
+              ))}
+          </ul>
+        )}
+      </section>
 
       <section className="flex flex-col gap-2">
         <h2 className="font-semibold">{t('profile.history')}</h2>

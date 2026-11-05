@@ -6,7 +6,26 @@ import { GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { useSettings } from '@/features/settings/settings-store';
 import type { RoomApi } from '@/online/use-room';
+import type { RatingChange, SeatOccupant } from '@bg/protocol';
 import { Clock, Presence, seatName } from './shared';
+
+/** Rating next to a player's name; after a ranked game, the change (+12 / −8). */
+function RatingBadge({ occ, change }: { occ: SeatOccupant | null; change: RatingChange | undefined }) {
+  if (change) {
+    const diff = change.after - change.before;
+    return (
+      <span className="text-sm tabular-nums" data-testid="rating-change">
+        {change.after}{' '}
+        <span className={diff >= 0 ? 'text-green-600' : 'text-[var(--danger)]'}>
+          ({diff >= 0 ? '+' : '−'}
+          {Math.abs(diff)})
+        </span>
+      </span>
+    );
+  }
+  if (occ?.kind !== 'user' || occ.rating === undefined) return null;
+  return <span className="text-sm tabular-nums text-[var(--muted)]">({occ.rating})</span>;
+}
 
 export function OnlineMatchView({ api }: { api: RoomApi }) {
   const t = useTranslations();
@@ -79,6 +98,10 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
                 <span className="flex min-w-0 items-center gap-2">
                   {PieceIcon ? <PieceIcon seat={seat} size={20} /> : null}
                   <span className="truncate">{seatName(t, room.seats[seat] ?? null, api.userId)}</span>
+                  <RatingBadge
+                    occ={room.seats[seat] ?? null}
+                    change={m.ratingChanges?.find((c) => c.seat === seat)}
+                  />
                   <Presence occ={room.seats[seat] ?? null} serverOffset={received.serverOffset} t={t} />
                 </span>
                 {clock && <Clock clock={clock} receivedAt={received.receivedAt} />}

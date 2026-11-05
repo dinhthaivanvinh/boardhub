@@ -18,6 +18,8 @@ Tham chiếu: `docs/05-realtime-protocol.md` (events, vòng đời phòng, recon
 | REST auth                                                                        | `apps/server/src/http/routes.ts`, `auth/*`                                                              |
 | Lưu trữ                                                                          | `store/live-store.ts` (memory), `store/redis-live-store.ts`, `store/repos.ts` (memory), `db/*` (Kysely) |
 | Game nào server hỗ trợ                                                           | `apps/server/src/registry.ts`                                                                           |
+| Ghép trận (hàng đợi, cửa sổ điểm)                                                | `apps/server/src/matchmaking/matchmaker.ts`                                                             |
+| Điểm xếp hạng (Glicko-2), bảng xếp hạng, ván đang diễn ra                        | `apps/server/src/ratings/*`, `http/competitive-routes.ts`                                               |
 | Client: kết nối, phiên, đồng bộ phòng                                            | `apps/web/src/online/{socket,session,use-room}.ts`                                                      |
 | Màn phòng                                                                        | `apps/web/src/features/room/*`                                                                          |
 

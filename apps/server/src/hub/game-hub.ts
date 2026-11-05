@@ -25,6 +25,7 @@ import { HubError } from '../errors';
 import type { LiveStore } from '../store/live-store';
 import type { HistoryRepo } from '../store/repos';
 import { maskProfanity } from './profanity';
+import type { RatingService } from '../ratings/rating-service';
 import type { Job, JobScheduler } from './scheduler';
 
 export interface Notifier {
@@ -53,6 +54,8 @@ export interface HubOptions {
   jobs: JobScheduler;
   notifier: Notifier;
   log: Logger;
+  /** Needed for ranked rooms; without it results never change ratings. */
+  ratings?: RatingService;
   now?: () => number;
   newId?: () => string;
   newSeed?: () => string;
@@ -125,6 +128,8 @@ export class GameHub {
       seats,
       spectators: input.hostSeat === null ? [actor.userId] : [],
       matchId: null,
+      ranked: false,
+      public: false,
       createdAt: now,
       updatedAt: now,
     };
@@ -199,6 +204,7 @@ export class GameHub {
   async addBot(actor: Actor, roomId: string, seat: number, level: BotLevel): Promise<void> {
     await this.mutateLobby(roomId, (room) => {
       this.requireHost(room, actor);
+      if (room.ranked) throw new HubError('room.invalid_state', { reason: 'ranked' });
       if (seat >= room.seats.length) throw new HubError('invalid.payload', { field: 'seat' });
       if (room.seats[seat]) throw new HubError('room.seat_taken');
       room.seats[seat] = { kind: 'bot', level };
@@ -225,53 +231,104 @@ export class GameHub {
       if (gaps || players < def.meta.minPlayers) throw new HubError('room.not_ready', { reason: 'seats' });
       const unready = room.seats.some((s) => s?.kind === 'user' && s.userId !== actor.userId && !s.ready);
       if (unready) throw new HubError('room.not_ready', { reason: 'ready' });
-
-      const now = this.now();
-      const seed = this.newSeed();
-      const { state } = setupMatch(def, room.config, players, seed);
-      const first = def.activePlayers(state)[0] ?? null;
-      const match: MatchRecord = {
-        id: this.newId(),
-        roomId: room.id,
-        gameId: room.gameId,
-        rulesVersion: def.meta.rulesVersion,
-        config: room.config,
-        seed,
-        players,
-        state,
-        seq: 0,
-        moves: [],
-        clocks: initClocks(room.timeControl, players, first, now),
-        processedMoveIds: [],
-        result: null,
-        pendingOffer: null,
-        startedAt: now,
-        lastMoveAt: now,
-      };
-      room.status = 'playing';
-      room.matchId = match.id;
-      await this.o.store.saveMatch(match);
-      await this.saveRoom(room);
-      await this.history(() =>
-        this.o.history.createMatch({
-          id: match.id,
-          roomCode: room.code,
-          gameId: room.gameId,
-          rulesVersion: match.rulesVersion,
-          config: room.config,
-          timeControl: room.timeControl,
-          seed,
-          startedAt: now,
-          players: room.seats.slice(0, players).map((s, seat) => ({
-            seat,
-            userId: s?.kind === 'user' ? s.userId : null,
-            botLevel: s?.kind === 'bot' ? s.level : null,
-          })),
-        }),
-      );
-      this.o.log.info({ roomId, matchId: match.id }, 'match started');
-      await this.afterMatchChange(room, match);
+      await this.beginMatch(room, players);
     });
+  }
+
+  /**
+   * A room made by the matchmaker: both players seated and ready, ranked if asked, listed as live,
+   * and the match starts right away. Seat order is as given (the matchmaker shuffles it).
+   */
+  async createMatchedRoom(
+    players: { actor: Actor; rating: number }[],
+    input: { gameId: string; timeControl: TimeControl; ranked: boolean },
+  ): Promise<RoomSnapshot> {
+    const def = this.game(input.gameId);
+    if (players.length < def.meta.minPlayers || players.length > def.meta.maxPlayers) {
+      throw new HubError('queue.unsupported');
+    }
+    const now = this.now();
+    const room: Room = {
+      id: this.newId(),
+      code: await this.uniqueCode(),
+      gameId: input.gameId,
+      config: def.configSchema.parse({}) as Record<string, unknown>,
+      timeControl: input.timeControl,
+      disconnectPolicy: 'forfeit',
+      hostId: players[0]!.actor.userId,
+      status: 'lobby',
+      seats: Array.from({ length: def.meta.maxPlayers }, (_, i) => {
+        const p = players[i];
+        return p ? { ...this.occupant(p.actor), ready: true, rating: p.rating } : null;
+      }),
+      spectators: [],
+      matchId: null,
+      ranked: input.ranked,
+      public: true,
+      createdAt: now,
+      updatedAt: now,
+    };
+    await this.o.store.saveRoom(room);
+    await this.o.store.withLock(room.id, async () => {
+      const fresh = await this.loadRoom(room.id);
+      await this.beginMatch(fresh, players.length);
+      Object.assign(room, fresh);
+    });
+    this.o.log.info({ roomId: room.id, gameId: room.gameId, ranked: room.ranked }, 'matched room created');
+    return toRoomSnapshot(room);
+  }
+
+  /** Starts a match in a room whose seats 0..players-1 are filled. Call inside the room lock. */
+  private async beginMatch(room: Room, players: number): Promise<void> {
+    const roomId = room.id;
+    const def = this.game(room.gameId);
+    const now = this.now();
+    const seed = this.newSeed();
+    const { state } = setupMatch(def, room.config, players, seed);
+    const first = def.activePlayers(state)[0] ?? null;
+    const match: MatchRecord = {
+      id: this.newId(),
+      roomId: room.id,
+      gameId: room.gameId,
+      rulesVersion: def.meta.rulesVersion,
+      config: room.config,
+      seed,
+      players,
+      state,
+      seq: 0,
+      moves: [],
+      clocks: initClocks(room.timeControl, players, first, now),
+      processedMoveIds: [],
+      result: null,
+      pendingOffer: null,
+      startedAt: now,
+      lastMoveAt: now,
+    };
+    room.status = 'playing';
+    room.matchId = match.id;
+    await this.o.store.saveMatch(match);
+    await this.saveRoom(room);
+    await this.history(() =>
+      this.o.history.createMatch({
+        id: match.id,
+        roomCode: room.code,
+        gameId: room.gameId,
+        rulesVersion: match.rulesVersion,
+        config: room.config,
+        timeControl: room.timeControl,
+        seed,
+        startedAt: now,
+        ranked: room.ranked,
+        players: room.seats.slice(0, players).map((s, seat) => ({
+          seat,
+          userId: s?.kind === 'user' ? s.userId : null,
+          botLevel: s?.kind === 'bot' ? s.level : null,
+        })),
+      }),
+    );
+    if (room.public) await this.o.store.setLive(room.id, true);
+    this.o.log.info({ roomId, matchId: match.id }, 'match started');
+    await this.afterMatchChange(room, match);
   }
 
   /** Back to the lobby with the same players; seats rotate so someone else moves first. */
@@ -400,6 +457,7 @@ export class GameHub {
       serverTime: now,
       result: match.result,
       pendingOffer: match.pendingOffer,
+      ratingChanges: match.ratingChanges ?? null,
     };
   }
 
@@ -439,12 +497,14 @@ export class GameHub {
 
   /** Saves room and match, records the result if the match just ended, notifies and schedules follow-ups. */
   private async commit(room: Room, match: MatchRecord) {
+    if (match.result && room.ranked && !match.ratingChanges) await this.applyRatings(room, match);
     await this.o.store.saveMatch(match);
     await this.saveRoom(room);
     if (match.result) {
       const result = match.result;
       await this.history(() => this.o.history.finishMatch(match.id, result, this.now()));
       this.o.log.info({ roomId: room.id, matchId: match.id, result }, 'match finished');
+      if (room.public) await this.o.store.setLive(room.id, false);
     }
     await this.afterMatchChange(room, match);
   }
@@ -604,6 +664,26 @@ export class GameHub {
     room.status = 'finished';
   }
 
+  /** Ranked two-player games: update both ratings once, record the change on the match and in history. */
+  private async applyRatings(room: Room, match: MatchRecord) {
+    const result = match.result;
+    const ids = room.seats.slice(0, match.players).map((s) => (s?.kind === 'user' ? s.userId : null));
+    const [a, b] = ids;
+    if (!result || !this.o.ratings || match.players !== 2 || !a || !b) return;
+    try {
+      const changes = await this.o.ratings.applyResult(match.gameId, [a, b], result);
+      match.ratingChanges = changes;
+      // Show the new ratings in the room (for a rematch).
+      for (const c of changes) {
+        const occ = room.seats[c.seat];
+        if (occ?.kind === 'user') occ.rating = c.after;
+      }
+      await this.history(() => this.o.history.setRatingChanges(match.id, changes));
+    } catch (err) {
+      this.o.log.error({ err, matchId: match.id }, 'failed to update ratings');
+    }
+  }
+
   private async markDisconnected(room: Room, seat: number) {
     const occ = room.seats[seat] as UserOccupant;
     occ.connected = false;
@@ -723,5 +803,7 @@ export function toRoomSnapshot(room: Room): RoomSnapshot {
     seats: room.seats,
     spectatorCount: room.spectators.length,
     matchId: room.matchId,
+    ranked: room.ranked,
+    public: room.public,
   };
 }

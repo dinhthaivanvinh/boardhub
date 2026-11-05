@@ -45,7 +45,18 @@ match_moves                        PK (match_id, idx)
   created_at timestamptz
 ```
 
-Rating (Glicko-2) và cài đặt game của admin sẽ thêm ở M4.
+Thêm ở M4a (migration `2026_11_06_001_ratings`):
+
+```
+ratings                            PK (user_id, game_id)
+  user_id, game_id, rating, rd, volatility (Glicko-2), games, wins, losses, draws, updated_at
+  INDEX (game_id, rating desc)
+
+matches.ranked                     boolean
+match_players.rating_before/after  double (ván tính điểm)
+```
+
+Không có `DATABASE_URL`: `MemoryRatingRepo`. Cài đặt game của admin sẽ thêm ở M4b.
 
 Không có `DATABASE_URL` thì server dùng bản trong bộ nhớ (`MemoryUserRepo`, `MemoryHistoryRepo`): chỉ dành cho dev,
 mất khi khởi động lại. Ván `local` và ván với bot ở trình duyệt không lưu lên server.
@@ -63,6 +74,10 @@ Code: `apps/server/src/store/redis-live-store.ts`. Giá trị là JSON, TTL 24 g
 | `lock:{roomId}`    | string        | khóa `SET NX PX 5000` + token, nhả bằng Lua compare-and-delete                               |
 | `jobs:due`         | sorted set    | khóa job → thời điểm đến hạn (ms)                                                            |
 | `jobs:data`        | hash          | khóa job → `{ v, job }` (JSON). `job` là `{kind: clock\|grace\|bot, …}`                      |
+| `queue:{bucket}`   | hash          | userId → `QueueEntry` (tên, điểm, lúc vào hàng). `bucket` = `gameId\|preset\|ranked\|casual` |
+| `queue:buckets`    | set           | các bucket đang có người                                                                     |
+| `queue:user:{id}`  | string        | → bucket hiện tại của người đó (mỗi người ở tối đa một hàng)                                 |
+| `rooms:live`       | set           | id các phòng công khai đang có ván                                                           |
 
 Mọi thay đổi phòng/ván chạy trong `withLock(roomId)`, kể cả hẹn giờ và bot. Socket.IO dùng `@socket.io/redis-adapter`
 để broadcast giữa nhiều process (có test tích hợp với 2 server).

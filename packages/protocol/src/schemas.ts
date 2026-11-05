@@ -70,6 +70,22 @@ export const MatchActionName = z.enum(['resign', 'offer-draw', 'accept-draw', 'd
 export const MatchAction = z.strictObject({ matchId: Id, action: MatchActionName });
 export const MatchRef = z.strictObject({ matchId: Id });
 export const ChatSend = z.strictObject({ roomId: Id, text: z.string().trim().min(1).max(300) });
+export const TimeControlPresetSchema = z.enum(['none', 'blitz', 'rapid', 'perMove30']);
+/** Quick match: wait for an opponent of a similar rating for this game and time control. */
+/** Quick-match games always have a clock: a stranger must not be able to stall a game forever. */
+export const QueueTimeControlSchema = TimeControlPresetSchema.exclude(['none']);
+export const QueueJoin = z.strictObject({
+  gameId: Id,
+  timeControl: QueueTimeControlSchema.default('blitz'),
+  ranked: z.boolean().default(true),
+});
+export const QueueLeave = z.strictObject({});
+
+export interface RatingChange {
+  seat: number;
+  before: number;
+  after: number;
+}
 
 export type RoomCreatePayload = z.input<typeof RoomCreate>;
 export type MoveSubmitPayload = z.input<typeof MoveSubmit>;
@@ -86,6 +102,8 @@ export type SeatOccupant =
       connected: boolean;
       /** When a disconnected player loses the seat (ms since epoch), else null. */
       graceUntil: number | null;
+      /** Rating in this game, shown in ranked rooms. */
+      rating?: number;
     }
   | { kind: 'bot'; level: BotLevel };
 
@@ -103,6 +121,10 @@ export interface RoomSnapshot {
   seats: (SeatOccupant | null)[];
   spectatorCount: number;
   matchId: string | null;
+  /** Results change ratings (quick-match rooms only). */
+  ranked: boolean;
+  /** Listed on the "live games" page for anyone to watch. */
+  public: boolean;
 }
 
 export interface ClockView {
@@ -131,6 +153,8 @@ export interface MatchSnapshot {
   serverTime: number;
   result: GameResultView | null;
   pendingOffer: { type: 'draw'; from: number } | null;
+  /** Ranked games, once over: each player's rating before and after. */
+  ratingChanges: RatingChange[] | null;
 }
 
 export interface ChatMessage {
@@ -164,5 +188,6 @@ export const ERROR_CODES = [
   'match.not_player',
   'match.no_offer',
   'match.not_finished',
+  'queue.unsupported',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];

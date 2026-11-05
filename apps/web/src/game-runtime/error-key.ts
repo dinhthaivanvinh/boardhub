@@ -1,5 +1,14 @@
 // Namespaces of protocol errors (docs/05 §6); their messages live under errors.* in the app's i18n.
-const PROTOCOL_NAMESPACES = new Set(['room', 'match', 'auth', 'rate', 'invalid', 'game', 'protocol']);
+const PROTOCOL_NAMESPACES = new Set([
+  'room',
+  'match',
+  'auth',
+  'rate',
+  'invalid',
+  'game',
+  'protocol',
+  'queue',
+]);
 
 /**
  * Maps an error code to its i18n key:

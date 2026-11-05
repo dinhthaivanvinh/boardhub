@@ -43,6 +43,11 @@ export function RoomScreen({ code }: { code: string }) {
         <h1 className="text-xl font-bold tracking-tight lg:text-2xl">
           {t(`games.${room.gameId}.name`)}{' '}
           <span className="font-mono text-base text-[var(--muted)]">#{room.code}</span>
+          {room.ranked && (
+            <span className="ml-2 rounded-full bg-[var(--accent)] px-2 py-0.5 align-middle text-xs font-semibold text-[var(--accent-fg)]">
+              {t('queue.ranked')}
+            </span>
+          )}
         </h1>
         <div className="flex gap-2">
           {isGameId(room.gameId) && (

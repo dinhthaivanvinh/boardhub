@@ -7,6 +7,8 @@ import type {
   MatchRef,
   MatchSnapshot,
   MoveSubmit,
+  QueueJoin,
+  QueueLeave,
   RoomAddBot,
   RoomCreate,
   RoomJoin,
@@ -40,6 +42,8 @@ export interface ClientToServerEvents {
   'match:action': Handler<typeof MatchAction>;
   'match:resync': Handler<typeof MatchRef, { match: MatchSnapshot }>;
   'chat:send': Handler<typeof ChatSend>;
+  'queue:join': Handler<typeof QueueJoin>;
+  'queue:leave': Handler<typeof QueueLeave>;
 }
 
 /** Events the server pushes. */
@@ -48,6 +52,8 @@ export interface ServerToClientEvents {
   /** Sent separately to each player with their own view. */
   'match:state': (match: MatchSnapshot) => void;
   'chat:message': (message: ChatMessage) => void;
+  /** A quick-match opponent was found: the game has already started in this room. */
+  'queue:matched': (match: { roomId: string; roomCode: string }) => void;
 }
 
 /** Sent in the Socket.IO handshake `auth` field. */

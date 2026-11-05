@@ -26,6 +26,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const locale = await getLocale();
   const messages = await getMessages();
   const t = await getTranslations('app');
+  const nav = await getTranslations('nav');
   return (
     <html lang={locale}>
       <body>
@@ -39,6 +40,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 {t('name')}
               </Link>
               <div className="flex items-center gap-4">
+                <nav className="hidden items-center gap-4 text-sm sm:flex" aria-label={nav('label')}>
+                  <Link href="/live" className="underline-offset-4 hover:underline">
+                    {nav('live')}
+                  </Link>
+                  <Link href="/leaderboard" className="underline-offset-4 hover:underline">
+                    {nav('leaderboard')}
+                  </Link>
+                </nav>
                 <AccountLink />
                 <LanguageSwitcher />
               </div>

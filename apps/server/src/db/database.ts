@@ -24,6 +24,7 @@ export interface MatchesTable {
   result: unknown | null;
   started_at: Date;
   ended_at: Date | null;
+  ranked: Generated<boolean>;
 }
 
 export interface MatchPlayersTable {
@@ -31,6 +32,8 @@ export interface MatchPlayersTable {
   seat: number;
   user_id: string | null;
   bot_level: string | null;
+  rating_before: number | null;
+  rating_after: number | null;
 }
 
 export interface MatchMovesTable {
@@ -42,8 +45,22 @@ export interface MatchMovesTable {
   created_at: Date;
 }
 
+export interface RatingsTable {
+  user_id: string;
+  game_id: string;
+  rating: number;
+  rd: number;
+  volatility: number;
+  games: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  updated_at: Generated<Date>;
+}
+
 export interface Database {
   users: UsersTable;
+  ratings: RatingsTable;
   matches: MatchesTable;
   match_players: MatchPlayersTable;
   match_moves: MatchMovesTable;
@@ -110,6 +127,41 @@ const MIGRATIONS: Record<string, Migration> = {
     async down(db) {
       for (const t of ['match_moves', 'match_players', 'matches', 'users'])
         await db.schema.dropTable(t).execute();
+    },
+  },
+  '2026_11_06_001_ratings': {
+    async up(db) {
+      await db.schema
+        .createTable('ratings')
+        .addColumn('user_id', 'uuid', (c) => c.notNull().references('users.id').onDelete('cascade'))
+        .addColumn('game_id', 'text', (c) => c.notNull())
+        .addColumn('rating', 'double precision', (c) => c.notNull())
+        .addColumn('rd', 'double precision', (c) => c.notNull())
+        .addColumn('volatility', 'double precision', (c) => c.notNull())
+        .addColumn('games', 'integer', (c) => c.notNull().defaultTo(0))
+        .addColumn('wins', 'integer', (c) => c.notNull().defaultTo(0))
+        .addColumn('losses', 'integer', (c) => c.notNull().defaultTo(0))
+        .addColumn('draws', 'integer', (c) => c.notNull().defaultTo(0))
+        .addColumn('updated_at', 'timestamptz', (c) => c.notNull().defaultTo(sql`now()`))
+        .addPrimaryKeyConstraint('ratings_pk', ['user_id', 'game_id'])
+        .execute();
+      await db.schema
+        .createIndex('ratings_leaderboard')
+        .on('ratings')
+        .columns(['game_id', 'rating desc'])
+        .execute();
+      await db.schema
+        .alterTable('matches')
+        .addColumn('ranked', 'boolean', (c) => c.notNull().defaultTo(false))
+        .execute();
+      await db.schema.alterTable('match_players').addColumn('rating_before', 'double precision').execute();
+      await db.schema.alterTable('match_players').addColumn('rating_after', 'double precision').execute();
+    },
+    async down(db) {
+      await db.schema.alterTable('match_players').dropColumn('rating_after').execute();
+      await db.schema.alterTable('match_players').dropColumn('rating_before').execute();
+      await db.schema.alterTable('matches').dropColumn('ranked').execute();
+      await db.schema.dropTable('ratings').execute();
     },
   },
 };

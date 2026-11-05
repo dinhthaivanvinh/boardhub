@@ -6,7 +6,10 @@
   "nav": {
     "home": "Trang chủ",
     "language": "Ngôn ngữ",
-    "account": "Tài khoản"
+    "account": "Tài khoản",
+    "label": "Điều hướng",
+    "live": "Đang diễn ra",
+    "leaderboard": "Xếp hạng"
   },
   "catalog": {
     "title": "Chọn một game",
@@ -23,7 +26,8 @@
     "modes": {
       "bot": "Chơi với máy",
       "local": "Hai người, chung một máy",
-      "online": "Chơi online với bạn bè"
+      "online": "Chơi online với bạn bè",
+      "quick": "Ghép trận nhanh với người lạ"
     },
     "level": "Độ khó",
     "side": "Bạn cầm quân",
@@ -45,7 +49,10 @@
     "disconnectPolicies": {
       "forfeit": "Xử thua",
       "bot": "Máy đánh thay"
-    }
+    },
+    "quick": "Ghép trận nhanh",
+    "ranked": "Tính điểm xếp hạng",
+    "findMatch": "Tìm đối thủ"
   },
   "bot": {
     "level": {
@@ -190,6 +197,9 @@
     },
     "protocol": {
       "version": "Trang đã cũ, hãy tải lại trang."
+    },
+    "queue": {
+      "unsupported": "Game này chưa hỗ trợ ghép trận nhanh."
     }
   },
   "profile": {
@@ -213,7 +223,9 @@
       "loss": "Thua",
       "draw": "Hòa",
       "playing": "Đang chơi"
-    }
+    },
+    "ratings": "Điểm xếp hạng",
+    "noRatings": "Chưa có ván tính điểm nào."
   },
   "replay": {
     "pageTitle": "Xem lại ván",
@@ -238,5 +250,27 @@
     "thisGame": "Tùy chọn của ván này",
     "on": "Bật",
     "off": "Tắt"
+  },
+  "queue": {
+    "pageTitle": "Tìm đối thủ",
+    "title": "Đang tìm đối thủ: {game}",
+    "ranked": "Tính điểm",
+    "casual": "Không tính điểm",
+    "waiting": "Đã chờ",
+    "cancel": "Hủy tìm"
+  },
+  "leaderboard": {
+    "title": "Bảng xếp hạng",
+    "games": "Chọn game",
+    "player": "Người chơi",
+    "rating": "Điểm",
+    "record": "Thắng/Thua/Hòa",
+    "empty": "Chưa có ai đủ {n} ván tính điểm trong game này."
+  },
+  "live": {
+    "title": "Đang diễn ra",
+    "subtitle": "Các ván ghép trận đang được chơi. Bấm để vào xem.",
+    "empty": "Hiện không có ván nào đang diễn ra.",
+    "watch": "Xem"
   }
 }

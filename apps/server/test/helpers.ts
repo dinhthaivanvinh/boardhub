@@ -5,6 +5,7 @@ import { InlineBotRunner } from '../src/bots/bot-runner';
 import type { Actor } from '../src/domain/types';
 import { GameHub, type Notifier } from '../src/hub/game-hub';
 import { ManualJobScheduler } from '../src/hub/scheduler';
+import { MemoryRatingRepo, RatingService } from '../src/ratings/rating-service';
 import { GAME_DEFS } from '../src/registry';
 import { MemoryLiveStore } from '../src/store/live-store';
 import { MemoryHistoryRepo } from '../src/store/repos';
@@ -52,6 +53,7 @@ export function makeHub(opts: { graceMs?: number; botDelayMs?: number } = {}) {
   let now = 1_000_000;
   const store = new MemoryLiveStore();
   const history = new MemoryHistoryRepo();
+  const ratings = new RatingService(new MemoryRatingRepo());
   const scheduler = new ManualJobScheduler();
   const events = {
     rooms: [] as RoomSnapshot[],
@@ -72,6 +74,7 @@ export function makeHub(opts: { graceMs?: number; botDelayMs?: number } = {}) {
     games,
     bots: new InlineBotRunner(),
     jobs: scheduler,
+    ratings,
     notifier,
     log: silentLog,
     now: () => now,
@@ -84,6 +87,7 @@ export function makeHub(opts: { graceMs?: number; botDelayMs?: number } = {}) {
   scheduler.start(hub.runJob);
   return {
     hub,
+    ratings,
     store,
     history,
     scheduler,

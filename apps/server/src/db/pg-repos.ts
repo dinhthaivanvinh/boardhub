@@ -8,7 +8,8 @@ import type {
   UserRecord,
   UserRepo,
 } from '../store/repos';
-import type { Database, MatchesTable, UsersTable } from './database';
+import { fresh, type RatingRepo, type StoredRating } from '../ratings/rating-service';
+import type { Database, MatchesTable, RatingsTable, UsersTable } from './database';
 
 const json = (value: unknown) => JSON.stringify(value);
 
@@ -91,6 +92,7 @@ export class PgHistoryRepo implements HistoryRepo {
           time_control: json(m.timeControl),
           seed: m.seed,
           status: 'playing',
+          ranked: m.ranked,
           result: null,
           started_at: new Date(m.startedAt),
           ended_at: null,
@@ -105,6 +107,8 @@ export class PgHistoryRepo implements HistoryRepo {
               seat: p.seat,
               user_id: p.userId,
               bot_level: p.botLevel,
+              rating_before: null,
+              rating_after: null,
             })),
           )
           .execute();
@@ -124,6 +128,17 @@ export class PgHistoryRepo implements HistoryRepo {
         created_at: new Date(at),
       })
       .execute();
+  }
+
+  async setRatingChanges(matchId: string, changes: { seat: number; before: number; after: number }[]) {
+    for (const c of changes) {
+      await this.db
+        .updateTable('match_players')
+        .set({ rating_before: c.before, rating_after: c.after })
+        .where('match_id', '=', matchId)
+        .where('seat', '=', c.seat)
+        .execute();
+    }
   }
 
   async finishMatch(matchId: string, result: GameResult, endedAt: number) {
@@ -198,4 +213,70 @@ function toSummary(
     endedAt: row.ended_at?.getTime() ?? null,
     players,
   };
+}
+
+function toRating(row: Selectable<RatingsTable>): StoredRating {
+  return {
+    userId: row.user_id,
+    gameId: row.game_id,
+    rating: row.rating,
+    rd: row.rd,
+    volatility: row.volatility,
+    games: row.games,
+    wins: row.wins,
+    losses: row.losses,
+    draws: row.draws,
+  };
+}
+
+export class PgRatingRepo implements RatingRepo {
+  constructor(private readonly db: Kysely<Database>) {}
+
+  async get(userId: string, gameId: string) {
+    const row = await this.db
+      .selectFrom('ratings')
+      .selectAll()
+      .where('user_id', '=', userId)
+      .where('game_id', '=', gameId)
+      .executeTakeFirst();
+    return row ? toRating(row) : fresh(userId, gameId);
+  }
+
+  async save(r: StoredRating) {
+    const values = {
+      user_id: r.userId,
+      game_id: r.gameId,
+      rating: r.rating,
+      rd: r.rd,
+      volatility: r.volatility,
+      games: r.games,
+      wins: r.wins,
+      losses: r.losses,
+      draws: r.draws,
+    };
+    await this.db
+      .insertInto('ratings')
+      .values(values)
+      .onConflict((oc) =>
+        oc.columns(['user_id', 'game_id']).doUpdateSet({ ...values, updated_at: new Date() }),
+      )
+      .execute();
+  }
+
+  async top(gameId: string, limit: number, minGames: number) {
+    const rows = await this.db
+      .selectFrom('ratings')
+      .selectAll()
+      .where('game_id', '=', gameId)
+      .where('games', '>=', minGames)
+      .orderBy('rating', 'desc')
+      .limit(limit)
+      .execute();
+    return rows.map(toRating);
+  }
+
+  async forUser(userId: string) {
+    const rows = await this.db.selectFrom('ratings').selectAll().where('user_id', '=', userId).execute();
+    return rows.map(toRating);
+  }
 }

@@ -42,8 +42,8 @@
 
 ## M4 — Cạnh tranh (3 tuần)
 
-- [ ] Quick-match, ranked, Glicko-2, bảng xếp hạng
-- [ ] Spectate
+- [x] Quick-match, ranked, Glicko-2, bảng xếp hạng (`/queue`, `/leaderboard`, điểm trong hồ sơ và trong phòng)
+- [x] Spectate: `/live` liệt kê ván ghép trận đang chơi; vào phòng bằng mã thì xem với view của người xem
 - [ ] Admin: bật/tắt game, báo cáo người chơi
 - [ ] Cờ vua, Cờ đam, Ô ăn quan, Cờ gánh
 

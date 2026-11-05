@@ -157,7 +157,9 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   registerOfficeRoutes(app, officeHub);
   attachOfficeGateway(officeNs, officeHub, auth, log);
 
-  jobs.start((job) => (job.kind === 'office-expire' ? officeHub.runJob(job) : hub.runJob(job)));
+  jobs.start((job) =>
+    job.kind === 'office-expire' || job.kind === 'office-reveal' ? officeHub.runJob(job) : hub.runJob(job),
+  );
   // Periodic re-check so ranked rating windows widen for players who are still waiting.
   const sweep = setInterval(
     () => void matchmaker.sweep().catch((err: unknown) => log.error({ err }, 'matchmaking sweep failed')),

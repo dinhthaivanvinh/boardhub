@@ -716,3 +716,241 @@ body {
     animation: none;
   }
 }
+
+/* ---------- Office: draw player (race, wheel, result) — docs/office/07 §5 ---------- */
+.draw-player {
+  --result-a: #fde047;
+  --result-b: #f59e0b;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  color: #f8fafc;
+  background:
+    radial-gradient(600px 300px at 50% 0%, rgb(250 204 21 / 0.14), transparent 70%),
+    linear-gradient(180deg, #1e1b4b, #0f0d2e);
+}
+.draw-player-big {
+  margin: 1rem 0 2rem;
+  padding: 2rem;
+  min-height: 60vh;
+  justify-content: center;
+  background: rgb(255 255 255 / 0.04);
+  border: 1px solid rgb(255 255 255 / 0.1);
+}
+.draw-status {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fde68a;
+}
+.draw-player-big .draw-status {
+  font-size: 2rem;
+}
+.draw-countdown {
+  display: inline-block;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  animation: draw-count 1s ease-out both;
+}
+.draw-player-big .draw-countdown {
+  font-size: 6rem;
+}
+@keyframes draw-count {
+  from {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+.race {
+  width: 100%;
+}
+.race-track {
+  --lane: 4rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+.race-lane {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 9rem) 1fr;
+  align-items: center;
+  height: var(--lane);
+}
+.race-lane:nth-child(odd) .race-run {
+  background: #166534;
+}
+.race-lane:nth-child(even) .race-run {
+  background: #15803d;
+}
+.race-name {
+  padding-right: 0.6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.race-run {
+  position: relative;
+  height: 100%;
+  border-bottom: 1px dashed rgb(255 255 255 / 0.25);
+}
+.race-finish {
+  position: absolute;
+  top: 0;
+  right: calc(var(--lane) * 0.45);
+  bottom: 0;
+  width: 10px;
+  background: repeating-conic-gradient(#fff 0 25%, #111 0 50%) 0 0 / 10px 10px;
+  opacity: 0.85;
+}
+.race-runner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: var(--lane);
+  height: 100%;
+  will-change: transform;
+}
+.race-runner svg {
+  width: 88%;
+  height: 88%;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.4));
+}
+.race-runner[data-finished='true'] svg {
+  filter: drop-shadow(0 0 12px #fde047);
+}
+.draw-player-big .race-track {
+  --lane: clamp(2.75rem, calc(56vh / var(--lanes)), 6rem);
+}
+.draw-player-big .race-name {
+  font-size: clamp(1rem, calc(var(--lane) * 0.32), 1.6rem);
+}
+.race-more {
+  margin-top: 0.5rem;
+  text-align: center;
+  color: rgb(255 255 255 / 0.7);
+}
+.wheel {
+  width: min(100%, 26rem);
+}
+.draw-player-big .wheel {
+  width: min(100%, 56vh);
+}
+.wheel-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.45));
+}
+.wheel-name {
+  fill: #fff;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: rgb(0 0 0 / 0.35);
+  stroke-width: 1.2px;
+  dominant-baseline: middle;
+}
+.draw-result {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  animation: result-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.draw-result .result-glow {
+  width: 120%;
+  left: -10%;
+  top: -20%;
+}
+.draw-result-title {
+  position: relative;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fde68a;
+}
+.draw-player-big .draw-result-title {
+  font-size: 2.25rem;
+}
+.draw-winners {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem 2rem;
+}
+.draw-winner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.draw-winner svg {
+  filter: drop-shadow(0 0 24px rgb(253 224 71 / 0.6));
+}
+.draw-winner-name {
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.1;
+  background: linear-gradient(180deg, #fff7c2, #fbbf24 55%, #d97706);
+  background-clip: text;
+  color: transparent;
+}
+.draw-player-big .draw-winner-name {
+  font-size: clamp(3rem, 6vw, 5rem);
+}
+.draw-verify-link {
+  position: relative;
+  font-size: 0.85rem;
+  color: rgb(255 255 255 / 0.75);
+  text-decoration: underline;
+}
+.draw-phone {
+  text-align: center;
+  font-size: 1.1rem;
+}
+.draw-phone-running {
+  animation: result-pulse 1.4s ease-in-out infinite;
+}
+.draw-phone-won {
+  color: #713f12;
+  background: linear-gradient(180deg, #fef9c3, #fde047);
+  box-shadow: 0 0 32px rgb(253 224 71 / 0.7);
+  animation: result-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.verify-verdict {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  border: 2px solid;
+}
+.verify-ok {
+  border-color: #16a34a;
+  background: color-mix(in srgb, #16a34a 12%, var(--card));
+}
+.verify-bad {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 12%, var(--card));
+}
+@media (prefers-reduced-motion: reduce) {
+  .draw-countdown,
+  .draw-result,
+  .draw-phone-running,
+  .draw-phone-won {
+    animation: none;
+  }
+}

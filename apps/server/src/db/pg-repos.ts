@@ -8,6 +8,7 @@ import type {
   UserRecord,
   UserRepo,
 } from '../store/repos';
+import type { OfficeDrawRecord } from '@bg/protocol';
 import type { OfficeRepo } from '../office/store';
 import { fresh, type RatingRepo, type StoredRating } from '../ratings/rating-service';
 import type { Database, MatchesTable, RatingsTable, UsersTable } from './database';
@@ -323,6 +324,52 @@ export class PgOfficeRepo implements OfficeRepo {
         }),
       )
       .execute();
+  }
+
+  /** Only revealed draws are ever written, so a stored seed is safe to serve. */
+  async drawRevealed(code: string, d: OfficeDrawRecord) {
+    await this.db
+      .insertInto('office_draws')
+      .values({
+        id: d.drawId,
+        session_code: code,
+        round: d.round,
+        mode: d.mode,
+        n: d.n,
+        candidates: JSON.stringify(d.candidates),
+        commitment: d.commitment,
+        seed: d.seed,
+        winners: JSON.stringify(d.winners),
+        starts_at: new Date(d.startsAt),
+        reveal_at: new Date(d.revealAt),
+        revealed_at: new Date(d.revealedAt),
+      })
+      .onConflict((oc) => oc.column('id').doNothing())
+      .execute();
+  }
+
+  async getDraw(code: string, drawId: string): Promise<OfficeDrawRecord | null> {
+    if (!/^[0-9a-f-]{36}$/i.test(drawId)) return null;
+    const row = await this.db
+      .selectFrom('office_draws')
+      .selectAll()
+      .where('id', '=', drawId)
+      .where('session_code', '=', code)
+      .executeTakeFirst();
+    if (!row) return null;
+    return {
+      drawId: row.id,
+      round: row.round,
+      mode: row.mode,
+      n: row.n,
+      candidates: row.candidates as OfficeDrawRecord['candidates'],
+      commitment: row.commitment,
+      seed: row.seed,
+      winners: row.winners,
+      startsAt: row.starts_at.getTime(),
+      revealAt: row.reveal_at.getTime(),
+      revealedAt: row.revealed_at.getTime(),
+    };
   }
 
   async statusChanged(code: string, status: string, at: number) {

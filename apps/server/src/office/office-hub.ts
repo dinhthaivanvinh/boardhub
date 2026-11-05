@@ -1,9 +1,22 @@
-import { randomInt, randomUUID } from 'node:crypto';
+import { randomBytes, randomInt, randomUUID } from 'node:crypto';
 import { defaultAvatar } from '@bg/avatars/random';
 import type { Avatar } from '@bg/avatars/schema';
-import type { ActivityContext, AnyActivityDefinition, Screen } from '@bg/office-core';
+import {
+  commitment,
+  DRAW_BUILD_UP_MS,
+  DRAW_REVEAL_LEAD_MS,
+  DRAW_START_DELAY_MS,
+  drawWinners,
+  normalizeCandidates,
+  type ActivityContext,
+  type AnyActivityDefinition,
+  type DrawRequest,
+  type Screen,
+} from '@bg/office-core';
 import {
   OFFICE_MAX_PARTICIPANTS,
+  type OfficeDrawRecord,
+  type OfficeDrawStarted,
   type OfficeHostOpInput,
   type OfficeParticipant,
   type OfficeSessionInfo,
@@ -12,7 +25,7 @@ import {
 import { HubError } from '../errors';
 import type { Logger } from '../hub/game-hub';
 import type { JobScheduler } from '../hub/scheduler';
-import type { OfficeRepo, OfficeSessionRecord, OfficeStore } from './store';
+import type { OfficeRepo, OfficeSessionRecord, OfficeStore, RunningDraw } from './store';
 
 /** Sessions close after this long without any activity (FR-SES-07). */
 export const OFFICE_IDLE_MS = 24 * 60 * 60 * 1000;
@@ -31,6 +44,8 @@ export interface OfficeNotifier {
   /** One view per screen; personal views (hidden information) come with later activities. */
   activity(code: string, seq: number, views: Record<Screen, unknown>): void;
   kicked(code: string, userId: string): void;
+  drawStarted(code: string, seq: number, draw: OfficeDrawStarted): void;
+  drawRevealed(code: string, seq: number, draw: OfficeDrawRecord): void;
 }
 
 export interface OfficeHubOptions {
@@ -88,6 +103,8 @@ export class OfficeHub {
       participants: [],
       kicked: [],
       state: activity.setup(settings.data),
+      draw: null,
+      history: [],
     };
     await this.o.store.save(session);
     await this.o.jobs.schedule(`office-expire:${code}`, now + OFFICE_IDLE_MS, {
@@ -249,10 +266,15 @@ export class OfficeHub {
       const ctx = this.ctx(session);
       const check = activity.validate(session.state, who, parsed.data, ctx);
       if (!check.ok) throw new HubError(check.code);
-      const { state } = activity.apply(session.state, who, parsed.data, ctx);
+      const { state, draw } = activity.apply(session.state, who, parsed.data, ctx);
+      if (draw && session.draw && !session.draw.revealed) throw new HubError('office.draw_running');
       const next = { ...session, state, seq: session.seq + 1 };
-      await this.commit(next);
-      this.o.notifier.activity(next.code, next.seq, this.views(next));
+      if (!draw) {
+        await this.commit(next);
+        this.o.notifier.activity(next.code, next.seq, this.views(next));
+        return;
+      }
+      await this.startDraw(next, draw);
     });
   }
 
@@ -275,8 +297,96 @@ export class OfficeHub {
     });
   }
 
+  /**
+   * The fair draw (skill office-fair-draw): freeze the candidates, make a secret seed, fix the winners,
+   * publish only the commitment. The reveal job publishes seed and winners just before the landing.
+   */
+  private async startDraw(session: OfficeSessionRecord, request: DrawRequest) {
+    const ids = normalizeCandidates(request.candidates);
+    const byId = new Map(session.participants.map((p) => [p.id, p]));
+    const seed = randomBytes(32).toString('hex');
+    const drawId = randomUUID();
+    const startsAt = this.now() + DRAW_START_DELAY_MS;
+    const draw: RunningDraw = {
+      drawId,
+      round: (session.history?.length ?? 0) + 1,
+      mode: request.mode,
+      n: request.n,
+      candidates: ids.map((id) => {
+        const p = byId.get(id);
+        return { id, name: p?.name ?? '?', avatar: p!.avatar };
+      }),
+      commitment: commitment(seed),
+      startsAt,
+      revealAt: startsAt + DRAW_BUILD_UP_MS,
+      seed,
+      winners: drawWinners(seed, drawId, ids, request.n),
+      revealed: false,
+      revealedAt: null,
+    };
+    const next = { ...session, draw };
+    await this.commit(next);
+    this.o.notifier.drawStarted(next.code, next.seq, publicDraw(draw));
+    await this.o.jobs.schedule(`office-reveal:${next.code}`, draw.revealAt - DRAW_REVEAL_LEAD_MS, {
+      kind: 'office-reveal',
+      code: next.code,
+      drawId,
+    });
+  }
+
+  /** Idempotent: a draw is revealed once, even if the job runs again (or the session was closed meanwhile). */
+  private async reveal(code: string, drawId: string) {
+    await this.o.withLock(lockKey(code), async () => {
+      const session = await this.o.store.get(code);
+      const draw = session?.draw;
+      if (!session || !draw || draw.drawId !== drawId || draw.revealed) return;
+      const activity = this.activityOf(session);
+      const record: OfficeDrawRecord = {
+        ...publicDraw(draw),
+        seed: draw.seed,
+        winners: draw.winners,
+        revealedAt: this.now(),
+      };
+      const state = activity.onDrawResult(
+        session.state,
+        { drawId, mode: draw.mode, winners: draw.winners },
+        this.ctx(session),
+      );
+      const next: OfficeSessionRecord = {
+        ...session,
+        state,
+        draw: { ...draw, revealed: true, revealedAt: record.revealedAt },
+        history: [record, ...(session.history ?? [])].slice(0, 50),
+        seq: session.seq + 1,
+      };
+      await this.commit(next);
+      this.o.notifier.drawRevealed(code, next.seq, record);
+      const after = { ...next, seq: next.seq + 1 };
+      await this.o.store.save(after);
+      this.o.notifier.activity(code, after.seq, this.views(after));
+      await this.o.repo
+        .drawRevealed(code, record)
+        .catch((err: unknown) => this.o.log.error({ err, code, drawId }, 'office draw not recorded'));
+    });
+  }
+
+  /** A revealed draw for the verification page: from the live session, else from long-term storage. */
+  async getDraw(code: string, drawId: string): Promise<OfficeDrawRecord | null> {
+    const session = await this.o.store.get(code);
+    const live = session?.history?.find((d) => d.drawId === drawId);
+    return live ?? this.o.repo.getDraw(code, drawId);
+  }
+
+  /** Job entry point for office jobs. */
+  runJob = async (
+    job: { kind: 'office-expire'; code: string } | { kind: 'office-reveal'; code: string; drawId: string },
+  ) => {
+    if (job.kind === 'office-reveal') return this.reveal(job.code, job.drawId);
+    return this.expire(job);
+  };
+
   /** Idempotent: closes idle sessions, otherwise checks again when they could next expire. */
-  runJob = async (job: { kind: 'office-expire'; code: string }) => {
+  private expire = async (job: { kind: 'office-expire'; code: string }) => {
     await this.o.withLock(lockKey(job.code), async () => {
       const session = await this.o.store.get(job.code);
       if (!session || session.status === 'closed') return;
@@ -367,6 +477,8 @@ export class OfficeHub {
       },
       participants: [...session.participants].sort((a, b) => a.joinedAt - b.joinedAt),
       activity: activity.view(session.state, screen, userId, this.ctx(session)),
+      draw: session.draw ? (session.draw.revealed ? recordOf(session.draw) : publicDraw(session.draw)) : null,
+      history: session.history ?? [],
     };
   }
 
@@ -378,6 +490,24 @@ export class OfficeHub {
 }
 
 const lockKey = (code: string) => `office:${code.toUpperCase()}`;
+
+/** What everyone may know while a draw runs: no seed, no winners. */
+function publicDraw(d: RunningDraw): OfficeDrawStarted {
+  return {
+    drawId: d.drawId,
+    round: d.round,
+    mode: d.mode,
+    n: d.n,
+    candidates: d.candidates,
+    commitment: d.commitment,
+    startsAt: d.startsAt,
+    revealAt: d.revealAt,
+  };
+}
+
+function recordOf(d: RunningDraw): OfficeDrawRecord {
+  return { ...publicDraw(d), seed: d.seed, winners: d.winners, revealedAt: d.revealedAt ?? d.revealAt };
+}
 
 function info(s: OfficeSessionRecord): OfficeSessionInfo {
   return { code: s.code, activityId: s.activityId, title: s.title, status: s.status, hostId: s.hostId };

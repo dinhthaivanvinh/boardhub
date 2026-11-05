@@ -181,6 +181,8 @@ export const ERROR_CODES = [
   'office.unknown_activity',
   'office.bad_settings',
   'office.bad_action',
+  'office.not_enough',
+  'office.draw_running',
   'protocol.version',
   'rate.limited',
   'invalid.payload',

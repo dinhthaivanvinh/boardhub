@@ -9,7 +9,8 @@ export type Job =
   | { kind: 'clock'; roomId: string; matchId: string }
   | { kind: 'grace'; roomId: string; userId: string }
   | { kind: 'bot'; roomId: string; matchId: string; seq: number }
-  | { kind: 'office-expire'; code: string };
+  | { kind: 'office-expire'; code: string }
+  | { kind: 'office-reveal'; code: string; drawId: string };
 
 export type JobHandler = (job: Job) => Promise<void>;
 

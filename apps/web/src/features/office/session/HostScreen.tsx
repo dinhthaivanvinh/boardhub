@@ -6,6 +6,7 @@ import { Avatar, randomAvatar } from '@bg/avatars';
 import type { Rng } from '@bg/engine';
 import { errorKey } from '@/game-runtime/error-key';
 import { useOfficeSession } from '@/office/use-office-session';
+import { DrawPanel } from './DrawPanel';
 import { animalLabel, Connecting, joinUrl, OfficeError, QrCode } from './shared';
 
 const uiRng: Rng = {
@@ -51,6 +52,15 @@ export function HostScreen({ code }: { code: string }) {
           <p role="alert" className="text-sm text-[var(--danger)]">
             {tAll(errorKey(error))}
           </p>
+        )}
+
+        {session.activityId === 'lucky-animal' && (
+          <DrawPanel
+            code={code}
+            session={session}
+            serverOffset={api.serverOffset}
+            onAction={(a) => void run(api.action(a))}
+          />
         )}
 
         <ul className="flex flex-col gap-2" aria-label={t('people')}>
@@ -143,7 +153,6 @@ export function HostScreen({ code }: { code: string }) {
             </button>
           </div>
         )}
-        <p className="card text-sm text-[var(--muted)]">{t('drawSoon')}</p>
       </aside>
     </div>
   );

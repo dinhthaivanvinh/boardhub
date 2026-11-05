@@ -2,12 +2,14 @@
 
 import { useTranslations } from 'next-intl';
 import { useOfficeSession } from '@/office/use-office-session';
+import { DrawPlayer } from '../draw-player/DrawPlayer';
+import { isRevealed } from '../draw-player/timeline';
 import { Connecting, Herd, herdSize, joinUrl, OfficeError, QrCode } from './shared';
 
 /** The projector: big title, code and QR, and everyone's animal (docs/office/07 §2). No controls. */
 export function StageScreen({ code }: { code: string }) {
   const t = useTranslations('officeSession');
-  const { session, joinError } = useOfficeSession(code, 'stage', true);
+  const { session, joinError, serverOffset } = useOfficeSession(code, 'stage', true);
   if (joinError && !session) return <OfficeError code={joinError} />;
   if (!session) return <Connecting />;
   const people = session.participants;
@@ -40,7 +42,16 @@ export function StageScreen({ code }: { code: string }) {
             ? t('lockedCount', { n: people.length })
             : t('count', { n: people.length })}
       </p>
-      {people.length === 0 ? (
+      {session.draw && (
+        <DrawPlayer
+          key={session.draw.drawId}
+          code={code}
+          draw={session.draw}
+          serverOffset={serverOffset}
+          big
+        />
+      )}
+      {session.draw && !isRevealed(session.draw) ? null : people.length === 0 ? (
         <p className="office-stage-empty">{t('waitingFirst')}</p>
       ) : (
         <Herd people={people} size={herdSize(people.length)} showNames={people.length <= 60} />

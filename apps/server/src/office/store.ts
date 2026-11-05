@@ -1,5 +1,5 @@
 import type { Redis } from 'ioredis';
-import type { OfficeParticipant, OfficeStatus } from '@bg/protocol';
+import type { OfficeDrawRecord, OfficeDrawStarted, OfficeParticipant, OfficeStatus } from '@bg/protocol';
 
 /** A live office session (docs/office/06 §5). Stored whole: at most 200 participants (~60 KB). */
 export interface OfficeSessionRecord {
@@ -17,6 +17,17 @@ export interface OfficeSessionRecord {
   kicked: string[];
   /** The activity's state (JSON). */
   state: unknown;
+  /** The current or last draw. Seed and winners stay on the server until the reveal (ADR-0006). */
+  draw?: RunningDraw | null;
+  /** Revealed draws, newest first (at most 50). */
+  history?: OfficeDrawRecord[];
+}
+
+export interface RunningDraw extends OfficeDrawStarted {
+  seed: string;
+  winners: string[];
+  revealed: boolean;
+  revealedAt: number | null;
 }
 
 export interface OfficeStore {
@@ -63,12 +74,22 @@ export interface OfficeRepo {
     createdAt: number;
   }): Promise<void>;
   statusChanged(code: string, status: OfficeStatus, at: number): Promise<void>;
+  /** A revealed draw, kept for history and verification (30 days). */
+  drawRevealed(code: string, record: OfficeDrawRecord): Promise<void>;
+  getDraw(code: string, drawId: string): Promise<OfficeDrawRecord | null>;
 }
 
 export class MemoryOfficeRepo implements OfficeRepo {
   readonly rows = new Map<string, { status: OfficeStatus; closedAt: number | null }>();
   async created(session: { code: string }) {
     this.rows.set(session.code, { status: 'open', closedAt: null });
+  }
+  readonly draws = new Map<string, OfficeDrawRecord>();
+  async drawRevealed(code: string, record: OfficeDrawRecord) {
+    this.draws.set(`${code}:${record.drawId}`, structuredClone(record));
+  }
+  async getDraw(code: string, drawId: string) {
+    return this.draws.get(`${code}:${drawId}`) ?? null;
   }
   async statusChanged(code: string, status: OfficeStatus, at: number) {
     const row = this.rows.get(code);

@@ -246,7 +246,9 @@
       "not_participant": "Bạn chưa ở trong phiên.",
       "unknown_activity": "Hoạt động này không có.",
       "bad_settings": "Cài đặt không hợp lệ.",
-      "bad_action": "Thao tác không hợp lệ."
+      "bad_action": "Thao tác không hợp lệ.",
+      "not_enough": "Không đủ người để bốc.",
+      "draw_running": "Đang quay rồi, chờ một chút nhé."
     }
   },
   "profile": {
@@ -550,7 +552,6 @@
     "lockHint": "Khi khoá, người mới không vào được; người đã vào vẫn quay lại được.",
     "close": "Kết thúc phiên",
     "closeConfirm": "Kết thúc phiên này? Không ai vào được nữa.",
-    "drawSoon": "🎯 Phần bốc thăm (đua thú, vòng quay) sẽ có ở bản cập nhật tiếp theo. Bây giờ bạn có thể mời mọi người vào và xem con vật của họ trên màn chiếu.",
     "youAreIn": "Bạn đã vào phiên",
     "waitHost": "Chờ chủ trì bắt đầu nhé!",
     "joinWith": "Vào phiên với con vật này",
@@ -563,6 +564,51 @@
       "not_found": "Không tìm thấy phiên này. Kiểm tra lại mã nhé.",
       "closed": "Phiên này đã kết thúc.",
       "locked": "Phiên đã khoá hoặc bạn đã được mời ra."
+    },
+    "draw": {
+      "heading": "Bốc thăm",
+      "mode": "Kiểu bốc",
+      "modes": {
+        "race": "Đua thú",
+        "wheel": "Vòng quay"
+      },
+      "howMany": "Số người chọn",
+      "fewer": "Bớt một người",
+      "more": "Thêm một người",
+      "excludePrevious": "Không chọn lại người đã được chọn",
+      "hostParticipates": "Chủ trì cũng tham gia bốc",
+      "spin": "Quay!",
+      "drawing": "Đang quay…",
+      "drawingPhone": "Đang quay… nhìn lên màn chiếu nhé!",
+      "pool": "{n, plural, =0 {Chưa có ai để bốc} other {Bốc trong # người}}",
+      "notEnough": "cần ít nhất {n} người",
+      "resetExclusions": "Cho {n} người đã được chọn vào bốc lại",
+      "history": "Các lượt trước",
+      "picked": "{n, plural, =1 {Người được chọn} other {Những người được chọn}}",
+      "round": "Lượt {n}",
+      "youWon": "Bạn được chọn!",
+      "verify": "Kiểm chứng",
+      "moreInDraw": "+ {n} người nữa vẫn trong lượt bốc (không lên đường đua)"
+    },
+    "verify": {
+      "kicker": "Kiểm chứng bốc thăm",
+      "title": "Lượt {round}: có công bằng không?",
+      "ok": "Công bằng — kết quả khớp",
+      "okDetail": "Trình duyệt của bạn vừa tính lại từ đầu và ra đúng những người này.",
+      "bad": "Không khớp",
+      "badDetail": "Mã khoá hoặc kết quả không khớp với dữ liệu đã công bố.",
+      "winners": "Kết quả đã công bố",
+      "steps": "Các bước kiểm tra",
+      "stepCommitment": "SHA-256 của hạt giống khớp với mã khoá đã công bố trước khi quay",
+      "commitment": "Mã khoá (công bố trước khi quay)",
+      "seed": "Hạt giống (công bố sau khi quay)",
+      "stepWinners": "Tính lại {n} người từ {total} ứng viên ra đúng kết quả",
+      "recomputed": "Tính lại được",
+      "how": "Cách tính: xếp ứng viên theo mã; với người thứ i, lấy 8 byte đầu của HMAC-SHA256(hạt giống, \"drawId:i\") chia lấy dư cho số người còn lại, rồi rút người ở vị trí đó. Máy chủ không thể đổi hạt giống sau khi đã công bố mã khoá.",
+      "pool": "Danh sách ứng viên ({n} người, theo thứ tự tính)",
+      "notFound": "Không tìm thấy lượt bốc này (hoặc chưa quay xong).",
+      "loadFailed": "Không tải được dữ liệu. Thử lại sau nhé.",
+      "back": "Về Văn phòng"
     }
   }
 }

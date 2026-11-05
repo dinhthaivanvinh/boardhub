@@ -154,3 +154,38 @@ describe('office namespace', () => {
     expect(bad.json()).toEqual({ exists: false, status: null });
   });
 });
+
+describe('a draw over sockets', () => {
+  it('everyone gets the start (no seed), then the reveal; the record can be fetched for verification', async () => {
+    const host = await open((await guest('Host')).token);
+    const { session } = await ok<{ session: OfficeSnapshot }>(host, 'office:create', {
+      activityId: 'lucky-animal',
+    });
+    const code = session.code;
+    const stage = await open((await guest('Projector')).token);
+    await ok(stage, 'office:join', { code, screen: 'stage' });
+    for (const name of ['An', 'Bình', 'Chi']) {
+      const phone = await open((await guest(name)).token);
+      await ok(phone, 'office:join', { code, screen: 'participant' });
+    }
+
+    const startedOnStage = next(stage, 'office:draw-started');
+    const revealedOnStage = next(stage, 'office:draw-revealed');
+    await ok(host, 'office:action', { code, action: { kind: 'draw' } });
+    const started = await startedOnStage;
+    expect(started.draw.candidates).toHaveLength(3);
+    expect(JSON.stringify(started)).not.toMatch(/"seed"|"winners"/);
+
+    const revealed = await revealedOnStage;
+    expect(revealed.draw.drawId).toBe(started.draw.drawId);
+    expect(Date.now()).toBeLessThan(revealed.draw.revealAt); // the result arrives just before the landing
+
+    const res = await server.app.inject({
+      method: 'GET',
+      url: `/api/office/${code}/draws/${revealed.draw.drawId}`,
+    });
+    expect(res.json()).toEqual(revealed.draw);
+    const missing = await server.app.inject({ method: 'GET', url: `/api/office/${code}/draws/nope` });
+    expect(missing.statusCode).toBe(404);
+  }, 15_000);
+});

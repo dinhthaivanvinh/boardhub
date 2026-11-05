@@ -55,6 +55,9 @@ export function createOfficeNotifier(ns: OfficeNamespace): OfficeNotifier {
       for (const screen of SCREENS)
         ns.to(screenChannel(code, screen)).emit('office:activity', { code, seq, view: views[screen] });
     },
+    drawStarted: (code, seq, draw) => void ns.to(all(code)).emit('office:draw-started', { code, seq, draw }),
+    drawRevealed: (code, seq, draw) =>
+      void ns.to(all(code)).emit('office:draw-revealed', { code, seq, draw }),
     kicked(code, userId) {
       ns.to(user(userId)).emit('office:kicked', { code });
       // Their sockets stop receiving the session (works across servers through the Redis adapter).

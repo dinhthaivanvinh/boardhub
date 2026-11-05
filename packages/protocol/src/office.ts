@@ -67,6 +67,35 @@ export interface OfficeSessionInfo {
   hostId: string;
 }
 
+/** Someone in a draw, as they were when the draw started (so history does not change later). */
+export interface OfficeDrawCandidate {
+  id: string;
+  name: string;
+  avatar: Avatar;
+}
+
+/** A draw that has started: the result is fixed but secret; only its commitment is public (ADR-0006). */
+export interface OfficeDrawStarted {
+  drawId: string;
+  round: number;
+  mode: string;
+  n: number;
+  /** Sorted by id: the exact pool the winners are drawn from. */
+  candidates: OfficeDrawCandidate[];
+  /** sha256(seed), hex. */
+  commitment: string;
+  /** Server times (ms): build-up runs from startsAt, landing from revealAt. */
+  startsAt: number;
+  revealAt: number;
+}
+
+/** A revealed draw: anyone can check it with verifyDraw (docs/office/04 §5). */
+export interface OfficeDrawRecord extends OfficeDrawStarted {
+  seed: string;
+  winners: string[];
+  revealedAt: number;
+}
+
 export interface OfficeSnapshot extends OfficeSessionInfo {
   seq: number;
   serverTime: number;
@@ -74,6 +103,10 @@ export interface OfficeSnapshot extends OfficeSessionInfo {
   participants: OfficeParticipant[];
   /** The activity's view for your screen. */
   activity: unknown;
+  /** The draw running now, or the last one (revealed), so late joiners can catch up. */
+  draw: OfficeDrawStarted | OfficeDrawRecord | null;
+  /** Revealed draws of this session, newest first (at most 50). */
+  history: OfficeDrawRecord[];
 }
 
 export type OfficeHostOpInput = z.input<typeof OfficeHostOp>;
@@ -101,6 +134,8 @@ export interface OfficeServerToClientEvents {
   }) => void;
   'office:session': (e: { code: string; seq: number; session: OfficeSessionInfo }) => void;
   'office:activity': (e: { code: string; seq: number; view: unknown }) => void;
+  'office:draw-started': (e: { code: string; seq: number; draw: OfficeDrawStarted }) => void;
+  'office:draw-revealed': (e: { code: string; seq: number; draw: OfficeDrawRecord }) => void;
   /** Sent to the person who was removed by the host. */
   'office:kicked': (e: { code: string }) => void;
 }

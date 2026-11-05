@@ -25,16 +25,17 @@
 
 ## O3 — Thú may mắn (MVP)
 
-- [ ] Gói `@bg/office-lucky-animal`: cài đặt, hành động, view
-- [ ] Bốc thăm commit–reveal hai pha, đồng bộ thời gian; hiệu ứng `race` và `wheel`
-- [ ] Kết quả + pháo hoa, lịch sử, trang Kiểm chứng
-- [ ] E2E: 3 trình duyệt (chủ trì, sân khấu, người tham gia) cùng thấy một kết quả; trang kiểm chứng ✓
+- [x] Gói `@bg/office-lucky-animal`: cài đặt, hành động, view
+- [x] Bốc thăm commit–reveal hai pha, đồng bộ thời gian; hiệu ứng `race` và `wheel`
+- [x] Kết quả + pháo hoa, lịch sử, trang Kiểm chứng (`/office/s/:code/verify/:drawId`, tính lại ngay trong trình duyệt)
+- [x] E2E: chủ trì, 2 sân khấu (1 tắt hiệu ứng), 2 điện thoại cùng thấy một kết quả; trang kiểm chứng ✓
 - **Demo:** "Ai mua trà sữa?" với cả team, mọi màn hình về đích cùng lúc.
 
 ## O4 — Hoàn thiện trải nghiệm
 
 - [ ] Hiệu ứng `spotlight`, `claw`; thả cảm xúc; âm thanh (tắt mặc định); tải thẻ con vật PNG
-- [ ] Chế độ trình chiếu ở màn Chủ trì (phím Space)
+- [ ] Chế độ trình chiếu ở màn Chủ trì (phím Space đã quay được từ O3)
+- [ ] `wheel` > 60 người quay theo nhóm 12 (O-07 §3); `GET /api/office/:code/draws`
 
 ## O5 — Thêm hoạt động
 

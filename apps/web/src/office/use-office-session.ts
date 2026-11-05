@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AvatarData } from '@bg/avatars';
 import type {
+  OfficeDrawRecord,
+  OfficeDrawStarted,
   OfficeHostOpInput,
   OfficeParticipant,
   OfficeScreen,
@@ -126,6 +128,14 @@ export function useOfficeSession(code: string, screen: OfficeScreen, autoJoin: b
           })),
         'office:activity': (e: { code: string; seq: number; view: unknown }) =>
           step(e, (prev) => ({ ...prev, activity: e.view })),
+        'office:draw-started': (e: { code: string; seq: number; draw: OfficeDrawStarted }) =>
+          step(e, (prev) => ({ ...prev, draw: e.draw })),
+        'office:draw-revealed': (e: { code: string; seq: number; draw: OfficeDrawRecord }) =>
+          step(e, (prev) => ({
+            ...prev,
+            draw: e.draw,
+            history: [e.draw, ...prev.history.filter((d) => d.drawId !== e.draw.drawId)].slice(0, 50),
+          })),
         'office:kicked': (e: { code: string }) => {
           if (!mine(e)) return;
           joinedWith.current = null;

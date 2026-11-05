@@ -400,3 +400,29 @@ describe('office storage', () => {
     expect(row).toMatchObject({ status: 'open', title: 'Hai', closed_at: null });
   });
 });
+
+describe('office draws in Postgres', () => {
+  it('a revealed draw is stored once and read back exactly', async () => {
+    const repo = new PgOfficeRepo(db);
+    const code = randomUUID().slice(0, 6).toUpperCase();
+    const record = {
+      drawId: randomUUID(),
+      round: 1,
+      mode: 'race',
+      n: 1,
+      candidates: [{ id: 'a', name: 'An', avatar: { v: 1 } as never }],
+      commitment: 'c'.repeat(64),
+      seed: 'd'.repeat(64),
+      winners: ['a'],
+      startsAt: 1_000,
+      revealAt: 4_000,
+      revealedAt: 3_600,
+    };
+    expect(await repo.getDraw(code, record.drawId)).toBeNull();
+    await repo.drawRevealed(code, record);
+    await repo.drawRevealed(code, record); // a repeated reveal job writes nothing new
+    expect(await repo.getDraw(code, record.drawId)).toEqual(record);
+    expect(await repo.getDraw('OTHER1', record.drawId)).toBeNull();
+    expect(await repo.getDraw(code, 'not-a-uuid')).toBeNull();
+  });
+});

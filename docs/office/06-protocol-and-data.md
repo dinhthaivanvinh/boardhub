@@ -24,16 +24,16 @@ Màn `stage` và `host` không chiếm chỗ người tham gia (chủ trì muố
 
 ### 1.2 Server → client
 
-| Sự kiện                      | Payload                                                                         |
-| ---------------------------- | ------------------------------------------------------------------------------- |
-| `office:participant`         | `{ code, seq, participant }` (vào mới / đổi tên / đổi avatar / online-offline)  |
-| `office:participant-removed` | `{ code, seq, id, reason: 'left' \| 'kicked' }`                                 |
-| `office:session`             | `{ code, seq, session: { code, activityId, title, status, hostId } }`           |
-| `office:activity`            | `{ code, seq, view }` (view của hoạt động cho màn của bạn)                      |
-| `office:kicked`              | `{ code }` chỉ gửi cho người bị mời ra; socket của họ rời các kênh của phiên    |
-| `office:draw-started`        | `{ seq, drawId, mode, candidates, n, commitment, startsAt, revealAt }` — **O3** |
-| `office:draw-revealed`       | `{ seq, drawId, seed, winners, landAt }` — **O3**                               |
-| `office:reaction`            | `{ from, emoji }` (không có `seq`, không lưu) — **O4**                          |
+| Sự kiện                      | Payload                                                                                                                                 |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `office:participant`         | `{ code, seq, participant }` (vào mới / đổi tên / đổi avatar / online-offline)                                                          |
+| `office:participant-removed` | `{ code, seq, id, reason: 'left' \| 'kicked' }`                                                                                         |
+| `office:session`             | `{ code, seq, session: { code, activityId, title, status, hostId } }`                                                                   |
+| `office:activity`            | `{ code, seq, view }` (view của hoạt động cho màn của bạn)                                                                              |
+| `office:kicked`              | `{ code }` chỉ gửi cho người bị mời ra; socket của họ rời các kênh của phiên                                                            |
+| `office:draw-started`        | `{ code, seq, draw: { drawId, round, mode, n, candidates: [{ id, name, avatar }], commitment, startsAt, revealAt } }` — không có `seed` |
+| `office:draw-revealed`       | `{ code, seq, draw: DrawRecord }` = phần trên + `seed, winners, revealedAt`; landing kết thúc ở `revealAt + DRAW_LANDING_MS`            |
+| `office:reaction`            | `{ from, emoji }` (không có `seq`, không lưu) — **O4**                                                                                  |
 
 Kênh Socket.IO: `office:{code}` (mọi màn), `office:{code}:{screen}` (view theo màn), `office-user:{userId}`.
 Người tham gia chưa bấm "Vào phiên" xem trước bằng màn `stage`.
@@ -55,13 +55,13 @@ Người tham gia chưa bấm "Vào phiên" xem trước bằng màn `stage`.
 
 ## 2. REST
 
-| Method + path                         | Trả về                                                         |
-| ------------------------------------- | -------------------------------------------------------------- |
-| `GET /api/office/:code`               | `{ exists, status }` — ô nhập mã ở cổng thử mã phiên trước     |
-| `GET /api/me/avatar`                  | `{ avatar: Avatar \| null }`                                   |
-| `PUT /api/me/avatar`                  | body `{ avatar }` → `{ avatar }` (zod, chỉ catalog)            |
-| `GET /api/office/:code/draws`         | lịch sử lần bốc đã reveal (cả phiên đã đóng, trong 30 ngày)    |
-| `GET /api/office/:code/draws/:drawId` | `DrawRecord` đầy đủ cho trang kiểm chứng (404 nếu chưa reveal) |
+| Method + path                         | Trả về                                                               |
+| ------------------------------------- | -------------------------------------------------------------------- |
+| `GET /api/office/:code`               | `{ exists, status }` — ô nhập mã ở cổng thử mã phiên trước           |
+| `GET /api/me/avatar`                  | `{ avatar: Avatar \| null }`                                         |
+| `PUT /api/me/avatar`                  | body `{ avatar }` → `{ avatar }` (zod, chỉ catalog)                  |
+| `GET /api/office/:code/draws`         | lịch sử lần bốc đã reveal — **chưa làm** (lịch sử đi trong snapshot) |
+| `GET /api/office/:code/draws/:drawId` | `DrawRecord` đầy đủ cho trang kiểm chứng (404 nếu chưa reveal)       |
 
 ## 3. Mã lỗi
 
@@ -105,8 +105,9 @@ office_draws
   commitment      text       hex sha256(seed)
   seed            text       hex; chỉ trả ra API sau revealed_at
   winners         jsonb      [id]
-  started_at      timestamptz
-  revealed_at     timestamptz
+  starts_at       timestamptz  lúc build-up bắt đầu
+  reveal_at       timestamptz  lúc landing bắt đầu
+  revealed_at     timestamptz  lúc server công bố seed (= reveal_at − 400 ms)
 ```
 
 Xoá `office_*` cũ hơn 30 ngày bằng job dọn dẹp hằng ngày.

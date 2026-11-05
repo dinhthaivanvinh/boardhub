@@ -19,3 +19,7 @@ export const CreateClient = dynamic(() => import('./CreateSessionForm').then((m)
   ssr: false,
   loading: Connecting,
 });
+export const VerifyClient = dynamic(() => import('./VerifyScreen').then((m) => m.VerifyScreen), {
+  ssr: false,
+  loading: Connecting,
+});

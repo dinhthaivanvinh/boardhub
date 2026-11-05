@@ -8,6 +8,7 @@ import { errorKey } from '@/game-runtime/error-key';
 import { fetchMyAvatar } from '@/office/avatar-api';
 import { useOfficeSession } from '@/office/use-office-session';
 import { ensureToken, useSession } from '@/online/session';
+import { ParticipantDraw } from './ParticipantDraw';
 import { animalLabel, Connecting, OfficeError } from './shared';
 
 /** The phone: your animal, the "Join" button, then "waiting for the host" (docs/office/07 §6). */
@@ -74,6 +75,14 @@ export function ParticipantScreen({ code }: { code: string }) {
       )}
       {joined ? (
         <>
+          {session.draw && (
+            <ParticipantDraw
+              key={session.draw.drawId}
+              draw={session.draw}
+              serverOffset={api.serverOffset}
+              meId={session.me.id}
+            />
+          )}
           <p className="card w-full text-[var(--muted)]" role="status" data-testid="participant-status">
             ✓ {t('youAreIn')} · {t('count', { n: session.participants.length })}
             <br />

@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { Avatar } from '@bg/avatars/schema';
-import { OFFICE_MAX_PARTICIPANTS } from '@bg/protocol';
+import { DRAW_BUILD_UP_MS, DRAW_START_DELAY_MS, verifyDraw } from '@bg/office-core';
+import { OFFICE_MAX_PARTICIPANTS, type OfficeDrawRecord, type OfficeDrawStarted } from '@bg/protocol';
 import { ManualJobScheduler } from '../src/hub/scheduler';
 import { OFFICE_IDLE_MS, OfficeHub, type OfficeNotifier } from '../src/office/office-hub';
 import { OFFICE_ACTIVITIES } from '../src/office/registry';
@@ -35,6 +36,8 @@ function makeOfficeHub() {
     session: (code, seq, session) => events.push({ kind: 'session', code, seq, session }),
     activity: (code, seq, views) => events.push({ kind: 'activity', code, seq, views }),
     kicked: (code, userId) => events.push({ kind: 'kicked', code, userId }),
+    drawStarted: (code, seq, draw) => events.push({ kind: 'drawStarted', code, seq, draw }),
+    drawRevealed: (code, seq, draw) => events.push({ kind: 'drawRevealed', code, seq, draw }),
   };
   const jobs = new ManualJobScheduler();
   const live = new MemoryLiveStore();
@@ -51,12 +54,15 @@ function makeOfficeHub() {
     now: () => now,
     newCode: () => codes.shift() ?? 'ZZZZZZ',
   });
-  jobs.start((job) => (job.kind === 'office-expire' ? hub.runJob(job) : Promise.resolve()));
+  jobs.start((job) =>
+    job.kind === 'office-expire' || job.kind === 'office-reveal' ? hub.runJob(job) : Promise.resolve(),
+  );
   return {
     hub,
     events,
     jobs,
     repo,
+    now: () => now,
     advance: async (ms: number) => {
       now += ms;
       await jobs.advanceTo(now);
@@ -253,5 +259,105 @@ describe('expiry', () => {
   it('the portal can ask whether a code is an office session', async () => {
     expect(await t.hub.exists(code)).toEqual({ exists: true, status: 'open' });
     expect(await t.hub.exists('QQQQQQ')).toEqual({ exists: false, status: null });
+  });
+});
+
+describe('the fair draw', () => {
+  const people = [an, binh, { userId: 'u-chi', name: 'Chi' }];
+
+  beforeEach(async () => {
+    for (const p of people) await t.hub.join(p, { code, screen: 'participant' });
+    t.events.length = 0;
+  });
+
+  const started = () => t.events.find((e) => e.kind === 'drawStarted')?.draw as OfficeDrawStarted;
+  const revealed = () => t.events.find((e) => e.kind === 'drawRevealed')?.draw as OfficeDrawRecord;
+  const toReveal = async () => t.advance(DRAW_START_DELAY_MS + DRAW_BUILD_UP_MS);
+
+  it('starts with only a commitment, then reveals a verifiable result', async () => {
+    await t.hub.action(host, code, { kind: 'draw' });
+    const draw = started();
+    expect(draw.candidates.map((c) => c.id)).toEqual(['u-an', 'u-binh', 'u-chi']); // sorted, host left out
+    expect(draw.commitment).toMatch(/^[0-9a-f]{64}$/);
+    expect(draw).not.toHaveProperty('seed');
+    expect(draw).not.toHaveProperty('winners');
+    expect(draw.revealAt - draw.startsAt).toBe(DRAW_BUILD_UP_MS);
+    // A late joiner sees the running draw, but not the result.
+    const mid = await t.hub.resync(an, code, 'participant');
+    expect(mid.draw).not.toHaveProperty('seed');
+    expect(revealed()).toBeUndefined();
+
+    await toReveal();
+    const record = revealed();
+    expect(record.drawId).toBe(draw.drawId);
+    expect(record.winners).toHaveLength(1);
+    expect(verifyDraw({ ...record, candidates: record.candidates.map((c) => c.id) })).toBe(true);
+
+    // The seed never left the server before the reveal.
+    const before = t.events.slice(
+      0,
+      t.events.findIndex((e) => e.kind === 'drawRevealed'),
+    );
+    expect(JSON.stringify(before)).not.toContain(record.seed);
+
+    const after = await t.hub.resync(host, code, 'host');
+    expect(after.history).toEqual([record]);
+    expect(after.draw).toMatchObject({ seed: record.seed, winners: record.winners });
+    expect(after.activity).toMatchObject({
+      rounds: [{ drawId: record.drawId, winners: record.winners }],
+      candidates: 2,
+    });
+    expect(await t.hub.getDraw(code, record.drawId)).toEqual(record);
+    expect(await t.repo.getDraw(code, record.drawId)).toEqual(record);
+  });
+
+  it('one draw at a time; only the host; never more winners than people', async () => {
+    await expect(t.hub.action(an, code, { kind: 'draw' })).rejects.toThrow('office.not_host');
+    await t.hub.action(host, code, { kind: 'draw' });
+    await expect(t.hub.action(host, code, { kind: 'draw' })).rejects.toThrow('office.draw_running');
+    await toReveal();
+    await t.hub.action(host, code, { kind: 'configure', patch: { n: 3 } });
+    await expect(t.hub.action(host, code, { kind: 'draw' })).rejects.toThrow('office.not_enough'); // one already picked
+  });
+
+  it('a reveal that runs twice changes nothing', async () => {
+    await t.hub.action(host, code, { kind: 'draw' });
+    await toReveal();
+    const record = revealed();
+    await t.hub.runJob({ kind: 'office-reveal', code, drawId: record.drawId });
+    await t.hub.runJob({ kind: 'office-reveal', code, drawId: 'other' });
+    expect(t.events.filter((e) => e.kind === 'drawRevealed')).toHaveLength(1);
+    expect((await t.hub.resync(host, code, 'host')).history).toHaveLength(1);
+  });
+
+  it('the pool is frozen: someone kicked mid-draw can still win this one, a newcomer cannot', async () => {
+    await t.hub.action(host, code, { kind: 'configure', patch: { n: 3 } });
+    await t.hub.action(host, code, { kind: 'draw' });
+    await t.hub.host(host, { code, op: 'kick', id: 'u-chi' });
+    await t.hub.join({ userId: 'u-dung', name: 'Dũng' }, { code, screen: 'participant' });
+    await toReveal();
+    expect([...revealed().winners].sort()).toEqual(['u-an', 'u-binh', 'u-chi']);
+  });
+
+  it('closing the session mid-draw still reveals the result', async () => {
+    await t.hub.action(host, code, { kind: 'draw' });
+    await t.hub.host(host, { code, op: 'close' });
+    await toReveal();
+    expect(revealed()).toBeDefined();
+  });
+
+  it('several draws: everyone picked once with exclusions; rounds numbered', async () => {
+    const winners: string[] = [];
+    for (let i = 0; i < 3; i++) {
+      t.events.length = 0;
+      await t.hub.action(host, code, { kind: 'draw' });
+      expect(started().round).toBe(i + 1);
+      await toReveal();
+      winners.push(...revealed().winners);
+    }
+    expect([...winners].sort()).toEqual(['u-an', 'u-binh', 'u-chi']);
+    await expect(t.hub.action(host, code, { kind: 'draw' })).rejects.toThrow('office.not_enough');
+    await t.hub.action(host, code, { kind: 'reset-exclusions' });
+    await t.hub.action(host, code, { kind: 'draw' });
   });
 });

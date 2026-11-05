@@ -70,9 +70,26 @@ export interface OfficeSessionsTable {
   closed_at: Date | null;
 }
 
+export interface OfficeDrawsTable {
+  id: string;
+  session_code: string;
+  round: number;
+  mode: string;
+  n: number;
+  /** [{ id, name, avatar }] as they were when the draw started. */
+  candidates: ColumnType<unknown, string, string>;
+  commitment: string;
+  seed: string;
+  winners: ColumnType<string[], string, string>;
+  starts_at: Date;
+  reveal_at: Date;
+  revealed_at: Date;
+}
+
 export interface Database {
   users: UsersTable;
   office_sessions: OfficeSessionsTable;
+  office_draws: OfficeDrawsTable;
   ratings: RatingsTable;
   matches: MatchesTable;
   match_players: MatchPlayersTable;
@@ -175,6 +192,29 @@ const MIGRATIONS: Record<string, Migration> = {
       await db.schema.alterTable('match_players').dropColumn('rating_before').execute();
       await db.schema.alterTable('matches').dropColumn('ranked').execute();
       await db.schema.dropTable('ratings').execute();
+    },
+  },
+  '2026_11_09_001_office_draws': {
+    async up(db) {
+      await db.schema
+        .createTable('office_draws')
+        .addColumn('id', 'uuid', (c) => c.primaryKey())
+        .addColumn('session_code', 'text', (c) => c.notNull())
+        .addColumn('round', 'integer', (c) => c.notNull())
+        .addColumn('mode', 'text', (c) => c.notNull())
+        .addColumn('n', 'integer', (c) => c.notNull())
+        .addColumn('candidates', 'jsonb', (c) => c.notNull())
+        .addColumn('commitment', 'text', (c) => c.notNull())
+        .addColumn('seed', 'text', (c) => c.notNull())
+        .addColumn('winners', 'jsonb', (c) => c.notNull())
+        .addColumn('starts_at', 'timestamptz', (c) => c.notNull())
+        .addColumn('reveal_at', 'timestamptz', (c) => c.notNull())
+        .addColumn('revealed_at', 'timestamptz', (c) => c.notNull())
+        .execute();
+      await db.schema.createIndex('office_draws_session').on('office_draws').column('session_code').execute();
+    },
+    async down(db) {
+      await db.schema.dropTable('office_draws').execute();
     },
   },
   '2026_11_08_001_office_sessions': {

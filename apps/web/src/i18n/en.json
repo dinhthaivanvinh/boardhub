@@ -246,7 +246,9 @@
       "not_participant": "You are not in the session.",
       "unknown_activity": "Unknown activity.",
       "bad_settings": "Invalid settings.",
-      "bad_action": "Invalid action."
+      "bad_action": "Invalid action.",
+      "not_enough": "Not enough people to draw.",
+      "draw_running": "Already spinning — hang on."
     }
   },
   "profile": {
@@ -550,7 +552,6 @@
     "lockHint": "When locked, newcomers cannot join; people already in can come back.",
     "close": "End session",
     "closeConfirm": "End this session? Nobody can join any more.",
-    "drawSoon": "🎯 The draw (animal race, wheel) arrives in the next update. For now, invite everyone and watch their animals on the stage.",
     "youAreIn": "You are in",
     "waitHost": "Wait for the host to start!",
     "joinWith": "Join with this animal",
@@ -563,6 +564,51 @@
       "not_found": "Session not found. Check the code.",
       "closed": "This session has ended.",
       "locked": "The session is locked, or you were removed."
+    },
+    "draw": {
+      "heading": "Draw",
+      "mode": "Draw style",
+      "modes": {
+        "race": "Animal race",
+        "wheel": "Wheel"
+      },
+      "howMany": "How many",
+      "fewer": "One fewer",
+      "more": "One more",
+      "excludePrevious": "Don't pick people who were already picked",
+      "hostParticipates": "Host takes part too",
+      "spin": "Spin!",
+      "drawing": "Spinning…",
+      "drawingPhone": "Spinning… look at the screen!",
+      "pool": "{n, plural, =0 {Nobody to pick from} one {Picking from # person} other {Picking from # people}}",
+      "notEnough": "needs at least {n}",
+      "resetExclusions": "Put the {n} picked people back in",
+      "history": "Earlier rounds",
+      "picked": "Picked",
+      "round": "Round {n}",
+      "youWon": "You've been picked!",
+      "verify": "Verify",
+      "moreInDraw": "+ {n} more still in the draw (not on the track)"
+    },
+    "verify": {
+      "kicker": "Draw verification",
+      "title": "Round {round}: was it fair?",
+      "ok": "Fair — the result checks out",
+      "okDetail": "Your browser just recomputed the draw from scratch and got exactly these people.",
+      "bad": "Doesn't match",
+      "badDetail": "The commitment or the result does not match the published data.",
+      "winners": "Published result",
+      "steps": "Checks",
+      "stepCommitment": "The SHA-256 of the seed matches the commitment published before the spin",
+      "commitment": "Commitment (published before the spin)",
+      "seed": "Seed (published after the spin)",
+      "stepWinners": "Recomputing {n} of {total} candidates gives the same result",
+      "recomputed": "Recomputed",
+      "how": "How: sort the candidates by id; for pick i, take the first 8 bytes of HMAC-SHA256(seed, \"drawId:i\") modulo the number of people left, and take the person at that position. The server cannot change the seed once the commitment is published.",
+      "pool": "Candidates ({n}, in the order used)",
+      "notFound": "This draw wasn't found (or hasn't finished yet).",
+      "loadFailed": "Couldn't load the data. Please try again later.",
+      "back": "Back to Office"
     }
   }
 }

@@ -37,6 +37,10 @@ kết thúc đúng người thắng). Mọi số ngẫu nhiên của hiệu ứn
 Với nhiều người (> 60) `wheel` chuyển thành vòng quay theo **nhóm 12** rồi phóng to nhóm thắng (đọc được), `race`
 chỉ chạy 12 con có thứ hạng ngẫu nhiên trong build-up, người thắng luôn có mặt trong landing.
 
+> Trạng thái O3: `race` 12 con đã làm (người thắng không có trên đường đua thay chỗ con cuối lúc reveal). `wheel`
+> hiện vẫn một vòng: ≤ 16 người có con vật trên ô, ≤ 24 có tên, đông hơn chỉ còn ô màu (thẻ kết quả ghi tên).
+> Quay theo nhóm 12 dời sang O4.
+
 ## 4. Kết quả
 
 - Thẻ người thắng giữa màn: avatar 320 px, tên, tiêu đề phiên ("đi mua trà sữa 🧋"), pháo hoa (giống

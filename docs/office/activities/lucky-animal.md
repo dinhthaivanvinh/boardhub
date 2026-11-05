@@ -46,10 +46,12 @@ lại, cài đặt. Không có thông tin ẩn.
 
 ## 6. Mã lỗi riêng
 
-| Code                        | Khi nào              |
-| --------------------------- | -------------------- |
-| `lucky-animal.not_enough`   | Ứng viên còn lại < N |
-| `lucky-animal.bad_settings` | Cài đặt sai (zod)    |
+| Code                  | Khi nào              |
+| --------------------- | -------------------- |
+| `office.not_enough`   | Ứng viên còn lại < N |
+| `office.bad_settings` | Cài đặt sai (zod)    |
+
+Hai mã dùng chung của khu Văn phòng (O-06 §3), vì hoạt động khác (chia đội, bốc quà) cũng cần.
 
 ## 7. Trường hợp biên cần test
 

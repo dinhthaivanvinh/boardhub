@@ -276,6 +276,9 @@ importers:
       socket.io-client:
         specifier: 'catalog:'
         version: 4.8.4
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
       zustand:
         specifier: 'catalog:'
         version: 5.0.16(@types/react@19.3.0)(react@19.3.1)

@@ -118,6 +118,7 @@ describe('REST auth', () => {
       kind: 'registered',
       displayName: 'An',
       email: 'an@example.com',
+      admin: false,
     });
 
     const login = await api<AuthResponse>('POST', '/api/auth/login', {

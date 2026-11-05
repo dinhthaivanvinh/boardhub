@@ -4,6 +4,8 @@ import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { AccountLink } from '@/features/account/AccountLink';
+import { AdminLink } from '@/features/admin/AdminLink';
+import { BannedBanner } from '@/features/admin/BannedBanner';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
 import { MobileNav } from '@/features/settings/MobileNav';
 import { NavMenus } from '@/features/settings/NavMenus';
@@ -40,12 +42,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               </Link>
               <div className="flex items-center gap-2 sm:gap-4">
                 <NavMenus />
+                <AdminLink />
                 <AccountLink />
                 <LanguageSwitcher />
                 <MobileNav />
               </div>
             </div>
           </header>
+          <BannedBanner />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
           <footer className="border-t border-[var(--border)]">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-[var(--muted)]">

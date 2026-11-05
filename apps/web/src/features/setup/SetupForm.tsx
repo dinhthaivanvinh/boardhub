@@ -10,6 +10,7 @@ import { CLIENT_GAMES } from '@/games/client-registry';
 import { buildPlayUrl, type PlayMode } from '@/game-runtime/match-setup';
 import { errorKey } from '@/game-runtime/error-key';
 import { configOptionLabel } from '@/features/rules/config-labels';
+import { useGameDisabled } from '@/features/admin/games-status';
 import { getSocket, request } from '@/online/socket';
 import {
   TIME_CONTROL_PRESETS,
@@ -62,6 +63,7 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
   const [policy, setPolicy] = useState<DisconnectPolicy>('forfeit');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const paused = useGameDisabled(gameId);
 
   /** Creates a room on the game server and opens it (FR-ROOM-01). */
   const createRoom = async () => {
@@ -102,6 +104,11 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
       }}
     >
       <h2 className="text-xl font-semibold">{t('setup.title')}</h2>
+      {paused && (
+        <p role="status" className="game-paused-note" data-testid="game-paused">
+          {t('catalog.pausedNote')}
+        </p>
+      )}
 
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 text-sm font-medium">{t('setup.mode')}</legend>
@@ -247,7 +254,7 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
           {t(errorKey(error))}
         </p>
       )}
-      <button type="submit" className="btn btn-primary w-full py-3 text-base" disabled={busy}>
+      <button type="submit" className="btn btn-primary w-full py-3 text-base" disabled={busy || paused}>
         {busy
           ? t('online.creating')
           : mode === 'online'

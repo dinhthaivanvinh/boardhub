@@ -24,6 +24,8 @@ export interface MatchmakerOptions {
   now?: () => number;
   /** Shuffles who sits first; injectable for tests. */
   coinFlip?: () => boolean;
+  /** Admin switch (FR-CAT-03): nobody can queue for, or be paired in, a turned-off game. */
+  isGameEnabled?: (gameId: string) => Promise<boolean>;
 }
 
 /** Ranked players are only paired within this many rating points; it widens the longer they wait. */
@@ -57,6 +59,8 @@ export class Matchmaker {
     if (!def) throw new HubError('game.not_found');
     // Quick match pairs two people; games for more players need a room.
     if (def.meta.minPlayers !== 2) throw new HubError('queue.unsupported');
+    if (this.o.isGameEnabled && !(await this.o.isGameEnabled(request.gameId)))
+      throw new HubError('game.disabled');
     const rating = this.o.ratings ? await this.o.ratings.ratingOf(actor.userId, request.gameId) : 1500;
     const entry: QueueEntry = { userId: actor.userId, name: actor.name, rating, joinedAt: this.now() };
     const bucket = bucketOf(request);
@@ -75,6 +79,8 @@ export class Matchmaker {
 
   private async tryMatch(bucket: string): Promise<void> {
     const request = parseBucket(bucket);
+    // Players already waiting when a game is turned off just keep waiting (or leave).
+    if (this.o.isGameEnabled && !(await this.o.isGameEnabled(request.gameId))) return;
     const pairs = await this.o.store.withLock(`queue:${bucket}`, async () => {
       const entries = (await this.o.store.queueEntries(bucket)).sort((a, b) => a.joinedAt - b.joinedAt);
       const now = this.now();

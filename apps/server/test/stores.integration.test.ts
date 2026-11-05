@@ -13,6 +13,7 @@ import { buildServer } from '../src/app';
 import { InlineBotRunner } from '../src/bots/bot-runner';
 import { loadConfig } from '../src/config';
 import { createDb, migrateToLatest } from '../src/db/database';
+import { PgAdminRepo } from '../src/db/pg-admin-repo';
 import { PgHistoryRepo, PgOfficeRepo, PgUserRepo } from '../src/db/pg-repos';
 import { RedisOfficeStore, type OfficeSessionRecord } from '../src/office/store';
 import type { Room } from '../src/domain/types';
@@ -430,5 +431,79 @@ describe('office draws in Postgres', () => {
     expect(await repo.listDraws(code, 10)).toEqual([second, record]);
     expect(await repo.listDraws(code, 1)).toEqual([second]);
     expect(await repo.listDraws('OTHER1', 10)).toEqual([]);
+  });
+});
+
+describe('admin storage in Postgres', () => {
+  it('stores game switches, reports and sanctions', async () => {
+    const repo = new PgAdminRepo(db);
+    const users = new PgUserRepo(db);
+    const mk = async (name: string) =>
+      (
+        await users.create({
+          id: randomUUID(),
+          kind: 'guest',
+          displayName: name,
+          email: null,
+          passwordHash: null,
+        })
+      ).id;
+    const [reporter, target, admin] = [await mk('R'), await mk('T'), await mk('A')];
+    const game = `test-${randomUUID().slice(0, 8)}`;
+
+    await repo.setGameEnabled(game, false, admin, 1_000);
+    await repo.setGameEnabled(game, true, admin, 2_000);
+    expect((await repo.gameSettings()).find((g) => g.gameId === game)).toEqual({
+      gameId: game,
+      enabled: true,
+      updatedAt: 2_000,
+    });
+
+    const id = randomUUID();
+    const now = Date.now();
+    await repo.createReport({
+      id,
+      reporterId: reporter,
+      targetId: target,
+      reason: 'abuse',
+      note: 'rude',
+      roomCode: 'ABC123',
+      evidence: [{ text: 'bad words', at: now - 10 }],
+      createdAt: now,
+    });
+    expect(await repo.hasOpenReport(reporter, target)).toBe(true);
+    expect(await repo.countReportsBy(reporter, now - 1)).toBe(1);
+    expect(await repo.countReportsBy(reporter, now + 1)).toBe(0);
+    expect((await repo.countOpenByTarget([target])).get(target)).toBe(1);
+    expect((await repo.listReports('open', 500)).some((r) => r.id === id)).toBe(true);
+
+    expect(await repo.resolveReport(id, 'mute', admin, now + 5)).toBe(true);
+    expect(await repo.resolveReport(id, 'ban', admin, now + 6)).toBe(false);
+    expect(await repo.getReport(id)).toEqual({
+      id,
+      reporterId: reporter,
+      targetId: target,
+      reason: 'abuse',
+      note: 'rude',
+      roomCode: 'ABC123',
+      evidence: [{ text: 'bad words', at: now - 10 }],
+      status: 'resolved',
+      action: 'mute',
+      createdAt: now,
+      resolvedAt: now + 5,
+      resolvedBy: admin,
+    });
+    expect(await repo.hasOpenReport(reporter, target)).toBe(false);
+
+    await repo.setSanctions(target, { mutedUntil: now + 60_000 }, admin, now);
+    await repo.setSanctions(target, { bannedUntil: now + 120_000 }, admin, now);
+    expect((await repo.getSanctions([target])).get(target)).toEqual({
+      userId: target,
+      mutedUntil: now + 60_000,
+      bannedUntil: now + 120_000,
+    });
+    expect((await repo.listSanctioned(now, 500)).some((s) => s.userId === target)).toBe(true);
+    await repo.setSanctions(target, { mutedUntil: null, bannedUntil: null }, admin, now);
+    expect((await repo.listSanctioned(now, 500)).some((s) => s.userId === target)).toBe(false);
   });
 });

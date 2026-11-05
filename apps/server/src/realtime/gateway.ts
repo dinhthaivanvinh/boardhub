@@ -61,11 +61,18 @@ export function attachGateway(
   auth: AuthService,
   log: Logger,
   matchmaker?: Matchmaker,
+  moderation?: { isMuted(userId: string): Promise<boolean> },
 ) {
   io.use(async (socket, next) => {
     const { token, protocolVersion } = (socket.handshake.auth ?? {}) as Partial<HandshakeAuth>;
     if (protocolVersion !== PROTOCOL_VERSION) return next(new Error('protocol.version'));
-    const user = await auth.authenticate(token).catch(() => null);
+    let user;
+    try {
+      user = await auth.authenticate(token);
+    } catch (err) {
+      // A banned account gets its own code, so the page can say why.
+      return next(new Error(err instanceof HubError ? err.code : 'auth.required'));
+    }
     if (!user) return next(new Error('auth.required'));
     socket.data.actor = { userId: user.id, name: user.displayName };
     next();
@@ -123,7 +130,10 @@ export function attachGateway(
     on('move:submit', MoveSubmit, (input) => hub.submitMove(actor, input));
     on('match:action', MatchAction, ({ matchId, action }) => hub.matchAction(actor, matchId, action));
     on('match:resync', MatchRef, async ({ matchId }) => ({ match: await hub.resync(actor, matchId) }));
-    on('chat:send', ChatSend, ({ roomId, text }) => hub.chat(actor, roomId, text));
+    on('chat:send', ChatSend, async ({ roomId, text }) => {
+      if (await moderation?.isMuted(actor.userId)) throw new HubError('chat.muted');
+      await hub.chat(actor, roomId, text);
+    });
     on('queue:join', QueueJoin, async (input) => {
       if (!matchmaker) throw new HubError('queue.unsupported');
       await matchmaker.join(actor, input);

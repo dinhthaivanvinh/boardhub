@@ -10,6 +10,7 @@ import { useRoom } from '@/online/use-room';
 import { ChatPanel } from './ChatPanel';
 import { Lobby } from './Lobby';
 import { OnlineMatchView } from './OnlineMatchView';
+import { ReportButton } from './ReportButton';
 import { timeControlLabel } from './shared';
 
 export function RoomScreen({ code }: { code: string }) {
@@ -63,6 +64,7 @@ export function RoomScreen({ code }: { code: string }) {
               ]}
             />
           )}
+          <ReportButton room={room} chat={api.chat} myUserId={api.userId} labels={api.labels} />
           <button
             type="button"
             className="btn"

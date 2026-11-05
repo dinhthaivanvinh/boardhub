@@ -57,10 +57,48 @@ matches.ranked                     boolean
 match_players.rating_before/after  double (ván tính điểm)
 ```
 
-Không có `DATABASE_URL`: `MemoryRatingRepo`. Cài đặt game của admin sẽ thêm ở M4b.
+Không có `DATABASE_URL`: `MemoryRatingRepo`.
+
+Thêm ở M4b (migration `2026_11_10_001_admin`, repo `apps/server/src/db/pg-admin-repo.ts`):
+
+```
+game_settings                      admin bật/tắt game; không có dòng = đang bật
+  game_id PK, enabled, updated_at, updated_by (uuid admin)
+
+player_reports
+  id uuid PK, reporter_id → users, target_id → users (cascade)
+  reason text, note text, room_code text null
+  evidence jsonb       [{ text, at }] tin nhắn của người bị báo cáo trong phòng lúc báo cáo (chat chỉ sống 24 giờ ở Redis)
+  status 'open' | 'resolved', action 'dismiss' | 'mute' | 'ban' | null
+  created_at, resolved_at, resolved_by
+  INDEX (status, created_at desc), (target_id), (reporter_id, created_at)
+
+user_sanctions                     PK user_id → users (cascade)
+  muted_until, banned_until timestamptz null    đã qua = hết hạn; "đến khi gỡ" = năm 9999
+  updated_at, updated_by
+```
+
+Không có `DATABASE_URL`: `MemoryAdminRepo`.
 
 Không có `DATABASE_URL` thì server dùng bản trong bộ nhớ (`MemoryUserRepo`, `MemoryHistoryRepo`): chỉ dành cho dev,
 mất khi khởi động lại. Ván `local` và ván với bot ở trình duyệt không lưu lên server.
+
+## 1b. Lịch sử ván trên trình duyệt (IndexedDB)
+
+Code: `apps/web/src/game-runtime/local-history.ts`. Database `bg-local`, object store `matches` (keyPath `id`, index `endedAt`).
+Ván với máy và 2 người cùng máy được lưu **khi kết thúc** (đi lại rồi kết thúc lần nữa thì ghi đè cùng `id`); giữ 200 ván mới nhất.
+
+```
+LocalMatchRecord
+  id            32 ký tự hex (route /replay/local/[id])
+  gameId, rulesVersion, mode 'bot' | 'local'
+  config, seed, moves [{ seat, move }]     đủ để dựng lại mọi thế cờ, như ván online (§3)
+  players [{ seat, botLevel | null }]       null = người chơi ở máy này
+  result GameResult (kể cả đầu hàng), startedAt, endedAt
+```
+
+Chỉ ở trình duyệt này, không gửi lên server; không có IndexedDB (một số chế độ ẩn danh) thì không lưu và danh sách trống.
+`rulesVersion` khác bản hiện tại mà không dựng lại được thì màn xem lại báo "luật chơi có thể đã thay đổi".
 
 ## 2. Redis (live store)
 

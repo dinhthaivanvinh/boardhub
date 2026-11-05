@@ -10,6 +10,7 @@ import {
   type Seat,
 } from '@bg/engine';
 import type { BotLevel } from '@bg/bots';
+import { newLocalMatchId } from './local-history';
 import type { SeatController } from './match-setup';
 
 export interface LocalSnapshot<S> {
@@ -31,6 +32,9 @@ export class LocalMatch<S, M, C> {
   private snap: LocalSnapshot<S>;
   private readonly listeners = new Set<() => void>();
   readonly config: C;
+  /** Identity in the browser's history of local games (local-history.ts). */
+  readonly id = newLocalMatchId();
+  readonly startedAt = Date.now();
 
   constructor(
     readonly def: GameDefinition<S, M, C>,

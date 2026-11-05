@@ -3,11 +3,15 @@ import { createAdapter } from '@socket.io/redis-adapter';
 import Fastify from 'fastify';
 import { Redis } from 'ioredis';
 import { Server } from 'socket.io';
+import { MemoryAdminRepo, type AdminRepo } from './admin/admin-repo';
+import { registerAdminRoutes } from './admin/admin-routes';
+import { AdminService } from './admin/admin-service';
 import { AuthService } from './auth/auth-service';
 import { TokenService } from './auth/tokens';
 import { InlineBotRunner, WorkerBotRunner, type BotRunner } from './bots/bot-runner';
 import type { ServerConfig } from './config';
 import { createDb, migrateToLatest } from './db/database';
+import { PgAdminRepo } from './db/pg-admin-repo';
 import { PgHistoryRepo, PgOfficeRepo, PgRatingRepo, PgUserRepo } from './db/pg-repos';
 import { registerCompetitiveRoutes } from './http/competitive-routes';
 import { Matchmaker } from './matchmaking/matchmaker';
@@ -42,6 +46,7 @@ export interface ServerOverrides {
   ratings?: RatingRepo;
   officeStore?: OfficeStore;
   officeRepo?: OfficeRepo;
+  adminRepo?: AdminRepo;
   /** How often waiting quick-match players are re-checked (widening rating windows). */
   matchSweepMs?: number;
 }
@@ -64,18 +69,21 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   let history = overrides.history;
   let ratingRepo = overrides.ratings;
   let officeRepo = overrides.officeRepo;
-  if ((!users || !history || !ratingRepo || !officeRepo) && config.DATABASE_URL) {
+  let adminRepo = overrides.adminRepo;
+  if ((!users || !history || !ratingRepo || !officeRepo || !adminRepo) && config.DATABASE_URL) {
     const db = createDb(config.DATABASE_URL);
     await migrateToLatest(db);
     users ??= new PgUserRepo(db);
     history ??= new PgHistoryRepo(db);
     ratingRepo ??= new PgRatingRepo(db);
     officeRepo ??= new PgOfficeRepo(db);
+    adminRepo ??= new PgAdminRepo(db);
     cleanups.push(() => db.destroy());
   }
   users ??= new MemoryUserRepo();
   history ??= new MemoryHistoryRepo();
   ratingRepo ??= new MemoryRatingRepo();
+  adminRepo ??= new MemoryAdminRepo();
   const ratings = new RatingService(ratingRepo);
 
   const io: IoServer = new Server(app.server, {
@@ -117,6 +125,27 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
       : new TimerJobScheduler(Date.now, onJobError));
   const log = app.log;
 
+  // Admin and moderation (M4b). A ban drops the user's live connections right away.
+  let matchmakerRef: Matchmaker | null = null;
+  const admin = new AdminService({
+    repo: adminRepo,
+    users,
+    gameIds: Object.keys(GAME_DEFS),
+    adminEmails: config.adminEmails,
+    roomChat: async (code) => {
+      const roomId = await store.roomIdByCode(code);
+      return roomId ? store.getChat(roomId) : [];
+    },
+    onBanned: async (userId) => {
+      io.in('user:' + userId).disconnectSockets(true);
+      io.of('/office')
+        .in('office-user:' + userId)
+        .disconnectSockets(true);
+      await matchmakerRef?.leave(userId);
+    },
+  });
+  const isGameEnabled = (gameId: string) => admin.isGameEnabled(gameId);
+
   const hub = new GameHub({
     store,
     history,
@@ -128,10 +157,15 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     ratings,
     graceMs: config.GRACE_MS,
     botDelayMs: config.BOT_DELAY_MS,
+    isGameEnabled,
   });
-  const auth = new AuthService(users, new TokenService(config.JWT_SECRET));
+  const auth = new AuthService(users, new TokenService(config.JWT_SECRET), {
+    isBanned: (id) => admin.isBanned(id),
+    isAdmin: (u) => admin.isAdmin(u),
+  });
   registerRoutes(app, auth, new HistoryService(history, users), users);
   registerCompetitiveRoutes(app, { auth, ratings: ratingRepo, users, store, games: GAME_DEFS });
+  registerAdminRoutes(app, auth, admin);
   const matchmaker = new Matchmaker({
     store,
     hub,
@@ -139,8 +173,10 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     ratings,
     log,
     notify: (userId, match) => io.to(`user:${userId}`).emit('queue:matched', match),
+    isGameEnabled,
   });
-  attachGateway(io, hub, auth, log, matchmaker);
+  matchmakerRef = matchmaker;
+  attachGateway(io, hub, auth, log, matchmaker, admin);
 
   // Office area: its own hub and namespace on the same infrastructure (ADR-0005).
   const officeNs = io.of('/office') as unknown as OfficeNamespace;
@@ -176,5 +212,5 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     for (const fn of cleanups.reverse()) await fn().catch(() => undefined);
   };
 
-  return { app, io, hub, officeHub, auth, matchmaker, ratings, close };
+  return { app, io, hub, officeHub, auth, admin, matchmaker, ratings, close };
 }

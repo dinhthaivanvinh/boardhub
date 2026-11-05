@@ -9,6 +9,10 @@ const PROTOCOL_NAMESPACES = new Set([
   'protocol',
   'queue',
   'office',
+  'admin',
+  'chat',
+  'report',
+  'user',
 ]);
 
 /**

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import type { GameDefinition } from '@bg/engine';
 import type { GameId } from '@/games/catalog';
 import { requestBotMove } from './bot-client';
+import { saveLocalMatch, toLocalRecord } from './local-history';
 import { LocalMatch, newSeed } from './local-match';
 import type { SeatController } from './match-setup';
 
@@ -21,7 +22,35 @@ export function useLocalMatch<S, M, C>(
   const [match, setMatch] = useState(() => new LocalMatch(def, config, controllers, newSeed()));
   const snapshot = useSyncExternalStore(match.subscribe, match.getSnapshot, match.getSnapshot);
   const [error, setError] = useState<string | null>(null);
+  /** The id under which the finished game was saved in this browser (for "Xem lại ván"). */
+  const [savedId, setSavedId] = useState<string | null>(null);
   const botTurn = match.botToMove();
+
+  // A finished game is kept in this browser; after an undo and a new ending it is saved again.
+  const { result, moves } = snapshot;
+  useEffect(() => {
+    if (!result) return;
+    let cancelled = false;
+    saveLocalMatch(
+      toLocalRecord({
+        id: match.id,
+        gameId,
+        rulesVersion: def.meta.rulesVersion,
+        config: match.config,
+        seed: match.seed,
+        controllers,
+        moves,
+        result,
+        startedAt: match.startedAt,
+        endedAt: Date.now(),
+      }),
+    )
+      .then(() => !cancelled && setSavedId(match.id))
+      .catch((err: unknown) => console.warn('could not save the game in this browser', err));
+    return () => {
+      cancelled = true;
+    };
+  }, [match, result, moves, gameId, def, controllers]);
 
   // When it is a bot's turn, ask the worker for a move. Replies for an outdated position are dropped.
   useEffect(() => {
@@ -78,6 +107,7 @@ export function useLocalMatch<S, M, C>(
 
   return {
     snapshot,
+    replayHref: result && savedId === match.id ? `/replay/local/${match.id}` : null,
     error,
     botThinking: botTurn !== null,
     humanToMove: match.humanToMove(),

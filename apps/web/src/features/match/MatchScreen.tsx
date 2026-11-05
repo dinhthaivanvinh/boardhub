@@ -202,6 +202,12 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           </label>
         </fieldset>
 
+        {match.replayHref && (
+          <Link href={match.replayHref} className="btn" data-testid="local-replay">
+            {t('room.replay')}
+          </Link>
+        )}
+
         <Link href={`/games/${gameId}`} className="text-sm underline underline-offset-4">
           {t('match.actions.changeSetup')}
         </Link>

@@ -17,10 +17,16 @@ const EnvSchema = z.object({
   BOT_DELAY_MS: z.coerce.number().int().min(0).default(400),
   /** 0 = run bots on the main thread. */
   BOT_WORKERS: z.coerce.number().int().min(0).default(2),
+  /** Comma-separated emails of registered accounts that may open /admin (M4b). */
+  ADMIN_EMAILS: z.string().default(''),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
 });
 
-export type ServerConfig = z.infer<typeof EnvSchema> & { JWT_SECRET: string; corsOrigins: string[] | true };
+export type ServerConfig = z.infer<typeof EnvSchema> & {
+  JWT_SECRET: string;
+  corsOrigins: string[] | true;
+  adminEmails: string[];
+};
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   const parsed = EnvSchema.parse(env);
@@ -34,5 +40,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     ...parsed,
     JWT_SECRET: parsed.JWT_SECRET ?? DEV_SECRET,
     corsOrigins: parsed.CORS_ORIGIN ? parsed.CORS_ORIGIN.split(',').map((s) => s.trim()) : true,
+    adminEmails: parsed.ADMIN_EMAILS.split(',')
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean),
   };
 }

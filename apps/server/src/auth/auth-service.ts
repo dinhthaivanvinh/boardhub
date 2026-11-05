@@ -49,15 +49,26 @@ export function randomGuestName(rand: () => number = Math.random): string {
   return `${pick(GUEST_NOUNS)} ${pick(GUEST_ADJECTIVES)} ${Math.floor(rand() * 9000 + 1000)}`;
 }
 
-export function toPublicUser(u: UserRecord): PublicUser {
-  return { id: u.id, kind: u.kind, displayName: u.displayName, email: u.email };
+export function toPublicUser(u: UserRecord, admin = false): PublicUser {
+  return { id: u.id, kind: u.kind, displayName: u.displayName, email: u.email, admin };
+}
+
+/** Moderation hooks (M4b): banned users cannot sign in; admins are flagged for the web. */
+export interface AuthPolicy {
+  isBanned(userId: string): Promise<boolean>;
+  isAdmin(user: UserRecord): boolean;
 }
 
 export class AuthService {
   constructor(
     private readonly users: UserRepo,
     private readonly tokens: TokenService,
+    private readonly policy?: AuthPolicy,
   ) {}
+
+  publicUser(u: UserRecord): PublicUser {
+    return toPublicUser(u, this.policy?.isAdmin(u) ?? false);
+  }
 
   async guest(displayName?: string): Promise<AuthResponse> {
     const user = await this.users.create({
@@ -96,29 +107,32 @@ export class AuthService {
     const user = await this.users.findByEmail(input.email);
     const ok = user?.passwordHash ? await verifyPassword(input.password, user.passwordHash) : false;
     if (!user || !ok) throw new HubError('auth.invalid_credentials');
+    if (await this.policy?.isBanned(user.id)) throw new HubError('auth.banned');
     return this.respond(user);
   }
 
   async me(userId: string): Promise<PublicUser> {
     const user = await this.users.findById(userId);
     if (!user) throw new HubError('auth.required');
-    return toPublicUser(user);
+    return this.publicUser(user);
   }
 
   async rename(userId: string, displayName: string): Promise<PublicUser> {
     const user = await this.users.update(userId, { displayName });
     if (!user) throw new HubError('auth.required');
-    return toPublicUser(user);
+    return this.publicUser(user);
   }
 
-  /** Resolves a bearer token to a user, or null. */
+  /** Resolves a bearer token to a user, or null. Throws auth.banned for a banned account. */
   async authenticate(token: string | undefined): Promise<UserRecord | null> {
     if (!token) return null;
     const claims = await this.tokens.verify(token);
-    return claims ? this.users.findById(claims.userId) : null;
+    const user = claims ? await this.users.findById(claims.userId) : null;
+    if (user && (await this.policy?.isBanned(user.id))) throw new HubError('auth.banned');
+    return user;
   }
 
   private async respond(user: UserRecord): Promise<AuthResponse> {
-    return { token: await this.tokens.sign({ userId: user.id }), user: toPublicUser(user) };
+    return { token: await this.tokens.sign({ userId: user.id }), user: this.publicUser(user) };
   }
 }

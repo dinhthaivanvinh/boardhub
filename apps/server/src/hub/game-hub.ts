@@ -64,6 +64,8 @@ export interface HubOptions {
   graceMs?: number;
   /** Pause before a bot moves, so its moves are visible (rule B7). */
   botDelayMs?: number;
+  /** Admin switch (FR-CAT-03): a turned-off game gets no new rooms or matches. Default: all on. */
+  isGameEnabled?: (gameId: string) => Promise<boolean>;
 }
 
 export interface CreateRoomInput {
@@ -108,6 +110,7 @@ export class GameHub {
 
   async createRoom(actor: Actor, input: CreateRoomInput): Promise<RoomSnapshot> {
     const def = this.game(input.gameId);
+    await this.requireEnabled(input.gameId);
     const config = def.configSchema.safeParse(input.config ?? {});
     if (!config.success) throw new HubError('invalid.payload', { field: 'config' });
     const seats: Room['seats'] = Array.from({ length: def.meta.maxPlayers }, () => null);
@@ -231,6 +234,8 @@ export class GameHub {
       if (gaps || players < def.meta.minPlayers) throw new HubError('room.not_ready', { reason: 'seats' });
       const unready = room.seats.some((s) => s?.kind === 'user' && s.userId !== actor.userId && !s.ready);
       if (unready) throw new HubError('room.not_ready', { reason: 'ready' });
+      // Matches already running finish normally; only new ones are refused.
+      await this.requireEnabled(room.gameId);
       await this.beginMatch(room, players);
     });
   }
@@ -714,6 +719,10 @@ export class GameHub {
     room.updatedAt = this.now();
     await this.o.store.saveRoom(room);
     this.o.notifier.roomUpdated(toRoomSnapshot(room));
+  }
+
+  private async requireEnabled(gameId: string) {
+    if (this.o.isGameEnabled && !(await this.o.isGameEnabled(gameId))) throw new HubError('game.disabled');
   }
 
   private requireHost(room: Room, actor: Actor) {

@@ -22,6 +22,8 @@ export interface PublicUser {
   kind: UserKind;
   displayName: string;
   email: string | null;
+  /** Can open /admin (server config ADMIN_EMAILS). */
+  admin: boolean;
 }
 
 export interface AuthResponse {

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { GameMeta } from '@/features/home/GameMeta';
+import { GameStatusChip } from '@/features/admin/GameStatusChip';
 import { FeatureIcon, type FeatureId } from '@/features/home/icons';
 import { JoinRoomForm } from '@/features/home/JoinRoomForm';
 import { GAME_IDS, GAMES, UPCOMING_GAMES } from '@/games/catalog';
@@ -87,7 +88,10 @@ export default async function BoardGamesPage() {
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
-                  <h3 className="text-xl font-semibold">{t(`games.${id}.name`)}</h3>
+                  <h3 className="flex items-center gap-2 text-xl font-semibold">
+                    {t(`games.${id}.name`)}
+                    <GameStatusChip gameId={id} />
+                  </h3>
                   <p className="mt-2 flex-1 text-sm text-[var(--muted)]">
                     {t(`games.${id}.shortDescription`)}
                   </p>

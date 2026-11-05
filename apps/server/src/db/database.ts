@@ -86,7 +86,43 @@ export interface OfficeDrawsTable {
   revealed_at: Date;
 }
 
+/** Admin switch per game (M4b). No row = enabled. */
+export interface GameSettingsTable {
+  game_id: string;
+  enabled: boolean;
+  updated_at: Date;
+  updated_by: string | null;
+}
+
+export interface PlayerReportsTable {
+  id: string;
+  reporter_id: string;
+  target_id: string;
+  reason: string;
+  note: string;
+  room_code: string | null;
+  /** The target's chat lines in that room at report time: [{ text, at }]. */
+  evidence: ColumnType<unknown, string, string>;
+  status: 'open' | 'resolved';
+  action: string | null;
+  created_at: Date;
+  resolved_at: Date | null;
+  resolved_by: string | null;
+}
+
+/** Current mute/ban per user; a past end time means the sanction is over. */
+export interface UserSanctionsTable {
+  user_id: string;
+  muted_until: Date | null;
+  banned_until: Date | null;
+  updated_at: Date;
+  updated_by: string | null;
+}
+
 export interface Database {
+  game_settings: GameSettingsTable;
+  player_reports: PlayerReportsTable;
+  user_sanctions: UserSanctionsTable;
   users: UsersTable;
   office_sessions: OfficeSessionsTable;
   office_draws: OfficeDrawsTable;
@@ -232,6 +268,55 @@ const MIGRATIONS: Record<string, Migration> = {
     },
     async down(db) {
       await db.schema.dropTable('office_sessions').execute();
+    },
+  },
+  '2026_11_10_001_admin': {
+    async up(db) {
+      await db.schema
+        .createTable('game_settings')
+        .addColumn('game_id', 'text', (c) => c.primaryKey())
+        .addColumn('enabled', 'boolean', (c) => c.notNull())
+        .addColumn('updated_at', 'timestamptz', (c) => c.notNull())
+        .addColumn('updated_by', 'uuid')
+        .execute();
+      await db.schema
+        .createTable('player_reports')
+        .addColumn('id', 'uuid', (c) => c.primaryKey())
+        .addColumn('reporter_id', 'uuid', (c) => c.notNull().references('users.id').onDelete('cascade'))
+        .addColumn('target_id', 'uuid', (c) => c.notNull().references('users.id').onDelete('cascade'))
+        .addColumn('reason', 'text', (c) => c.notNull())
+        .addColumn('note', 'text', (c) => c.notNull())
+        .addColumn('room_code', 'text')
+        .addColumn('evidence', 'jsonb', (c) => c.notNull())
+        .addColumn('status', 'text', (c) => c.notNull())
+        .addColumn('action', 'text')
+        .addColumn('created_at', 'timestamptz', (c) => c.notNull())
+        .addColumn('resolved_at', 'timestamptz')
+        .addColumn('resolved_by', 'uuid')
+        .execute();
+      await db.schema
+        .createIndex('player_reports_status')
+        .on('player_reports')
+        .columns(['status', 'created_at desc'])
+        .execute();
+      await db.schema.createIndex('player_reports_target').on('player_reports').column('target_id').execute();
+      await db.schema
+        .createIndex('player_reports_reporter')
+        .on('player_reports')
+        .columns(['reporter_id', 'created_at'])
+        .execute();
+      await db.schema
+        .createTable('user_sanctions')
+        .addColumn('user_id', 'uuid', (c) => c.primaryKey().references('users.id').onDelete('cascade'))
+        .addColumn('muted_until', 'timestamptz')
+        .addColumn('banned_until', 'timestamptz')
+        .addColumn('updated_at', 'timestamptz', (c) => c.notNull())
+        .addColumn('updated_by', 'uuid')
+        .execute();
+    },
+    async down(db) {
+      for (const t of ['user_sanctions', 'player_reports', 'game_settings'])
+        await db.schema.dropTable(t).execute();
     },
   },
   '2026_11_07_001_avatars': {

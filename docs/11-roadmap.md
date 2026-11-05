@@ -37,14 +37,14 @@
 - [x] `@bg/game-xiangqi` (đủ luật đi quân, lộ mặt tướng, chiếu bí/hết nước; lặp lại 3 lần và 60 nước không ăn quân = hòa, xem spec)
 - [x] Xem lại ván (`/replay/[id]`), lịch sử và thống kê (`/profile`), API `GET /api/me/matches`, `GET /api/matches/:id`
 - [ ] Luật chiếu/đuổi liên tục chính thức của Cờ tướng (hiện: lặp lại 3 lần = hòa)
-- [ ] Lưu ván local / với máy vào IndexedDB (hiện: không lưu)
+- [x] Lưu ván local / với máy vào IndexedDB của trình duyệt (200 ván gần nhất): xem lại ở `/replay/local/[id]`, danh sách trong `/profile`
 - **Demo:** 4 game MVP chơi được ở mọi mode → **phát hành MVP**.
 
 ## M4 — Cạnh tranh (3 tuần)
 
 - [x] Quick-match, ranked, Glicko-2, bảng xếp hạng (`/queue`, `/leaderboard`, điểm trong hồ sơ và trong phòng)
 - [x] Spectate: `/live` liệt kê ván ghép trận đang chơi; vào phòng bằng mã thì xem với view của người xem
-- [ ] Admin: bật/tắt game, báo cáo người chơi
+- [x] Admin (`/admin`, `ADMIN_EMAILS`): bật/tắt game, báo cáo người chơi (kèm tin nhắn làm bằng chứng), cấm chat, khoá tài khoản (bật/tắt từng biến thể và FR-ADM-01 xem/đóng phòng: để sau)
 - [x] Game đợt 2: [x] Cờ gánh (`co-ganh`) · [x] Ô ăn quan (`o-an-quan`) · [x] Cờ vua (`chess`, kiểm tra bằng perft) · (Cờ đam: tạm hoãn, ít phổ biến ở VN)
 
 ## M5 — Đa dạng cơ chế (4 tuần)

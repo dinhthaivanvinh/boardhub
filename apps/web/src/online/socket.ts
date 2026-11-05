@@ -9,6 +9,7 @@ import {
   type ServerToClientEvents,
 } from '@bg/protocol';
 import { serverUrl } from './api';
+import { useBanned } from './banned';
 import { ensureToken, useSession } from './session';
 
 export type GameSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -27,6 +28,8 @@ export async function getSocket(): Promise<GameSocket> {
     transports: ['websocket', 'polling'],
   });
   s.on('connect_error', (err) => {
+    // A banned account stays out (no retry); the header explains why.
+    if (err.message === 'auth.banned') return useBanned.getState().setBanned(true);
     // The server forgot us (e.g. dev server restarted with in-memory users): start over as a new guest.
     if (err.message !== 'auth.required') return;
     useSession.getState().clear();

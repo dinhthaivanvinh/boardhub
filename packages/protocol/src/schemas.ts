@@ -171,6 +171,15 @@ export type Ack<T = Record<string, never>> =
 /** Error codes shared by server and client (docs/05 §6). */
 export const ERROR_CODES = [
   'auth.required',
+  'auth.banned',
+  'admin.required',
+  'chat.muted',
+  'game.disabled',
+  'report.self',
+  'report.duplicate',
+  'report.too_many',
+  'report.not_found',
+  'user.not_found',
   'office.invalid_avatar',
   'office.not_found',
   'office.locked',

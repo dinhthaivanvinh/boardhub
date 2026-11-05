@@ -1,3 +1,5 @@
+import { useBanned } from './banned';
+
 /** Game server URL. Defaults to port 4000 on the same host, so LAN play works without config. */
 export function serverUrl(): string {
   const configured = process.env.NEXT_PUBLIC_GAME_SERVER_URL;
@@ -24,6 +26,7 @@ export async function apiRequest<T>(
       ...(body !== undefined && { body: JSON.stringify(body) }),
     });
     const data = (await res.json().catch(() => ({}))) as T & { code?: string };
+    if (data.code === 'auth.banned') useBanned.getState().setBanned(true);
     return res.ok ? { ok: true, data } : { ok: false, code: data.code ?? 'internal' };
   } catch {
     return { ok: false, code: 'network' };

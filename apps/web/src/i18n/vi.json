@@ -16,14 +16,18 @@
     "office": "Văn phòng",
     "catalog": "Danh mục game",
     "activities": "Hoạt động",
-    "myAnimal": "Thú của tôi"
+    "myAnimal": "Thú của tôi",
+    "admin": "Quản trị"
   },
   "catalog": {
     "title": "Chọn một game",
     "players": "{players} người chơi",
     "minutes": "~{n} phút",
     "play": "Chơi ngay",
-    "comingSoon": "Sắp ra mắt"
+    "comingSoon": "Sắp ra mắt",
+    "paused": "Tạm tắt",
+    "pausedNote": "Game này đang tạm tắt để bảo trì. Ván đang chơi vẫn tiếp tục; tạm thời chưa mở được ván mới.",
+    "backToGames": "Về danh mục game"
   },
   "upcoming": {},
   "setup": {
@@ -225,10 +229,12 @@
     "auth": {
       "required": "Hãy đăng nhập lại.",
       "invalid_credentials": "Email hoặc mật khẩu không đúng.",
-      "email_taken": "Email này đã được dùng."
+      "email_taken": "Email này đã được dùng.",
+      "banned": "Tài khoản này đã bị khoá vì vi phạm quy định."
     },
     "game": {
-      "not_found": "Game không tồn tại."
+      "not_found": "Game không tồn tại.",
+      "disabled": "Game này đang tạm tắt."
     },
     "protocol": {
       "version": "Trang đã cũ, hãy tải lại trang."
@@ -249,6 +255,21 @@
       "bad_action": "Thao tác không hợp lệ.",
       "not_enough": "Không đủ người để bốc.",
       "draw_running": "Đang quay rồi, chờ một chút nhé."
+    },
+    "admin": {
+      "required": "Chỉ quản trị viên mới làm được việc này."
+    },
+    "chat": {
+      "muted": "Bạn đang bị cấm chat."
+    },
+    "report": {
+      "self": "Không thể báo cáo hoặc xử lý chính mình.",
+      "duplicate": "Bạn đã báo cáo người này rồi; quản trị viên sẽ xem sớm.",
+      "too_many": "Bạn đã gửi nhiều báo cáo, hãy thử lại sau.",
+      "not_found": "Báo cáo không còn (có thể đã được xử lý)."
+    },
+    "user": {
+      "not_found": "Không tìm thấy người chơi."
     }
   },
   "profile": {
@@ -257,7 +278,7 @@
     "settings": "Cài đặt tài khoản",
     "history": "Ván online gần đây",
     "empty": "Bạn chưa chơi ván online nào.",
-    "localNote": "Ván chơi trên máy (2 người hoặc với máy ngoài phòng online) không được lưu.",
+    "localNote": "Lưu trong trình duyệt này (tối đa 200 ván gần nhất), không gửi lên máy chủ. Xoá dữ liệu trình duyệt hoặc dùng máy khác thì không còn.",
     "vs": "với {names}",
     "replay": "Xem lại",
     "rejoin": "Vào lại phòng",
@@ -274,7 +295,13 @@
       "playing": "Đang chơi"
     },
     "ratings": "Điểm xếp hạng",
-    "noRatings": "Chưa có ván tính điểm nào."
+    "noRatings": "Chưa có ván tính điểm nào.",
+    "localHistory": "Ván với máy và 2 người cùng máy",
+    "localEmpty": "Chưa có ván nào. Ván chơi với máy hoặc 2 người cùng máy sẽ hiện ở đây khi kết thúc.",
+    "hotSeat": "2 người cùng máy",
+    "seatWon": "Người chơi {n} thắng",
+    "clearLocal": "Xoá hết",
+    "clearConfirm": "Chắc chắn xoá?"
   },
   "replay": {
     "pageTitle": "Xem lại ván",
@@ -290,7 +317,9 @@
     "play": "Tự chạy",
     "pause": "Tạm dừng",
     "back": "Về hồ sơ",
-    "broken": "Không dựng lại được ván này (luật chơi có thể đã thay đổi)."
+    "broken": "Không dựng lại được ván này (luật chơi có thể đã thay đổi).",
+    "localMissing": "Không tìm thấy ván này trong trình duyệt (có thể đã bị xoá, hoặc ván được chơi trên máy khác).",
+    "savedHere": "lưu trên trình duyệt này"
   },
   "rules": {
     "open": "Luật chơi",
@@ -630,5 +659,70 @@
     },
     "waitNext": "Chờ chủ trì quay lượt tiếp theo nhé!",
     "downloadCard": "Tải thẻ con vật (PNG)"
+  },
+  "report": {
+    "open": "Báo cáo",
+    "title": "Báo cáo người chơi",
+    "close": "Đóng",
+    "who": "Người chơi",
+    "why": "Lý do",
+    "reasons": {
+      "cheating": "Gian lận (dùng máy, phần mềm hỗ trợ)",
+      "abuse": "Lăng mạ, quấy rối",
+      "spam": "Spam tin nhắn",
+      "name": "Tên không phù hợp",
+      "other": "Lý do khác"
+    },
+    "note": "Mô tả thêm (không bắt buộc)",
+    "notePlaceholder": "Chuyện gì đã xảy ra?",
+    "privacy": "Người bị báo cáo không biết ai báo cáo. Tin nhắn của họ trong phòng này được gửi kèm cho quản trị viên.",
+    "send": "Gửi báo cáo",
+    "sending": "Đang gửi…",
+    "sent": "Đã gửi báo cáo. Cảm ơn bạn! Quản trị viên sẽ xem xét."
+  },
+  "admin": {
+    "title": "Quản trị",
+    "loading": "Đang tải…",
+    "denied": "Trang này chỉ dành cho quản trị viên.",
+    "signIn": "Đăng nhập",
+    "tabs": {
+      "open": "Báo cáo mới",
+      "resolved": "Đã xử lý",
+      "games": "Game",
+      "sanctions": "Đang bị xử lý"
+    },
+    "empty": {
+      "open": "Không có báo cáo nào cần xử lý.",
+      "resolved": "Chưa xử lý báo cáo nào.",
+      "sanctions": "Không ai đang bị cấm chat hay khoá tài khoản."
+    },
+    "guest": "Khách",
+    "reportedBy": "Báo cáo bởi {name}",
+    "room": "phòng {code}",
+    "openAgainst": "{n} báo cáo đang mở về người này",
+    "evidence": "Tin nhắn của người bị báo cáo",
+    "duration": "Thời hạn",
+    "hours": "{h, plural, =24 {24 giờ} =168 {7 ngày} =720 {30 ngày} other {# giờ}}",
+    "forever": "vĩnh viễn",
+    "until": "đến {at}",
+    "actions": {
+      "dismiss": "Bỏ qua",
+      "mute": "Cấm chat",
+      "ban": "Khoá tài khoản"
+    },
+    "confirmBan": "Chắc chắn khoá?",
+    "outcome": "Đã xử lý: {action}",
+    "muted": "Cấm chat",
+    "bannedChip": "Bị khoá",
+    "unmute": "Gỡ cấm chat",
+    "unban": "Mở khoá",
+    "gamesHint": "Game tắt thì không tạo được phòng, không ghép trận và không chơi với máy; ván đang chơi vẫn tiếp tục.",
+    "on": "Đang bật",
+    "off": "Đã tắt",
+    "toggle": "Bật/tắt {game}",
+    "banned": {
+      "text": "Tài khoản này đã bị khoá vì vi phạm quy định.",
+      "signOut": "Đăng xuất"
+    }
   }
 }

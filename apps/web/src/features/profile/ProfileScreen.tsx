@@ -10,6 +10,7 @@ import { isGameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { apiRequest } from '@/online/api';
 import { ensureToken, useSession } from '@/online/session';
+import { LocalHistory } from './LocalHistory';
 
 const BADGE: Record<Outcome, string> = {
   win: 'bg-green-600 text-white',
@@ -157,8 +158,9 @@ export function ProfileScreen() {
             );
           })}
         </ul>
-        <p className="text-xs text-[var(--muted)]">{t('profile.localNote')}</p>
       </section>
+
+      <LocalHistory />
     </div>
   );
 }

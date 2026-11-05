@@ -7,33 +7,75 @@ import type { MatchDetail } from '@bg/protocol';
 import { DEFAULT_BOARD_SETTINGS } from '@bg/ui';
 import { errorKey } from '@/game-runtime/error-key';
 import { RulesButton } from '@/features/rules/RulesButton';
+import { asMatchDetail, getLocalMatch, humanSeatOf } from '@/game-runtime/local-history';
 import { buildReplay } from '@/game-runtime/replay';
 import { GAMES, isGameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { apiRequest } from '@/online/api';
 import { useSession } from '@/online/session';
 
-export function ReplayScreen({ matchId }: { matchId: string }) {
-  const t = useTranslations();
-  const userId = useSession((s) => s.user?.id ?? null);
-  const [match, setMatch] = useState<MatchDetail | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(false);
+type Loaded = { match: MatchDetail; mySeat: number | null; local: LocalInfo | null } | { error: string };
+interface LocalInfo {
+  mode: 'bot' | 'local';
+}
 
+/** An online match from the server (finished matches only). */
+export function ReplayScreen({ matchId }: { matchId: string }) {
+  const userId = useSession((s) => s.user?.id ?? null);
+  const [loaded, setLoaded] = useState<Loaded | null>(null);
   useEffect(() => {
     let cancelled = false;
     void apiRequest<MatchDetail>('GET', `/api/matches/${matchId}`).then((res) => {
       if (cancelled) return;
-      if (!res.ok) return setError(res.code);
-      if (!isGameId(res.data.gameId)) return setError('game.not_found');
-      setMatch(res.data);
-      setIndex(res.data.moves.length);
+      setLoaded(res.ok ? { match: res.data, mySeat: null, local: null } : { error: res.code });
     });
     return () => {
       cancelled = true;
     };
   }, [matchId]);
+  if (loaded && 'match' in loaded) {
+    const mySeat = loaded.match.players.find((p) => p.userId === userId)?.seat ?? null;
+    return <ReplayView key={`${matchId}:ready`} {...loaded} mySeat={mySeat} />;
+  }
+  return <ReplayView key={matchId} loaded={loaded} />;
+}
+
+/** A game played against the computer or at one screen, saved in this browser (local-history.ts). */
+export function LocalReplayScreen({ id }: { id: string }) {
+  const [loaded, setLoaded] = useState<Loaded | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    void getLocalMatch(id).then((rec) => {
+      if (cancelled) return;
+      setLoaded(
+        rec
+          ? { match: asMatchDetail(rec), mySeat: humanSeatOf(rec), local: { mode: rec.mode } }
+          : { error: 'replay.local_missing' },
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+  if (loaded && 'match' in loaded) return <ReplayView key={`${id}:ready`} {...loaded} />;
+  return <ReplayView key={id} loaded={loaded} />;
+}
+
+function ReplayView(
+  props: { match: MatchDetail; mySeat: number | null; local: LocalInfo | null } | { loaded: Loaded | null },
+) {
+  const t = useTranslations();
+  const match = 'match' in props ? props.match : null;
+  const mySeat = 'match' in props ? props.mySeat : null;
+  const local = 'match' in props ? props.local : null;
+  const loadError =
+    'loaded' in props && props.loaded && 'error' in props.loaded
+      ? props.loaded.error
+      : match && !isGameId(match.gameId)
+        ? 'game.not_found'
+        : null;
+  const [index, setIndex] = useState(() => match?.moves.length ?? 0);
+  const [playing, setPlaying] = useState(false);
 
   const replay = useMemo(() => {
     if (!match || !isGameId(match.gameId)) return null;
@@ -76,11 +118,17 @@ export function ReplayScreen({ matchId }: { matchId: string }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [last]);
 
-  if (error || replay?.error) {
-    const code = error ?? replay?.error ?? 'internal';
+  if (loadError || replay?.error) {
+    const code = loadError ?? replay?.error ?? 'internal';
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
-        <p role="alert">{code === 'replay.broken' ? t('replay.broken') : t(errorKey(code))}</p>
+        <p role="alert">
+          {code === 'replay.broken'
+            ? t('replay.broken')
+            : code === 'replay.local_missing'
+              ? t('replay.localMissing')
+              : t(errorKey(code))}
+        </p>
         <Link href="/profile" className="btn mt-6">
           {t('replay.back')}
         </Link>
@@ -94,12 +142,14 @@ export function ReplayScreen({ matchId }: { matchId: string }) {
   const gameId = match.gameId;
   const { definition } = GAMES[gameId];
   const { Board, PieceIcon } = CLIENT_GAMES[gameId];
-  const mySeat = match.players.find((p) => p.userId === userId)?.seat ?? null;
   const state = replay.states[index];
   const playerName = (seat: number) => {
     const p = match.players.find((x) => x.seat === seat);
     if (!p) return '';
-    return p.botLevel ? t('room.bot', { level: t(`bot.level.${p.botLevel}`) }) : (p.name ?? '?');
+    if (p.botLevel) return t('room.bot', { level: t(`bot.level.${p.botLevel}`) });
+    // Local games have no names: "Bạn" against the computer, "Người chơi N" at one screen.
+    if (local) return local.mode === 'bot' ? t('match.you') : t('match.player', { n: seat + 1 });
+    return p.name ?? '?';
   };
   const reasonText = (reason: string) => {
     const key = `games.${gameId}.reasons.${reason}`;
@@ -135,6 +185,7 @@ export function ReplayScreen({ matchId }: { matchId: string }) {
         </div>
         <p className="text-sm text-[var(--muted)]">
           {t('replay.when', { date: new Date(match.startedAt).toLocaleString() })}
+          {local && <> · {t('replay.savedHere')}</>}
         </p>
       </div>
 
@@ -158,7 +209,9 @@ export function ReplayScreen({ matchId }: { matchId: string }) {
               {PieceIcon ? <PieceIcon seat={p.seat} size={20} /> : null}
               <span className="truncate">
                 {playerName(p.seat)}
-                {p.seat === mySeat && <span className="text-[var(--muted)]"> ({t('room.you')})</span>}
+                {p.seat === mySeat && !local && (
+                  <span className="text-[var(--muted)]"> ({t('room.you')})</span>
+                )}
               </span>
             </li>
           ))}

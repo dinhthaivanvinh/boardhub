@@ -16,14 +16,18 @@
     "office": "Office",
     "catalog": "All games",
     "activities": "Activities",
-    "myAnimal": "My animal"
+    "myAnimal": "My animal",
+    "admin": "Admin"
   },
   "catalog": {
     "title": "Pick a game",
     "players": "{players} players",
     "minutes": "~{n} min",
     "play": "Play now",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "paused": "Paused",
+    "pausedNote": "This game is paused for maintenance. Games in progress carry on; new games cannot start for now.",
+    "backToGames": "Back to the games"
   },
   "upcoming": {},
   "setup": {
@@ -225,10 +229,12 @@
     "auth": {
       "required": "Please sign in again.",
       "invalid_credentials": "Wrong email or password.",
-      "email_taken": "That email is already used."
+      "email_taken": "That email is already used.",
+      "banned": "This account has been banned for breaking the rules."
     },
     "game": {
-      "not_found": "Unknown game."
+      "not_found": "Unknown game.",
+      "disabled": "This game is paused."
     },
     "protocol": {
       "version": "This page is out of date, please reload."
@@ -249,6 +255,21 @@
       "bad_action": "Invalid action.",
       "not_enough": "Not enough people to draw.",
       "draw_running": "Already spinning — hang on."
+    },
+    "admin": {
+      "required": "Only admins can do this."
+    },
+    "chat": {
+      "muted": "You are muted."
+    },
+    "report": {
+      "self": "You cannot report or sanction yourself.",
+      "duplicate": "You already reported this player; an admin will look soon.",
+      "too_many": "You have sent many reports; try again later.",
+      "not_found": "This report is gone (it may have been handled)."
+    },
+    "user": {
+      "not_found": "Player not found."
     }
   },
   "profile": {
@@ -257,7 +278,7 @@
     "settings": "Account settings",
     "history": "Recent online games",
     "empty": "You haven't played any online games yet.",
-    "localNote": "Games on this device (two players, or against the computer outside online rooms) are not saved.",
+    "localNote": "Kept in this browser (the last 200 games), never sent to the server. Clearing browser data or using another device loses them.",
     "vs": "vs {names}",
     "replay": "Replay",
     "rejoin": "Back to room",
@@ -274,7 +295,13 @@
       "playing": "Playing"
     },
     "ratings": "Ratings",
-    "noRatings": "No rated games yet."
+    "noRatings": "No rated games yet.",
+    "localHistory": "Games against the computer and at one screen",
+    "localEmpty": "No games yet. Games against the computer or at one screen show up here when they end.",
+    "hotSeat": "2 players, one screen",
+    "seatWon": "Player {n} won",
+    "clearLocal": "Delete all",
+    "clearConfirm": "Really delete?"
   },
   "replay": {
     "pageTitle": "Replay",
@@ -290,7 +317,9 @@
     "play": "Play",
     "pause": "Pause",
     "back": "Back to profile",
-    "broken": "This game cannot be replayed (the rules may have changed)."
+    "broken": "This game cannot be replayed (the rules may have changed).",
+    "localMissing": "This game is not in this browser (it may have been deleted, or played on another device).",
+    "savedHere": "saved in this browser"
   },
   "rules": {
     "open": "Rules",
@@ -630,5 +659,70 @@
     },
     "waitNext": "Waiting for the host to spin the next round!",
     "downloadCard": "Download animal card (PNG)"
+  },
+  "report": {
+    "open": "Report",
+    "title": "Report a player",
+    "close": "Close",
+    "who": "Player",
+    "why": "Reason",
+    "reasons": {
+      "cheating": "Cheating (engine or assistance)",
+      "abuse": "Insults or harassment",
+      "spam": "Chat spam",
+      "name": "Inappropriate name",
+      "other": "Something else"
+    },
+    "note": "Details (optional)",
+    "notePlaceholder": "What happened?",
+    "privacy": "The player is not told who reported them. Their chat in this room is sent along to the admins.",
+    "send": "Send report",
+    "sending": "Sending…",
+    "sent": "Report sent. Thank you! An admin will review it."
+  },
+  "admin": {
+    "title": "Admin",
+    "loading": "Loading…",
+    "denied": "This page is for admins only.",
+    "signIn": "Sign in",
+    "tabs": {
+      "open": "New reports",
+      "resolved": "Handled",
+      "games": "Games",
+      "sanctions": "Sanctioned"
+    },
+    "empty": {
+      "open": "No reports waiting.",
+      "resolved": "No reports handled yet.",
+      "sanctions": "Nobody is muted or banned."
+    },
+    "guest": "Guest",
+    "reportedBy": "Reported by {name}",
+    "room": "room {code}",
+    "openAgainst": "{n} open reports about this player",
+    "evidence": "Messages from the reported player",
+    "duration": "Length",
+    "hours": "{h, plural, =24 {24 hours} =168 {7 days} =720 {30 days} other {# hours}}",
+    "forever": "until lifted",
+    "until": "until {at}",
+    "actions": {
+      "dismiss": "Dismiss",
+      "mute": "Mute chat",
+      "ban": "Ban account"
+    },
+    "confirmBan": "Really ban?",
+    "outcome": "Handled: {action}",
+    "muted": "Muted",
+    "bannedChip": "Banned",
+    "unmute": "Unmute",
+    "unban": "Unban",
+    "gamesHint": "A paused game cannot get new rooms, quick matches or bot games; games in progress carry on.",
+    "on": "On",
+    "off": "Off",
+    "toggle": "Turn {game} on or off",
+    "banned": {
+      "text": "This account has been banned for breaking the rules.",
+      "signOut": "Sign out"
+    }
   }
 }

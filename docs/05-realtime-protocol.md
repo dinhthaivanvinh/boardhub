@@ -12,7 +12,7 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 - `Ack<T> = { ok: true, data: T } | { ok: false, code: string, params? }`. Nước đi bị từ chối cũng trả qua ack (không có event riêng).
 - Mỗi ván có `seq` (tăng 1 sau mỗi thay đổi client cần thấy: nước đi, xin hòa, hết giờ…). `move:submit` gửi kèm `seq` client đang thấy; lệch thì `match.stale_seq` → client gọi `match:resync`.
 - Mỗi nước đi có `clientMoveId` (8–64 ký tự, client sinh ngẫu nhiên) để chống áp dụng 2 lần khi gửi lại.
-- Handshake: `auth = { token, protocolVersion }` (`HandshakeAuth`). Sai token → lỗi `auth.required`; sai phiên bản → `protocol.version`.
+- Handshake: `auth = { token, protocolVersion }` (`HandshakeAuth`). Sai token → lỗi `auth.required`; tài khoản bị khoá → `auth.banned` (web hiện thông báo, không thử lại); sai phiên bản → `protocol.version`.
 - Rate limit: 10 event/giây/socket (`rate.limited`). Payload sai schema → `invalid.payload`.
 
 ## 2. REST (`/api`)
@@ -35,6 +35,32 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 
 Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
 CORS cho phép `GET, HEAD, POST, PATCH, PUT`.
+
+### 2.1 Quản trị và báo cáo (M4b)
+
+Admin là tài khoản **đã đăng ký** có email nằm trong biến môi trường `ADMIN_EMAILS` của server (phân cách bằng dấu phẩy).
+`PublicUser.admin` cho web biết để hiện link "Quản trị". Mọi route `/api/admin/*` kiểm tra lại ở server → 403 `admin.required`.
+Schema ở `packages/protocol/src/admin.ts`.
+
+| Method + path                         | Body                                         | Trả về                                                                                         |
+| ------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `GET /api/games/status`               | —                                            | `{ disabled: string[] }` công khai; web làm mờ game bị tắt                                     |
+| `POST /api/reports`                   | `{ targetUserId, reason, note?, roomCode? }` | `{ id }`. Có `roomCode` thì server lưu kèm ≤ 20 tin nhắn cuối của người bị báo cáo trong phòng |
+| `GET /api/admin/games`                | —                                            | `{ games: AdminGameSetting[] }`                                                                |
+| `PUT /api/admin/games/:gameId`        | `{ enabled }`                                | `AdminGameSetting`                                                                             |
+| `GET /api/admin/reports?status=`      | —                                            | `{ reports: AdminReport[] }` `open` (mặc định) hoặc `resolved`, mới nhất trước, tối đa 100     |
+| `POST /api/admin/reports/:id/resolve` | `{ action: dismiss/mute/ban, hours? }`       | `{ report }`. `hours` null = đến khi gỡ; chế tài dài hơn đang có thì giữ nguyên                |
+| `GET /api/admin/sanctions`            | —                                            | `{ users: SanctionedUser[] }` người đang bị cấm chat hoặc khoá                                 |
+| `PUT /api/admin/users/:id/sanctions`  | `{ mutedUntil?, bannedUntil? }`              | `{ sanctions }`. `null` = gỡ                                                                   |
+
+- `reason`: `cheating | abuse | spam | name | other`. Mỗi người tối đa 10 báo cáo/giờ (`report.too_many`), một báo cáo
+  đang mở cho mỗi người bị báo cáo (`report.duplicate`), không tự báo cáo mình (`report.self`).
+- **Game bị tắt** (FR-CAT-03): `room:create`, `room:start` và `queue:join` trả `game.disabled`; ván đang chơi vẫn tiếp tục;
+  người đã đứng chờ ghép trận không được ghép cho tới khi bật lại. Mỗi process đọc lại danh sách sau tối đa 2 giây.
+  Web ẩn nút bắt đầu (cả chơi local/với máy); không gọi được server thì coi như game đang bật.
+- **Cấm chat:** `chat:send` → `chat.muted`. **Khoá tài khoản:** mọi request → 403 `auth.banned`, đăng nhập cũng vậy;
+  socket đang mở (cả `/office`) bị ngắt ngay và người đó rời hàng chờ. Khách bị khoá vẫn có thể tạo khách mới (giới hạn đã biết).
+- "Đến khi gỡ" lưu là năm 9999 (`SANCTION_FOREVER`).
 
 **Danh tính khách:** web lưu token trong `localStorage` (`bg-session`), nên mọi tab của một trình duyệt là
 **cùng một người** (mở link mời ở tab mới vẫn giữ ghế). Muốn thêm người chơi trên cùng máy: dùng trình duyệt
@@ -125,7 +151,9 @@ Phòng (và ván) sống trong live store 24 giờ kể từ lần thay đổi c
 
 | Code                                                                                                            | Ý nghĩa                                     |
 | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `auth.required`, `auth.invalid_credentials`, `auth.email_taken`                                                 | Xác thực                                    |
+| `auth.required`, `auth.invalid_credentials`, `auth.email_taken`, `auth.banned`                                  | Xác thực                                    |
+| `admin.required`, `chat.muted`, `game.disabled`, `user.not_found`                                               | Quản trị (§2.1)                             |
+| `report.self`, `report.duplicate`, `report.too_many`, `report.not_found`                                        | Báo cáo người chơi (§2.1)                   |
 | `protocol.version`, `rate.limited`, `invalid.payload`, `internal`                                               | Chung                                       |
 | `room.not_found`, `room.not_host`, `room.invalid_state`, `room.seat_taken`, `room.not_seated`, `room.not_ready` | Phòng                                       |
 | `game.not_found`                                                                                                | `gameId` không có trong registry server     |

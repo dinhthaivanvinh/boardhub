@@ -72,7 +72,13 @@ export function attachOfficeGateway(ns: OfficeNamespace, hub: OfficeHub, auth: A
   ns.use(async (socket, next) => {
     const { token, protocolVersion } = (socket.handshake.auth ?? {}) as Partial<HandshakeAuth>;
     if (protocolVersion !== PROTOCOL_VERSION) return next(new Error('protocol.version'));
-    const found = await auth.authenticate(token).catch(() => null);
+    let found;
+    try {
+      found = await auth.authenticate(token);
+    } catch (err) {
+      // A banned account gets its own code, so the page can say why.
+      return next(new Error(err instanceof HubError ? err.code : 'auth.required'));
+    }
     if (!found) return next(new Error('auth.required'));
     socket.data.actor = { userId: found.id, name: found.displayName };
     socket.data.screens = {};

@@ -19,7 +19,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm typecheck
-      - run: pnpm test
+      # Two packages at a time: the runner has 2 cores, and jsdom board tests are slow when everything runs at once.
+      - run: pnpm turbo run test --concurrency=2
 
   integration:
     runs-on: ubuntu-latest

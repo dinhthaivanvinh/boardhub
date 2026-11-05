@@ -6,7 +6,7 @@ const cell = (page: Page, col: number, row: number) =>
 const status = (page: Page) => page.getByRole('status').first();
 
 test('the home page lists Four in a Row as playable', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/board-games');
   await page.getByRole('link', { name: /Bốn trong hàng/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Bốn trong hàng' })).toBeVisible();
   await expect(page.getByLabel('Số cột')).toHaveValue('7');

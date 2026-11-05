@@ -436,3 +436,75 @@ body {
     display: none;
   }
 }
+
+/* ---------- Two areas: portal cards and header menus (ADR-0007) ---------- */
+.area-card {
+  @apply flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-300;
+  border-color: var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+.area-card:hover,
+.area-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px -20px rgb(0 0 0 / 0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+.area-card-art {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #1e1b4b;
+}
+.area-card-collage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+.area-card-tile {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.area-card:hover .area-card-tile {
+  transform: scale(1.06);
+}
+.nav-link[data-current='true'] {
+  color: var(--fg);
+  font-weight: 600;
+}
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  z-index: 40;
+  min-width: 12rem;
+  padding: 0.35rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.35);
+}
+.nav-dropdown-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+}
+.nav-dropdown-link:hover,
+.nav-dropdown-link:focus-visible {
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+.nav-dropdown-link[aria-current='page'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+@media (prefers-reduced-motion: reduce) {
+  .area-card,
+  .area-card-tile {
+    transition: none;
+  }
+  .area-card:hover {
+    transform: none;
+  }
+}

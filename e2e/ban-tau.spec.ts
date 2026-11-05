@@ -17,7 +17,7 @@ async function newPlayer(browser: Browser): Promise<Page> {
 }
 
 test('the home page lists Bắn tàu', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/board-games');
   await page.getByRole('link', { name: /Bắn tàu/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Bắn tàu' })).toBeVisible();
 });

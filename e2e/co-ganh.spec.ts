@@ -10,7 +10,7 @@ async function newPlayer(browser: Browser): Promise<Page> {
 }
 
 test('the home page lists Cờ gánh', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/board-games');
   await page.getByRole('link', { name: /Cờ gánh/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Cờ gánh' })).toBeVisible();
 });

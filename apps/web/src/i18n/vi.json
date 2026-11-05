@@ -2,7 +2,7 @@
   "app": {
     "name": "BoardHub",
     "tagline": "Chơi board game với bạn bè hoặc với máy, ngay trên trình duyệt.",
-    "footer": "Board game dân gian và phổ thông, chơi miễn phí trên trình duyệt."
+    "footer": "Board game và trò chơi văn phòng, miễn phí trên trình duyệt."
   },
   "nav": {
     "home": "Trang chủ",
@@ -11,7 +11,12 @@
     "label": "Điều hướng",
     "live": "Đang diễn ra",
     "leaderboard": "Xếp hạng",
-    "menu": "Menu"
+    "menu": "Menu",
+    "boardGames": "Board game",
+    "office": "Văn phòng",
+    "catalog": "Danh mục game",
+    "activities": "Hoạt động",
+    "myAnimal": "Thú của tôi"
   },
   "catalog": {
     "title": "Chọn một game",
@@ -167,7 +172,8 @@
     "drawSent": "Đã xin hòa",
     "notFound": "Không tìm thấy phòng {code}. Có thể phòng đã đóng.",
     "spectating": "Bạn đang xem trận này.",
-    "replay": "Xem lại ván"
+    "replay": "Xem lại ván",
+    "backToGames": "Về danh mục game"
   },
   "chat": {
     "title": "Trò chuyện",
@@ -324,6 +330,64 @@
       "replay": {
         "title": "Xem lại ván",
         "text": "Tua lại từng nước đi của các ván đã chơi."
+      }
+    }
+  },
+  "portal": {
+    "title": "Chơi cùng nhau, ngay trên trình duyệt",
+    "tagline": "Board game với bạn bè hoặc với máy, và những trò chơi nhanh cho cả team văn phòng.",
+    "boardGames": {
+      "badge": "{n} game",
+      "title": "Board game",
+      "text": "Cờ tướng, Cờ vua, Caro, Ô ăn quan, Bắn tàu… Chơi với máy, với bạn bè qua mã phòng, hoặc ghép trận xếp hạng.",
+      "cta": "Vào khu Board game"
+    },
+    "office": {
+      "badge": "Mới",
+      "title": "Văn phòng",
+      "text": "Mỗi người một con vật tự trang trí. Bốc thăm công bằng ai đi mua trà sữa, ai thuyết trình trước, chia đội…",
+      "cta": "Vào khu Văn phòng"
+    }
+  },
+  "office": {
+    "title": "Văn phòng",
+    "badge": "Trò chơi cho cả team",
+    "tagline": "Mở trên máy chiếu, mọi người vào bằng điện thoại với con vật của riêng mình, rồi cùng xem ai được chọn. Công bằng, kiểm chứng được.",
+    "myAnimal": "Thú của tôi",
+    "activitiesTitle": "Các hoạt động",
+    "soon": "Sắp ra mắt",
+    "avatarSoon": "Sắp có: chọn một con vật và trang trí theo ý bạn: màu lông, mắt, phụ kiện… Con vật sẽ theo bạn vào mọi phiên.",
+    "how": {
+      "title": "Cách chơi",
+      "create": {
+        "title": "Chủ trì mở phiên",
+        "text": "Đặt câu hỏi, ví dụ \"Ai đi mua trà sữa?\", rồi chiếu màn sân khấu có mã và QR."
+      },
+      "join": {
+        "title": "Mọi người quét QR",
+        "text": "Chọn con vật đại diện trên điện thoại. Con vật của bạn xuất hiện ngay trên màn chiếu."
+      },
+      "draw": {
+        "title": "Quay!",
+        "text": "Thú đua nhau hoặc vòng quay chạy trên mọi màn hình cùng lúc. Ai cũng kiểm chứng được kết quả."
+      }
+    },
+    "activities": {
+      "lucky-animal": {
+        "name": "Thú may mắn",
+        "text": "Bốc ngẫu nhiên một hoặc vài người bằng đua thú hoặc vòng quay."
+      },
+      "team-split": {
+        "name": "Chia đội",
+        "text": "Chia cả team thành các đội đều nhau trong vài giây."
+      },
+      "random-order": {
+        "name": "Thứ tự ngẫu nhiên",
+        "text": "Xếp thứ tự thuyết trình hay báo cáo một cách công bằng."
+      },
+      "prize-draw": {
+        "name": "Bốc quà",
+        "text": "Nhiều giải, nhiều vòng, mỗi người trúng tối đa một lần."
       }
     }
   }

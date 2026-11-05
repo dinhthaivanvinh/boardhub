@@ -6,6 +6,7 @@ import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { AccountLink } from '@/features/account/AccountLink';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
 import { MobileNav } from '@/features/settings/MobileNav';
+import { NavMenus } from '@/features/settings/NavMenus';
 import { TIME_ZONE } from '@/i18n/messages';
 import './globals.css';
 
@@ -27,7 +28,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const locale = await getLocale();
   const messages = await getMessages();
   const t = await getTranslations('app');
-  const nav = await getTranslations('nav');
   return (
     <html lang={locale}>
       <body>
@@ -39,14 +39,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 {t('name')}
               </Link>
               <div className="flex items-center gap-2 sm:gap-4">
-                <nav className="hidden items-center gap-1 text-sm sm:flex" aria-label={nav('label')}>
-                  <Link href="/live" className="nav-link">
-                    {nav('live')}
-                  </Link>
-                  <Link href="/leaderboard" className="nav-link">
-                    {nav('leaderboard')}
-                  </Link>
-                </nav>
+                <NavMenus />
                 <AccountLink />
                 <LanguageSwitcher />
                 <MobileNav />

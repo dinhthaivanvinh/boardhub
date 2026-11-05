@@ -24,8 +24,8 @@ export function RoomScreen({ code }: { code: string }) {
         <p role="alert" className="text-lg">
           {api.joinError === 'room.not_found' ? t('room.notFound', { code }) : t(errorKey(api.joinError))}
         </p>
-        <Link href="/" className="btn mt-6">
-          {t('notFound.back')}
+        <Link href="/board-games" className="btn mt-6">
+          {t('room.backToGames')}
         </Link>
       </div>
     );

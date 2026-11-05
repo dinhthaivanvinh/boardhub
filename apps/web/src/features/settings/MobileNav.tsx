@@ -4,12 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-
-const LINKS = [
-  { href: '/', key: 'home' },
-  { href: '/live', key: 'live' },
-  { href: '/leaderboard', key: 'leaderboard' },
-] as const;
+import { NAV_GROUPS } from './nav-links';
 
 /** Menu button for small screens, where the header has no room for the nav links. */
 export function MobileNav() {
@@ -56,20 +51,41 @@ export function MobileNav() {
         <nav
           id="mobile-nav"
           aria-label={t('label')}
-          className="absolute right-0 mt-2 w-52 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] py-1 shadow-xl"
+          className="absolute right-0 mt-2 w-60 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] py-1 shadow-xl"
         >
-          {LINKS.map(({ href, key }) => (
-            <Link
-              key={href}
-              href={href}
-              aria-current={pathname === href ? 'page' : undefined}
-              className="block px-4 py-2.5 text-sm hover:bg-[var(--bg)] aria-[current=page]:font-semibold aria-[current=page]:text-[var(--accent)]"
+          <MenuLink href="/" label={t('home')} current={pathname === '/'} />
+          {NAV_GROUPS.map((group) => (
+            <div
+              key={group.key}
+              role="group"
+              aria-labelledby={'mobile-nav-' + group.key}
+              className="border-t border-[var(--border)] py-1"
             >
-              {t(key)}
-            </Link>
+              <p
+                id={'mobile-nav-' + group.key}
+                className="px-4 pt-2 pb-1 text-xs font-semibold tracking-wide text-[var(--muted)] uppercase"
+              >
+                {t(group.key)}
+              </p>
+              {group.links.map(({ href, key }) => (
+                <MenuLink key={href} href={href} label={t(key)} current={pathname === href} />
+              ))}
+            </div>
           ))}
         </nav>
       )}
     </div>
+  );
+}
+
+function MenuLink({ href, label, current }: { href: string; label: string; current: boolean }) {
+  return (
+    <Link
+      href={href}
+      aria-current={current ? 'page' : undefined}
+      className="block px-4 py-2.5 text-sm hover:bg-[var(--bg)] aria-[current=page]:font-semibold aria-[current=page]:text-[var(--accent)]"
+    >
+      {label}
+    </Link>
   );
 }

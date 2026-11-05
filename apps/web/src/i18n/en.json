@@ -2,7 +2,7 @@
   "app": {
     "name": "BoardHub",
     "tagline": "Play board games with friends or against the computer, right in your browser.",
-    "footer": "Folk and classic board games, free to play in your browser."
+    "footer": "Board games and office games, free in your browser."
   },
   "nav": {
     "home": "Home",
@@ -11,7 +11,12 @@
     "label": "Navigation",
     "live": "Live",
     "leaderboard": "Leaderboard",
-    "menu": "Menu"
+    "menu": "Menu",
+    "boardGames": "Board games",
+    "office": "Office",
+    "catalog": "All games",
+    "activities": "Activities",
+    "myAnimal": "My animal"
   },
   "catalog": {
     "title": "Pick a game",
@@ -167,7 +172,8 @@
     "drawSent": "Draw offered",
     "notFound": "Room {code} not found. It may have closed.",
     "spectating": "You are watching this game.",
-    "replay": "Replay"
+    "replay": "Replay",
+    "backToGames": "Back to all games"
   },
   "chat": {
     "title": "Chat",
@@ -324,6 +330,64 @@
       "replay": {
         "title": "Replays",
         "text": "Step through every move of the games you played."
+      }
+    }
+  },
+  "portal": {
+    "title": "Play together, right in your browser",
+    "tagline": "Board games with friends or the computer, and quick games for your whole office team.",
+    "boardGames": {
+      "badge": "{n} games",
+      "title": "Board games",
+      "text": "Xiangqi, Chess, Caro, O an quan, Sea Battle… Play the computer, friends with a room code, or ranked quick match.",
+      "cta": "Go to Board games"
+    },
+    "office": {
+      "badge": "New",
+      "title": "Office",
+      "text": "Everyone gets an animal they dress up themselves. Fairly draw who buys the bubble tea, who presents first, split teams…",
+      "cta": "Go to Office"
+    }
+  },
+  "office": {
+    "title": "Office",
+    "badge": "Games for the whole team",
+    "tagline": "Put it on the projector, everyone joins from their phone with their own animal, and watch who gets picked. Fair and verifiable.",
+    "myAnimal": "My animal",
+    "activitiesTitle": "Activities",
+    "soon": "Coming soon",
+    "avatarSoon": "Coming soon: pick an animal and dress it up your way: fur colours, eyes, accessories… It will follow you into every session.",
+    "how": {
+      "title": "How it works",
+      "create": {
+        "title": "The host opens a session",
+        "text": "Ask a question like \"Who buys the bubble tea?\" and project the stage with its code and QR."
+      },
+      "join": {
+        "title": "Everyone scans the QR",
+        "text": "Pick your animal on your phone. It shows up on the big screen right away."
+      },
+      "draw": {
+        "title": "Spin!",
+        "text": "Animals race or the wheel spins on every screen at once. Anyone can verify the result."
+      }
+    },
+    "activities": {
+      "lucky-animal": {
+        "name": "Lucky animal",
+        "text": "Randomly pick one or more people with an animal race or a wheel."
+      },
+      "team-split": {
+        "name": "Team split",
+        "text": "Split the team into even groups in seconds."
+      },
+      "random-order": {
+        "name": "Random order",
+        "text": "A fair order for presentations or stand-ups."
+      },
+      "prize-draw": {
+        "name": "Prize draw",
+        "text": "Several prizes, several rounds, one win per person."
       }
     }
   }

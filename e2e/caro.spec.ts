@@ -6,7 +6,7 @@ const cell = (page: Page, row: number, col: number) =>
 const status = (page: Page) => page.getByRole('status').first();
 
 test('choose Caro from the home page and play against the computer', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/board-games');
   await page.getByRole('link', { name: /Caro/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Caro' })).toBeVisible();
   await page.getByRole('radio', { name: 'Dễ' }).check();
@@ -66,7 +66,7 @@ test('the board works with the keyboard', async ({ page }) => {
 });
 
 test('the language switcher changes the UI to English', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/board-games');
   await page.getByRole('combobox', { name: 'Ngôn ngữ' }).selectOption('en');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your game board, anywhere');
   await page.getByRole('combobox', { name: 'Language' }).selectOption('vi');

@@ -7,7 +7,7 @@
 - [x] Phân tích, yêu cầu, kiến trúc, đặc tả hoạt động, avatar, giao thức, UX, lộ trình (`docs/office/*`)
 - [x] ADR-0005 (hợp đồng hoạt động), ADR-0006 (bốc thăm commit–reveal), ADR-0007 (hai khu, URL)
 - [x] Skills `office-*`
-- [ ] Cổng `/` hai khu; danh mục board game sang `/board-games`; menu thả xuống Board game ▾ / Văn phòng ▾ (FR-NAV-01…04)
+- [x] Cổng `/` hai khu; danh mục board game sang `/board-games`; menu thả xuống Board game ▾ / Văn phòng ▾ (FR-NAV-01…04). `/office` và `/office/avatar` hiện các mục "Sắp ra mắt" cho tới O1–O3
 
 ## O1 — Con vật đại diện
 

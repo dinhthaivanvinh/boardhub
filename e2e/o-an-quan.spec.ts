@@ -43,7 +43,7 @@ test.describe('with the sowing animation', () => {
 });
 
 test('the home page lists Ô ăn quan', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/board-games');
   await page.getByRole('link', { name: /Ô ăn quan/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Ô ăn quan' })).toBeVisible();
 });

@@ -16,6 +16,7 @@
     "@bg/game-caro": "workspace:*",
     "@bg/game-co-ganh": "workspace:*",
     "@bg/game-four-in-a-row": "workspace:*",
+    "@bg/game-o-an-quan": "workspace:*",
     "@bg/game-reversi": "workspace:*",
     "@bg/game-xiangqi": "workspace:*",
     "@bg/protocol": "workspace:*",

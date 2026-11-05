@@ -1,0 +1,44 @@
+{
+  "name": "Ô ăn quan",
+  "shortDescription": "Rải dân quanh bàn, ăn dân và ăn quan. Ai nhiều điểm hơn khi hết quan thì thắng.",
+  "rules": "Bàn có 10 ô dân (mỗi bên 5 ô, mỗi ô 5 dân) và 2 ô quan ở hai đầu. Mỗi quan tính bằng **10 dân**. Bên 1 đi trước.\n\nĐến lượt, chọn một ô dân **của mình** còn dân và một hướng. Bốc hết dân trong ô và rải lần lượt mỗi ô một viên theo hướng đó.\n\nRải xong viên cuối, nhìn ô kế tiếp: còn **dân** thì bốc lên rải tiếp; là **ô quan** thì hết lượt; **trống** thì **ăn** hết quân ở ô ngay sau nó. Sau khi ăn, nếu lại gặp một ô trống rồi một ô có quân thì **ăn tiếp**. Hai ô trống liền nhau thì hết lượt.\n\nĐến lượt mà 5 ô của mình đều trống thì tự lấy 5 dân đã ăn ra rải mỗi ô một viên; thiếu thì **vay** đối thủ và trả lại khi tính điểm.\n\nVán kết thúc khi **cả hai quan đã bị ăn**. Dân còn trên ô của bên nào thuộc về bên đó. Ai nhiều điểm hơn thì thắng.",
+  "pieces": {
+    "0": "Bên 1",
+    "1": "Bên 2"
+  },
+  "boardLabel": "Bàn ô ăn quan",
+  "square": "Ô {n} {owner}: {count} dân",
+  "mine": "của bạn",
+  "theirs": "của đối thủ",
+  "quanSquare": "Ô quan {side}: {quan}{count} dân",
+  "quanLeft": "trái",
+  "quanRight": "phải",
+  "hasQuan": "còn quan, ",
+  "noQuan": "",
+  "pickDirection": "Rải ô {n} theo hướng nào?",
+  "left": "Rải sang trái",
+  "right": "Rải sang phải",
+  "cancel": "Huỷ",
+  "stash": "Đã ăn",
+  "stashLine": "{dan} dân · {quan} quan",
+  "debt": "nợ {n} dân",
+  "points": "{n} điểm",
+  "lastMove": "{who} rải ô {n} sang {dir}.",
+  "took": "Ăn {n} ô!",
+  "refill": "{who} hết dân, rải lại 5 dân.",
+  "refillBorrowed": "{who} hết dân, vay {n} dân để rải lại.",
+  "errors": {
+    "not_your_cell": "Chỉ được chọn ô dân của mình.",
+    "empty_cell": "Ô này không còn dân."
+  },
+  "reasons": {
+    "more_points": "nhiều điểm hơn",
+    "equal_points": "bằng điểm"
+  },
+  "config": {},
+  "dirs": {
+    "1": "phải",
+    "-1": "trái"
+  },
+  "skip": "Xem nhanh"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Opening: side 1 captures a square after a long sow; three quiet moves follow",
+  "config": {},
+  "seed": "fixture-opening",
+  "moves": [
+    { "cell": 1, "dir": 1 },
+    { "cell": 9, "dir": -1 },
+    { "cell": 4, "dir": -1 },
+    { "cell": 11, "dir": 1 }
+  ],
+  "expected": {
+    "result": null,
+    "cells": [4, 4, 4, 11, 3, 10, 4, 0, 1, 2, 0, 1],
+    "stash": [
+      { "dan": 6, "quan": 0 },
+      { "dan": 0, "quan": 0 }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "O an quan",
+  "shortDescription": "Sow stones around the board and capture villagers and mandarins. Most points when both mandarins are gone wins.",
+  "rules": "The board has 10 villager squares (5 per side, 5 stones each) and 2 mandarin squares at the ends. A mandarin is worth **10 stones**. Side 1 moves first.\n\nOn your turn, pick one of **your** squares that has stones and a direction. Take all its stones and sow them one per square in that direction.\n\nAfter the last stone, look at the next square: if it has **stones**, pick them up and keep sowing; if it is a **mandarin square**, your turn ends; if it is **empty**, **capture** everything in the square after it. After a capture, if you meet another empty square followed by a full one, **capture again**. Two empty squares in a row end your turn.\n\nIf all 5 of your squares are empty at the start of your turn, 5 of your captured stones are put back, one per square; if you have fewer, you **borrow** from your opponent and pay back when scoring.\n\nThe game ends when **both mandarins have been captured**. Stones left on your squares are yours. Most points wins.",
+  "pieces": {
+    "0": "Side 1",
+    "1": "Side 2"
+  },
+  "boardLabel": "O an quan board",
+  "square": "Square {n} {owner}: {count} stones",
+  "mine": "(yours)",
+  "theirs": "(opponent)",
+  "quanSquare": "{side} mandarin square: {quan}{count} stones",
+  "quanLeft": "Left",
+  "quanRight": "Right",
+  "hasQuan": "mandarin, ",
+  "noQuan": "",
+  "pickDirection": "Sow square {n} which way?",
+  "left": "Sow left",
+  "right": "Sow right",
+  "cancel": "Cancel",
+  "stash": "Captured",
+  "stashLine": "{dan} stones · {quan} mandarins",
+  "debt": "owes {n}",
+  "points": "{n} points",
+  "lastMove": "{who} sowed square {n} to the {dir}.",
+  "took": "Captured {n} squares!",
+  "refill": "{who} ran out and put 5 stones back.",
+  "refillBorrowed": "{who} ran out and borrowed {n} stones.",
+  "errors": {
+    "not_your_cell": "Pick one of your own squares.",
+    "empty_cell": "That square is empty."
+  },
+  "reasons": {
+    "more_points": "more points",
+    "equal_points": "equal points"
+  },
+  "config": {},
+  "dirs": {
+    "1": "right",
+    "-1": "left"
+  },
+  "skip": "Skip"
+}

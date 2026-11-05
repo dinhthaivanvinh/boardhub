@@ -5,6 +5,7 @@
 @import '@bg/game-xiangqi/theme.css';
 @import '@bg/game-reversi/theme.css';
 @import '@bg/game-co-ganh/theme.css';
+@import '@bg/game-o-an-quan/theme.css';
 /* Tailwind classes used inside workspace packages. */
 @source '../../../../packages';
 

@@ -6,6 +6,8 @@ import { bot as caroBot } from '@bg/game-caro/bot';
 import { definition as caro } from '@bg/game-caro/rules';
 import { bot as coGanhBot } from '@bg/game-co-ganh/bot';
 import { definition as coGanh } from '@bg/game-co-ganh/rules';
+import { bot as oAnQuanBot } from '@bg/game-o-an-quan/bot';
+import { definition as oAnQuan } from '@bg/game-o-an-quan/rules';
 import { bot as fourBot } from '@bg/game-four-in-a-row/bot';
 import { definition as fourInARow } from '@bg/game-four-in-a-row/rules';
 import { bot as xiangqiBot } from '@bg/game-xiangqi/bot';
@@ -19,6 +21,7 @@ export const GAME_DEFS: Record<string, AnyGameDefinition> = {
   reversi: reversi,
   xiangqi: xiangqi,
   'co-ganh': coGanh,
+  'o-an-quan': oAnQuan,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,4 +31,5 @@ export const GAME_BOTS: Record<string, Bot<any, any>> = {
   reversi: reversiBot,
   xiangqi: xiangqiBot,
   'co-ganh': coGanhBot,
+  'o-an-quan': oAnQuanBot,
 };

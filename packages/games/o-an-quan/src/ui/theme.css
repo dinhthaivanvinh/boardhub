@@ -1,0 +1,229 @@
+/* Ô ăn quan: squares drawn in chalk on a wooden floor, pebbles for villagers, a big stone for each mandarin. */
+[data-game='o-an-quan'] {
+  --piece-p0: #ea580c;
+  --piece-p1: #0d9488;
+  --oaq-floor: #e7cf9e;
+  --oaq-line: #7a5a2b;
+  --oaq-square: #f5e6c4;
+  --oaq-dot: #57534e;
+  --oaq-quan: #7c2d12;
+}
+@media (prefers-color-scheme: dark) {
+  [data-game='o-an-quan'] {
+    --piece-p0: #fb923c;
+    --piece-p1: #2dd4bf;
+    --oaq-floor: #3f3220;
+    --oaq-line: #c9a46a;
+    --oaq-square: #4d3d27;
+    --oaq-dot: #e7e5e4;
+    --oaq-quan: #fdba74;
+  }
+}
+
+.oaq-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 44rem;
+  margin-inline: auto;
+}
+.oaq-table {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 5fr) minmax(0, 1.1fr);
+  padding: 0.6rem;
+  border-radius: 1rem;
+  background: var(--oaq-floor, #e7cf9e);
+  box-shadow: inset 0 0 0 2px var(--oaq-line, #7a5a2b);
+}
+.oaq-rows {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+.oaq-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.oaq-square {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--oaq-line, #7a5a2b);
+  margin: -1px;
+  background: var(--oaq-square, #f5e6c4);
+  color: inherit;
+  font: inherit;
+  padding: 0.25rem;
+  transition: background-color 0.2s;
+}
+button.oaq-square[aria-disabled='false'] {
+  cursor: pointer;
+}
+button.oaq-square[aria-disabled='false']:hover {
+  background: color-mix(in srgb, var(--focus-ring, #0284c7) 12%, var(--oaq-square, #f5e6c4));
+}
+.oaq-quan {
+  aspect-ratio: auto;
+  flex-direction: column;
+}
+.oaq-quan-left {
+  border-radius: 999px 0 0 999px;
+}
+.oaq-quan-right {
+  border-radius: 0 999px 999px 0;
+}
+.oaq-quan-piece {
+  width: 46%;
+  aspect-ratio: 1.3;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fdba74, var(--oaq-quan, #7c2d12) 70%);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.35);
+  margin-bottom: 0.25rem;
+}
+.oaq-stones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 3px;
+  max-width: 80%;
+}
+.oaq-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--oaq-dot, #57534e);
+  box-shadow: inset -1px -1px 1px rgb(0 0 0 / 0.3);
+}
+.oaq-count {
+  position: absolute;
+  right: 0.3rem;
+  bottom: 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.oaq-selected {
+  outline: 3px solid var(--focus-ring, #0284c7);
+  outline-offset: -4px;
+  z-index: 1;
+}
+.oaq-start {
+  background: var(--highlight-last, rgb(250 204 21 / 0.45));
+}
+.oaq-taken {
+  background: var(--highlight-win, rgb(34 197 94 / 0.4));
+}
+.oaq-sown .oaq-count {
+  animation: oaq-pop 0.5s ease-out;
+}
+@keyframes oaq-pop {
+  0% {
+    transform: scale(1.8);
+    color: var(--focus-ring, #0284c7);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.oaq-stash {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border, #e3ded4);
+  font-size: 0.875rem;
+}
+.oaq-stash-who {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+.oaq-icon-p0 {
+  fill: var(--piece-p0, #ea580c);
+}
+.oaq-icon-p1 {
+  fill: var(--piece-p1, #0d9488);
+}
+.oaq-direction {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.oaq-dir-btn,
+.oaq-dir-cancel {
+  border-radius: 0.6rem;
+  border: 1px solid var(--border, #e3ded4);
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.oaq-dir-btn {
+  background: var(--accent, #c2410c);
+  border-color: var(--accent, #c2410c);
+  color: var(--accent-fg, #fff);
+}
+.oaq-note {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #b45309;
+}
+@media (max-width: 480px) {
+  .oaq-dot {
+    width: 0.3rem;
+    height: 0.3rem;
+  }
+  .oaq-count {
+    font-size: 0.7rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oaq-sown .oaq-count {
+    animation: none;
+  }
+}
+
+/* Sowing, played out stone by stone. */
+.oaq-active {
+  z-index: 2;
+  box-shadow: 0 0 0 3px var(--focus-ring, #0284c7);
+}
+.oaq-active-drop {
+  animation: oaq-drop 0.3s ease-out;
+}
+.oaq-active-take {
+  box-shadow: 0 0 0 4px #16a34a;
+}
+@keyframes oaq-drop {
+  0% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.oaq-hand {
+  position: absolute;
+  top: -0.9rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--focus-ring, #0284c7);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+}
+@media (prefers-reduced-motion: reduce) {
+  .oaq-active-drop {
+    animation: none;
+  }
+}

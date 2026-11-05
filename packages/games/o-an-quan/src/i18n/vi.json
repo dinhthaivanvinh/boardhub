@@ -40,5 +40,12 @@
     "1": "phải",
     "-1": "trái"
   },
-  "skip": "Xem nhanh"
+  "skip": "Bỏ qua",
+  "speed": "Tốc độ rải quân",
+  "speeds": {
+    "slow": "🐢 Chậm",
+    "normal": "Thường",
+    "fast": "⏩ Nhanh"
+  },
+  "replayMove": "Xem lại nước vừa đi"
 }

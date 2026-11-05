@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { AuthResponse, PublicUser } from '@bg/protocol';
 import { apiRequest } from './api';
+import { useAuthPrompt } from './auth-prompt';
 
 interface SessionState {
   token: string | null;
@@ -32,13 +33,45 @@ export const useSession = create<SessionState>()(
   ),
 );
 
-let pendingGuest: Promise<string> | null = null;
+/** "Always play as a guest" on this browser: the account question is not asked again. */
+const GUEST_CHOICE_KEY = 'bg-auth-choice';
 
-/** Returns the current token, creating a guest account first if there is none (FR-AUTH-01). */
+export function rememberGuestChoice(on: boolean): void {
+  try {
+    if (on) localStorage.setItem(GUEST_CHOICE_KEY, 'guest');
+    else localStorage.removeItem(GUEST_CHOICE_KEY);
+  } catch {
+    // Storage blocked: the question is simply asked again next time.
+  }
+}
+
+/** True when this browser chose "always play as a guest". */
+export const guestChosen = () => {
+  try {
+    return localStorage.getItem(GUEST_CHOICE_KEY) === 'guest';
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Returns the current token. Without one, asks first: sign in, register, or play as a guest
+ * (FR-AUTH-01/02). Rejects with "auth.cancelled" if the dialog is closed without a choice.
+ */
 export function ensureToken(): Promise<string> {
   const { token } = useSession.getState();
   if (token) return Promise.resolve(token);
-  pendingGuest ??= apiRequest<AuthResponse>('POST', '/api/auth/guest', {})
+  if (guestChosen()) return createGuest();
+  return useAuthPrompt.getState().ask();
+}
+
+let pendingGuest: Promise<string> | null = null;
+
+/** Creates a guest account (one request even if several screens ask at once). */
+export function createGuest(displayName?: string): Promise<string> {
+  const { token } = useSession.getState();
+  if (token) return Promise.resolve(token);
+  pendingGuest ??= apiRequest<AuthResponse>('POST', '/api/auth/guest', displayName ? { displayName } : {})
     .then((res) => {
       if (!res.ok) throw new Error(res.code);
       useSession.getState().setAuth(res.data);
@@ -61,6 +94,11 @@ export async function startNewGuest(): Promise<string> {
   useSession.getState().setAuth(res.data);
   return res.data.token;
 }
+
+// Whatever way a session appears (dialog, account page, another tab), whoever waits for it gets it.
+useSession.subscribe((s) => {
+  if (s.token && useAuthPrompt.getState().waiters.length > 0) useAuthPrompt.getState().finish(s.token);
+});
 
 // One identity per browser: when another tab signs in, signs out or starts a new guest, reload this
 // tab so it never keeps talking to the server as someone else.

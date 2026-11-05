@@ -1252,3 +1252,19 @@ body {
   height: 1.15rem;
   accent-color: var(--accent);
 }
+
+/* ---------------------------------------------------------------- account question */
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--border);
+}

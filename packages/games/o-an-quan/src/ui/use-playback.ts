@@ -7,6 +7,10 @@ import { frameDelay, sowFrames, type Frame } from './animation';
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
 
+/** Playback speeds: slow, normal, fast. */
+export const SPEEDS = [0.5, 1, 3] as const;
+export type Speed = (typeof SPEEDS)[number];
+
 /**
  * Shows each new move stone by stone instead of jumping to the result.
  * Moves that arrive while one is still playing (a quick reply from the computer or the opponent)
@@ -22,6 +26,15 @@ export function usePlayback(target: OAnQuanState, enabled: boolean) {
   const busy = useRef(false);
   const enabledRef = useRef(enabled);
   enabledRef.current = enabled;
+  const [speed, setSpeedState] = useState<Speed>(1);
+  const speedRef = useRef<Speed>(1);
+  /** The last single move that was shown (played out or skipped), so it can be watched again. */
+  const [last, setLast] = useState<{ base: OAnQuanState; next: OAnQuanState } | null>(null);
+
+  const setSpeed = useCallback((s: Speed) => {
+    speedRef.current = s;
+    setSpeedState(s);
+  }, []);
 
   const show = useCallback((s: OAnQuanState) => {
     shownRef.current = s;
@@ -29,20 +42,9 @@ export function usePlayback(target: OAnQuanState, enabled: boolean) {
     setFrame(null);
   }, []);
 
-  const pump = useCallback(() => {
-    while (!busy.current && queue.current.length > 0) {
-      const next = queue.current.shift()!;
-      const base = shownRef.current;
-      const animate =
-        enabledRef.current &&
-        !prefersReducedMotion() &&
-        next.lastMove !== null &&
-        next.moveCount === base.moveCount + 1 &&
-        !base.ended;
-      if (!animate) {
-        show(next);
-        continue;
-      }
+  /** Plays the sowing from `base` to `next`, then calls `done`. The speed can change while it runs. */
+  const animate = useCallback(
+    (base: OAnQuanState, next: OAnQuanState, done: () => void) => {
       const frames = sowFrames(base, next.lastMove!);
       busy.current = true;
       let i = 0;
@@ -50,16 +52,31 @@ export function usePlayback(target: OAnQuanState, enabled: boolean) {
         const f = frames[i++];
         if (f) {
           setFrame(f);
-          timer.current = setTimeout(tick, frameDelay(f, frames.length));
+          timer.current = setTimeout(tick, frameDelay(f, frames.length) / speedRef.current);
           return;
         }
         busy.current = false;
         show(next);
-        pump();
+        done();
       };
       tick();
+    },
+    [show],
+  );
+
+  const pump = useCallback(() => {
+    while (!busy.current && queue.current.length > 0) {
+      const next = queue.current.shift()!;
+      const base = shownRef.current;
+      const single = next.lastMove !== null && next.moveCount === base.moveCount + 1 && !base.ended;
+      setLast(single ? { base, next } : null);
+      if (!single || !enabledRef.current || prefersReducedMotion()) {
+        show(next);
+        continue;
+      }
+      animate(base, next, pump);
     }
-  }, [show]);
+  }, [show, animate]);
 
   useEffect(() => {
     if (target === lastTarget.current) return;
@@ -83,5 +100,22 @@ export function usePlayback(target: OAnQuanState, enabled: boolean) {
     show(lastTarget.current);
   }, [show]);
 
-  return { shown, frame, playing: frame !== null, skip };
+  /** Plays the last move again, stone by stone (also after it was skipped). */
+  const replay = useCallback(() => {
+    if (busy.current || !last || shownRef.current !== last.next) return;
+    show(last.base);
+    animate(last.base, last.next, pump);
+  }, [last, show, animate, pump]);
+
+  const playing = frame !== null;
+  return {
+    shown,
+    frame,
+    playing,
+    skip,
+    speed,
+    setSpeed,
+    replay,
+    canReplay: !playing && last !== null && shown === last.next,
+  };
 }

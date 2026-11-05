@@ -29,11 +29,13 @@ export function ParticipantScreen({ code }: { code: string }) {
   // Your saved animal (or your default one).
   useEffect(() => {
     let cancelled = false;
-    void ensureToken().then(async (token) => {
-      const res = await fetchMyAvatar(token);
-      const me = useSession.getState().user;
-      if (!cancelled && me) setAvatar(res.ok && res.data ? res.data : defaultAvatar(me.id));
-    });
+    void ensureToken()
+      .then(async (token) => {
+        const res = await fetchMyAvatar(token);
+        const me = useSession.getState().user;
+        if (!cancelled && me) setAvatar(res.ok && res.data ? res.data : defaultAvatar(me.id));
+      })
+      .catch(() => {}); // No account chosen yet: the join screen asks again.
     return () => {
       cancelled = true;
     };

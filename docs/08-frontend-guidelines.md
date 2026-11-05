@@ -99,3 +99,17 @@ Desktop                                   Mobile
 - Mỗi game có ảnh bìa `src/ui/cover.svg` (640×400, export `./cover.svg`, đăng ký trong `apps/web/src/games/covers.ts`), hiện ở trang chủ và trang game. Ảnh tự vẽ bằng SVG (bàn cờ + vài quân đang chơi), màu cố định vì được nạp bằng `<img>` nên không dùng được biến CSS; chữ trong ảnh chỉ là trang trí (`alt=""`).
 - Mỗi game export thêm `PieceIcon({ seat, size })`: hình quân nhỏ dùng trong thẻ người chơi (đăng ký trong `client-registry.ts`). Không có thì app hiển thị tên quân.
 - Hỗ trợ light và dark mode.
+
+## 9. SEO
+
+- **Lớp render:** trang công khai (`/`, `/board-games`, `/games/[id]`, `/office`, `/leaderboard`, `/live`) render nội dung chính
+  ở server: tiêu đề, mô tả, luật chơi, bảng xếp hạng (fetch ở server, `GAME_SERVER_INTERNAL_URL` nếu cần, cache 60 s).
+  Phần cần `localStorage` hoặc socket là "đảo" client bên trong; chỉ màn chơi/phòng/tài khoản dùng `ssr: false`.
+- **Metadata:** `src/seo/site.ts` → `publicPage()` cho title, description, canonical, Open Graph, Twitter.
+  `NEXT_PUBLIC_SITE_URL` là địa chỉ thật khi deploy (mặc định `http://localhost:3000`).
+- **Ảnh chia sẻ:** `app/opengraph-image.tsx` (trang chủ) và `app/games/[gameId]/opengraph-image.tsx` (mỗi game), 1200×630.
+- **Structured data:** `<JsonLd>`: `WebSite` (trang chủ), `ItemList` (danh mục), `Game` + `BreadcrumbList` (trang game).
+- **Crawl:** `app/robots.ts` chặn phòng, ván, xem lại, hồ sơ, tài khoản, admin, phiên văn phòng; `app/sitemap.ts` liệt kê trang công khai
+  và bảng xếp hạng từng game (mỗi game là một link thật `/leaderboard?game=…`). Trang riêng tư có thêm `robots: { index: false }`.
+- **Khác:** `app/icon.svg`, `app/manifest.ts`; một `<h1>` mỗi trang; trang game có breadcrumb.
+- **Giới hạn:** ngôn ngữ chọn bằng cookie, URL không có `/vi` `/en` nên công cụ tìm kiếm chỉ thấy bản tiếng Việt (không có hreflang).

@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = Number(process.env.E2E_PORT ?? 3123);
+const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e',
@@ -8,7 +9,13 @@ export default defineConfig({
   fullyParallel: true,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    baseURL: BASE_URL,
+    // Most tests play as a fresh guest without being asked first (the "remember" choice of the
+    // account dialog); e2e/auth-prompt.spec.ts clears this to test the question itself.
+    storageState: {
+      cookies: [],
+      origins: [{ origin: BASE_URL, localStorage: [{ name: 'bg-auth-choice', value: 'guest' }] }],
+    },
     trace: 'retain-on-failure',
   },
   projects: [

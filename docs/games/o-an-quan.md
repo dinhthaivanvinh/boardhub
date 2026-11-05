@@ -105,7 +105,7 @@ Perfect information: trả về toàn bộ state.
 - Hai hộp "Đã ăn" (dân, quan, nợ) cho hai bên.
 - **Rải chậm từng viên:** mỗi nước (kể cả của máy và đối thủ online) được diễn lại từ các bước `sow().events`
   (bốc, thả từng viên, ăn), có huy hiệu "✋ n" cho số dân còn trên tay. Nước tới trong lúc đang diễn thì xếp hàng chờ.
-  Không nhận nước đi trong lúc diễn. Nút "Xem nhanh" bỏ qua. Tắt khi tắt "Hiệu ứng" hoặc hệ thống bật giảm chuyển động.
+  Không nhận nước đi trong lúc diễn. Trong lúc diễn có chọn tốc độ (🐢 Chậm ×0,5 · Thường · ⏩ Nhanh ×3, đổi được giữa chừng) và nút "Bỏ qua"; sau đó nút "↺ Xem lại nước vừa đi" phát lại nước cuối từng viên (kể cả khi đã bỏ qua hoặc tắt hiệu ứng). Tắt khi tắt "Hiệu ứng" hoặc hệ thống bật giảm chuyển động.
   Nước rất dài được tăng tốc để không quá ~12 giây.
 
 ## 12. Trường hợp biên cần test

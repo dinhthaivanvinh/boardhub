@@ -48,7 +48,9 @@ export function QueueScreen({
         s.on('connect', join);
         if (s.connected) void join();
       })
-      .catch(() => setError('network'));
+      .catch((err: unknown) =>
+        setError(err instanceof Error && err.message.includes('.') ? err.message : 'network'),
+      );
     return () => {
       cancelled = true;
       if (!socket) return;

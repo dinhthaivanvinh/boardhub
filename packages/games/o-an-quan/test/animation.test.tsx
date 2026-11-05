@@ -121,6 +121,42 @@ describe('board playback', () => {
     expect(screen.queryByTestId('sowing-hand')).toBeNull();
   });
 
+  it('after "Skip", the move can be watched again stone by stone', () => {
+    const before = start();
+    const after = definition.applyMove(before, 0, move, ctx);
+    const { rerender } = render(board(before));
+    rerender(board(after));
+    fireEvent.click(screen.getByRole('button', { name: /games.o-an-quan.skip/ }));
+    fireEvent.click(screen.getByTestId('oaq-replay-move'));
+    expect(screen.getByTestId('sowing-hand')).toBeTruthy();
+    expect(count(1)).toBe('0');
+    expect(count(2)).toBe('5');
+    act(() => vi.advanceTimersByTime(60_000));
+    expect(screen.queryByTestId('sowing-hand')).toBeNull();
+    expect(count(2)).toBe('0');
+    // Still offered, also when effects are off.
+    expect(screen.getByTestId('oaq-replay-move')).toBeTruthy();
+  });
+
+  it('the speed can be changed while a move plays: slow takes twice as long, fast a third', () => {
+    const before = start();
+    const after = definition.applyMove(before, 0, move, ctx);
+    const { rerender } = render(board(before));
+    rerender(board(after));
+    fireEvent.click(screen.getByTestId('oaq-speed-0.5'));
+    expect(screen.getByTestId('oaq-speed-0.5').getAttribute('aria-pressed')).toBe('true');
+    // The first frame was already scheduled at normal speed; the next one is twice as slow.
+    act(() => vi.advanceTimersByTime(550));
+    expect(count(2)).toBe('6');
+    act(() => vi.advanceTimersByTime(700));
+    expect(count(3)).toBe('5');
+    act(() => vi.advanceTimersByTime(100));
+    expect(count(3)).toBe('6');
+    fireEvent.click(screen.getByTestId('oaq-speed-3'));
+    act(() => vi.advanceTimersByTime(20_000));
+    expect(screen.queryByTestId('sowing-hand')).toBeNull();
+  });
+
   it('no animation when effects are off, or after an undo', () => {
     const before = start();
     const after = definition.applyMove(before, 0, move, ctx);

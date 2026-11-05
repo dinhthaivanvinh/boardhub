@@ -62,6 +62,11 @@ Schema ở `packages/protocol/src/admin.ts`.
   socket đang mở (cả `/office`) bị ngắt ngay và người đó rời hàng chờ. Khách bị khoá vẫn có thể tạo khách mới (giới hạn đã biết).
 - "Đến khi gỡ" lưu là năm 9999 (`SANCTION_FOREVER`).
 
+**Hỏi trước khi tạo khách:** web không còn tự tạo khách. Lần đầu một màn cần tài khoản (tạo phòng, ghép trận, hồ sơ,
+phiên văn phòng…) mà trình duyệt chưa có phiên, `ensureToken()` mở hộp thoại: đăng nhập, đăng ký hoặc chơi với tên khách
+(tên tuỳ chọn). Đóng hộp thoại → lỗi `auth.cancelled` (chỉ ở client). Ô "Lần sau không hỏi lại" lưu `bg-auth-choice=guest`
+trong `localStorage`, khi đó khách được tạo luôn; đăng xuất xoá lựa chọn này. Chơi với máy / 2 người cùng máy không cần tài khoản.
+
 **Danh tính khách:** web lưu token trong `localStorage` (`bg-session`), nên mọi tab của một trình duyệt là
 **cùng một người** (mở link mời ở tab mới vẫn giữ ghế). Muốn thêm người chơi trên cùng máy: dùng trình duyệt
 khác/cửa sổ ẩn danh, hoặc nút "Chơi với tên khách mới" ở trang tài khoản (gọi lại `POST /api/auth/guest`;

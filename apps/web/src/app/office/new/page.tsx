@@ -4,7 +4,7 @@ import { CreateClient } from '@/features/office/session/clients';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('officeSession');
-  return { title: t('newTitle') };
+  return { title: t('newTitle'), robots: { index: false } };
 }
 
 export default async function NewSessionPage() {

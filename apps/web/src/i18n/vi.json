@@ -230,7 +230,8 @@
       "required": "Hãy đăng nhập lại.",
       "invalid_credentials": "Email hoặc mật khẩu không đúng.",
       "email_taken": "Email này đã được dùng.",
-      "banned": "Tài khoản này đã bị khoá vì vi phạm quy định."
+      "banned": "Tài khoản này đã bị khoá vì vi phạm quy định.",
+      "cancelled": "Hãy đăng nhập hoặc chọn chơi với tên khách để tiếp tục (nút \"Tài khoản\" ở đầu trang)."
     },
     "game": {
       "not_found": "Game không tồn tại.",
@@ -724,5 +725,22 @@
       "text": "Tài khoản này đã bị khoá vì vi phạm quy định.",
       "signOut": "Đăng xuất"
     }
+  },
+  "authPrompt": {
+    "title": "Chơi bằng tài khoản nào?",
+    "subtitle": "Đăng nhập để giữ lịch sử và điểm xếp hạng trên mọi thiết bị, hoặc chơi ngay với tên khách.",
+    "withAccount": "Tài khoản của bạn",
+    "or": "hoặc",
+    "asGuest": "Chơi với tên khách",
+    "guestNote": "Không cần email. Sau này đăng ký vẫn giữ nguyên lịch sử của tên khách này.",
+    "guestName": "Tên hiển thị (không bắt buộc)",
+    "guestNamePlaceholder": "Để trống để lấy tên ngẫu nhiên",
+    "remember": "Lần sau không hỏi lại trên trình duyệt này",
+    "playAsGuest": "Chơi với tên khách",
+    "later": "Để sau"
+  },
+  "seo": {
+    "breadcrumb": "Đường dẫn",
+    "leaderboardDescription": "Bảng xếp hạng {game} trên BoardHub: điểm Glicko-2 của người chơi ghép trận xếp hạng."
   }
 }

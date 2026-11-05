@@ -230,7 +230,8 @@
       "required": "Please sign in again.",
       "invalid_credentials": "Wrong email or password.",
       "email_taken": "That email is already used.",
-      "banned": "This account has been banned for breaking the rules."
+      "banned": "This account has been banned for breaking the rules.",
+      "cancelled": "Sign in or choose to play as a guest to continue (the \"Account\" link at the top)."
     },
     "game": {
       "not_found": "Unknown game.",
@@ -724,5 +725,22 @@
       "text": "This account has been banned for breaking the rules.",
       "signOut": "Sign out"
     }
+  },
+  "authPrompt": {
+    "title": "How do you want to play?",
+    "subtitle": "Sign in to keep your history and rating on every device, or play right away as a guest.",
+    "withAccount": "Your account",
+    "or": "or",
+    "asGuest": "Play as a guest",
+    "guestNote": "No email needed. If you register later, this guest keeps its history.",
+    "guestName": "Display name (optional)",
+    "guestNamePlaceholder": "Leave empty for a random name",
+    "remember": "Do not ask again on this browser",
+    "playAsGuest": "Play as a guest",
+    "later": "Not now"
+  },
+  "seo": {
+    "breadcrumb": "Breadcrumb",
+    "leaderboardDescription": "{game} rankings on BoardHub: Glicko-2 ratings of ranked quick-match players."
   }
 }

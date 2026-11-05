@@ -94,7 +94,9 @@ export function useRoom(code: string) {
         sock.on('chat:message', onChat);
         if (sock.connected) onConnect();
       })
-      .catch(() => setJoinError('network'));
+      .catch((err: unknown) =>
+        setJoinError(err instanceof Error && err.message.includes('.') ? err.message : 'network'),
+      );
 
     return () => {
       cancelled = true;

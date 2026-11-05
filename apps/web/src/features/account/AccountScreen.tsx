@@ -5,7 +5,8 @@ import { useEffect, useState, type FormEvent } from 'react';
 import type { AuthResponse, PublicUser } from '@bg/protocol';
 import { errorKey } from '@/game-runtime/error-key';
 import { apiRequest } from '@/online/api';
-import { ensureToken, startNewGuest, useSession } from '@/online/session';
+import { ensureToken, guestChosen, rememberGuestChoice, startNewGuest, useSession } from '@/online/session';
+import { AuthPanel } from './AuthPanel';
 
 const input = 'rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2';
 
@@ -15,11 +16,6 @@ export function AccountScreen() {
   const [tab, setTab] = useState<'register' | 'login'>('register');
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
-
-  // Everyone has an account: a guest one is created on first visit (FR-AUTH-01).
-  useEffect(() => {
-    if (!token) void ensureToken().catch((err: Error) => setError(err.message));
-  }, [token]);
 
   const submit = async <T,>(
     e: FormEvent<HTMLFormElement>,
@@ -34,7 +30,27 @@ export function AccountScreen() {
     else setError(res.code);
   };
 
-  if (!user) return <p className="px-4 py-20 text-center text-[var(--muted)]">{t('online.connecting')}</p>;
+  // "Always play as a guest" was chosen on this browser: make the guest without asking.
+  const autoGuest = !token && guestChosen();
+  useEffect(() => {
+    if (autoGuest) void ensureToken().catch((err: Error) => setError(err.message));
+  }, [autoGuest]);
+
+  if (!user && autoGuest) {
+    return <p className="px-4 py-20 text-center text-[var(--muted)]">{t('online.connecting')}</p>;
+  }
+  // No session yet: choose how to play (nothing is created behind your back).
+  if (!user) {
+    return (
+      <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-10">
+        <h1 className="text-2xl font-bold tracking-tight">{t('account.title')}</h1>
+        <p className="text-[var(--muted)]">{t('authPrompt.subtitle')}</p>
+        <div className="card">
+          <AuthPanel />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-10">
@@ -169,7 +185,15 @@ export function AccountScreen() {
           </form>
         </section>
       ) : (
-        <button type="button" className="btn self-start" onClick={() => clear()}>
+        <button
+          type="button"
+          className="btn self-start"
+          onClick={() => {
+            // Signing out asks again next time instead of quietly making a guest.
+            rememberGuestChoice(false);
+            clear();
+          }}
+        >
           {t('account.logout')}
         </button>
       )}

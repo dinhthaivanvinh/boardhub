@@ -108,83 +108,89 @@ export function useOfficeSession(code: string, screen: OfficeScreen, autoJoin: b
   useEffect(() => {
     let cancelled = false;
     let cleanup = () => {};
-    void getOfficeSocket().then((s) => {
-      if (cancelled) return;
-      socketRef.current = s;
-      const mine = (e: { code: string }) => e.code === code;
-      /** Applies an event only if it is the next one; otherwise resync. */
-      const step = (e: { code: string; seq: number }, apply: (prev: OfficeSnapshot) => OfficeSnapshot) => {
-        if (!mine(e) || e.seq <= seq.current) return;
-        if (e.seq !== seq.current + 1) {
-          void resync();
-          return;
-        }
-        seq.current = e.seq;
-        setSession((prev) => (prev ? { ...apply(prev), seq: e.seq } : prev));
-      };
-      const handlers = {
-        'office:participant': (e: { code: string; seq: number; participant: OfficeParticipant }) =>
-          step(e, (prev) => ({
-            ...prev,
-            participants: [...prev.participants.filter((p) => p.id !== e.participant.id), e.participant].sort(
-              byJoin,
-            ),
-            me: e.participant.id === prev.me.id ? { ...prev.me, joined: true } : prev.me,
-          })),
-        'office:participant-removed': (e: { code: string; seq: number; id: string }) =>
-          step(e, (prev) => ({
-            ...prev,
-            participants: prev.participants.filter((p) => p.id !== e.id),
-            me: e.id === prev.me.id ? { ...prev.me, joined: false } : prev.me,
-          })),
-        'office:session': (e: { code: string; seq: number; session: OfficeSessionInfo }) =>
-          step(e, (prev) => ({
-            ...prev,
-            ...e.session,
-            me: { ...prev.me, isHost: e.session.hostId === prev.me.id },
-          })),
-        'office:activity': (e: { code: string; seq: number; view: unknown }) =>
-          step(e, (prev) => ({ ...prev, activity: e.view })),
-        'office:draw-started': (e: { code: string; seq: number; draw: OfficeDrawStarted }) =>
-          step(e, (prev) => ({ ...prev, draw: e.draw })),
-        'office:draw-revealed': (e: { code: string; seq: number; draw: OfficeDrawRecord }) =>
-          step(e, (prev) => ({
-            ...prev,
-            draw: e.draw,
-            history: [e.draw, ...prev.history.filter((d) => d.drawId !== e.draw.drawId)].slice(0, 50),
-          })),
-        'office:reaction': (e: { code: string; from: string; emoji: OfficeReactionEmoji }) => {
-          if (!mine(e)) return;
-          const key = ++reactionKey.current;
-          setReactions((prev) => [...prev, { key, from: e.from, emoji: e.emoji }].slice(-MAX_REACTIONS));
-          // Only how long it stays on screen; nothing else depends on this timer.
-          window.setTimeout(() => setReactions((prev) => prev.filter((r) => r.key !== key)), REACTION_MS);
-        },
-        'office:kicked': (e: { code: string }) => {
-          if (!mine(e)) return;
-          joinedWith.current = null;
-          setKicked(true);
-        },
-      };
-      for (const [event, handler] of Object.entries(handlers))
-        (s.on as (e: string, h: unknown) => void)(event, handler);
-
-      const onConnect = () => {
-        setConnection('online');
-        // After a reconnect the server forgot which screens this socket shows: join again.
-        if (joinedWith.current) void doJoin(joinedWith.current);
-      };
-      const onDisconnect = () => setConnection('offline');
-      s.on('connect', onConnect);
-      s.on('disconnect', onDisconnect);
-      if (s.connected) onConnect();
-      cleanup = () => {
+    void getOfficeSocket()
+      .catch((err: unknown) => {
+        if (!cancelled) setJoinError(err instanceof Error ? err.message : 'network');
+        return null;
+      })
+      .then((s) => {
+        if (cancelled || !s) return;
+        socketRef.current = s;
+        const mine = (e: { code: string }) => e.code === code;
+        /** Applies an event only if it is the next one; otherwise resync. */
+        const step = (e: { code: string; seq: number }, apply: (prev: OfficeSnapshot) => OfficeSnapshot) => {
+          if (!mine(e) || e.seq <= seq.current) return;
+          if (e.seq !== seq.current + 1) {
+            void resync();
+            return;
+          }
+          seq.current = e.seq;
+          setSession((prev) => (prev ? { ...apply(prev), seq: e.seq } : prev));
+        };
+        const handlers = {
+          'office:participant': (e: { code: string; seq: number; participant: OfficeParticipant }) =>
+            step(e, (prev) => ({
+              ...prev,
+              participants: [
+                ...prev.participants.filter((p) => p.id !== e.participant.id),
+                e.participant,
+              ].sort(byJoin),
+              me: e.participant.id === prev.me.id ? { ...prev.me, joined: true } : prev.me,
+            })),
+          'office:participant-removed': (e: { code: string; seq: number; id: string }) =>
+            step(e, (prev) => ({
+              ...prev,
+              participants: prev.participants.filter((p) => p.id !== e.id),
+              me: e.id === prev.me.id ? { ...prev.me, joined: false } : prev.me,
+            })),
+          'office:session': (e: { code: string; seq: number; session: OfficeSessionInfo }) =>
+            step(e, (prev) => ({
+              ...prev,
+              ...e.session,
+              me: { ...prev.me, isHost: e.session.hostId === prev.me.id },
+            })),
+          'office:activity': (e: { code: string; seq: number; view: unknown }) =>
+            step(e, (prev) => ({ ...prev, activity: e.view })),
+          'office:draw-started': (e: { code: string; seq: number; draw: OfficeDrawStarted }) =>
+            step(e, (prev) => ({ ...prev, draw: e.draw })),
+          'office:draw-revealed': (e: { code: string; seq: number; draw: OfficeDrawRecord }) =>
+            step(e, (prev) => ({
+              ...prev,
+              draw: e.draw,
+              history: [e.draw, ...prev.history.filter((d) => d.drawId !== e.draw.drawId)].slice(0, 50),
+            })),
+          'office:reaction': (e: { code: string; from: string; emoji: OfficeReactionEmoji }) => {
+            if (!mine(e)) return;
+            const key = ++reactionKey.current;
+            setReactions((prev) => [...prev, { key, from: e.from, emoji: e.emoji }].slice(-MAX_REACTIONS));
+            // Only how long it stays on screen; nothing else depends on this timer.
+            window.setTimeout(() => setReactions((prev) => prev.filter((r) => r.key !== key)), REACTION_MS);
+          },
+          'office:kicked': (e: { code: string }) => {
+            if (!mine(e)) return;
+            joinedWith.current = null;
+            setKicked(true);
+          },
+        };
         for (const [event, handler] of Object.entries(handlers))
-          (s.off as (e: string, h: unknown) => void)(event, handler);
-        s.off('connect', onConnect);
-        s.off('disconnect', onDisconnect);
-      };
-    });
+          (s.on as (e: string, h: unknown) => void)(event, handler);
+
+        const onConnect = () => {
+          setConnection('online');
+          // After a reconnect the server forgot which screens this socket shows: join again.
+          if (joinedWith.current) void doJoin(joinedWith.current);
+        };
+        const onDisconnect = () => setConnection('offline');
+        s.on('connect', onConnect);
+        s.on('disconnect', onDisconnect);
+        if (s.connected) onConnect();
+        cleanup = () => {
+          for (const [event, handler] of Object.entries(handlers))
+            (s.off as (e: string, h: unknown) => void)(event, handler);
+          s.off('connect', onConnect);
+          s.off('disconnect', onDisconnect);
+        };
+      });
     return () => {
       cancelled = true;
       cleanup();
@@ -195,15 +201,17 @@ export function useOfficeSession(code: string, screen: OfficeScreen, autoJoin: b
   useEffect(() => {
     if (autoJoin || session || joinError) return;
     let cancelled = false;
-    void getOfficeSocket().then(async (s) => {
-      const res = await officeRequest<{ session: OfficeSnapshot }>(s, 'office:join', {
-        code,
-        screen: 'stage',
-      });
-      if (cancelled) return;
-      if (res.ok) accept({ ...res.data.session, me: { ...res.data.session.me, screen } });
-      else setJoinError(res.code);
-    });
+    void getOfficeSocket()
+      .then(async (s) => {
+        const res = await officeRequest<{ session: OfficeSnapshot }>(s, 'office:join', {
+          code,
+          screen: 'stage',
+        });
+        if (cancelled) return;
+        if (res.ok) accept({ ...res.data.session, me: { ...res.data.session.me, screen } });
+        else setJoinError(res.code);
+      })
+      .catch(() => {}); // No account chosen: the other effect shows why.
     return () => {
       cancelled = true;
     };

@@ -227,3 +227,12 @@ button.oaq-square[aria-disabled='false']:hover {
     animation: none;
   }
 }
+
+.oaq-playback {
+  flex-wrap: wrap;
+}
+.oaq-speed[aria-pressed='true'] {
+  border-color: var(--accent, #c2410c);
+  color: var(--accent, #c2410c);
+  background: color-mix(in srgb, var(--accent, #c2410c) 10%, transparent);
+}

@@ -4,7 +4,7 @@ import { AvatarStudio } from '@/features/office/avatar-studio/AvatarStudio';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('avatar');
-  return { title: t('title') };
+  return { title: t('title'), robots: { index: false } };
 }
 
 export default function MyAnimalPage() {

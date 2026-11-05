@@ -1,25 +1,46 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { GameMeta } from '@/features/home/GameMeta';
 import { GameStatusChip } from '@/features/admin/GameStatusChip';
 import { FeatureIcon, type FeatureId } from '@/features/home/icons';
 import { JoinRoomForm } from '@/features/home/JoinRoomForm';
 import { GAME_IDS, GAMES, UPCOMING_GAMES } from '@/games/catalog';
 import { COVERS } from '@/games/covers';
+import { toLocale } from '@/i18n/messages';
+import { JsonLd } from '@/seo/JsonLd';
+import { absolute, publicPage } from '@/seo/site';
 
 const FEATURES: FeatureId[] = ['bot', 'online', 'ranked', 'replay'];
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('nav');
-  return { title: t('boardGames') };
+  const t = await getTranslations();
+  return publicPage({
+    title: t('nav.boardGames'),
+    description: `${t('app.tagline')} ${GAME_IDS.map((id) => t(`games.${id}.name`)).join(', ')}.`,
+    path: '/board-games',
+    locale: toLocale(await getLocale()),
+  });
 }
 
 export default async function BoardGamesPage() {
   const t = await getTranslations();
   return (
     <>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: t('catalog.title'),
+          itemListElement: GAME_IDS.map((id, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: absolute(`/games/${id}`),
+            name: t(`games.${id}.name`),
+          })),
+        }}
+      />
       <section className="hero relative overflow-hidden border-b border-[var(--border)]">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:py-16">
           <div>

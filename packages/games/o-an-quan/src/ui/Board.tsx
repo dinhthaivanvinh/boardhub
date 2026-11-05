@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { VisuallyHidden, type BoardProps } from '@bg/ui';
 import { ownSquares, quanIndex, scores } from '../rules/rules';
 import type { OAnQuanMove, OAnQuanSeat, OAnQuanState } from '../rules/types';
-import { usePlayback } from './use-playback';
+import { SPEEDS, usePlayback } from './use-playback';
 
 export type OAnQuanBoardProps = BoardProps<OAnQuanState, OAnQuanMove>;
 
@@ -50,7 +50,10 @@ export function Board({
   }
 
   // Moves are played out stone by stone; while that runs the board shows a frame of it.
-  const { shown, frame, playing, skip } = usePlayback(incoming, settings.animations);
+  const { shown, frame, playing, skip, speed, setSpeed, replay, canReplay } = usePlayback(
+    incoming,
+    settings.animations,
+  );
   const view: OAnQuanState = frame
     ? {
         ...shown,
@@ -200,9 +203,29 @@ export function Board({
       {stashBox(viewer, pBottom, 'stash-bottom')}
 
       {playing && (
-        <div className="oaq-direction">
-          <button type="button" className="oaq-dir-cancel" onClick={skip}>
+        <div className="oaq-direction oaq-playback" role="group" aria-label={t('games.o-an-quan.speed')}>
+          {SPEEDS.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className="oaq-dir-cancel oaq-speed"
+              aria-pressed={speed === s}
+              onClick={() => setSpeed(s)}
+              data-testid={`oaq-speed-${s}`}
+            >
+              {t(`games.o-an-quan.speeds.${s === 0.5 ? 'slow' : s === 1 ? 'normal' : 'fast'}`)}
+            </button>
+          ))}
+          <button type="button" className="oaq-dir-cancel" onClick={skip} data-testid="oaq-skip">
             {t('games.o-an-quan.skip')} ⏭
+          </button>
+        </div>
+      )}
+
+      {canReplay && selected === null && (
+        <div className="oaq-direction">
+          <button type="button" className="oaq-dir-cancel" onClick={replay} data-testid="oaq-replay-move">
+            ↺ {t('games.o-an-quan.replayMove')}
           </button>
         </div>
       )}

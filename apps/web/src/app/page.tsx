@@ -1,16 +1,36 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { JoinRoomForm } from '@/features/home/JoinRoomForm';
 import { OfficeArt } from '@/features/home/OfficeArt';
 import { GAME_IDS } from '@/games/catalog';
 import { COVERS } from '@/games/covers';
+import { toLocale } from '@/i18n/messages';
+import { JsonLd } from '@/seo/JsonLd';
+import { absolute, publicPage, SITE_NAME } from '@/seo/site';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('portal');
+  return publicPage({ description: t('tagline'), path: '/', locale: toLocale(await getLocale()) });
+}
 
 /** The portal: two areas side by side (ADR-0007). */
 export default async function PortalPage() {
   const t = await getTranslations('portal');
+  const locale = toLocale(await getLocale());
   return (
     <div className="hero">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: SITE_NAME,
+          url: absolute('/'),
+          inLanguage: locale,
+          description: t('tagline'),
+        }}
+      />
       <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
         <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl">
           {t('title')}

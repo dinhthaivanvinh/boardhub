@@ -31,14 +31,21 @@ test.describe('with the sowing animation', () => {
     await expect(hand).toBeHidden({ timeout: 20_000 });
   });
 
-  test('"Xem nhanh" skips to the result', async ({ page }) => {
+  test('"Bỏ qua" skips to the result; the move can then be watched again slowly', async ({ page }) => {
     await page.goto('/play/o-an-quan?mode=local');
     await mine(page, 1).click();
     await page.getByRole('button', { name: /Rải sang phải/ }).click();
     await expect(page.getByTestId('sowing-hand')).toBeVisible();
-    await page.getByRole('button', { name: /Xem nhanh/ }).click();
+    await page.getByRole('button', { name: /Bỏ qua/ }).click();
     await expect(page.getByTestId('sowing-hand')).toBeHidden();
     await expect(square(page, 2)).toHaveAttribute('data-taken', 'true');
+
+    await page.getByRole('button', { name: /Xem lại nước vừa đi/ }).click();
+    await expect(page.getByTestId('sowing-hand')).toBeVisible();
+    await page.getByRole('button', { name: /Chậm/ }).click();
+    await expect(page.getByRole('button', { name: /Chậm/ })).toHaveAttribute('aria-pressed', 'true');
+    await expect(square(page, 2)).toHaveAttribute('data-taken', 'true', { timeout: 30_000 });
+    await expect(page.getByTestId('sowing-hand')).toBeHidden();
   });
 });
 

@@ -1,13 +1,20 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { OfficeArt } from '@/features/home/OfficeArt';
 import { OfficeJoinForm } from '@/features/office/OfficeJoinForm';
 import { OFFICE_ACTIVITIES } from '@/office/catalog';
+import { toLocale } from '@/i18n/messages';
+import { publicPage } from '@/seo/site';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('office');
-  return { title: t('title'), description: t('tagline') };
+  return publicPage({
+    title: t('title'),
+    description: t('tagline'),
+    path: '/office',
+    locale: toLocale(await getLocale()),
+  });
 }
 
 const STEPS = ['create', 'join', 'draw'] as const;

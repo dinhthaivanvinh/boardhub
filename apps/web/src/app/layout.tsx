@@ -3,7 +3,10 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
+import { toLocale } from '@/i18n/messages';
+import { OG_LOCALE, SITE_NAME, SITE_URL } from '@/seo/site';
 import { AccountLink } from '@/features/account/AccountLink';
+import { AuthPrompt } from '@/features/account/AuthPrompt';
 import { AdminLink } from '@/features/admin/AdminLink';
 import { BannedBanner } from '@/features/admin/BannedBanner';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
@@ -14,7 +17,16 @@ import './globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('app');
-  return { title: { default: t('name'), template: `%s · ${t('name')}` }, description: t('tagline') };
+  const locale = toLocale(await getLocale());
+  return {
+    metadataBase: new URL(SITE_URL),
+    applicationName: SITE_NAME,
+    title: { default: t('name'), template: `%s · ${t('name')}` },
+    description: t('tagline'),
+    openGraph: { type: 'website', siteName: SITE_NAME, locale: OG_LOCALE[locale] },
+    twitter: { card: 'summary_large_image' },
+    formatDetection: { telephone: false },
+  };
 }
 
 export const viewport: Viewport = {
@@ -50,6 +62,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             </div>
           </header>
           <BannedBanner />
+          <AuthPrompt />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
           <footer className="border-t border-[var(--border)]">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-[var(--muted)]">

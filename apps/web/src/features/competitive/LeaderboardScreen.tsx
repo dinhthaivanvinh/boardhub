@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import type { LeaderboardEntry } from '@bg/protocol';
@@ -7,22 +8,27 @@ import { errorKey } from '@/game-runtime/error-key';
 import { GAME_IDS, type GameId } from '@/games/catalog';
 import { apiRequest } from '@/online/api';
 import { useSession } from '@/online/session';
+import { useHydrated } from '@/features/account/use-hydrated';
 
-export function LeaderboardScreen({ initialGame }: { initialGame: GameId }) {
+export type LeaderboardData = { entries: LeaderboardEntry[]; minGames: number };
+
+/**
+ * Rankings of one game. The page renders it on the server with the data already in (so search engines
+ * see the table); the browser only fetches when the server could not reach the game server.
+ */
+export function LeaderboardScreen({ gameId, initial }: { gameId: GameId; initial: LeaderboardData | null }) {
   const t = useTranslations();
-  const me = useSession((s) => s.user?.id ?? null);
-  const [gameId, setGameId] = useState<GameId>(initialGame);
-  const [data, setData] = useState<{ entries: LeaderboardEntry[]; minGames: number } | null>(null);
+  const hydrated = useHydrated();
+  const myId = useSession((s) => s.user?.id ?? null);
+  // Highlighting "you" waits for hydration: the server does not know who you are.
+  const me = hydrated ? myId : null;
+  const [data, setData] = useState<LeaderboardData | null>(initial);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (initial) return;
     let cancelled = false;
-    setData(null);
-    setError(null);
-    void apiRequest<{ entries: LeaderboardEntry[]; minGames: number }>(
-      'GET',
-      `/api/leaderboard/${gameId}`,
-    ).then((res) => {
+    void apiRequest<LeaderboardData>('GET', `/api/leaderboard/${gameId}`).then((res) => {
       if (cancelled) return;
       if (res.ok) setData(res.data);
       else setError(res.code);
@@ -30,25 +36,26 @@ export function LeaderboardScreen({ initialGame }: { initialGame: GameId }) {
     return () => {
       cancelled = true;
     };
-  }, [gameId]);
+  }, [gameId, initial]);
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
       <h1 className="text-2xl font-bold tracking-tight">{t('leaderboard.title')}</h1>
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label={t('leaderboard.games')}>
+      <h2 className="sr-only">{t(`games.${gameId}.name`)}</h2>
+      {/* Real links, one page per game, so every ranking can be found and shared. */}
+      <nav className="flex flex-wrap gap-2" aria-label={t('leaderboard.games')}>
         {GAME_IDS.map((id) => (
-          <button
+          <Link
             key={id}
-            type="button"
-            role="tab"
-            aria-selected={id === gameId}
+            href={`/leaderboard?game=${id}`}
+            scroll={false}
+            aria-current={id === gameId ? 'page' : undefined}
             className={`btn ${id === gameId ? 'btn-primary' : ''}`}
-            onClick={() => setGameId(id)}
           >
             {t(`games.${id}.name`)}
-          </button>
+          </Link>
         ))}
-      </div>
+      </nav>
       {error && (
         <p role="alert" className="text-[var(--danger)]">
           {t(errorKey(error))}

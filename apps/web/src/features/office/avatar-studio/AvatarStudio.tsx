@@ -56,12 +56,14 @@ export function AvatarStudio() {
   // Load: the saved avatar, or the player's default one.
   useEffect(() => {
     let cancelled = false;
-    void ensureToken().then(async (tok) => {
-      const res = await fetchMyAvatar(tok);
-      const me = useSession.getState().user;
-      if (cancelled || !me) return;
-      setAvatar(res.ok && res.data ? res.data : defaultAvatar(me.id));
-    });
+    void ensureToken()
+      .then(async (tok) => {
+        const res = await fetchMyAvatar(tok);
+        const me = useSession.getState().user;
+        if (cancelled || !me) return;
+        setAvatar(res.ok && res.data ? res.data : defaultAvatar(me.id));
+      })
+      .catch(() => {}); // No account chosen: the studio waits; the header link signs in.
     return () => {
       cancelled = true;
     };

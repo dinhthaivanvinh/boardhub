@@ -88,7 +88,11 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
 
   const bots =
     overrides.bots ??
-    (config.BOT_WORKERS > 0 ? new WorkerBotRunner(config.BOT_WORKERS) : new InlineBotRunner());
+    (config.BOT_WORKERS > 0
+      ? new WorkerBotRunner(config.BOT_WORKERS, undefined, (err) =>
+          app.log.error({ err }, 'bot workers cannot start; bots now think on the main thread'),
+        )
+      : new InlineBotRunner());
   const onJobError = (err: unknown, job: unknown) => app.log.error({ err, job }, 'job failed');
   // With Redis, timers live there too: they survive restarts and any process can run them.
   const jobs =

@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useRef } from 'react';
+import { resultDetail } from '@/features/match/result-detail';
+import { ResultOverlay, type ResultTone } from '@/features/match/ResultOverlay';
 import { GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { useSettings } from '@/features/settings/settings-store';
@@ -62,6 +65,23 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
   const playing = !m.result && m.mySeat !== null;
   const offer = m.pendingOffer;
 
+  // The result, in the middle of the board: from your side if you played, plainly if you watched.
+  const boardRef = useRef<HTMLElement>(null);
+  const winner = m.result?.kind === 'win' ? (m.result.winners[0] ?? 0) : null;
+  const tone: ResultTone =
+    m.result?.kind === 'draw' ? 'draw' : m.mySeat === null ? 'neutral' : winner === m.mySeat ? 'win' : 'loss';
+  const overlayTitle =
+    tone === 'draw'
+      ? t('match.overlay.draw')
+      : tone === 'win'
+        ? t('match.overlay.youWin')
+        : tone === 'loss'
+          ? t('match.overlay.youLose')
+          : t('match.overlay.wins', {
+              player: seatName(t, room.seats[winner ?? 0] ?? null, api.userId, api.labels),
+            });
+  const loser = Array.from({ length: players }, (_, s) => s).find((s) => s !== winner) ?? 0;
+
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:grid-rows-[auto_1fr] lg:gap-x-6">
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
@@ -71,7 +91,10 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
         {m.mySeat === null && <p className="text-sm text-[var(--muted)]">{t('room.spectating')}</p>}
       </div>
 
-      <section className="mx-auto w-full max-w-[min(100%,calc(100dvh-10rem))] lg:col-start-1 lg:row-span-2 lg:row-start-1">
+      <section
+        ref={boardRef}
+        className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-10rem))] lg:col-start-1 lg:row-span-2 lg:row-start-1"
+      >
         <Board
           view={m.view}
           mySeat={m.mySeat}
@@ -81,6 +104,21 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
           onMove={(move) => void api.submitMove(move)}
           settings={settings}
           t={t}
+        />
+        <ResultOverlay
+          show={m.result !== null}
+          tone={tone}
+          title={overlayTitle}
+          detail={
+            m.result
+              ? resultDetail(t, tone, m.result.reason, {
+                  loserName: seatName(t, room.seats[loser] ?? null, api.userId, api.labels),
+                  reasonText,
+                })
+              : ''
+          }
+          icon={winner !== null && PieceIcon ? <PieceIcon seat={winner} size={40} /> : undefined}
+          boardRef={boardRef}
         />
       </section>
 

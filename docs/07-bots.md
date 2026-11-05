@@ -34,6 +34,11 @@ không gian tìm kiếm (ví dụ Caro chỉ xét các ô trong bán kính 2 qua
 
 `deadlineMs` là mốc thời gian tuyệt đối theo cùng đồng hồ với `now` (mặc định `Date.now`). Mỗi level có thêm `timeMs` riêng; bot dừng ở mốc sớm hơn. Ở web, bot chạy trong Web Worker (`apps/web/src/game-runtime/bot.worker.ts`) với RNG `createRng("bot:" + seed, moveIndex)`.
 
+Ở server, `WorkerBotRunner` chạy bot trong worker thread qua `bot-worker-boot.mjs`: file JS này đăng ký tsx **bên trong** worker
+rồi mới import `bot-worker.ts` (loader truyền qua `--import` chưa có hiệu lực với file đầu vào của worker). Worker chết trước
+khi trả lời thì việc được xếp lại; chết liền 3 lần thì runner thôi tạo worker mới, ghi log một lần và cho bot nghĩ trên luồng
+chính (`degraded`), không bao giờ lặp tạo worker vô hạn hay đi nước ngẫu nhiên.
+
 ## 3. Quy tắc
 
 | #   | Quy tắc                                                                                           |

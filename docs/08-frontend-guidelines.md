@@ -89,6 +89,10 @@ Desktop                                   Mobile
 
 - Màu dùng CSS variables (`--board-bg`, `--board-line`, `--piece-p0`, `--piece-p1`, …) định nghĩa ở `apps/web/src/app/globals.css`.
 - Mỗi game có `src/ui/theme.css` riêng (export `./theme.css`, được `@import` trong `globals.css`). Màn chơi có thuộc tính `data-game="<id>"`, nên game đổi màu quân bằng `[data-game='<id>'] { --piece-p0: …; }` mà không ảnh hưởng game khác.
+- **Kết thúc ván:** `ResultOverlay` (apps/web/src/features/match) hiện kết quả giữa bàn cờ với hiệu ứng tỏa sáng: vàng
+  khi bạn thắng, xám xanh khi thua, tím bạc khi hòa, trung tính khi chơi chung máy hoặc đang xem. Nó chờ nước cuối diễn
+  xong: tối thiểu 0,8 giây và không còn phần tử `[data-animating="true"]` trong bàn (board nào có hoạt cảnh dài phải
+  đặt thuộc tính này). "Xem bàn cờ" hoặc Esc để ẩn.
 - **Quân di chuyển phải trượt tới chỗ mới**, không hiện ra ngay: dùng `SlidingPiece` của `@bg/ui` trong `overlay` của
   `GridBoard` (key = `moveCount`, `animate = settings.animations`) và không vẽ quân đó trong ô đích. CSS `.bg-slide` ở
   `globals.css` (0,6 giây, tắt khi giảm chuyển động). Hiệu ứng phụ (lật, đổi màu) chờ quân trượt xong mới chạy.

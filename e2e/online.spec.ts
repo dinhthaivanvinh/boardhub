@@ -46,6 +46,13 @@ test('two guests play Caro online through an invite link', async ({ browser }) =
   await expect(status(alice)).toContainText('thắng (5 quân liên tiếp)');
   await expect(status(bob)).toContainText('thắng (5 quân liên tiếp)');
   await expect(alice.locator('[data-win="true"]')).toHaveCount(5);
+  // Each player sees the result from their own side.
+  await expect(alice.getByTestId('result-overlay').getByRole('dialog')).toContainText('Bạn thắng!');
+  await expect(alice.getByTestId('result-overlay')).toHaveAttribute('data-tone', 'win');
+  await expect(bob.getByTestId('result-overlay').getByRole('dialog')).toContainText('Bạn thua');
+  await expect(bob.getByTestId('result-overlay')).toHaveAttribute('data-tone', 'loss');
+  await alice.keyboard.press('Escape');
+  await expect(alice.getByTestId('result-overlay')).toBeHidden();
 
   // Chat reaches the other player.
   await bob.getByLabel('Nhập tin nhắn…').fill('ván hay!');

@@ -40,6 +40,14 @@ test('two players on one device play to a win', async ({ page }) => {
 
   await expect(status(page)).toHaveText('X · Người chơi 1 thắng (5 quân liên tiếp)');
   await expect(page.locator('[data-win="true"]')).toHaveCount(5);
+  // The result glows in the middle of the board; it can be put away to look at the board.
+  const overlay = page.getByTestId('result-overlay');
+  await expect(overlay).toBeVisible();
+  await expect(overlay).toHaveAttribute('data-tone', 'neutral');
+  await expect(overlay.getByRole('dialog')).toContainText('Người chơi 1 thắng!');
+  await expect(overlay).toContainText('5 quân liên tiếp');
+  await overlay.getByRole('button', { name: 'Xem bàn cờ' }).click();
+  await expect(overlay).toBeHidden();
   // The board no longer accepts moves.
   await cell(page, 10, 10).click();
   await expect(cell(page, 10, 10)).not.toHaveAttribute('data-piece', /.*/);
@@ -63,4 +71,16 @@ test('the language switcher changes the UI to English', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your game board, anywhere');
   await page.getByRole('combobox', { name: 'Language' }).selectOption('vi');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bàn cờ của bạn, ở bất cứ đâu');
+});
+
+test('resigning against the computer: the result says you resigned', async ({ page }) => {
+  await page.goto('/play/caro?mode=bot&level=easy');
+  await cell(page, 8, 8).click();
+  await expect(page.locator('[data-piece="o"]')).toHaveCount(1, { timeout: 10_000 });
+  await page.getByRole('button', { name: /Đầu hàng/ }).click();
+  const overlay = page.getByTestId('result-overlay');
+  await expect(overlay).toHaveAttribute('data-tone', 'loss');
+  await expect(overlay.getByRole('dialog')).toContainText('Bạn thua');
+  await expect(overlay.getByRole('dialog')).toContainText('Bạn đã đầu hàng');
+  await expect(overlay.getByRole('dialog')).not.toContainText('Đối thủ');
 });

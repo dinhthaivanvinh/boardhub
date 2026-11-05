@@ -84,7 +84,31 @@
       "confirmMove": "Chạm 2 lần để xác nhận nước đi",
       "animations": "Hiệu ứng"
     },
-    "loading": "Đang tải bàn cờ…"
+    "loading": "Đang tải bàn cờ…",
+    "overlay": {
+      "viewBoard": "Xem bàn cờ",
+      "youWin": "Bạn thắng!",
+      "youLose": "Bạn thua",
+      "draw": "Hòa!",
+      "wins": "{player} thắng!",
+      "reasons": {
+        "resign": {
+          "you": "Bạn đã đầu hàng",
+          "opponent": "Đối thủ đầu hàng",
+          "player": "{player} đầu hàng"
+        },
+        "abandon": {
+          "you": "Bạn đã rời trận",
+          "opponent": "Đối thủ rời trận",
+          "player": "{player} rời trận"
+        },
+        "timeout": {
+          "you": "Bạn hết giờ",
+          "opponent": "Đối thủ hết giờ",
+          "player": "{player} hết giờ"
+        }
+      }
+    }
   },
   "reasons": {
     "resign": "đối thủ đầu hàng",

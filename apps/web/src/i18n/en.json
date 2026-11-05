@@ -84,7 +84,31 @@
       "confirmMove": "Tap twice to confirm a move",
       "animations": "Animations"
     },
-    "loading": "Loading board…"
+    "loading": "Loading board…",
+    "overlay": {
+      "viewBoard": "View board",
+      "youWin": "You win!",
+      "youLose": "You lose",
+      "draw": "Draw!",
+      "wins": "{player} wins!",
+      "reasons": {
+        "resign": {
+          "you": "You resigned",
+          "opponent": "Your opponent resigned",
+          "player": "{player} resigned"
+        },
+        "abandon": {
+          "you": "You left the game",
+          "opponent": "Your opponent left",
+          "player": "{player} left"
+        },
+        "timeout": {
+          "you": "You ran out of time",
+          "opponent": "Your opponent ran out of time",
+          "player": "{player} ran out of time"
+        }
+      }
+    }
   },
   "reasons": {
     "resign": "opponent resigned",

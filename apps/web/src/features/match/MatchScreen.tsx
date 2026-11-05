@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import type { GameResult, Seat } from '@bg/engine';
 import { GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
@@ -11,6 +11,8 @@ import { useLocalMatch } from '@/game-runtime/use-local-match';
 import { useSettings } from '@/features/settings/settings-store';
 import { errorKey } from '@/game-runtime/error-key';
 import { RulesButton } from '@/features/rules/RulesButton';
+import { resultDetail } from './result-detail';
+import { ResultOverlay, type ResultTone } from './ResultOverlay';
 
 export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSetup }) {
   const t = useTranslations();
@@ -54,6 +56,27 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
   const viewer: Seat = setup.mode === 'bot' ? setup.humanSeat : (match.humanToMove ?? 0);
   const isMyTurn = match.humanToMove !== null;
 
+  // The result, in the middle of the board. Against the computer it is told from your side.
+  const boardRef = useRef<HTMLElement>(null);
+  const result = snapshot.result;
+  const winner = result?.kind === 'win' ? (result.winners[0] ?? 0) : null;
+  const tone: ResultTone =
+    result?.kind === 'draw'
+      ? 'draw'
+      : setup.mode !== 'bot'
+        ? 'neutral'
+        : winner === setup.humanSeat
+          ? 'win'
+          : 'loss';
+  const overlayTitle =
+    tone === 'draw'
+      ? t('match.overlay.draw')
+      : tone === 'win'
+        ? t('match.overlay.youWin')
+        : tone === 'loss'
+          ? t('match.overlay.youLose')
+          : t('match.overlay.wins', { player: seatName(winner ?? 0) });
+
   return (
     // Mobile: title + status above the board, everything else below. Desktop: board left, panel right.
     <div
@@ -78,7 +101,10 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
         )}
       </div>
 
-      <section className="mx-auto w-full max-w-[min(100%,calc(100dvh-8rem))] lg:col-start-1 lg:row-span-2 lg:row-start-1">
+      <section
+        ref={boardRef}
+        className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-8rem))] lg:col-start-1 lg:row-span-2 lg:row-start-1"
+      >
         <Board
           view={definition.playerView(snapshot.state, viewer)}
           mySeat={viewer}
@@ -89,6 +115,21 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           onMove={match.play}
           settings={settings}
           t={t}
+        />
+        <ResultOverlay
+          show={result !== null}
+          tone={tone}
+          title={overlayTitle}
+          detail={
+            result
+              ? resultDetail(t, tone, result.reason, {
+                  loserName: seatName(controllers.findIndex((_, s) => s !== winner)),
+                  reasonText,
+                })
+              : ''
+          }
+          icon={winner !== null && PieceIcon ? <PieceIcon seat={winner} size={40} /> : undefined}
+          boardRef={boardRef}
         />
       </section>
 

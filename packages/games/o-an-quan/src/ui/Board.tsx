@@ -187,7 +187,7 @@ export function Board({
   const mover = last ? (last.cell <= 5 ? 0 : 1) : null;
 
   return (
-    <div className="oaq-board">
+    <div className="oaq-board" data-animating={playing ? 'true' : undefined}>
       {stashBox(otherSeat(viewer), pTop, 'stash-top')}
       <div className="oaq-table" role="group" aria-label={t('games.o-an-quan.boardLabel')}>
         {quanSquare(leftQuan, 'left')}

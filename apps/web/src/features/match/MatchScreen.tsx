@@ -10,6 +10,7 @@ import { controllersFor, type MatchSetup, type SeatController } from '@/game-run
 import { useLocalMatch } from '@/game-runtime/use-local-match';
 import { useSettings } from '@/features/settings/settings-store';
 import { errorKey } from '@/game-runtime/error-key';
+import { RulesButton } from '@/features/rules/RulesButton';
 
 export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSetup }) {
   const t = useTranslations();
@@ -60,7 +61,10 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
       className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:py-6"
     >
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
-        <h1 className="text-xl font-bold tracking-tight lg:text-2xl">{t(`games.${gameId}.name`)}</h1>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-xl font-bold tracking-tight lg:text-2xl">{t(`games.${gameId}.name`)}</h1>
+          <RulesButton gameId={gameId} config={setup.config} />
+        </div>
         <p
           role="status"
           className={`card py-2.5 text-base font-medium lg:py-3 ${snapshot.result ? 'border-[var(--accent)]' : ''}`}

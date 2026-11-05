@@ -42,7 +42,9 @@ Dùng skill **`bg-bot`**. Tối thiểu phải có cấp `easy` (randomBot hoặ
 
 ## Bước 7 — i18n
 
-`src/i18n/vi.json` và `en.json` cần có: `name`, `shortDescription`, `rules` (markdown), mọi mã lỗi, mọi `reason` kết thúc ván, nhãn của các field config.
+`src/i18n/vi.json` và `en.json` cần có: `name`, `shortDescription`, `rules` (markdown), mọi mã lỗi, mọi `reason` kết thúc ván, nhãn của các field config (và `config.<key>Options.<value>` cho giá trị cần tên đẹp, ví dụ `"19": "19 × 19"`).
+
+`rules` được hiển thị **ngay trong ván** qua nút "Luật chơi" (FR-PLAY-08), nên phải đầy đủ và ngắn gọn: người chơi đọc nó giữa ván. Chỉ dùng đoạn văn (cách nhau bằng dòng trống) và `**đậm**`.
 
 ## Bước 8 — Đăng ký
 

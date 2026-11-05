@@ -9,6 +9,7 @@ import { GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { buildPlayUrl, type PlayMode } from '@/game-runtime/match-setup';
 import { errorKey } from '@/game-runtime/error-key';
+import { configOptionLabel } from '@/features/rules/config-labels';
 import { getSocket, request } from '@/online/socket';
 import {
   TIME_CONTROL_PRESETS,
@@ -87,10 +88,7 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
     () => definition.configSchema.parse({}) as Record<string, unknown>,
   );
 
-  const optionLabel = (key: string, value: string | number) => {
-    const k = `games.${gameId}.config.${key}Options.${value}`;
-    return t.has(k) ? t(k) : String(value);
-  };
+  const optionLabel = (key: string, value: string | number) => configOptionLabel(t, gameId, key, value);
 
   return (
     <form

@@ -48,7 +48,15 @@ export interface BoardProps<V, M> {
 - Bàn cờ có nhiều hiệu ứng hoặc > 500 phần tử động → cân nhắc Canvas/PixiJS (cần ADR).
 - Animation bằng CSS transform hoặc `framer-motion`; tắt khi người dùng bật `prefers-reduced-motion` hoặc tắt trong cài đặt.
 
-## 4. Tương tác
+## 4. Luật chơi trong ván
+
+Mọi màn chơi (local/bot, phòng online, xem lại) có nút **Luật chơi** (`apps/web/src/features/rules/RulesButton.tsx`, FR-PLAY-08).
+Hộp thoại dùng `<dialog>` gốc của trình duyệt (giữ focus, Esc để đóng, ván phía sau vẫn chạy) và hiển thị:
+
+1. **Tùy chọn của ván này**: từ `configFields` + giá trị config (qua `describeConfig`), cộng thời gian và luật mất kết nối với phòng online.
+2. Toàn văn `games.<id>.rules` (markdown đơn giản: đoạn văn và **đậm**).
+
+## 5. Tương tác
 
 - Hỗ trợ cả **click-click** (chọn quân → chọn ô đích) và **kéo-thả** (drag) cho game có di chuyển quân.
 - Bàn phím: phím mũi tên di chuyển con trỏ ô, `Enter`/`Space` để chọn, `Esc` để hủy chọn.
@@ -56,7 +64,7 @@ export interface BoardProps<V, M> {
 - Phân biệt quân bằng **hình dạng hoặc ký hiệu**, không chỉ bằng màu.
 - Vùng chạm tối thiểu 32×32 px trên mobile; nếu bàn cờ quá dày (Caro 19×19) thì có chế độ zoom/pan.
 
-## 5. Layout màn chơi
+## 6. Layout màn chơi
 
 ```
 Desktop                                   Mobile
@@ -71,13 +79,13 @@ Desktop                                   Mobile
 └──────────────────────┴──────────┘       └──────────────┘
 ```
 
-## 6. i18n
+## 7. i18n
 
 - Dùng `next-intl`. Chuỗi chung nằm ở `apps/web/src/i18n/{vi,en}.json`.
 - Chuỗi riêng của game (tên, luật, mã lỗi) nằm ở `packages/games/<id>/src/i18n/{vi,en}.json` và được gộp vào lúc build.
 - Không nối chuỗi thủ công; dùng ICU message: `"{player} thắng bằng {reason}"`.
 
-## 7. Theme
+## 8. Theme
 
 - Màu dùng CSS variables (`--board-bg`, `--board-line`, `--piece-p0`, `--piece-p1`, …) định nghĩa ở `apps/web/src/app/globals.css`.
 - Mỗi game có `src/ui/theme.css` riêng (export `./theme.css`, được `@import` trong `globals.css`). Màn chơi có thuộc tính `data-game="<id>"`, nên game đổi màu quân bằng `[data-game='<id>'] { --piece-p0: …; }` mà không ảnh hưởng game khác.

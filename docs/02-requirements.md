@@ -23,15 +23,16 @@
 
 ### 1.3 Chơi game (PLAY)
 
-| ID         | Yêu cầu                                                                                  | Ưu tiên |
-| ---------- | ---------------------------------------------------------------------------------------- | ------- |
-| FR-PLAY-01 | Chơi `local` (hot-seat) hoàn toàn ở client, chơi được cả khi offline                     | M       |
-| FR-PLAY-02 | Chơi với bot, chọn cấp độ (dễ / vừa / khó)                                               | M       |
-| FR-PLAY-03 | Highlight nước đi hợp lệ (có thể tắt trong cài đặt)                                      | M       |
-| FR-PLAY-04 | Hiển thị nước đi cuối, lượt hiện tại, đồng hồ                                            | M       |
-| FR-PLAY-05 | Xin hòa, đầu hàng, xin đi lại (đối thủ phải đồng ý; chỉ áp dụng ở chế độ không xếp hạng) | M       |
-| FR-PLAY-06 | Kết thúc ván: hiển thị kết quả, lý do, nút "Chơi lại"                                    | M       |
-| FR-PLAY-07 | Biến thể luật và cấu hình thời gian chọn khi tạo ván                                     | M       |
+| ID         | Yêu cầu                                                                                                      | Ưu tiên |
+| ---------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| FR-PLAY-01 | Chơi `local` (hot-seat) hoàn toàn ở client, chơi được cả khi offline                                         | M       |
+| FR-PLAY-02 | Chơi với bot, chọn cấp độ (dễ / vừa / khó)                                                                   | M       |
+| FR-PLAY-03 | Highlight nước đi hợp lệ (có thể tắt trong cài đặt)                                                          | M       |
+| FR-PLAY-04 | Hiển thị nước đi cuối, lượt hiện tại, đồng hồ                                                                | M       |
+| FR-PLAY-05 | Xin hòa, đầu hàng, xin đi lại (đối thủ phải đồng ý; chỉ áp dụng ở chế độ không xếp hạng)                     | M       |
+| FR-PLAY-06 | Kết thúc ván: hiển thị kết quả, lý do, nút "Chơi lại"                                                        | M       |
+| FR-PLAY-07 | Biến thể luật và cấu hình thời gian chọn khi tạo ván                                                         | M       |
+| FR-PLAY-08 | Xem lại luật chơi và tùy chọn của ván hiện tại ngay trong lúc chơi (local, online, xem lại) mà không rời ván | M       |
 
 ### 1.4 Phòng & multiplayer (ROOM)
 

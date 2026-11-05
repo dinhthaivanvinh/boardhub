@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { MatchDetail } from '@bg/protocol';
 import { DEFAULT_BOARD_SETTINGS } from '@bg/ui';
 import { errorKey } from '@/game-runtime/error-key';
+import { RulesButton } from '@/features/rules/RulesButton';
 import { buildReplay } from '@/game-runtime/replay';
 import { GAMES, isGameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
@@ -126,9 +127,12 @@ export function ReplayScreen({ matchId }: { matchId: string }) {
       className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-x-6 lg:py-6"
     >
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
-        <h1 className="text-xl font-bold tracking-tight lg:text-2xl">
-          {t('replay.title', { game: t(`games.${gameId}.name`) })}
-        </h1>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-xl font-bold tracking-tight lg:text-2xl">
+            {t('replay.title', { game: t(`games.${gameId}.name`) })}
+          </h1>
+          <RulesButton gameId={gameId} config={match.config} />
+        </div>
         <p className="text-sm text-[var(--muted)]">
           {t('replay.when', { date: new Date(match.startedAt).toLocaleString() })}
         </p>

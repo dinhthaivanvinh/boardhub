@@ -230,5 +230,13 @@
     "pause": "Pause",
     "back": "Back to profile",
     "broken": "This game cannot be replayed (the rules may have changed)."
+  },
+  "rules": {
+    "open": "Rules",
+    "title": "Rules: {game}",
+    "close": "Close",
+    "thisGame": "Options for this game",
+    "on": "On",
+    "off": "Off"
   }
 }

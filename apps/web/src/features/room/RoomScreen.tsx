@@ -4,10 +4,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { errorKey } from '@/game-runtime/error-key';
+import { RulesButton } from '@/features/rules/RulesButton';
+import { isGameId } from '@/games/catalog';
 import { useRoom } from '@/online/use-room';
 import { ChatPanel } from './ChatPanel';
 import { Lobby } from './Lobby';
 import { OnlineMatchView } from './OnlineMatchView';
+import { timeControlLabel } from './shared';
 
 export function RoomScreen({ code }: { code: string }) {
   const t = useTranslations();
@@ -41,16 +44,31 @@ export function RoomScreen({ code }: { code: string }) {
           {t(`games.${room.gameId}.name`)}{' '}
           <span className="font-mono text-base text-[var(--muted)]">#{room.code}</span>
         </h1>
-        <button
-          type="button"
-          className="btn"
-          onClick={async () => {
-            await api.leave();
-            router.push('/');
-          }}
-        >
-          {t('room.leave')}
-        </button>
+        <div className="flex gap-2">
+          {isGameId(room.gameId) && (
+            <RulesButton
+              gameId={room.gameId}
+              config={room.config}
+              extra={[
+                { label: t('setup.timeControl'), value: timeControlLabel(t, room.timeControl) },
+                {
+                  label: t('setup.disconnectPolicy'),
+                  value: t(`setup.disconnectPolicies.${room.disconnectPolicy}`),
+                },
+              ]}
+            />
+          )}
+          <button
+            type="button"
+            className="btn"
+            onClick={async () => {
+              await api.leave();
+              router.push('/');
+            }}
+          >
+            {t('room.leave')}
+          </button>
+        </div>
       </div>
 
       {api.connection === 'offline' && (

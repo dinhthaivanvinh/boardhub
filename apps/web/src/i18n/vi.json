@@ -230,5 +230,13 @@
     "pause": "Tạm dừng",
     "back": "Về hồ sơ",
     "broken": "Không dựng lại được ván này (luật chơi có thể đã thay đổi)."
+  },
+  "rules": {
+    "open": "Luật chơi",
+    "title": "Luật chơi: {game}",
+    "close": "Đóng",
+    "thisGame": "Tùy chọn của ván này",
+    "on": "Bật",
+    "off": "Tắt"
   }
 }

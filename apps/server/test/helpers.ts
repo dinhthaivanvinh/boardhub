@@ -4,7 +4,7 @@ import type { ChatMessage, MatchSnapshot, RoomSnapshot, TimeControl } from '@bg/
 import { InlineBotRunner } from '../src/bots/bot-runner';
 import type { Actor } from '../src/domain/types';
 import { GameHub, type Notifier } from '../src/hub/game-hub';
-import { ManualScheduler } from '../src/hub/scheduler';
+import { ManualJobScheduler } from '../src/hub/scheduler';
 import { GAME_DEFS } from '../src/registry';
 import { MemoryLiveStore } from '../src/store/live-store';
 import { MemoryHistoryRepo } from '../src/store/repos';
@@ -52,7 +52,7 @@ export function makeHub(opts: { graceMs?: number; botDelayMs?: number } = {}) {
   let now = 1_000_000;
   const store = new MemoryLiveStore();
   const history = new MemoryHistoryRepo();
-  const scheduler = new ManualScheduler();
+  const scheduler = new ManualJobScheduler();
   const events = {
     rooms: [] as RoomSnapshot[],
     matches: [] as Parameters<Notifier['matchUpdated']>[0][],
@@ -71,7 +71,7 @@ export function makeHub(opts: { graceMs?: number; botDelayMs?: number } = {}) {
     history,
     games,
     bots: new InlineBotRunner(),
-    scheduler,
+    jobs: scheduler,
     notifier,
     log: silentLog,
     now: () => now,
@@ -81,6 +81,7 @@ export function makeHub(opts: { graceMs?: number; botDelayMs?: number } = {}) {
     graceMs: opts.graceMs ?? 60_000,
     botDelayMs: opts.botDelayMs ?? 400,
   });
+  scheduler.start(hub.runJob);
   return {
     hub,
     store,

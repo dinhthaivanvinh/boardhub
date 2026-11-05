@@ -28,7 +28,7 @@
 - [x] Lưu users / matches / match_players / match_moves vào PostgreSQL (Kysely, ADR-0004)
 - [x] Chat (lọc từ ngữ cơ bản)
 - [x] Web: tạo phòng, link mời, vào bằng mã, sảnh chờ, ván online, trang tài khoản
-- [ ] Hẹn giờ dùng chung qua Redis (hiện hẹn giờ nằm trong từng process, xem docs/06 §4)
+- [x] Hẹn giờ dùng chung qua Redis: job lưu ở Redis, process nào cũng chạy được, sống sót qua khởi động lại (docs/06 §4)
 - **Demo:** 2 người ở 2 máy chơi Caro qua link mời.
 
 ## M3 — Mở rộng game (3 tuần)

@@ -61,6 +61,8 @@ Code: `apps/server/src/store/redis-live-store.ts`. Giá trị là JSON, TTL 24 g
 | `match:{matchId}`  | string (JSON) | `MatchRecord`: full state, `seq`, seed, danh sách nước, đồng hồ, `processedMoveIds`, kết quả |
 | `chat:{roomId}`    | list          | 50 tin nhắn cuối (JSON)                                                                      |
 | `lock:{roomId}`    | string        | khóa `SET NX PX 5000` + token, nhả bằng Lua compare-and-delete                               |
+| `jobs:due`         | sorted set    | khóa job → thời điểm đến hạn (ms)                                                            |
+| `jobs:data`        | hash          | khóa job → `{ v, job }` (JSON). `job` là `{kind: clock\|grace\|bot, …}`                      |
 
 Mọi thay đổi phòng/ván chạy trong `withLock(roomId)`, kể cả hẹn giờ và bot. Socket.IO dùng `@socket.io/redis-adapter`
 để broadcast giữa nhiều process (có test tích hợp với 2 server).
@@ -74,7 +76,17 @@ Không có `REDIS_URL` thì dùng `MemoryLiveStore` (một process, mất khi kh
 - Ghi lịch sử là "best effort": lỗi DB được log nhưng không làm hỏng ván đang chơi.
 - Xóa tài khoản (sau này): ẩn danh hóa `users`, giữ `matches` để không làm hỏng lịch sử của người khác.
 
-## 4. Giới hạn hiện tại
+## 4. Hẹn giờ dùng chung (`apps/server/src/hub/scheduler.ts`)
 
-- Hẹn giờ (đồng hồ, thời gian chờ kết nối lại, lượt của bot) nằm trong process đã tạo ra nó. Process đó khởi động lại thì
-  hẹn giờ mất; đồng hồ vẫn được kiểm tra lại khi có nước đi tiếp theo. Cần một hàng đợi hẹn giờ dùng chung (Redis) trước khi chạy nhiều node thật.
+Đồng hồ, thời gian chờ kết nối lại và lượt của bot là **job dạng dữ liệu** (không phải closure), lưu ở `jobs:due` / `jobs:data`.
+
+- Mỗi process quét job đến hạn mỗi 100 ms bằng một script Lua nguyên tử, nên hai process không nhận trùng một job.
+- Job được nhận bị đẩy lùi một **lease** (15 s): nếu process chết khi đang chạy, hết lease thì process khác chạy lại.
+  Vì thế handler (`GameHub.runJob`) phải **idempotent**: mọi nhánh tự kiểm tra lại trạng thái (đã có kết quả? còn đúng `seq`? đã hết giờ thật chưa?).
+- Hẹn lại cùng khóa thì thay job cũ; mỗi lần hẹn có `v` riêng, nên việc xác nhận của một lần chạy cũ không xoá job mới.
+- Handler lỗi thì log rồi bỏ job (không thử lại mãi); trường hợp process chết hẳn là việc của lease.
+- Đồng hồ các máy chủ phải đồng bộ (NTP) vì thời điểm đến hạn so với giờ của từng process.
+- Không có `REDIS_URL`: dùng `TimerJobScheduler` (setTimeout trong process, mất khi khởi động lại).
+
+Có test tích hợp: 2 process chia việc và mỗi job chạy đúng 1 lần; process sập giữa chừng thì process khác chạy lại;
+server tạo ván bị tắt thì server còn lại vẫn xử thua người hết giờ.

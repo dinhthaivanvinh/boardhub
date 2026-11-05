@@ -144,6 +144,7 @@ Có thể dựng lại state từ đầu bằng `setup(config, seed)` rồi áp 
 
 - Game server **stateless ở tầng process**: mọi state nằm ở Redis, nên process nào cũng xử lý được phòng nào (cần lock theo `roomId`).
 - Sticky session ở load balancer cho WebSocket; Socket.IO Redis adapter để broadcast giữa các node.
+- Hẹn giờ (đồng hồ, chờ kết nối lại, lượt bot) là job trong Redis, node nào cũng chạy được, không mất khi một node khởi động lại (docs/06 §4).
 - Bot chạy trong worker pool; bot ở cấp độ khó có ngân sách thời gian cố định (ví dụ 1–2 giây).
 - Môi trường: `local` (docker compose: postgres, redis) → `staging` → `production`.
 

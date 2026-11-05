@@ -25,7 +25,7 @@ import { HubError } from '../errors';
 import type { LiveStore } from '../store/live-store';
 import type { HistoryRepo } from '../store/repos';
 import { maskProfanity } from './profanity';
-import type { Scheduler } from './scheduler';
+import type { Job, JobScheduler } from './scheduler';
 
 export interface Notifier {
   roomUpdated(room: RoomSnapshot): void;
@@ -49,7 +49,8 @@ export interface HubOptions {
   history: HistoryRepo;
   games: Record<string, AnyGameDefinition>;
   bots: BotRunner;
-  scheduler: Scheduler;
+  /** Timers (clocks, grace periods, bot turns). Redis-backed when running several processes. */
+  jobs: JobScheduler;
   notifier: Notifier;
   log: Logger;
   now?: () => number;
@@ -141,7 +142,7 @@ export class GameHub {
       if (seat >= 0) {
         const occ = room.seats[seat] as UserOccupant;
         Object.assign(occ, { connected: true, graceUntil: null, name: actor.name });
-        this.o.scheduler.clear(graceKey(room.id, actor.userId));
+        await this.o.jobs.cancel(graceKey(room.id, actor.userId));
       } else if (!room.spectators.includes(actor.userId)) {
         room.spectators.push(actor.userId);
       }
@@ -162,7 +163,7 @@ export class GameHub {
       room.spectators = room.spectators.filter((id) => id !== actor.userId);
       const seat = seatOf(room, actor.userId);
       if (seat >= 0 && room.status === 'playing') {
-        this.markDisconnected(room, seat);
+        await this.markDisconnected(room, seat);
       } else if (seat >= 0) {
         room.seats[seat] = null;
       }
@@ -269,7 +270,7 @@ export class GameHub {
         }),
       );
       this.o.log.info({ roomId, matchId: match.id }, 'match started');
-      this.afterMatchChange(room, match);
+      await this.afterMatchChange(room, match);
     });
   }
 
@@ -317,7 +318,7 @@ export class GameHub {
       if (seat < 0) {
         room.spectators = room.spectators.filter((id) => id !== userId);
       } else {
-        this.markDisconnected(room, seat);
+        await this.markDisconnected(room, seat);
       }
       await this.saveRoom(room);
     });
@@ -445,10 +446,22 @@ export class GameHub {
       await this.history(() => this.o.history.finishMatch(match.id, result, this.now()));
       this.o.log.info({ roomId: room.id, matchId: match.id, result }, 'match finished');
     }
-    this.afterMatchChange(room, match);
+    await this.afterMatchChange(room, match);
   }
 
-  private afterMatchChange(room: Room, match: MatchRecord) {
+  /** Runs a due job. Every branch re-checks the current state, so running a job twice is harmless. */
+  runJob = async (job: Job): Promise<void> => {
+    switch (job.kind) {
+      case 'clock':
+        return this.onClockTimer(job.roomId, job.matchId);
+      case 'grace':
+        return this.onGraceExpired(job.roomId, job.userId);
+      case 'bot':
+        return this.runBotTurn(job.roomId, job.matchId, job.seq);
+    }
+  };
+
+  private async afterMatchChange(room: Room, match: MatchRecord) {
     const perUser = room.seats.flatMap((s, seat) =>
       s?.kind === 'user' && seat < match.players
         ? [{ userId: s.userId, snapshot: this.snapshotFor(match, seat) }]
@@ -459,23 +472,26 @@ export class GameHub {
     const clockKey = `clock:${match.id}`;
     const botKey = `bot:${match.id}`;
     if (match.result) {
-      this.o.scheduler.clear(clockKey);
-      this.o.scheduler.clear(botKey);
+      await this.o.jobs.cancel(clockKey);
+      await this.o.jobs.cancel(botKey);
       return;
     }
     const deadline = clockDeadline(match.clocks);
-    if (deadline === null) this.o.scheduler.clear(clockKey);
-    else this.o.scheduler.set(clockKey, deadline, () => this.onClockTimer(room.id, match.id));
+    if (deadline === null) await this.o.jobs.cancel(clockKey);
+    else
+      await this.o.jobs.schedule(clockKey, deadline, { kind: 'clock', roomId: room.id, matchId: match.id });
 
     const active = this.game(match.gameId).activePlayers(match.state)[0];
     const occ = active === undefined ? null : room.seats[active];
     if (occ?.kind === 'bot' && active !== undefined) {
-      const seq = match.seq;
-      this.o.scheduler.set(botKey, this.now() + this.botDelayMs, () =>
-        this.runBotTurn(room.id, match.id, seq),
-      );
+      await this.o.jobs.schedule(botKey, this.now() + this.botDelayMs, {
+        kind: 'bot',
+        roomId: room.id,
+        matchId: match.id,
+        seq: match.seq,
+      });
     } else {
-      this.o.scheduler.clear(botKey);
+      await this.o.jobs.cancel(botKey);
     }
   }
 
@@ -588,14 +604,15 @@ export class GameHub {
     room.status = 'finished';
   }
 
-  private markDisconnected(room: Room, seat: number) {
+  private async markDisconnected(room: Room, seat: number) {
     const occ = room.seats[seat] as UserOccupant;
     occ.connected = false;
     occ.graceUntil = this.now() + this.graceMs;
-    const userId = occ.userId;
-    this.o.scheduler.set(graceKey(room.id, userId), occ.graceUntil, () =>
-      this.onGraceExpired(room.id, userId),
-    );
+    await this.o.jobs.schedule(graceKey(room.id, occ.userId), occ.graceUntil, {
+      kind: 'grace',
+      roomId: room.id,
+      userId: occ.userId,
+    });
   }
 
   private passHost(room: Room, leaving: string) {

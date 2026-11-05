@@ -10,7 +10,7 @@ import type { ServerConfig } from './config';
 import { createDb, migrateToLatest } from './db/database';
 import { PgHistoryRepo, PgUserRepo } from './db/pg-repos';
 import { GameHub } from './hub/game-hub';
-import { TimerScheduler, type Scheduler } from './hub/scheduler';
+import { RedisJobScheduler, TimerJobScheduler, type JobScheduler } from './hub/scheduler';
 import { HistoryService } from './history/history-service';
 import { registerRoutes } from './http/routes';
 import { attachGateway, createNotifier, type IoServer } from './realtime/gateway';
@@ -24,7 +24,7 @@ export interface ServerOverrides {
   users?: UserRepo;
   history?: HistoryRepo;
   bots?: BotRunner;
-  scheduler?: Scheduler;
+  jobs?: JobScheduler;
 }
 
 /** Builds the HTTP + Socket.IO server. Tests pass overrides to run fully in memory. */
@@ -56,8 +56,10 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   });
 
   let store = overrides.store;
+  let redisForJobs: Redis | null = null;
   if (!store && config.REDIS_URL) {
     const redis = new Redis(config.REDIS_URL);
+    redisForJobs = redis;
     const pub = new Redis(config.REDIS_URL);
     const sub = pub.duplicate();
     io.adapter(createAdapter(pub, sub));
@@ -73,8 +75,13 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   const bots =
     overrides.bots ??
     (config.BOT_WORKERS > 0 ? new WorkerBotRunner(config.BOT_WORKERS) : new InlineBotRunner());
-  const scheduler =
-    overrides.scheduler ?? new TimerScheduler(Date.now, (err) => app.log.error({ err }, 'timer failed'));
+  const onJobError = (err: unknown, job: unknown) => app.log.error({ err, job }, 'job failed');
+  // With Redis, timers live there too: they survive restarts and any process can run them.
+  const jobs =
+    overrides.jobs ??
+    (redisForJobs
+      ? new RedisJobScheduler(redisForJobs, { onError: onJobError })
+      : new TimerJobScheduler(Date.now, onJobError));
   const log = app.log;
 
   const hub = new GameHub({
@@ -82,7 +89,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     history,
     games: GAME_DEFS,
     bots,
-    scheduler,
+    jobs,
     notifier: createNotifier(io),
     log,
     graceMs: config.GRACE_MS,
@@ -91,9 +98,10 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   const auth = new AuthService(users, new TokenService(config.JWT_SECRET));
   registerRoutes(app, auth, new HistoryService(history, users));
   attachGateway(io, hub, auth, log);
+  jobs.start(hub.runJob);
 
   const close = async () => {
-    scheduler.clearAll();
+    await jobs.stop();
     await new Promise<void>((resolve) => io.close(() => resolve()));
     await app.close();
     await bots.close();

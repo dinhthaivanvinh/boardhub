@@ -16,7 +16,7 @@ import { createDb, migrateToLatest } from '../src/db/database';
 import { PgHistoryRepo, PgUserRepo } from '../src/db/pg-repos';
 import type { Room } from '../src/domain/types';
 import { GameHub } from '../src/hub/game-hub';
-import { TimerScheduler } from '../src/hub/scheduler';
+import { TimerJobScheduler } from '../src/hub/scheduler';
 import { GAME_DEFS } from '../src/registry';
 import { RedisLiveStore } from '../src/store/redis-live-store';
 import { alice, bob, silentLog } from './helpers';
@@ -131,7 +131,7 @@ describe('Postgres repos', () => {
       history,
       games: GAME_DEFS,
       bots: new InlineBotRunner(),
-      scheduler: new TimerScheduler(),
+      jobs: new TimerJobScheduler(),
       notifier: { roomUpdated() {}, matchUpdated() {}, chatMessage() {} },
       log: silentLog,
     });

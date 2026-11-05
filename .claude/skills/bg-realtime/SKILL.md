@@ -33,6 +33,8 @@ Tham chiếu: `docs/05-realtime-protocol.md` (events, vòng đời phòng, recon
 ## Bất biến của GameHub (không được phá)
 
 - Mọi thay đổi phòng hoặc ván nằm trong `store.withLock(roomId, …)`. Hẹn giờ và bot cũng vậy: bot **suy nghĩ ngoài khóa**, rồi vào khóa kiểm tra `seq` chưa đổi mới áp dụng.
+- Hẹn giờ mới = thêm một `kind` vào type `Job` (`hub/scheduler.ts`), gọi `this.o.jobs.schedule(key, at, job)` và xử lý trong `runJob`. Job phải là JSON thuần (không closure) và handler phải **idempotent**: job có thể chạy lại sau khi một process sập (docs/06 §4).
+- Không dùng `setTimeout` trực tiếp trong hub: nó không sống qua khởi động lại và không chạy được ở process khác.
 - Nước đi chỉ đi qua `runMove` (kể cả của bot). Thứ tự: kiểm tra người chơi → `clientMoveId` đã xử lý? → hết giờ? → `seq` → `runMove` → đồng hồ → `seq++` → `commit` (lưu, ghi lịch sử, thông báo, hẹn giờ tiếp).
 - Gửi `match:state` **riêng từng người** với `playerView(state, seat)`; người xem nhận bản `'spectator'`. Không bao giờ gửi full state hay `seed` (có test `hidden information`).
 - Mọi thay đổi người chơi cần thấy phải `match.seq++`.

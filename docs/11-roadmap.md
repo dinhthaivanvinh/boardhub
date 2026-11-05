@@ -45,7 +45,7 @@
 - [x] Quick-match, ranked, Glicko-2, bảng xếp hạng (`/queue`, `/leaderboard`, điểm trong hồ sơ và trong phòng)
 - [x] Spectate: `/live` liệt kê ván ghép trận đang chơi; vào phòng bằng mã thì xem với view của người xem
 - [ ] Admin: bật/tắt game, báo cáo người chơi
-- [ ] Game đợt 2: [x] Cờ gánh (`co-ganh`) · [x] Ô ăn quan (`o-an-quan`) · [ ] Cờ vua · (Cờ đam: tạm hoãn, ít phổ biến ở VN)
+- [x] Game đợt 2: [x] Cờ gánh (`co-ganh`) · [x] Ô ăn quan (`o-an-quan`) · [x] Cờ vua (`chess`, kiểm tra bằng perft) · (Cờ đam: tạm hoãn, ít phổ biến ở VN)
 
 ## M5 — Đa dạng cơ chế (4 tuần)
 

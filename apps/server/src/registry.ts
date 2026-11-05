@@ -8,6 +8,8 @@ import { bot as coGanhBot } from '@bg/game-co-ganh/bot';
 import { definition as coGanh } from '@bg/game-co-ganh/rules';
 import { bot as banTauBot } from '@bg/game-ban-tau/bot';
 import { definition as banTau } from '@bg/game-ban-tau/rules';
+import { bot as chessBot } from '@bg/game-chess/bot';
+import { definition as chess } from '@bg/game-chess/rules';
 import { bot as oAnQuanBot } from '@bg/game-o-an-quan/bot';
 import { definition as oAnQuan } from '@bg/game-o-an-quan/rules';
 import { bot as fourBot } from '@bg/game-four-in-a-row/bot';
@@ -25,6 +27,7 @@ export const GAME_DEFS: Record<string, AnyGameDefinition> = {
   'co-ganh': coGanh,
   'o-an-quan': oAnQuan,
   'ban-tau': banTau,
+  chess,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,4 +39,5 @@ export const GAME_BOTS: Record<string, Bot<any, any>> = {
   'co-ganh': coGanhBot,
   'o-an-quan': oAnQuanBot,
   'ban-tau': banTauBot,
+  chess: chessBot,
 };

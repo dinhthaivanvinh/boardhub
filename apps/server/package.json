@@ -15,6 +15,7 @@
     "@bg/engine": "workspace:*",
     "@bg/game-ban-tau": "workspace:*",
     "@bg/game-caro": "workspace:*",
+    "@bg/game-chess": "workspace:*",
     "@bg/game-co-ganh": "workspace:*",
     "@bg/game-four-in-a-row": "workspace:*",
     "@bg/game-o-an-quan": "workspace:*",

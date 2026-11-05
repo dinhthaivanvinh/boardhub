@@ -1,0 +1,45 @@
+{
+  "name": "Cờ vua",
+  "shortDescription": "Môn cờ trí tuệ phổ biến nhất thế giới: chiếu bí Vua đối phương để thắng.",
+  "rules": "Bàn 8 × 8, Trắng đi trước. **Vua** đi 1 ô mọi hướng. **Hậu** đi thẳng hoặc chéo bao xa cũng được. **Xe** đi thẳng, **Tượng** đi chéo, bao xa cũng được. **Mã** đi hình chữ L và nhảy qua quân khác. **Tốt** tiến 1 ô (nước đầu được 2 ô), ăn chéo 1 ô.\n\n**Nhập thành:** Vua đi 2 ô về phía Xe, Xe nhảy sang bên kia Vua. Chỉ được khi Vua và Xe chưa đi, giữa chúng trống, Vua không đang bị chiếu và không đi qua ô bị khống chế.\n\n**Bắt tốt qua đường:** Tốt vừa tiến 2 ô đi ngang qua ô Tốt đối phương khống chế thì có thể bị ăn như thể nó chỉ tiến 1 ô, nhưng chỉ ngay nước sau.\n\n**Phong cấp:** Tốt tới hàng cuối được đổi thành Hậu, Xe, Tượng hoặc Mã.\n\nKhông được đi nước để Vua mình bị chiếu. Bên bị **chiếu bí** thì thua. Hòa khi: bên đến lượt không bị chiếu mà hết nước đi, cùng một thế cờ lặp lại 3 lần, 50 nước mỗi bên không đi Tốt và không ăn quân, hoặc không bên nào đủ quân để chiếu bí.",
+  "pieces": {
+    "0": "Trắng",
+    "1": "Đen"
+  },
+  "pieceNames": {
+    "K": "Vua",
+    "Q": "Hậu",
+    "R": "Xe",
+    "B": "Tượng",
+    "N": "Mã",
+    "P": "Tốt"
+  },
+  "pieceLabel": "{type} {color}",
+  "empty": "trống",
+  "boardLabel": "Bàn cờ vua",
+  "cellLabel": "{square}: {piece}",
+  "lastMove": "{piece} đi từ {from} đến {to}.",
+  "captures": "Ăn {piece}.",
+  "promotes": "Phong cấp thành {piece}.",
+  "castleK": "{color} nhập thành cánh Vua.",
+  "castleQ": "{color} nhập thành cánh Hậu.",
+  "check": "Chiếu!",
+  "promoteTo": "Phong cấp thành quân nào?",
+  "cancel": "Huỷ",
+  "errors": {
+    "out_of_bounds": "Nước đi nằm ngoài bàn cờ.",
+    "no_piece": "Không có quân ở đó.",
+    "not_your_piece": "Đó là quân của đối thủ.",
+    "illegal_move": "Quân này không đi được như vậy.",
+    "self_check": "Nước này để Vua của bạn bị chiếu.",
+    "needs_promotion": "Hãy chọn quân để phong cấp."
+  },
+  "reasons": {
+    "checkmate": "chiếu bí",
+    "stalemate": "hết nước đi (pat)",
+    "repetition": "lặp lại thế cờ 3 lần",
+    "fifty_moves": "50 nước không đi Tốt, không ăn quân",
+    "insufficient": "không đủ quân để chiếu bí"
+  },
+  "config": {}
+}

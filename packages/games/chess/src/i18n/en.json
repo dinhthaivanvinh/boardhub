@@ -1,0 +1,45 @@
+{
+  "name": "Chess",
+  "shortDescription": "The world's most popular strategy game: checkmate the enemy king to win.",
+  "rules": "8 × 8 board, White moves first. The **king** moves one square any way. The **queen** moves any distance straight or diagonally. The **rook** moves straight and the **bishop** diagonally, any distance. The **knight** moves in an L and jumps over pieces. A **pawn** moves one square forward (two on its first move) and captures one square diagonally.\n\n**Castling:** the king moves two squares towards a rook, and the rook jumps to its other side. Only if neither has moved, the squares between are empty, the king is not in check and does not pass through an attacked square.\n\n**En passant:** a pawn that has just moved two squares past an enemy pawn can be captured as if it had moved one, but only on the very next move.\n\n**Promotion:** a pawn reaching the last rank becomes a queen, rook, bishop or knight.\n\nYou may not leave your king in check. A side that is **checkmated** loses. It is a draw when the side to move is not in check but has no move (stalemate), the same position occurs three times, 50 moves each pass without a pawn move or capture, or neither side has enough material to mate.",
+  "pieces": {
+    "0": "White",
+    "1": "Black"
+  },
+  "pieceNames": {
+    "K": "King",
+    "Q": "Queen",
+    "R": "Rook",
+    "B": "Bishop",
+    "N": "Knight",
+    "P": "Pawn"
+  },
+  "pieceLabel": "{color} {type}",
+  "empty": "empty",
+  "boardLabel": "Chess board",
+  "cellLabel": "{square}: {piece}",
+  "lastMove": "{piece} from {from} to {to}.",
+  "captures": "Captures the {piece}.",
+  "promotes": "Promotes to a {piece}.",
+  "castleK": "{color} castles kingside.",
+  "castleQ": "{color} castles queenside.",
+  "check": "Check!",
+  "promoteTo": "Promote to which piece?",
+  "cancel": "Cancel",
+  "errors": {
+    "out_of_bounds": "That move is off the board.",
+    "no_piece": "There is no piece there.",
+    "not_your_piece": "That is your opponent's piece.",
+    "illegal_move": "That piece cannot move like that.",
+    "self_check": "That move leaves your king in check.",
+    "needs_promotion": "Choose a piece to promote to."
+  },
+  "reasons": {
+    "checkmate": "checkmate",
+    "stalemate": "stalemate",
+    "repetition": "threefold repetition",
+    "fifty_moves": "fifty-move rule",
+    "insufficient": "insufficient material"
+  },
+  "config": {}
+}

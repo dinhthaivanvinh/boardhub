@@ -1,0 +1,91 @@
+/* Cờ vua: classic light and dark wood squares. */
+[data-game='chess'] {
+  --piece-p0: #f8fafc;
+  --piece-p1: #1f2937;
+  --ch-light: #f0d9b5;
+  --ch-dark: #b58863;
+}
+@media (prefers-color-scheme: dark) {
+  [data-game='chess'] {
+    --ch-light: #d9c3a0;
+    --ch-dark: #8b6544;
+  }
+}
+
+.ch-board {
+  position: relative;
+}
+.ch-light {
+  fill: var(--ch-light, #f0d9b5);
+}
+.ch-dark {
+  fill: var(--ch-dark, #b58863);
+}
+.ch-coord text {
+  font-size: 7px;
+  font-weight: 700;
+  fill: rgb(0 0 0 / 0.45);
+  pointer-events: none;
+}
+.ch-piece {
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+}
+.ch-white {
+  fill: #f8fafc;
+  stroke: #1f2937;
+}
+.ch-black {
+  fill: #1f2937;
+  stroke: #e5e7eb;
+}
+.ch-last {
+  fill: rgb(250 204 21 / 0.4);
+}
+.ch-selected-sq {
+  fill: rgb(2 132 199 / 0.35);
+}
+.ch-check-glow {
+  fill: rgb(220 38 38 / 0.55);
+  filter: blur(2px);
+}
+.ch-target {
+  fill: rgb(0 0 0 / 0.25);
+}
+.ch-capture {
+  fill: none;
+  stroke: rgb(0 0 0 / 0.3);
+  stroke-width: 3.5;
+}
+.ch-promotion {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgb(0 0 0 / 0.55);
+  border-radius: 0.5rem;
+}
+.ch-promotion-title {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.ch-promotion-options {
+  display: flex;
+  gap: 0.5rem;
+}
+.ch-promotion-btn {
+  border-radius: 0.75rem;
+  padding: 0.35rem;
+  background: var(--ch-light, #f0d9b5);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.35);
+  transition: transform 0.15s;
+}
+.ch-promotion-btn:hover,
+.ch-promotion-btn:focus-visible {
+  transform: translateY(-3px);
+}

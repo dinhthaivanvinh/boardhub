@@ -31,6 +31,7 @@ import {
   configFields as banTauFields,
   PieceIcon as BanTauPiece,
 } from '@bg/game-ban-tau';
+import { Board as ChessBoard, configFields as chessFields, PieceIcon as ChessPiece } from '@bg/game-chess';
 import type { BoardProps, ConfigFieldSpec } from '@bg/ui';
 import type { GameId } from './catalog';
 
@@ -73,5 +74,10 @@ export const CLIENT_GAMES: Record<GameId, ClientGameEntry> = {
     Board: BanTauBoard as ClientGameEntry['Board'],
     configFields: banTauFields,
     PieceIcon: BanTauPiece,
+  },
+  chess: {
+    Board: ChessBoard as ClientGameEntry['Board'],
+    configFields: chessFields,
+    PieceIcon: ChessPiece,
   },
 };

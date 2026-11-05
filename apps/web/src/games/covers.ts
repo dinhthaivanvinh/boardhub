@@ -8,6 +8,7 @@ import xiangqi from '@bg/game-xiangqi/cover.svg';
 import coGanh from '@bg/game-co-ganh/cover.svg';
 import oAnQuan from '@bg/game-o-an-quan/cover.svg';
 import banTau from '@bg/game-ban-tau/cover.svg';
+import chess from '@bg/game-chess/cover.svg';
 import type { GameId } from './catalog';
 
 export const COVERS: Record<GameId, StaticImageData> = {
@@ -18,4 +19,5 @@ export const COVERS: Record<GameId, StaticImageData> = {
   'co-ganh': coGanh,
   'o-an-quan': oAnQuan,
   'ban-tau': banTau,
+  chess,
 };

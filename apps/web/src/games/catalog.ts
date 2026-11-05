@@ -12,6 +12,9 @@ import oAnQuanVi from '@bg/game-o-an-quan/i18n/vi.json';
 import { definition as banTau } from '@bg/game-ban-tau/rules';
 import banTauEn from '@bg/game-ban-tau/i18n/en.json';
 import banTauVi from '@bg/game-ban-tau/i18n/vi.json';
+import { definition as chess } from '@bg/game-chess/rules';
+import chessEn from '@bg/game-chess/i18n/en.json';
+import chessVi from '@bg/game-chess/i18n/vi.json';
 import { definition as fourInARow } from '@bg/game-four-in-a-row/rules';
 import fourEn from '@bg/game-four-in-a-row/i18n/en.json';
 import fourVi from '@bg/game-four-in-a-row/i18n/vi.json';
@@ -36,6 +39,7 @@ const ENTRIES = {
   'co-ganh': { definition: coGanh, messages: { vi: coGanhVi, en: coGanhEn } },
   'o-an-quan': { definition: oAnQuan, messages: { vi: oAnQuanVi, en: oAnQuanEn } },
   'ban-tau': { definition: banTau, messages: { vi: banTauVi, en: banTauEn } },
+  chess: { definition: chess, messages: { vi: chessVi, en: chessEn } },
 } satisfies Record<string, CatalogEntry>;
 
 export type GameId = keyof typeof ENTRIES;

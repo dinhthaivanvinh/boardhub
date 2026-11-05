@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { ClockView, SeatOccupant, TimeControl } from '@bg/protocol';
+import { playSound } from '@/sound/play';
 
 export type T = (key: string, values?: Record<string, string | number>) => string;
 
@@ -42,6 +43,22 @@ export function formatClock(ms: number): string {
   const m = Math.floor(total / 60);
   const s = total % 60;
   return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+/** One tick a second during the last ten seconds of a running clock. */
+export function useClockTicks(clock: ClockView | undefined, receivedAt: number) {
+  const running = clock?.running === true;
+  const remainingMs = clock?.remainingMs ?? 0;
+  useEffect(() => {
+    if (!running) return;
+    let last = Number.POSITIVE_INFINITY;
+    const id = window.setInterval(() => {
+      const left = Math.ceil((remainingMs - (Date.now() - receivedAt)) / 1000);
+      if (left > 0 && left <= 10 && left < last) playSound('clock');
+      last = left;
+    }, 200);
+    return () => window.clearInterval(id);
+  }, [running, remainingMs, receivedAt]);
 }
 
 /** Counts down locally from the last server snapshot. */

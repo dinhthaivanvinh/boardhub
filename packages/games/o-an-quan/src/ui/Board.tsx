@@ -41,6 +41,7 @@ export function Board({
   orientation,
   settings,
   t,
+  playSound,
 }: OAnQuanBoardProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [seenMoveCount, setSeenMoveCount] = useState(incoming.moveCount);
@@ -53,6 +54,7 @@ export function Board({
   const { shown, frame, playing, skip, speed, setSpeed, replay, canReplay } = usePlayback(
     incoming,
     settings.animations,
+    playSound,
   );
   const view: OAnQuanState = frame
     ? {

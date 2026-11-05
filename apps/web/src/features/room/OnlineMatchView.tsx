@@ -10,7 +10,9 @@ import { CLIENT_GAMES } from '@/games/client-registry';
 import { useSettings } from '@/features/settings/settings-store';
 import type { RoomApi } from '@/online/use-room';
 import type { RatingChange, SeatOccupant } from '@bg/protocol';
-import { Clock, Presence, seatName } from './shared';
+import { SoundControls } from '@/sound/SoundControls';
+import { useGameSound } from '@/sound/use-game-sound';
+import { Clock, Presence, seatName, useClockTicks } from './shared';
 
 /** Rating next to a player's name; after a ranked game, the change (+12 / −8). */
 function RatingBadge({ occ, change }: { occ: SeatOccupant | null; change: RatingChange | undefined }) {
@@ -37,7 +39,7 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
   const received = api.match!;
   const m = received.snapshot;
   const gameId = room.gameId as GameId;
-  const { Board, PieceIcon } = CLIENT_GAMES[gameId];
+  const { Board, PieceIcon, moveSounds, music } = CLIENT_GAMES[gameId];
   const players = GAMES[gameId].definition.meta.maxPlayers;
 
   const pieceName = (seat: number) => t(`games.${gameId}.pieces.${seat}`);
@@ -82,6 +84,13 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
             });
   const loser = Array.from({ length: players }, (_, s) => s).find((s) => s !== winner) ?? 0;
 
+  const sound = useGameSound({ view: m.view, moveSounds, music, outcome: m.result ? tone : null });
+  // Your last ten seconds tick (only your own clock, only while it runs).
+  useClockTicks(
+    m.mySeat === null ? undefined : m.clocks?.find((c) => c.seat === m.mySeat),
+    received.receivedAt,
+  );
+
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:grid-rows-[auto_1fr] lg:gap-x-6">
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
@@ -102,6 +111,7 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
           disabled={api.movePending || api.connection !== 'online'}
           orientation={m.mySeat ?? 0}
           onMove={(move) => void api.submitMove(move)}
+          playSound={sound}
           settings={settings}
           t={t}
         />
@@ -183,6 +193,8 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
             </button>
           </div>
         )}
+
+        <SoundControls />
 
         {room.status === 'finished' && (
           <div className="grid grid-cols-2 gap-2">

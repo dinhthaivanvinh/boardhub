@@ -9,6 +9,7 @@ import { errorKey } from '@/game-runtime/error-key';
 import { RulesButton } from '@/features/rules/RulesButton';
 import { asMatchDetail, getLocalMatch, humanSeatOf } from '@/game-runtime/local-history';
 import { buildReplay } from '@/game-runtime/replay';
+import { useGameSound } from '@/sound/use-game-sound';
 import { GAMES, isGameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { apiRequest } from '@/online/api';
@@ -86,6 +87,23 @@ function ReplayView(
     }
   }, [match]);
   const last = replay?.states ? replay.states.length - 1 : 0;
+
+  // Stepping forward one move sounds like that move (no music, no jingle in a replay).
+  const gameOk = match && isGameId(match.gameId) ? match.gameId : null;
+  const shownState = replay?.states?.[index];
+  const shownView = useMemo(
+    () =>
+      gameOk && shownState !== undefined
+        ? GAMES[gameOk].definition.playerView(shownState, mySeat ?? 'spectator')
+        : null,
+    [gameOk, shownState, mySeat],
+  );
+  const sound = useGameSound({
+    view: shownView,
+    moveSounds: gameOk ? CLIENT_GAMES[gameOk].moveSounds : undefined,
+    music: null,
+    outcome: null,
+  });
 
   // Autoplay one move every 0.8 s; stops at the end.
   useEffect(() => {
@@ -191,7 +209,8 @@ function ReplayView(
 
       <section className="mx-auto w-full max-w-[min(100%,calc(100dvh-12rem))] lg:col-start-1 lg:row-span-3 lg:row-start-1">
         <Board
-          view={definition.playerView(state, mySeat ?? 'spectator')}
+          view={shownView ?? definition.playerView(state, mySeat ?? 'spectator')}
+          playSound={sound}
           mySeat={mySeat}
           isMyTurn={false}
           disabled

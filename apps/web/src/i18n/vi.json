@@ -742,5 +742,11 @@
   "seo": {
     "breadcrumb": "Đường dẫn",
     "leaderboardDescription": "Bảng xếp hạng {game} trên BoardHub: điểm Glicko-2 của người chơi ghép trận xếp hạng."
+  },
+  "sound": {
+    "title": "Âm thanh",
+    "effects": "Hiệu ứng",
+    "music": "Nhạc nền",
+    "volume": "Âm lượng {what}"
   }
 }

@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import type { ChatMessage } from '@bg/protocol';
+import { playSound } from '@/sound/play';
 
 export function ChatPanel({
   messages,
@@ -22,6 +23,14 @@ export function ChatPanel({
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages.length]);
+
+  // A soft pop for a new message from someone else (not for the history loaded on joining).
+  const seen = useRef(messages.length);
+  useEffect(() => {
+    const fresh = messages.slice(seen.current);
+    seen.current = messages.length;
+    if (fresh.some((m) => m.from.userId !== myUserId)) playSound('chat');
+  }, [messages, myUserId]);
 
   return (
     <section className="card flex flex-col gap-2 py-3" aria-label={t('title')}>

@@ -113,3 +113,60 @@ Desktop                                   Mobile
   và bảng xếp hạng từng game (mỗi game là một link thật `/leaderboard?game=…`). Trang riêng tư có thêm `robots: { index: false }`.
 - **Khác:** `app/icon.svg`, `app/manifest.ts`; một `<h1>` mỗi trang; trang game có breadcrumb.
 - **Giới hạn:** ngôn ngữ chọn bằng cookie, URL không có `/vi` `/en` nên công cụ tìm kiếm chỉ thấy bản tiếng Việt (không có hreflang).
+
+## 10. Âm thanh
+
+Mọi âm thanh được **tổng hợp bằng Web Audio** (`apps/web/src/sound/`): không có file âm thanh, không lo bản quyền,
+không tải thêm gì. Khu Văn phòng có âm thanh riêng (`features/office/draw-player/sounds.ts`, mặc định tắt).
+
+**Hợp đồng với game** (`@bg/ui` `board/sound.ts`): game chỉ _gọi tên_ chuyện vừa xảy ra, app quyết định nghe thế nào.
+
+- `moveSounds(before, after): SoundCue[]`: hàm thuần, nhận hai **view** của người xem (không lộ thông tin ẩn), chỉ được gọi khi
+  `moveCount` tăng đúng 1 (đi lại, resync, tải lại trang thì im lặng). Export từ package game, đăng ký trong `client-registry.ts`.
+- `music: 'calm' | 'folk' | 'sea'`: kiểu nhạc nền.
+- `BoardProps.playSound`: cho bàn cờ tự diễn nước đi theo thời gian (Ô ăn quan kêu từng viên sỏi, khớp hiệu ứng).
+
+| Cue            | Khi nào                 | Game                        | Âm                                       |
+| -------------- | ----------------------- | --------------------------- | ---------------------------------------- |
+| `place`        | đặt quân                | Caro, Cờ lật                | quân gỗ đặt xuống bàn                    |
+| `drop`         | thả đĩa                 | Bốn trong hàng              | đĩa lăn xuống cột, nảy hai lần           |
+| `move`         | đi quân                 | Cờ vua, Cờ tướng, Cờ gánh   | trượt nhẹ rồi đặt xuống                  |
+| `capture`      | ăn quân                 | Cờ vua, Cờ tướng, Ô ăn quan | gõ mạnh hơn + quân bị ăn lách cách       |
+| `flip` (count) | lật quân / gánh, vây    | Cờ lật, Cờ gánh             | chuỗi tiếng "tích" cao dần               |
+| `check`        | chiếu tướng             | Cờ vua, Cờ tướng            | hai tiếng chuông                         |
+| `pick`, `sow`  | bốc quân, rải từng viên | Ô ăn quan                   | sỏi rơi vào ô gỗ                         |
+| `splash`       | bắn trượt               | Bắn tàu                     | nước bắn + bọt                           |
+| `hit` / `sunk` | trúng / chìm tàu        | Bắn tàu                     | nổ + mảnh vỡ / nổ lớn, thân tàu rên, bọt |
+| `ready`        | xếp xong hạm đội        | Bắn tàu                     | hai tiếng gõ + chuông                    |
+| `invalid`      | nước bị từ chối         | mọi game                    | hai tiếng "bụp" trầm, nhỏ                |
+
+Âm của app (không do game gọi): `win` (hợp âm rải đi lên), `lose` (giai điệu đi xuống, nhẹ nhàng, không phải còi báo lỗi),
+`draw`, `clock` (tích tắc mỗi giây trong 10 giây cuối của **đồng hồ mình**), `chat` (tin nhắn của người khác).
+Thắng/thua tính theo người xem; người xem ván người khác và chơi 2 người cùng máy nghe `win` (hoặc `draw`).
+
+**Nhạc nền** là một dàn nhạc nhỏ tổng hợp bằng Web Audio (`sound/orchestra/`) chơi các bản nhạc **viết riêng cho dự án**
+(`scores.ts`, không trích giai điệu có sẵn) trong tiếng vang phòng hoà nhạc:
+
+| Kiểu   | Bản                                                  | Game                                           | Dàn nhạc                                                                                               |
+| ------ | ---------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `calm` | Pastorale (Rê trưởng, 4/4, 70 bpm, 24 ô nhịp A–A'–B) | Cờ vua, Cờ tướng, Caro, Cờ lật, Bốn trong hàng | sáo / violin / clarinet hát giai điệu, harp rải móc đơn, viola giữ hợp âm, contrabass, kèn horn bè phụ |
+| `folk` | "Làng quê" (điệu Bắc C–D–F–G–A, 62 bpm, 16 ô nhịp)   | Ô ăn quan, Cờ gánh                             | sáo như sáo trúc có láy, harp như đàn tranh có luyến, nền dây trầm, cello bè phụ                       |
+| `sea`  | "Ra khơi" (Rê thứ, 3/4, 84 bpm, 16 ô nhịp)           | Bắn tàu                                        | kèn horn gọi, cello "đưa võng" theo nhịp sóng, trống timpani vê, tiếng sóng                            |
+
+- Nhạc cụ (`instruments.ts`): đàn dây = vài dao động răng cưa lệch nhau một chút (một bè, không phải một cây đàn), vibrato
+  vào trễ; horn có độ "nở" sáng; sáo có hơi thổi; harp gảy ngân; timpani vê là một tiếng trống kéo dài với tremolo.
+- Mỗi vòng lặp đổi nhạc cụ hát giai điệu (`melodyBy`), từ vòng hai mới có bè phụ; mỗi nốt lệch rất nhẹ về thời điểm và độ
+  mạnh để nghe như người chơi. Đoạn giữa (`lift`) to hơn một chút.
+- Thêm/sửa bản nhạc: theo ký hiệu ở đầu `scores.ts`; `apps/web/test/music-scores.test.ts` kiểm tra mỗi ô nhịp đủ phách,
+  nốt hợp lệ, nằm trong âm vực của nhạc cụ, và giai điệu dân gian chỉ dùng thang ngũ cung.
+- Chi phí: render offline 60 s nhạc mất khoảng 15–20 s (khoảng 25–33 % một nhân CPU khi phát). Đo lại khi thêm nhạc cụ.
+
+Chỉ phát khi ván đang diễn ra, mờ dần khi ván kết thúc. Không có nhạc ở màn xem lại (chỉ có tiếng nước đi khi bước tới).
+
+**Mức âm**: effects ×0,9 và music ×0,4 nhân với âm lượng người dùng, qua một compressor chung. Nhạc nền đỉnh ≈ 0,07–0,09 so với tiếng đi
+quân ≈ 0,33 (thấp hơn khoảng 12 dB); tiếng nổ lớn nhất ≈ 0,88. Đo lại bằng render offline khi đổi công thức âm.
+
+**Quy tắc**: trình duyệt chỉ cho phát âm sau lần chạm/phím đầu tiên, nên âm trước đó bị bỏ qua (không xếp hàng); tab ẩn thì tạm dừng.
+Cài đặt (`bg-sound` trong `localStorage`): hiệu ứng bật 70 %, nhạc nền bật 50 %; bảng "Âm thanh" có ở mọi màn chơi.
+Âm thanh chỉ là phần thêm: mọi thông tin vẫn có trên màn hình. E2E bật `localStorage["bg-sound-debug"]="1"` để đọc
+`window.__bgSounds`.

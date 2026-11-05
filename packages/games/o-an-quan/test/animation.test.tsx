@@ -157,6 +157,38 @@ describe('board playback', () => {
     expect(screen.queryByTestId('sowing-hand')).toBeNull();
   });
 
+  it('sounds every step of the sowing; a move shown at once gets a short summary', () => {
+    const before = start();
+    const after = definition.applyMove(before, 0, move, ctx);
+    const sounds: string[] = [];
+    const withSound = (view: OAnQuanState, animations = true) => (
+      <Board
+        view={view}
+        mySeat={0}
+        isMyTurn
+        onMove={() => {}}
+        settings={{ ...DEFAULT_BOARD_SETTINGS, animations }}
+        t={t}
+        playSound={(c) => sounds.push(c.kind)}
+      />
+    );
+    const { rerender, unmount } = render(withSound(before));
+    rerender(withSound(after));
+    act(() => vi.advanceTimersByTime(60_000));
+    // One sound per animation frame: pick-ups, one per stone sown, and the capture at the end.
+    const frames = sowFrames(before, move);
+    expect(sounds).toHaveLength(frames.length);
+    expect(sounds[0]).toBe('pick');
+    expect(sounds.at(-1)).toBe('capture');
+    expect(sounds.filter((x) => x === 'sow')).toHaveLength(frames.filter((f) => f.event === 'drop').length);
+    unmount();
+
+    sounds.length = 0;
+    const second = render(withSound(before, false));
+    second.rerender(withSound(after, false));
+    expect(sounds).toEqual(['pick', 'sow', 'capture']);
+  });
+
   it('no animation when effects are off, or after an undo', () => {
     const before = start();
     const after = definition.applyMove(before, 0, move, ctx);

@@ -1,4 +1,5 @@
 import type { Seat } from '@bg/engine';
+import type { SoundCue } from './sound';
 
 /** Translator from the app (next-intl in apps/web). Keys are full paths, e.g. 'games.caro.cellLabel'. */
 export type Translator = (key: string, values?: Record<string, string | number>) => string;
@@ -34,6 +35,11 @@ export interface BoardProps<V, M> {
   disabled?: boolean;
   settings: BoardSettings;
   t: Translator;
+  /**
+   * For boards that play a move out over time (Ô ăn quan sows stone by stone): sounds in step with
+   * their own animation. Other boards ignore it; the app plays their MoveSounds.
+   */
+  playSound?(cue: SoundCue): void;
 }
 
 /** Describes one config field so the app can render a generic setup form. */

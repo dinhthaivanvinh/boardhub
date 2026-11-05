@@ -1,38 +1,14 @@
-// Client-side pieces of each game: board component and setup form fields.
+// Client-side pieces of each game: board component, setup form fields, sounds.
 import type { ComponentType } from 'react';
-import { Board as CaroBoard, configFields as caroFields, PieceIcon as CaroPiece } from '@bg/game-caro';
-import {
-  Board as FourBoard,
-  configFields as fourFields,
-  PieceIcon as FourPiece,
-} from '@bg/game-four-in-a-row';
-import {
-  Board as ReversiBoard,
-  configFields as reversiFields,
-  PieceIcon as ReversiPiece,
-} from '@bg/game-reversi';
-import {
-  Board as XiangqiBoard,
-  configFields as xiangqiFields,
-  PieceIcon as XiangqiPiece,
-} from '@bg/game-xiangqi';
-import {
-  Board as CoGanhBoard,
-  configFields as coGanhFields,
-  PieceIcon as CoGanhPiece,
-} from '@bg/game-co-ganh';
-import {
-  Board as OAnQuanBoard,
-  configFields as oAnQuanFields,
-  PieceIcon as OAnQuanPiece,
-} from '@bg/game-o-an-quan';
-import {
-  Board as BanTauBoard,
-  configFields as banTauFields,
-  PieceIcon as BanTauPiece,
-} from '@bg/game-ban-tau';
-import { Board as ChessBoard, configFields as chessFields, PieceIcon as ChessPiece } from '@bg/game-chess';
-import type { BoardProps, ConfigFieldSpec } from '@bg/ui';
+import * as banTau from '@bg/game-ban-tau';
+import * as caro from '@bg/game-caro';
+import * as chess from '@bg/game-chess';
+import * as coGanh from '@bg/game-co-ganh';
+import * as four from '@bg/game-four-in-a-row';
+import * as oAnQuan from '@bg/game-o-an-quan';
+import * as reversi from '@bg/game-reversi';
+import * as xiangqi from '@bg/game-xiangqi';
+import type { BoardProps, ConfigFieldSpec, MoveSounds, MusicMood } from '@bg/ui';
 import type { GameId } from './catalog';
 
 export interface ClientGameEntry {
@@ -41,43 +17,35 @@ export interface ClientGameEntry {
   configFields: ConfigFieldSpec[];
   /** Small piece drawing for player cards. Falls back to the piece name. */
   PieceIcon?: ComponentType<{ seat: number; size?: number }>;
+  /** What each move sounds like (docs/08 §10). */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  moveSounds: MoveSounds<any>;
+  /** Background music style. */
+  music: MusicMood;
 }
 
+/** The same shape for every game package. */
+const entry = (pkg: {
+  Board: unknown;
+  configFields: ConfigFieldSpec[];
+  PieceIcon: ComponentType<{ seat: number; size?: number }>;
+  moveSounds: unknown;
+  music: MusicMood;
+}): ClientGameEntry => ({
+  Board: pkg.Board as ClientGameEntry['Board'],
+  configFields: pkg.configFields,
+  PieceIcon: pkg.PieceIcon,
+  moveSounds: pkg.moveSounds as ClientGameEntry['moveSounds'],
+  music: pkg.music,
+});
+
 export const CLIENT_GAMES: Record<GameId, ClientGameEntry> = {
-  caro: { Board: CaroBoard as ClientGameEntry['Board'], configFields: caroFields, PieceIcon: CaroPiece },
-  'four-in-a-row': {
-    Board: FourBoard as ClientGameEntry['Board'],
-    configFields: fourFields,
-    PieceIcon: FourPiece,
-  },
-  reversi: {
-    Board: ReversiBoard as ClientGameEntry['Board'],
-    configFields: reversiFields,
-    PieceIcon: ReversiPiece,
-  },
-  xiangqi: {
-    Board: XiangqiBoard as ClientGameEntry['Board'],
-    configFields: xiangqiFields,
-    PieceIcon: XiangqiPiece,
-  },
-  'co-ganh': {
-    Board: CoGanhBoard as ClientGameEntry['Board'],
-    configFields: coGanhFields,
-    PieceIcon: CoGanhPiece,
-  },
-  'o-an-quan': {
-    Board: OAnQuanBoard as ClientGameEntry['Board'],
-    configFields: oAnQuanFields,
-    PieceIcon: OAnQuanPiece,
-  },
-  'ban-tau': {
-    Board: BanTauBoard as ClientGameEntry['Board'],
-    configFields: banTauFields,
-    PieceIcon: BanTauPiece,
-  },
-  chess: {
-    Board: ChessBoard as ClientGameEntry['Board'],
-    configFields: chessFields,
-    PieceIcon: ChessPiece,
-  },
+  caro: entry(caro),
+  'four-in-a-row': entry(four),
+  reversi: entry(reversi),
+  xiangqi: entry(xiangqi),
+  'co-ganh': entry(coGanh),
+  'o-an-quan': entry(oAnQuan),
+  'ban-tau': entry(banTau),
+  chess: entry(chess),
 };

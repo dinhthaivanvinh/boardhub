@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { GameResult, Seat } from '@bg/engine';
 import { GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
@@ -11,13 +11,16 @@ import { useLocalMatch } from '@/game-runtime/use-local-match';
 import { useSettings } from '@/features/settings/settings-store';
 import { errorKey } from '@/game-runtime/error-key';
 import { RulesButton } from '@/features/rules/RulesButton';
+import { playSound } from '@/sound/play';
+import { SoundControls } from '@/sound/SoundControls';
+import { useGameSound } from '@/sound/use-game-sound';
 import { resultDetail } from './result-detail';
 import { ResultOverlay, type ResultTone } from './ResultOverlay';
 
 export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSetup }) {
   const t = useTranslations();
   const { definition } = GAMES[gameId];
-  const { Board, PieceIcon } = CLIENT_GAMES[gameId];
+  const { Board, PieceIcon, moveSounds, music } = CLIENT_GAMES[gameId];
   const controllers = useMemo(() => controllersFor(setup, definition.meta.minPlayers), [setup, definition]);
   const match = useLocalMatch(gameId, definition, setup.config, controllers);
   const settings = useSettings();
@@ -77,6 +80,13 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           ? t('match.overlay.youLose')
           : t('match.overlay.wins', { player: seatName(winner ?? 0) });
 
+  const view = definition.playerView(snapshot.state, viewer);
+  const sound = useGameSound({ view, moveSounds, music, outcome: result ? tone : null });
+  // A refused move gets a soft "no".
+  useEffect(() => {
+    if (match.error) playSound('invalid');
+  }, [match.error]);
+
   return (
     // Mobile: title + status above the board, everything else below. Desktop: board left, panel right.
     <div
@@ -106,8 +116,9 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
         className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-8rem))] lg:col-start-1 lg:row-span-2 lg:row-start-1"
       >
         <Board
-          view={definition.playerView(snapshot.state, viewer)}
+          view={view}
           mySeat={viewer}
+          playSound={sound}
           isMyTurn={isMyTurn}
           disabled={match.botThinking}
           // Hot-seat keeps one orientation; turning the board every move is disorienting.
@@ -179,6 +190,8 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
             ⚑ {t('match.actions.resign')}
           </button>
         </div>
+
+        <SoundControls />
 
         <fieldset className="card flex flex-col gap-2 py-3 text-sm">
           <legend className="px-1 font-medium">{t('match.settings.title')}</legend>

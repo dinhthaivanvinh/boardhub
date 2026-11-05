@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { playSound } from '@/sound/play';
 import { useTranslations } from 'next-intl';
 import { errorKey } from '@/game-runtime/error-key';
 import { RulesButton } from '@/features/rules/RulesButton';
@@ -18,6 +20,9 @@ export function RoomScreen({ code }: { code: string }) {
   const router = useRouter();
   const api = useRoom(code);
   const { room } = api;
+  useEffect(() => {
+    if (api.actionError) playSound('invalid');
+  }, [api.actionError]);
 
   if (api.joinError) {
     return (

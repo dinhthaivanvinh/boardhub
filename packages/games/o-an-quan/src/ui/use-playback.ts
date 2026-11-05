@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { SoundCue } from '@bg/ui';
 import type { OAnQuanState } from '../rules/types';
 import { frameDelay, sowFrames, type Frame } from './animation';
 
@@ -16,7 +17,12 @@ export type Speed = (typeof SPEEDS)[number];
  * Moves that arrive while one is still playing (a quick reply from the computer or the opponent)
  * wait their turn, so every move is seen. Undo, reloads and jumps of more than one move are shown at once.
  */
-export function usePlayback(target: OAnQuanState, enabled: boolean) {
+/** What each step of a sowing sounds like. */
+const FRAME_SOUND: Record<Frame['event'], SoundCue['kind']> = { pick: 'pick', drop: 'sow', take: 'capture' };
+
+export function usePlayback(target: OAnQuanState, enabled: boolean, playSound?: (cue: SoundCue) => void) {
+  const soundRef = useRef(playSound);
+  soundRef.current = playSound;
   const [shown, setShown] = useState(target);
   const [frame, setFrame] = useState<Frame | null>(null);
   const shownRef = useRef(target);
@@ -52,6 +58,7 @@ export function usePlayback(target: OAnQuanState, enabled: boolean) {
         const f = frames[i++];
         if (f) {
           setFrame(f);
+          soundRef.current?.({ kind: FRAME_SOUND[f.event] });
           timer.current = setTimeout(tick, frameDelay(f, frames.length) / speedRef.current);
           return;
         }
@@ -71,6 +78,12 @@ export function usePlayback(target: OAnQuanState, enabled: boolean) {
       const single = next.lastMove !== null && next.moveCount === base.moveCount + 1 && !base.ended;
       setLast(single ? { base, next } : null);
       if (!single || !enabledRef.current || prefersReducedMotion()) {
+        // Shown at once: a short summary sound instead of one per stone.
+        if (single) {
+          soundRef.current?.({ kind: 'pick' });
+          soundRef.current?.({ kind: 'sow', delay: 120 });
+          if (next.taken.length > 0) soundRef.current?.({ kind: 'capture', delay: 260 });
+        }
         show(next);
         continue;
       }

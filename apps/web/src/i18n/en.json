@@ -742,5 +742,11 @@
   "seo": {
     "breadcrumb": "Breadcrumb",
     "leaderboardDescription": "{game} rankings on BoardHub: Glicko-2 ratings of ranked quick-match players."
+  },
+  "sound": {
+    "title": "Sound",
+    "effects": "Effects",
+    "music": "Music",
+    "volume": "{what} volume"
   }
 }

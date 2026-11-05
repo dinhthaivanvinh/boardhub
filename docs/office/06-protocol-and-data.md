@@ -16,7 +16,7 @@
 | `office:update-me` | `{ code, name?, avatar? }`                                                                           | người tham gia | `{}`                              |
 | `office:host`      | `{ code, op: 'lock' \| 'unlock' \| 'close' \| 'kick' \| 'rename' \| 'add-absent' \| 'transfer', … }` | chủ trì        | `{}`                              |
 | `office:action`    | `{ code, action }` (`action` theo `actionSchema` của hoạt động)                                      | tùy hoạt động  | `{}`                              |
-| `office:react`     | `{ code, emoji }` (emoji thuộc danh sách cho phép)                                                   | người tham gia | `{}`                              |
+| `office:react`     | `{ code, emoji }` (emoji thuộc danh sách cho phép) — **O4**                                          | người tham gia | `{}`                              |
 | `office:resync`    | `{ code }`                                                                                           | bất kỳ         | `OfficeSnapshot`                  |
 
 Màn `stage` và `host` không chiếm chỗ người tham gia (chủ trì muốn tham gia thì vào thêm bằng điện thoại, hoặc bật
@@ -24,15 +24,19 @@ Màn `stage` và `host` không chiếm chỗ người tham gia (chủ trì muố
 
 ### 1.2 Server → client
 
-| Sự kiện                      | Payload                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------ |
-| `office:participant`         | `{ seq, participant }` (vào mới / đổi tên / đổi avatar / online-offline) |
-| `office:participant-removed` | `{ seq, id, reason: 'left' \| 'kicked' }`                                |
-| `office:session`             | `{ seq, status, title, hostId, locked }`                                 |
-| `office:activity`            | `{ seq, view }` (view của hoạt động cho màn của bạn)                     |
-| `office:draw-started`        | `{ seq, drawId, mode, candidates, n, commitment, startsAt, revealAt }`   |
-| `office:draw-revealed`       | `{ seq, drawId, seed, winners, landAt }`                                 |
-| `office:reaction`            | `{ from, emoji }` (không có `seq`, không lưu)                            |
+| Sự kiện                      | Payload                                                                         |
+| ---------------------------- | ------------------------------------------------------------------------------- |
+| `office:participant`         | `{ code, seq, participant }` (vào mới / đổi tên / đổi avatar / online-offline)  |
+| `office:participant-removed` | `{ code, seq, id, reason: 'left' \| 'kicked' }`                                 |
+| `office:session`             | `{ code, seq, session: { code, activityId, title, status, hostId } }`           |
+| `office:activity`            | `{ code, seq, view }` (view của hoạt động cho màn của bạn)                      |
+| `office:kicked`              | `{ code }` chỉ gửi cho người bị mời ra; socket của họ rời các kênh của phiên    |
+| `office:draw-started`        | `{ seq, drawId, mode, candidates, n, commitment, startsAt, revealAt }` — **O3** |
+| `office:draw-revealed`       | `{ seq, drawId, seed, winners, landAt }` — **O3**                               |
+| `office:reaction`            | `{ from, emoji }` (không có `seq`, không lưu) — **O4**                          |
+
+Kênh Socket.IO: `office:{code}` (mọi màn), `office:{code}:{screen}` (view theo màn), `office-user:{userId}`.
+Người tham gia chưa bấm "Vào phiên" xem trước bằng màn `stage`.
 
 `seq` tăng mỗi thay đổi; client thấy khoảng trống `seq` thì gọi `office:resync`.
 
@@ -53,6 +57,7 @@ Màn `stage` và `host` không chiếm chỗ người tham gia (chủ trì muố
 
 | Method + path                         | Trả về                                                         |
 | ------------------------------------- | -------------------------------------------------------------- |
+| `GET /api/office/:code`               | `{ exists, status }` — ô nhập mã ở cổng thử mã phiên trước     |
 | `GET /api/me/avatar`                  | `{ avatar: Avatar \| null }`                                   |
 | `PUT /api/me/avatar`                  | body `{ avatar }` → `{ avatar }` (zod, chỉ catalog)            |
 | `GET /api/office/:code/draws`         | lịch sử lần bốc đã reveal (cả phiên đã đóng, trong 30 ngày)    |
@@ -108,9 +113,8 @@ Xoá `office_*` cũ hơn 30 ngày bằng job dọn dẹp hằng ngày.
 
 ## 5. Redis (live)
 
-| Key                  | Kiểu   | Nội dung                                                                                |
-| -------------------- | ------ | --------------------------------------------------------------------------------------- |
-| `office:{code}`      | string | JSON phiên: trạng thái, chủ trì, state hoạt động, lần bốc đang chạy (gồm `seed` bí mật) |
-| `office:{code}:p`    | hash   | `participantId` → JSON người tham gia                                                   |
-| `office:{code}:lock` | string | khoá `withLock`                                                                         |
-| TTL                  |        | 24 giờ, gia hạn mỗi hoạt động                                                           |
+| Key                  | Kiểu   | Nội dung                                                                                                                                                                    |
+| -------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `office:{code}`      | string | JSON **cả phiên** (`OfficeSessionRecord`): trạng thái, chủ trì, người tham gia (≤ 200, ~60 KB), người bị mời ra, state hoạt động, lần bốc đang chạy (O3, gồm `seed` bí mật) |
+| `lock:office:{code}` | string | khoá `withLock` (dùng chung cơ chế khoá của LiveStore)                                                                                                                      |
+| TTL                  |        | 25 giờ, đặt lại mỗi lần lưu; job `office-expire` đóng phiên sau 24 giờ không hoạt động                                                                                      |

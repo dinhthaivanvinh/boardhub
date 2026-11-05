@@ -13,7 +13,8 @@ import { buildServer } from '../src/app';
 import { InlineBotRunner } from '../src/bots/bot-runner';
 import { loadConfig } from '../src/config';
 import { createDb, migrateToLatest } from '../src/db/database';
-import { PgHistoryRepo, PgUserRepo } from '../src/db/pg-repos';
+import { PgHistoryRepo, PgOfficeRepo, PgUserRepo } from '../src/db/pg-repos';
+import { RedisOfficeStore, type OfficeSessionRecord } from '../src/office/store';
 import type { Room } from '../src/domain/types';
 import { GameHub } from '../src/hub/game-hub';
 import { TimerJobScheduler } from '../src/hub/scheduler';
@@ -332,5 +333,70 @@ describe('M4a storage', () => {
       [ids[2], 1650],
     ]);
     expect(await repo.forUser(ids[2]!)).toEqual([expect.objectContaining({ gameId: game, games: 10 })]);
+  });
+});
+
+describe('office storage', () => {
+  it('Redis keeps whole sessions', async () => {
+    const store = new RedisOfficeStore(redis);
+    const code = randomUUID().slice(0, 6).toUpperCase();
+    const session: OfficeSessionRecord = {
+      code,
+      activityId: 'lucky-animal',
+      title: 'T',
+      hostId: 'h',
+      status: 'open',
+      createdAt: 1,
+      lastActiveAt: 1,
+      seq: 1,
+      participants: [],
+      kicked: [],
+      state: { rounds: [] },
+    };
+    expect(await store.get(code)).toBeNull();
+    await store.save(session);
+    expect(await store.get(code)).toEqual(session);
+    expect(await redis.ttl(`office:${code}`)).toBeGreaterThan(24 * 3600);
+  });
+
+  it('Postgres records sessions; a reused code starts a fresh record', async () => {
+    const repo = new PgOfficeRepo(db);
+    const users = new PgUserRepo(db);
+    const host = await users.create({
+      id: randomUUID(),
+      kind: 'guest',
+      displayName: 'H',
+      email: null,
+      passwordHash: null,
+    });
+    const code = randomUUID().slice(0, 6).toUpperCase();
+    await repo.created({
+      code,
+      activityId: 'lucky-animal',
+      title: 'Một',
+      hostId: host.id,
+      createdAt: Date.now(),
+    });
+    await repo.statusChanged(code, 'closed', Date.now());
+    let row = await db
+      .selectFrom('office_sessions')
+      .selectAll()
+      .where('code', '=', code)
+      .executeTakeFirstOrThrow();
+    expect(row).toMatchObject({ status: 'closed', title: 'Một' });
+    expect(row.closed_at).not.toBeNull();
+    await repo.created({
+      code,
+      activityId: 'lucky-animal',
+      title: 'Hai',
+      hostId: host.id,
+      createdAt: Date.now(),
+    });
+    row = await db
+      .selectFrom('office_sessions')
+      .selectAll()
+      .where('code', '=', code)
+      .executeTakeFirstOrThrow();
+    expect(row).toMatchObject({ status: 'open', title: 'Hai', closed_at: null });
   });
 });

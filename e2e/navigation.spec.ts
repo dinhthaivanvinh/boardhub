@@ -12,7 +12,8 @@ test('the portal leads to both areas', async ({ page }) => {
   await expect(page).toHaveURL(/\/office$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Văn phòng' })).toBeVisible();
   await expect(page.getByTestId('activity-lucky-animal')).toContainText('Thú may mắn');
-  await expect(page.getByTestId('activity-lucky-animal')).toContainText('Sắp ra mắt');
+  await expect(page.getByTestId('activity-lucky-animal')).toContainText('Tạo phiên');
+  await expect(page.getByTestId('activity-team-split')).toContainText('Sắp ra mắt');
   await page
     .getByRole('link', { name: /Thú của tôi/ })
     .first()

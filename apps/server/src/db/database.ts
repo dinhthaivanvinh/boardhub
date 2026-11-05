@@ -60,8 +60,19 @@ export interface RatingsTable {
   updated_at: Generated<Date>;
 }
 
+export interface OfficeSessionsTable {
+  code: string;
+  activity_id: string;
+  title: string;
+  host_user_id: string;
+  status: string;
+  created_at: Date;
+  closed_at: Date | null;
+}
+
 export interface Database {
   users: UsersTable;
+  office_sessions: OfficeSessionsTable;
   ratings: RatingsTable;
   matches: MatchesTable;
   match_players: MatchPlayersTable;
@@ -164,6 +175,23 @@ const MIGRATIONS: Record<string, Migration> = {
       await db.schema.alterTable('match_players').dropColumn('rating_before').execute();
       await db.schema.alterTable('matches').dropColumn('ranked').execute();
       await db.schema.dropTable('ratings').execute();
+    },
+  },
+  '2026_11_08_001_office_sessions': {
+    async up(db) {
+      await db.schema
+        .createTable('office_sessions')
+        .addColumn('code', 'text', (c) => c.primaryKey())
+        .addColumn('activity_id', 'text', (c) => c.notNull())
+        .addColumn('title', 'text', (c) => c.notNull())
+        .addColumn('host_user_id', 'uuid', (c) => c.notNull())
+        .addColumn('status', 'text', (c) => c.notNull())
+        .addColumn('created_at', 'timestamptz', (c) => c.notNull())
+        .addColumn('closed_at', 'timestamptz')
+        .execute();
+    },
+    async down(db) {
+      await db.schema.dropTable('office_sessions').execute();
     },
   },
   '2026_11_07_001_avatars': {

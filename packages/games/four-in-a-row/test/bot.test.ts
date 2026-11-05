@@ -84,15 +84,20 @@ describe('four-in-a-row bot', () => {
   });
 
   it('hard beats easy', () => {
-    const player = (level: BotLevel) => (s: FourState, seat: Seat, game: number, ply: number) =>
-      bot.chooseMove({
+    // A fixed amount of work per move (the clock ticks once per check, every 64 nodes), not wall time:
+    // the result must not depend on how busy the machine is.
+    const player = (level: BotLevel) => (s: FourState, seat: Seat, game: number, ply: number) => {
+      let tick = 0;
+      return bot.chooseMove({
         state: s,
         seat,
         level,
         rng: createRng(`${level}-${game}`, ply),
-        deadlineMs: Date.now() + 150,
+        deadlineMs: 400,
+        now: () => tick++,
       });
+    };
     const stats = playArena(definition, {}, [player('hard'), player('easy')], 4);
     expect(stats.wins[0]).toBeGreaterThanOrEqual(3);
-  });
+  }, 60_000);
 });

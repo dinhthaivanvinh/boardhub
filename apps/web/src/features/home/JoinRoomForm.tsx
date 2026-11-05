@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { serverUrl } from '@/online/api';
 
 export function JoinRoomForm() {
   const t = useTranslations('online');
@@ -15,7 +16,11 @@ export function JoinRoomForm() {
       className="card flex flex-col gap-3 sm:flex-row sm:items-end"
       onSubmit={(e) => {
         e.preventDefault();
-        if (valid) router.push(`/room/${code}`);
+        if (!valid) return;
+        void fetch(`${serverUrl()}/api/office/${code}`)
+          .then((r) => r.json() as Promise<{ exists?: boolean }>)
+          .catch(() => ({ exists: false }))
+          .then((r) => router.push(r.exists ? `/office/s/${code}` : `/room/${code}`));
       }}
     >
       <label className="flex flex-1 flex-col gap-1 text-sm font-medium">

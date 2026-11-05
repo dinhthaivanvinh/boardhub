@@ -50,7 +50,7 @@ describe('RedisJobScheduler', () => {
   it('two processes share the work and every job runs exactly once', async () => {
     const prefix = `test-${randomUUID()}`;
     const ran: string[] = [];
-    const handler: JobHandler = async (j) => void ran.push(j.roomId);
+    const handler: JobHandler = async (j) => void ran.push('roomId' in j ? j.roomId : j.code);
     const [a, b] = [process_(prefix), process_(prefix)];
     for (let i = 0; i < 40; i++) await a.schedule(`k${i}`, Date.now() + (i % 5) * 10, job(i));
     a.start(handler);
@@ -65,7 +65,7 @@ describe('RedisJobScheduler', () => {
     const prefix = `test-${randomUUID()}`;
     const ran: string[] = [];
     const s = process_(prefix);
-    s.start(async (j) => void ran.push(j.roomId));
+    s.start(async (j) => void ran.push('roomId' in j ? j.roomId : j.code));
     await s.schedule('later', Date.now() + 300, job(1));
     await s.schedule('replaced', Date.now() + 50, job(2));
     await s.schedule('replaced', Date.now() + 100, job(3));
@@ -93,7 +93,7 @@ describe('RedisJobScheduler', () => {
 
     const ran: string[] = [];
     const survivor = process_(prefix);
-    survivor.start(async (j) => void ran.push(j.roomId));
+    survivor.start(async (j) => void ran.push('roomId' in j ? j.roomId : j.code));
     await sleep(150);
     expect(ran).toEqual([]); // still leased
     await until(() => ran.length === 1);
@@ -121,7 +121,7 @@ describe('RedisJobScheduler', () => {
     release();
     await stopped; // the first run has acknowledged now; it must not have removed job 2
     const ran: string[] = [];
-    other.start(async (j) => void ran.push(j.roomId));
+    other.start(async (j) => void ran.push('roomId' in j ? j.roomId : j.code));
     await until(() => ran.length === 1);
     expect(ran).toEqual(['r2']);
   });

@@ -8,7 +8,7 @@ import { TokenService } from './auth/tokens';
 import { InlineBotRunner, WorkerBotRunner, type BotRunner } from './bots/bot-runner';
 import type { ServerConfig } from './config';
 import { createDb, migrateToLatest } from './db/database';
-import { PgHistoryRepo, PgRatingRepo, PgUserRepo } from './db/pg-repos';
+import { PgHistoryRepo, PgOfficeRepo, PgRatingRepo, PgUserRepo } from './db/pg-repos';
 import { registerCompetitiveRoutes } from './http/competitive-routes';
 import { Matchmaker } from './matchmaking/matchmaker';
 import { MemoryRatingRepo, RatingService, type RatingRepo } from './ratings/rating-service';
@@ -18,6 +18,17 @@ import { HistoryService } from './history/history-service';
 import { registerRoutes } from './http/routes';
 import { attachGateway, createNotifier, type IoServer } from './realtime/gateway';
 import { GAME_DEFS } from './registry';
+import { attachOfficeGateway, createOfficeNotifier, type OfficeNamespace } from './office/office-gateway';
+import { OfficeHub } from './office/office-hub';
+import { registerOfficeRoutes } from './office/office-routes';
+import { OFFICE_ACTIVITIES } from './office/registry';
+import {
+  MemoryOfficeRepo,
+  MemoryOfficeStore,
+  RedisOfficeStore,
+  type OfficeRepo,
+  type OfficeStore,
+} from './office/store';
 import { MemoryLiveStore, type LiveStore } from './store/live-store';
 import { RedisLiveStore } from './store/redis-live-store';
 import { MemoryHistoryRepo, MemoryUserRepo, type HistoryRepo, type UserRepo } from './store/repos';
@@ -29,6 +40,8 @@ export interface ServerOverrides {
   bots?: BotRunner;
   jobs?: JobScheduler;
   ratings?: RatingRepo;
+  officeStore?: OfficeStore;
+  officeRepo?: OfficeRepo;
   /** How often waiting quick-match players are re-checked (widening rating windows). */
   matchSweepMs?: number;
 }
@@ -50,12 +63,14 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   let users = overrides.users;
   let history = overrides.history;
   let ratingRepo = overrides.ratings;
-  if ((!users || !history || !ratingRepo) && config.DATABASE_URL) {
+  let officeRepo = overrides.officeRepo;
+  if ((!users || !history || !ratingRepo || !officeRepo) && config.DATABASE_URL) {
     const db = createDb(config.DATABASE_URL);
     await migrateToLatest(db);
     users ??= new PgUserRepo(db);
     history ??= new PgHistoryRepo(db);
     ratingRepo ??= new PgRatingRepo(db);
+    officeRepo ??= new PgOfficeRepo(db);
     cleanups.push(() => db.destroy());
   }
   users ??= new MemoryUserRepo();
@@ -126,7 +141,23 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     notify: (userId, match) => io.to(`user:${userId}`).emit('queue:matched', match),
   });
   attachGateway(io, hub, auth, log, matchmaker);
-  jobs.start(hub.runJob);
+
+  // Office area: its own hub and namespace on the same infrastructure (ADR-0005).
+  const officeNs = io.of('/office') as unknown as OfficeNamespace;
+  const officeHub = new OfficeHub({
+    store:
+      overrides.officeStore ?? (redisForJobs ? new RedisOfficeStore(redisForJobs) : new MemoryOfficeStore()),
+    repo: officeRepo ?? new MemoryOfficeRepo(),
+    withLock: (key, fn) => store.withLock(key, fn),
+    jobs,
+    activities: OFFICE_ACTIVITIES,
+    notifier: createOfficeNotifier(officeNs),
+    log,
+  });
+  registerOfficeRoutes(app, officeHub);
+  attachOfficeGateway(officeNs, officeHub, auth, log);
+
+  jobs.start((job) => (job.kind === 'office-expire' ? officeHub.runJob(job) : hub.runJob(job)));
   // Periodic re-check so ranked rating windows widen for players who are still waiting.
   const sweep = setInterval(
     () => void matchmaker.sweep().catch((err: unknown) => log.error({ err }, 'matchmaking sweep failed')),
@@ -143,5 +174,5 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     for (const fn of cleanups.reverse()) await fn().catch(() => undefined);
   };
 
-  return { app, io, hub, auth, matchmaker, ratings, close };
+  return { app, io, hub, officeHub, auth, matchmaker, ratings, close };
 }

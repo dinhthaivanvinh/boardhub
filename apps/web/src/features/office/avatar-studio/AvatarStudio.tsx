@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
@@ -48,6 +50,8 @@ export function AvatarStudio() {
   const [tab, setTab] = useState<Tab>('species');
   const [save, setSave] = useState<SaveState>('idle');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const back = useSearchParams().get('back');
+  const backTo = back && /^\/office\/s\/[A-Z0-9]{6}$/.test(back) ? back : null;
 
   // Load: the saved avatar, or the player's default one.
   useEffect(() => {
@@ -114,6 +118,11 @@ export function AvatarStudio() {
   return (
     <div className="mx-auto grid max-w-5xl gap-8 px-4 py-8 md:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] md:py-12">
       <section className="flex flex-col items-center gap-4 md:sticky md:top-20 md:self-start">
+        {backTo && (
+          <Link href={backTo} className="btn btn-primary self-stretch">
+            ← {t('backToSession')}
+          </Link>
+        )}
         <h1 className="self-start text-2xl font-bold tracking-tight md:text-3xl">{t('title')}</h1>
         <div className="studio-preview">
           <Avatar avatar={avatar} size={220} label={label} />

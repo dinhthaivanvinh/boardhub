@@ -11,6 +11,7 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
+    "@bg/avatars": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

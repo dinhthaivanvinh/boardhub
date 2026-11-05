@@ -66,8 +66,9 @@ describe('ManualJobScheduler (tests)', () => {
     const s = new ManualJobScheduler();
     const ran: string[] = [];
     s.start(async (j) => {
-      ran.push(j.roomId);
-      if (j.roomId === 'r1') await s.schedule('chained', 15, job(3));
+      const id = 'roomId' in j ? j.roomId : j.code;
+      ran.push(id);
+      if (id === 'r1') await s.schedule('chained', 15, job(3));
     });
     await s.schedule('b', 20, job(2));
     await s.schedule('a', 10, job(1));

@@ -10,13 +10,14 @@
 
 ## 2. Cài đặt (`settingsSchema`)
 
-| Field              | Kiểu            | Mặc định        | Mô tả                                                |
-| ------------------ | --------------- | --------------- | ---------------------------------------------------- |
-| `title`            | string ≤ 60     | "Ai được chọn?" | Câu hỏi hiển thị trên sân khấu ("Ai mua trà sữa?")   |
-| `mode`             | `wheel \| race` | `race`          | Kiểu hiệu ứng mặc định (đổi được trước mỗi lần quay) |
-| `n`                | 1–20            | 1               | Số người được chọn mỗi lần                           |
-| `excludePrevious`  | boolean         | true            | Người đã được chọn ở lần trước không vào lần sau     |
-| `hostParticipates` | boolean         | false           | Chủ trì có trong danh sách ứng viên                  |
+Tiêu đề ("Ai mua trà sữa?") thuộc **phiên** (`office:create { title }`), không nằm trong cài đặt của hoạt động.
+
+| Field              | Kiểu            | Mặc định | Mô tả                                                |
+| ------------------ | --------------- | -------- | ---------------------------------------------------- |
+| `mode`             | `wheel \| race` | `race`   | Kiểu hiệu ứng mặc định (đổi được trước mỗi lần quay) |
+| `n`                | 1–20            | 1        | Số người được chọn mỗi lần                           |
+| `excludePrevious`  | boolean         | true     | Người đã được chọn ở lần trước không vào lần sau     |
+| `hostParticipates` | boolean         | false    | Chủ trì có trong danh sách ứng viên                  |
 
 ## 3. State
 

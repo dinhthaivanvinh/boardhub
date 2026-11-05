@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { OfficeArt } from '@/features/home/OfficeArt';
+import { OfficeJoinForm } from '@/features/office/OfficeJoinForm';
 import { OFFICE_ACTIVITIES } from '@/office/catalog';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,9 +25,15 @@ export default async function OfficePage() {
             </h1>
             <p className="mt-4 max-w-lg text-lg text-[var(--muted)]">{t('tagline')}</p>
             <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/office/new" className="btn btn-primary btn-lg">
+                {t('start')}
+              </Link>
               <Link href="/office/avatar" className="btn btn-lg">
                 🐾 {t('myAnimal')}
               </Link>
+            </div>
+            <div className="mt-6 max-w-md">
+              <OfficeJoinForm />
             </div>
           </div>
           <div
@@ -72,7 +79,13 @@ export default async function OfficePage() {
               </span>
               <h3 className="text-lg font-semibold">{t(`activities.${a.id}.name`)}</h3>
               <p className="flex-1 text-sm text-[var(--muted)]">{t(`activities.${a.id}.text`)}</p>
-              {a.status === 'soon' && <span className="chip self-start text-xs">{t('soon')}</span>}
+              {a.status === 'soon' ? (
+                <span className="chip self-start text-xs">{t('soon')}</span>
+              ) : (
+                <Link href="/office/new" className="game-card-cta">
+                  {t('start')} <span aria-hidden="true">→</span>
+                </Link>
+              )}
             </li>
           ))}
         </ul>

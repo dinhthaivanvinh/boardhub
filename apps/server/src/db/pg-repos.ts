@@ -8,6 +8,7 @@ import type {
   UserRecord,
   UserRepo,
 } from '../store/repos';
+import type { OfficeRepo } from '../office/store';
 import { fresh, type RatingRepo, type StoredRating } from '../ratings/rating-service';
 import type { Database, MatchesTable, RatingsTable, UsersTable } from './database';
 
@@ -292,5 +293,43 @@ export class PgRatingRepo implements RatingRepo {
   async forUser(userId: string) {
     const rows = await this.db.selectFrom('ratings').selectAll().where('user_id', '=', userId).execute();
     return rows.map(toRating);
+  }
+}
+
+/** Long-term record of office sessions (docs/office/06 §4). A code can be reused once its old session is gone. */
+export class PgOfficeRepo implements OfficeRepo {
+  constructor(private readonly db: Kysely<Database>) {}
+
+  async created(s: { code: string; activityId: string; title: string; hostId: string; createdAt: number }) {
+    await this.db
+      .insertInto('office_sessions')
+      .values({
+        code: s.code,
+        activity_id: s.activityId,
+        title: s.title,
+        host_user_id: s.hostId,
+        status: 'open',
+        created_at: new Date(s.createdAt),
+        closed_at: null,
+      })
+      .onConflict((oc) =>
+        oc.column('code').doUpdateSet({
+          activity_id: s.activityId,
+          title: s.title,
+          host_user_id: s.hostId,
+          status: 'open',
+          created_at: new Date(s.createdAt),
+          closed_at: null,
+        }),
+      )
+      .execute();
+  }
+
+  async statusChanged(code: string, status: string, at: number) {
+    await this.db
+      .updateTable('office_sessions')
+      .set({ status, ...(status === 'closed' ? { closed_at: new Date(at) } : {}) })
+      .where('code', '=', code)
+      .execute();
   }
 }

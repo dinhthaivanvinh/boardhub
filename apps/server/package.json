@@ -22,6 +22,8 @@
     "@bg/game-o-an-quan": "workspace:*",
     "@bg/game-reversi": "workspace:*",
     "@bg/game-xiangqi": "workspace:*",
+    "@bg/office-core": "workspace:*",
+    "@bg/office-lucky-animal": "workspace:*",
     "@bg/protocol": "workspace:*",
     "@fastify/cors": "catalog:",
     "@socket.io/redis-adapter": "catalog:",

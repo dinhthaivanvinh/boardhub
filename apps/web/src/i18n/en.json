@@ -237,7 +237,16 @@
       "unsupported": "Quick match is not available for this game yet."
     },
     "office": {
-      "invalid_avatar": "That animal is not valid."
+      "invalid_avatar": "That animal is not valid.",
+      "not_found": "Session not found.",
+      "locked": "The session is locked; you cannot join.",
+      "full": "The session is full.",
+      "closed": "The session has ended.",
+      "not_host": "Only the host can do that.",
+      "not_participant": "You are not in the session.",
+      "unknown_activity": "Unknown activity.",
+      "bad_settings": "Invalid settings.",
+      "bad_action": "Invalid action."
     }
   },
   "profile": {
@@ -392,7 +401,8 @@
         "name": "Prize draw",
         "text": "Several prizes, several rounds, one win per person."
       }
-    }
+    },
+    "start": "Start a session"
   },
   "avatar": {
     "title": "My animal",
@@ -492,6 +502,67 @@
       "21": "Blue",
       "22": "Violet",
       "23": "Pink"
+    },
+    "backToSession": "Back to the session",
+    "animalLabel": "{name}: {species}"
+  },
+  "officeSession": {
+    "session": "Session",
+    "hostTitle": "Hosting",
+    "stageTitle": "Stage",
+    "newTitle": "New session",
+    "titleLabel": "The question for this session",
+    "suggestionsLabel": "Ideas",
+    "suggestions": {
+      "tea": "Who buys the bubble tea?",
+      "present": "Who presents first?",
+      "duty": "Who is on call this weekend?",
+      "icebreaker": "Who answers the icebreaker?"
+    },
+    "create": "Create session",
+    "untitled": "Who gets picked?",
+    "activity": {
+      "lucky-animal": "Lucky animal"
+    },
+    "qrLabel": "QR code to join: {url}",
+    "joinAt": "Scan the QR or open",
+    "count": "{n, plural, =0 {Nobody yet} one {# person in} other {# people in}}",
+    "lockedCount": "🔒 Locked · {n} people",
+    "waitingFirst": "Waiting for the first person…",
+    "closed": "The session has ended",
+    "locked": "Locked",
+    "people": "People",
+    "rename": "Rename",
+    "save": "Save",
+    "kick": "Remove",
+    "kickWho": "Remove {name} from the session",
+    "absent": "Absent (added by the host)",
+    "online": "Connected",
+    "offline": "Disconnected",
+    "addAbsent": "Add someone absent",
+    "addAbsentPlaceholder": "Name of someone without a phone",
+    "add": "Add",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "openStage": "Open the stage",
+    "lock": "Lock session",
+    "unlock": "Unlock session",
+    "lockHint": "When locked, newcomers cannot join; people already in can come back.",
+    "close": "End session",
+    "closeConfirm": "End this session? Nobody can join any more.",
+    "drawSoon": "🎯 The draw (animal race, wheel) arrives in the next update. For now, invite everyone and watch their animals on the stage.",
+    "youAreIn": "You are in",
+    "waitHost": "Wait for the host to start!",
+    "joinWith": "Join with this animal",
+    "changeAnimal": "Change my animal",
+    "changeAnimalFirst": "Dress up my animal first",
+    "haveCode": "Have a session code? Join now",
+    "codePlaceholder": "6-CHARACTER CODE",
+    "join": "Join",
+    "errors": {
+      "not_found": "Session not found. Check the code.",
+      "closed": "This session has ended.",
+      "locked": "The session is locked, or you were removed."
     }
   }
 }

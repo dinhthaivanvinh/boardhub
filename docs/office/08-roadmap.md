@@ -18,9 +18,9 @@
 
 ## O2 — Phiên văn phòng
 
-- [ ] `@bg/office-core`: hợp đồng, `fair-draw` (+ test phân phối, verify), helper test
-- [ ] Protocol `office:*`, `OfficeHub`, namespace `/office`, lưu trữ memory/Redis/Postgres, job hết hạn
-- [ ] Màn Người tham gia / Chủ trì / Sân khấu (chờ + danh sách + QR), khoá, kick, đổi tên, thêm vắng mặt
+- [x] `@bg/office-core`: hợp đồng, `fair-draw` (+ test phân phối, verify), helper test
+- [x] Protocol `office:*`, `OfficeHub`, namespace `/office`, lưu trữ memory/Redis/Postgres, job hết hạn
+- [x] Màn Người tham gia / Chủ trì / Sân khấu (chờ + danh sách + QR), khoá, kick, đổi tên, thêm vắng mặt
 - **Demo:** 10 điện thoại vào bằng QR, con vật hiện trên màn chiếu trong < 1 giây.
 
 ## O3 — Thú may mắn (MVP)

@@ -9,7 +9,7 @@ export interface OfficeActivityEntry {
 }
 
 export const OFFICE_ACTIVITIES: readonly OfficeActivityEntry[] = [
-  { id: 'lucky-animal', emoji: '🎯', status: 'soon' },
+  { id: 'lucky-animal', emoji: '🎯', status: 'ready' },
   { id: 'team-split', emoji: '🧩', status: 'soon' },
   { id: 'random-order', emoji: '🔢', status: 'soon' },
   { id: 'prize-draw', emoji: '🎁', status: 'soon' },

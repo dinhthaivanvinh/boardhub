@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   BotLevel,
   ChatMessage,
@@ -11,6 +11,7 @@ import type {
   ServerToClientEvents,
 } from '@bg/protocol';
 import { newSeed } from '@/game-runtime/local-match';
+import { nameLabels } from './names';
 import { useSession } from './session';
 import { getSocket, request, type GameSocket } from './socket';
 
@@ -142,6 +143,18 @@ export function useRoom(code: string) {
     [act, movePending, resync],
   );
 
+  // Names are not unique: two different people with the same name get a short id suffix.
+  const labels = useMemo(
+    () =>
+      nameLabels([
+        ...(room?.seats ?? []).flatMap((s) =>
+          s?.kind === 'user' ? [{ userId: s.userId, name: s.name }] : [],
+        ),
+        ...chat.map((m) => m.from),
+      ]),
+    [room, chat],
+  );
+
   const id = room?.id ?? '';
   const mySeat = room?.seats.findIndex((s) => s?.kind === 'user' && s.userId === userId) ?? -1;
 
@@ -154,6 +167,7 @@ export function useRoom(code: string) {
     actionError,
     movePending,
     userId,
+    labels,
     mySeat: mySeat >= 0 ? mySeat : null,
     isHost: room !== null && room.hostId === userId,
     takeSeat: (seat: number | null) => act('room:take-seat', { roomId: id, seat }),

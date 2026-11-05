@@ -32,6 +32,13 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 | `GET /health`                  | —                                  | `{ ok: true }`                                                                                                                |
 
 Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
+CORS cho phép `GET, HEAD, POST, PATCH`.
+
+**Danh tính khách:** web lưu token trong `localStorage` (`bg-session`), nên mọi tab của một trình duyệt là
+**cùng một người** (mở link mời ở tab mới vẫn giữ ghế). Muốn thêm người chơi trên cùng máy: dùng trình duyệt
+khác/cửa sổ ẩn danh, hoặc nút "Chơi với tên khách mới" ở trang tài khoản (gọi lại `POST /api/auth/guest`;
+các tab khác nhận sự kiện `storage` và tự tải lại). Tên hiển thị **không duy nhất** (id mới định danh người);
+trong phòng, hai người khác nhau trùng tên được hiển thị kèm 4 ký tự đầu của id: `An #3f2a`.
 
 ## 3. Client → Server
 

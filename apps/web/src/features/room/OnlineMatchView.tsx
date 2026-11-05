@@ -39,7 +39,7 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
 
   const pieceName = (seat: number) => t(`games.${gameId}.pieces.${seat}`);
   const nameOf = (seat: number) =>
-    `${pieceName(seat)} · ${seatName(t, room.seats[seat] ?? null, api.userId)}`;
+    `${pieceName(seat)} · ${seatName(t, room.seats[seat] ?? null, api.userId, api.labels)}`;
   const reasonText = (reason: string) => {
     const key = `games.${gameId}.reasons.${reason}`;
     if (t.has(key)) return t(key);
@@ -97,7 +97,9 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
               >
                 <span className="flex min-w-0 items-center gap-2">
                   {PieceIcon ? <PieceIcon seat={seat} size={20} /> : null}
-                  <span className="truncate">{seatName(t, room.seats[seat] ?? null, api.userId)}</span>
+                  <span className="truncate">
+                    {seatName(t, room.seats[seat] ?? null, api.userId, api.labels)}
+                  </span>
                   <RatingBadge
                     occ={room.seats[seat] ?? null}
                     change={m.ratingChanges?.find((c) => c.seat === seat)}

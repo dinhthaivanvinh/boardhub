@@ -5,7 +5,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import type { AuthResponse, PublicUser } from '@bg/protocol';
 import { errorKey } from '@/game-runtime/error-key';
 import { apiRequest } from '@/online/api';
-import { ensureToken, useSession } from '@/online/session';
+import { ensureToken, startNewGuest, useSession } from '@/online/session';
 
 const input = 'rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2';
 
@@ -57,6 +57,7 @@ export function AccountScreen() {
       )}
 
       <form
+        key={user.id}
         className="card flex flex-col gap-3"
         onSubmit={(e) =>
           submit<PublicUser>(
@@ -84,6 +85,28 @@ export function AccountScreen() {
           {t('account.save')}
         </button>
       </form>
+
+      {user.kind === 'guest' && (
+        <section className="card flex flex-col gap-2" aria-label={t('account.newGuest')}>
+          <h2 className="font-medium">{t('account.newGuest')}</h2>
+          <p className="text-sm text-[var(--muted)]">{t('account.newGuestNote')}</p>
+          <button
+            type="button"
+            className="btn self-start"
+            onClick={async () => {
+              setError(null);
+              try {
+                await startNewGuest();
+                setNotice(t('account.newGuestDone'));
+              } catch (err) {
+                setError(err instanceof Error ? err.message : 'network');
+              }
+            }}
+          >
+            {t('account.newGuest')}
+          </button>
+        </section>
+      )}
 
       {user.kind === 'guest' ? (
         <section className="card flex flex-col gap-4">

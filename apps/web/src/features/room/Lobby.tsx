@@ -39,7 +39,7 @@ export function Lobby({ api }: { api: RoomApi }) {
               <span className="flex min-w-0 items-center gap-2">
                 {PieceIcon ? <PieceIcon seat={seat} size={20} /> : null}
                 <span className="truncate">
-                  {seatName(t, occ, api.userId)}
+                  {seatName(t, occ, api.userId, api.labels)}
                   {occ?.kind === 'user' && occ.rating !== undefined && (
                     <span className="ml-1 text-sm tabular-nums text-[var(--muted)]">({occ.rating})</span>
                   )}

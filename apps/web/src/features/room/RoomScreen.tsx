@@ -90,7 +90,7 @@ export function RoomScreen({ code }: { code: string }) {
       {showMatch ? <OnlineMatchView api={api} /> : <Lobby api={api} />}
 
       <div className="max-w-xl">
-        <ChatPanel messages={api.chat} myUserId={api.userId} onSend={api.sendChat} />
+        <ChatPanel messages={api.chat} myUserId={api.userId} labels={api.labels} onSend={api.sendChat} />
       </div>
     </div>
   );

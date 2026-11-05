@@ -13,7 +13,12 @@ interface SessionState {
   clear(): void;
 }
 
-/** Who the player is on the game server. Kept in localStorage; a guest account is created on demand. */
+const SESSION_STORAGE_KEY = 'bg-session';
+
+/**
+ * Who the player is on the game server. Kept in localStorage, so every tab of a browser is the same
+ * person (an invite link opened in a new tab keeps your seat). A guest account is created on demand.
+ */
 export const useSession = create<SessionState>()(
   persist(
     (set) => ({
@@ -23,7 +28,7 @@ export const useSession = create<SessionState>()(
       setUser: (user) => set({ user }),
       clear: () => set({ token: null, user: null }),
     }),
-    { name: 'bg-session', partialize: ({ token, user }) => ({ token, user }) },
+    { name: SESSION_STORAGE_KEY, partialize: ({ token, user }) => ({ token, user }) },
   ),
 );
 
@@ -43,4 +48,29 @@ export function ensureToken(): Promise<string> {
       pendingGuest = null;
     });
   return pendingGuest;
+}
+
+/**
+ * Switches this browser to a brand-new guest (to try several players on one machine).
+ * The old guest cannot be recovered unless it was registered. Other tabs follow (see below).
+ */
+export async function startNewGuest(): Promise<string> {
+  // Swap in one write, so other tabs never see a moment with no session (they would make their own guest).
+  const res = await apiRequest<AuthResponse>('POST', '/api/auth/guest', {});
+  if (!res.ok) throw new Error(res.code);
+  useSession.getState().setAuth(res.data);
+  return res.data.token;
+}
+
+// One identity per browser: when another tab signs in, signs out or starts a new guest, reload this
+// tab so it never keeps talking to the server as someone else.
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (event.key !== SESSION_STORAGE_KEY) return;
+    const before = useSession.getState().user?.id ?? null;
+    void Promise.resolve(useSession.persist.rehydrate()).then(() => {
+      const after = useSession.getState().user?.id ?? null;
+      if (after !== before) window.location.reload();
+    });
+  });
 }

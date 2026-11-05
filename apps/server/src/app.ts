@@ -39,7 +39,11 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     logger: config.LOG_LEVEL === 'silent' ? false : { level: config.LOG_LEVEL },
     bodyLimit: 16 * 1024,
   });
-  await app.register(cors, { origin: config.corsOrigins, credentials: true });
+  await app.register(cors, {
+    origin: config.corsOrigins,
+    credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PATCH'],
+  });
 
   const cleanups: (() => Promise<void>)[] = [];
 

@@ -5,12 +5,48 @@ import type { UserRecord, UserRepo } from '../store/repos';
 import { hashPassword, verifyPassword } from './passwords';
 import type { TokenService } from './tokens';
 
-const GUEST_ADJECTIVES = ['Nhanh', 'Khéo', 'Lặng', 'Vui', 'Tinh', 'Gan', 'Bền', 'Sáng'];
-const GUEST_NOUNS = ['Hổ', 'Cáo', 'Ưng', 'Rồng', 'Sói', 'Hạc', 'Cá', 'Gấu'];
+// 16 × 16 × 9000 ≈ 2.3 million names. Names are only labels (ids identify people); the room UI
+// disambiguates the rare case of two people with the same name.
+const GUEST_ADJECTIVES = [
+  'Nhanh',
+  'Khéo',
+  'Lặng',
+  'Vui',
+  'Tinh',
+  'Gan',
+  'Bền',
+  'Sáng',
+  'Hiền',
+  'Dũng',
+  'Khôn',
+  'Lanh',
+  'Mạnh',
+  'Nhẹ',
+  'Tươi',
+  'Xinh',
+];
+const GUEST_NOUNS = [
+  'Hổ',
+  'Cáo',
+  'Ưng',
+  'Rồng',
+  'Sói',
+  'Hạc',
+  'Cá',
+  'Gấu',
+  'Mèo',
+  'Ngựa',
+  'Voi',
+  'Công',
+  'Sẻ',
+  'Thỏ',
+  'Rùa',
+  'Cú',
+];
 
 export function randomGuestName(rand: () => number = Math.random): string {
   const pick = <T>(arr: T[]) => arr[Math.floor(rand() * arr.length)] as T;
-  return `${pick(GUEST_NOUNS)} ${pick(GUEST_ADJECTIVES)} ${Math.floor(rand() * 900 + 100)}`;
+  return `${pick(GUEST_NOUNS)} ${pick(GUEST_ADJECTIVES)} ${Math.floor(rand() * 9000 + 1000)}`;
 }
 
 export function toPublicUser(u: UserRecord): PublicUser {

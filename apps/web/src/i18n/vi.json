@@ -160,7 +160,10 @@
     "login": "Đăng nhập",
     "email": "Email",
     "password": "Mật khẩu",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "newGuest": "Chơi với tên khách mới",
+    "newGuestNote": "Mọi tab của trình duyệt này là cùng một người chơi. Bấm nút này để trở thành một khách khác (ví dụ để thử nhiều người chơi trên một máy). Các tab khác cũng chuyển sang khách mới. Lịch sử của khách hiện tại sẽ không mở lại được, trừ khi bạn đã đăng ký.",
+    "newGuestDone": "Bạn đang chơi với tên khách mới."
   },
   "errors": {
     "network": "Không kết nối được máy chủ trò chơi.",

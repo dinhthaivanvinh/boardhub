@@ -160,7 +160,10 @@
     "login": "Log in",
     "email": "Email",
     "password": "Password",
-    "logout": "Log out"
+    "logout": "Log out",
+    "newGuest": "Play as a new guest",
+    "newGuestNote": "Every tab of this browser is the same player. Use this to become a different guest (for example to try several players on one machine). Other tabs switch too. The current guest's history cannot be reopened unless you signed up.",
+    "newGuestDone": "You are now playing as a new guest."
   },
   "errors": {
     "network": "Cannot reach the game server.",

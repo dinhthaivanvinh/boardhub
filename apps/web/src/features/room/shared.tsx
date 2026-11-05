@@ -16,10 +16,16 @@ export function useNow(ms = 250, active = true): number {
   return now;
 }
 
-export function seatName(t: T, occ: SeatOccupant | null, myUserId: string | null): string {
+export function seatName(
+  t: T,
+  occ: SeatOccupant | null,
+  myUserId: string | null,
+  labels?: Map<string, string>,
+): string {
   if (!occ) return t('room.empty');
   if (occ.kind === 'bot') return t('room.bot', { level: t(`bot.level.${occ.level}`) });
-  return occ.userId === myUserId ? `${occ.name} (${t('room.you')})` : occ.name;
+  const name = labels?.get(occ.userId) ?? occ.name;
+  return occ.userId === myUserId ? `${name} (${t('room.you')})` : name;
 }
 
 export function timeControlLabel(t: T, tc: TimeControl): string {

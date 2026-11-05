@@ -7,10 +7,12 @@ import type { ChatMessage } from '@bg/protocol';
 export function ChatPanel({
   messages,
   myUserId,
+  labels,
   onSend,
 }: {
   messages: ChatMessage[];
   myUserId: string | null;
+  labels?: Map<string, string>;
   onSend(text: string): Promise<string | null>;
 }) {
   const t = useTranslations('chat');
@@ -33,7 +35,7 @@ export function ChatPanel({
         {messages.map((m) => (
           <li key={m.id} className="break-words">
             <span className={`font-medium ${m.from.userId === myUserId ? 'text-[var(--accent)]' : ''}`}>
-              {m.from.name}:
+              {labels?.get(m.from.userId) ?? m.from.name}:
             </span>{' '}
             {m.text}
           </li>

@@ -145,6 +145,19 @@ describe('REST auth', () => {
     expect((await api('POST', '/api/auth/guest', { displayName: 'x' })).status).toBe(400);
     expect((await api('GET', '/health')).body).toEqual({ ok: true });
   });
+
+  it('browsers may send PATCH (renaming from the account page)', async () => {
+    const res = await server.app.inject({
+      method: 'OPTIONS',
+      url: '/api/me',
+      headers: {
+        origin: 'http://localhost:3000',
+        'access-control-request-method': 'PATCH',
+        'access-control-request-headers': 'content-type,authorization',
+      },
+    });
+    expect(res.headers['access-control-allow-methods']).toContain('PATCH');
+  });
 });
 
 describe('socket handshake', () => {

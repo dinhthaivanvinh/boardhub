@@ -1,6 +1,7 @@
 export * from './types';
 export {
   commitment,
+  drawPrizes,
   drawWinners,
   normalizeCandidates,
   verifyDraw,

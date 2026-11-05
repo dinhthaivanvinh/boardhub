@@ -6,6 +6,7 @@ import {
   DRAW_BUILD_UP_MS,
   DRAW_REVEAL_LEAD_MS,
   DRAW_START_DELAY_MS,
+  drawPrizes,
   drawWinners,
   normalizeCandidates,
   type ActivityContext,
@@ -303,6 +304,8 @@ export class OfficeHub {
    */
   private async startDraw(session: OfficeSessionRecord, request: DrawRequest) {
     const ids = normalizeCandidates(request.candidates);
+    const prizes = request.prizes ? normalizeCandidates(request.prizes) : null;
+    if (prizes && prizes.length < request.n) throw new HubError('office.not_enough');
     const byId = new Map(session.participants.map((p) => [p.id, p]));
     const seed = randomBytes(32).toString('hex');
     const drawId = randomUUID();
@@ -321,6 +324,7 @@ export class OfficeHub {
       revealAt: startsAt + DRAW_BUILD_UP_MS,
       seed,
       winners: drawWinners(seed, drawId, ids, request.n),
+      ...(prizes && { prizes, awarded: drawPrizes(seed, drawId, prizes, request.n) }),
       revealed: false,
       revealedAt: null,
     };
@@ -341,15 +345,15 @@ export class OfficeHub {
       const draw = session?.draw;
       if (!session || !draw || draw.drawId !== drawId || draw.revealed) return;
       const activity = this.activityOf(session);
-      const record: OfficeDrawRecord = {
-        ...publicDraw(draw),
-        seed: draw.seed,
-        winners: draw.winners,
-        revealedAt: this.now(),
-      };
+      const record: OfficeDrawRecord = { ...recordOf(draw), revealedAt: this.now() };
       const state = activity.onDrawResult(
         session.state,
-        { drawId, mode: draw.mode, winners: draw.winners },
+        {
+          drawId,
+          mode: draw.mode,
+          winners: draw.winners,
+          ...(draw.awarded && { awarded: draw.awarded }),
+        },
         this.ctx(session),
       );
       const next: OfficeSessionRecord = {
@@ -510,11 +514,18 @@ function publicDraw(d: RunningDraw): OfficeDrawStarted {
     commitment: d.commitment,
     startsAt: d.startsAt,
     revealAt: d.revealAt,
+    ...(d.prizes && { prizes: d.prizes }),
   };
 }
 
 function recordOf(d: RunningDraw): OfficeDrawRecord {
-  return { ...publicDraw(d), seed: d.seed, winners: d.winners, revealedAt: d.revealedAt ?? d.revealAt };
+  return {
+    ...publicDraw(d),
+    seed: d.seed,
+    winners: d.winners,
+    ...(d.awarded && { awarded: d.awarded }),
+    revealedAt: d.revealedAt ?? d.revealAt,
+  };
 }
 
 function info(s: OfficeSessionRecord): OfficeSessionInfo {

@@ -26,6 +26,8 @@ export interface OfficeSessionRecord {
 export interface RunningDraw extends OfficeDrawStarted {
   seed: string;
   winners: string[];
+  /** Prize of each winner, when the activity asked for prizes; secret until the reveal like winners. */
+  awarded?: string[];
   revealed: boolean;
   revealedAt: number | null;
 }

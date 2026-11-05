@@ -96,6 +96,17 @@ verify(record) = commitment(record.seed) === record.commitment
                  && deepEqual(drawWinners(record.seed, record.drawId, record.candidates, record.n), record.winners)
 ```
 
+**Phần quà trong cùng lần bốc** (thêm cho Lì xì, không đổi thuật toán cũ): `DrawRequest.prizes` là kho phần quà (id duy nhất).
+Hub chọn thêm một phần quà cho mỗi người thắng, cùng seed, khác thông điệp HMAC:
+
+```ts
+drawPrizes(seed, drawId, prizes, n)   // như drawWinners nhưng message = `${drawId}:prize:${i}`; quà i → người thắng i
+verify(record) = (như trên) && (record.prizes ? deepEqual(drawPrizes(seed, drawId, prizes, n), record.awarded) : true)
+```
+
+Kho `prizes` công khai ngay khi bắt đầu (như `candidates`); `awarded` chỉ công bố lúc reveal. `DrawResult.awarded` đưa vào
+`onDrawResult`. Lần bốc cũ (không có `prizes`) vẫn kiểm chứng như trước.
+
 - `seed` sinh bằng `crypto.randomBytes(32)` ở hub, **không** truyền vào hoạt động trước khi reveal.
 - `drawId` là uuid do hub tạo, nằm trong commitment payload, nên không thể dùng lại seed cho lần bốc khác.
 - Kịch bản hiệu ứng: `animationRng = createRng(seed, 'anim')` (dùng `@bg/engine` createRng) ⇒ mọi màn giống nhau.

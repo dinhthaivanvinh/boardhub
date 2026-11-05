@@ -37,12 +37,16 @@ export interface DrawRequest {
   n: number;
   candidates: string[];
   mode: string;
+  /** Optional: also hand each winner one prize from this pool (ids, unique), in the same fair draw. */
+  prizes?: string[];
 }
 
 export interface DrawResult {
   drawId: string;
   mode: string;
   winners: string[];
+  /** When the request had prizes: the prize of each winner, same order. */
+  awarded?: string[];
 }
 
 export interface ActivityDefinition<Settings, State, Action, View> {

@@ -1,0 +1,62 @@
+{
+  "name": "Sea Battle",
+  "shortDescription": "Hide your fleet, guess where the enemy ships are, and sink them all first.",
+  "rules": "Each side has a 10 × 10 sea and 5 ships: **Carrier** (5 squares), **Battleship** (4), **Cruiser** (3), **Submarine** (3) and **Destroyer** (2).\n\nAt the start, each side secretly places its ships in straight lines, across or down, without overlapping (touching is fine). Your opponent cannot see your ships.\n\nOn your turn, pick a square in the enemy sea and fire. A **hit** earns **another shot**; a **miss** passes the turn.\n\nWhen every square of a ship has been hit, it **sinks** and is shown to both sides.\n\nThe first to sink the whole enemy fleet wins.",
+  "pieces": { "0": "Blue fleet", "1": "Orange fleet" },
+  "ships": {
+    "0": "Carrier",
+    "1": "Battleship",
+    "2": "Cruiser",
+    "3": "Submarine",
+    "4": "Destroyer"
+  },
+  "shipSize": "{n} squares",
+  "theirSea": "Enemy sea",
+  "mySea": "Your fleet",
+  "seaOf": "{player}'s sea",
+  "cellLabel": "{col}{row}: {state}",
+  "state": {
+    "water": "water",
+    "ship": "your ship",
+    "miss": "miss",
+    "hit": "hit",
+    "sunk": "sunk ship"
+  },
+  "place": {
+    "title": "Place your fleet",
+    "hint": "Pick a ship, then tap the sea to place it. Tap a placed ship to pick it up.",
+    "rotate": "Rotate",
+    "horizontal": "Across",
+    "vertical": "Down",
+    "random": "Random",
+    "clear": "Clear",
+    "done": "Done, to battle!",
+    "placed": "placed",
+    "cannot": "It does not fit there."
+  },
+  "waiting": "Your opponent is placing ships…",
+  "yourTurn": "Pick a square in the enemy sea to fire at.",
+  "theirTurn": "Your opponent is taking aim…",
+  "afloat": "Enemy ships",
+  "lastHit": "{who} fired at {cell}: hit!",
+  "lastMiss": "{who} fired at {cell}: miss.",
+  "lastSunk": "{who} fired at {cell}: sank the {ship}!",
+  "you": "You",
+  "opponent": "Opponent",
+  "handoff": {
+    "title": "Pass the device to {player}",
+    "text": "No peeking, other player! Press the button when ready.",
+    "show": "I am {player}: show my board"
+  },
+  "errors": {
+    "wrong_phase": "You cannot do that now.",
+    "bad_fleet": "Place all 5 ships.",
+    "out_of_bounds": "That is outside the sea.",
+    "overlap": "Ships cannot overlap.",
+    "already_shot": "You already fired there."
+  },
+  "reasons": {
+    "fleet_sunk": "sank the whole fleet"
+  },
+  "config": {}
+}

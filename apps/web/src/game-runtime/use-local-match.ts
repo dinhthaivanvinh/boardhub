@@ -32,7 +32,8 @@ export function useLocalMatch<S, M, C>(
     const version = snapshot.version;
     requestBotMove({
       gameId,
-      state: snapshot.state,
+      // Bots see only what their seat may see (rule B4): hidden-info games must not leak to them.
+      state: def.playerView(snapshot.state, turn.seat),
       seat: turn.seat,
       level: turn.level,
       seed: snapshot.seed,
@@ -48,7 +49,7 @@ export function useLocalMatch<S, M, C>(
     return () => {
       cancelled = true;
     };
-  }, [match, snapshot, gameId]);
+  }, [match, snapshot, gameId, def]);
 
   const play = useCallback(
     (move: unknown) => {

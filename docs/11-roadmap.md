@@ -45,12 +45,12 @@
 - [x] Quick-match, ranked, Glicko-2, bảng xếp hạng (`/queue`, `/leaderboard`, điểm trong hồ sơ và trong phòng)
 - [x] Spectate: `/live` liệt kê ván ghép trận đang chơi; vào phòng bằng mã thì xem với view của người xem
 - [ ] Admin: bật/tắt game, báo cáo người chơi
-- [ ] Game đợt 2: [x] Cờ gánh (`co-ganh`) · [x] Ô ăn quan (`o-an-quan`) · [ ] Cờ đam (quốc tế 10×10) · [ ] Cờ vua
+- [ ] Game đợt 2: [x] Cờ gánh (`co-ganh`) · [x] Ô ăn quan (`o-an-quan`) · [ ] Cờ vua · (Cờ đam: tạm hoãn, ít phổ biến ở VN)
 
 ## M5 — Đa dạng cơ chế (4 tuần)
 
 - [ ] Cá ngựa (chance, 2–4 người) → kiểm chứng RNG và multi-player
-- [ ] Bắn tàu (hidden-info) → kiểm chứng `playerView` và test chống lộ thông tin
+- [x] Bắn tàu (`ban-tau`, hidden-info) → kiểm chứng `playerView` và test chống lộ thông tin (bot ở web cũng chỉ nhận view)
 - [ ] Correspondence mode + thông báo
 
 ## Sau đó

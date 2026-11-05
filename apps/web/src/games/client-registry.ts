@@ -26,6 +26,11 @@ import {
   configFields as oAnQuanFields,
   PieceIcon as OAnQuanPiece,
 } from '@bg/game-o-an-quan';
+import {
+  Board as BanTauBoard,
+  configFields as banTauFields,
+  PieceIcon as BanTauPiece,
+} from '@bg/game-ban-tau';
 import type { BoardProps, ConfigFieldSpec } from '@bg/ui';
 import type { GameId } from './catalog';
 
@@ -63,5 +68,10 @@ export const CLIENT_GAMES: Record<GameId, ClientGameEntry> = {
     Board: OAnQuanBoard as ClientGameEntry['Board'],
     configFields: oAnQuanFields,
     PieceIcon: OAnQuanPiece,
+  },
+  'ban-tau': {
+    Board: BanTauBoard as ClientGameEntry['Board'],
+    configFields: banTauFields,
+    PieceIcon: BanTauPiece,
   },
 };

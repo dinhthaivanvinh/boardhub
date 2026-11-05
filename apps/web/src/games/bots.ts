@@ -6,6 +6,7 @@ import { bot as reversiBot } from '@bg/game-reversi/bot';
 import { bot as xiangqiBot } from '@bg/game-xiangqi/bot';
 import { bot as coGanhBot } from '@bg/game-co-ganh/bot';
 import { bot as oAnQuanBot } from '@bg/game-o-an-quan/bot';
+import { bot as banTauBot } from '@bg/game-ban-tau/bot';
 import type { GameId } from './catalog';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,4 +17,5 @@ export const BOTS: Record<GameId, Bot<any, any>> = {
   xiangqi: xiangqiBot,
   'co-ganh': coGanhBot,
   'o-an-quan': oAnQuanBot,
+  'ban-tau': banTauBot,
 };

@@ -1,0 +1,42 @@
+{
+  "name": "Both fleets placed; seat 0 hits B10, hits C10 to sink the destroyer, then misses A1",
+  "config": {},
+  "seed": "fixture-sink",
+  "moves": [
+    {
+      "seat": 0,
+      "move": {
+        "kind": "place",
+        "ships": [
+          { "cell": 0, "horizontal": true },
+          { "cell": 20, "horizontal": true },
+          { "cell": 40, "horizontal": true },
+          { "cell": 60, "horizontal": true },
+          { "cell": 80, "horizontal": true }
+        ]
+      }
+    },
+    {
+      "seat": 1,
+      "move": {
+        "kind": "place",
+        "ships": [
+          { "cell": 9, "horizontal": false },
+          { "cell": 2, "horizontal": false },
+          { "cell": 55, "horizontal": true },
+          { "cell": 77, "horizontal": true },
+          { "cell": 91, "horizontal": true }
+        ]
+      }
+    },
+    { "seat": 0, "move": { "kind": "fire", "cell": 91 } },
+    { "seat": 0, "move": { "kind": "fire", "cell": 92 } },
+    { "seat": 0, "move": { "kind": "fire", "cell": 0 } }
+  ],
+  "expected": {
+    "result": null,
+    "turn": 1,
+    "sunk": [[], [4]],
+    "lastShot": { "seat": 0, "cell": 0, "hit": false, "sunk": null }
+  }
+}

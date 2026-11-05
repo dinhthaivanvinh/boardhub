@@ -13,6 +13,7 @@
   "dependencies": {
     "@bg/bots": "workspace:*",
     "@bg/engine": "workspace:*",
+    "@bg/game-ban-tau": "workspace:*",
     "@bg/game-caro": "workspace:*",
     "@bg/game-co-ganh": "workspace:*",
     "@bg/game-four-in-a-row": "workspace:*",

@@ -1,0 +1,258 @@
+/* Bắn tàu: a blue sea with steel hulls, white splashes for misses and red bursts for hits. */
+[data-game='ban-tau'] {
+  --piece-p0: #2563eb;
+  --piece-p1: #ea580c;
+  --bt-sea: #1e6fae;
+  --bt-sea-deep: #134e7c;
+  --bt-line: rgb(255 255 255 / 0.18);
+  --bt-hull: #94a3b8;
+  --bt-hull-edge: #475569;
+}
+@media (prefers-color-scheme: dark) {
+  [data-game='ban-tau'] {
+    --piece-p0: #60a5fa;
+    --piece-p1: #fb923c;
+    --bt-sea: #164e7a;
+    --bt-sea-deep: #0c2f4d;
+    --bt-hull: #64748b;
+    --bt-hull-edge: #cbd5e1;
+  }
+}
+
+.bt-board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.bt-seas {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 900px) {
+  .bt-seas {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.bt-sea-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.bt-sea-frame {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  grid-template-rows: 1.1rem 1fr;
+}
+.bt-coords {
+  display: grid;
+  font-size: 0.65rem;
+  color: var(--muted, #6b665e);
+  text-align: center;
+  align-items: center;
+}
+.bt-coords-top {
+  grid-column: 2;
+  grid-template-columns: repeat(10, 1fr);
+}
+.bt-coords-left {
+  grid-row: 2;
+  grid-template-rows: repeat(10, 1fr);
+}
+.bt-grid {
+  grid-column: 2;
+  grid-row: 2;
+}
+.bt-grid .bg-board {
+  fill: var(--bt-sea, #1e6fae);
+}
+.bt-sea .bg-grid-lines line {
+  stroke: var(--bt-line, rgb(255 255 255 / 0.18));
+}
+.bt-aim {
+  fill: transparent;
+}
+[data-can-fire='true'] .bg-cell:hover .bt-aim,
+.bt-aim-pending {
+  fill: rgb(255 255 255 / 0.22);
+  stroke: #fde047;
+  stroke-width: 2;
+}
+[data-can-fire='true'] .bg-cell {
+  cursor: crosshair;
+}
+.bt-hull {
+  stroke-width: 2;
+}
+.bt-hull-mine {
+  fill: var(--bt-hull, #94a3b8);
+  stroke: var(--bt-hull-edge, #475569);
+}
+.bt-hull-sunk {
+  fill: #450a0a;
+  stroke: #f87171;
+  stroke-dasharray: 4 3;
+}
+.bt-hull-ghost-ok {
+  fill: rgb(34 197 94 / 0.55);
+  stroke: #22c55e;
+}
+.bt-hull-ghost-bad {
+  fill: rgb(239 68 68 / 0.5);
+  stroke: #ef4444;
+}
+.bt-miss-dot {
+  fill: #e0f2fe;
+  stroke: rgb(255 255 255 / 0.5);
+  stroke-width: 4;
+}
+.bt-hit-burst {
+  fill: #f97316;
+  opacity: 0.85;
+}
+.bt-hit-x {
+  stroke: #7f1d1d;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.bt-ripple {
+  fill: none;
+  stroke: #fef08a;
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bt-ripple 0.9s ease-out 2;
+}
+.bt-latest .bt-hit-burst,
+.bt-latest .bt-miss-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bt-land 0.45s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+@keyframes bt-ripple {
+  from {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@keyframes bt-land {
+  from {
+    transform: scale(0.2);
+  }
+}
+.bt-banner {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border, #e3ded4);
+  font-weight: 600;
+  text-align: center;
+}
+.bt-banner-go {
+  border-color: var(--accent, #c2410c);
+  color: var(--accent, #c2410c);
+}
+.bt-hint {
+  font-size: 0.875rem;
+  color: var(--muted, #6b665e);
+}
+.bt-warning {
+  font-size: 0.875rem;
+  color: var(--danger, #b91c1c);
+}
+.bt-last {
+  font-size: 0.9rem;
+  text-align: center;
+}
+.bt-afloat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+.bt-afloat-ship[data-sunk='true'] {
+  text-decoration: line-through;
+  color: var(--danger, #b91c1c);
+}
+.bt-placer-body {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 700px) {
+  .bt-placer-body {
+    grid-template-columns: 13rem 1fr;
+    align-items: start;
+  }
+}
+.bt-ship-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.bt-ship-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border, #e3ded4);
+  text-align: left;
+  font-size: 0.85rem;
+}
+.bt-ship-btn[aria-pressed='true'] {
+  border-color: var(--focus-ring, #0284c7);
+  box-shadow: 0 0 0 2px var(--focus-ring, #0284c7);
+}
+.bt-ship-btn[data-placed='true'] {
+  opacity: 0.65;
+}
+.bt-ship-pips {
+  display: inline-flex;
+  gap: 2px;
+}
+.bt-ship-pips span {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  background: var(--bt-hull-edge, #475569);
+}
+.bt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.bt-handoff {
+  display: flex;
+  min-height: 22rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at 50% 30%, var(--bt-sea, #1e6fae), var(--bt-sea-deep, #134e7c));
+}
+.bt-handoff-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.bt-icon-p0 {
+  fill: var(--piece-p0, #2563eb);
+  stroke: var(--piece-p0, #2563eb);
+}
+.bt-icon-p1 {
+  fill: var(--piece-p1, #ea580c);
+  stroke: var(--piece-p1, #ea580c);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bt-ripple,
+  .bt-latest .bt-hit-burst,
+  .bt-latest .bt-miss-dot {
+    animation: none;
+  }
+}

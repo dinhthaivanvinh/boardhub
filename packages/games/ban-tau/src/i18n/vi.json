@@ -1,0 +1,62 @@
+{
+  "name": "Bắn tàu",
+  "shortDescription": "Giấu hạm đội của bạn, đoán vị trí tàu đối thủ và bắn chìm tất cả trước.",
+  "rules": "Mỗi bên có một vùng biển 10 × 10 và 5 tàu: **Tàu sân bay** (5 ô), **Thiết giáp hạm** (4), **Tuần dương hạm** (3), **Tàu ngầm** (3) và **Khu trục hạm** (2).\n\nĐầu ván, mỗi bên bí mật xếp tàu theo hàng ngang hoặc dọc, không chồng lên nhau (được để sát nhau). Đối thủ không nhìn thấy tàu của bạn.\n\nĐến lượt, chọn một ô trên biển đối thủ để bắn. **Trúng** thì được **bắn tiếp**; **trượt** thì đến lượt đối thủ.\n\nKhi mọi ô của một tàu đều trúng, tàu đó **chìm** và hiện ra cho cả hai bên.\n\nAi bắn chìm toàn bộ hạm đội đối thủ trước thì thắng.",
+  "pieces": { "0": "Hạm đội Xanh", "1": "Hạm đội Cam" },
+  "ships": {
+    "0": "Tàu sân bay",
+    "1": "Thiết giáp hạm",
+    "2": "Tuần dương hạm",
+    "3": "Tàu ngầm",
+    "4": "Khu trục hạm"
+  },
+  "shipSize": "{n} ô",
+  "theirSea": "Biển đối thủ",
+  "mySea": "Hạm đội của bạn",
+  "seaOf": "Biển của {player}",
+  "cellLabel": "{col}{row}: {state}",
+  "state": {
+    "water": "nước",
+    "ship": "tàu của bạn",
+    "miss": "bắn trượt",
+    "hit": "trúng",
+    "sunk": "tàu chìm"
+  },
+  "place": {
+    "title": "Xếp hạm đội",
+    "hint": "Chọn một tàu, rồi chạm vào biển để đặt. Chạm tàu đã đặt để nhấc lên.",
+    "rotate": "Xoay",
+    "horizontal": "Ngang",
+    "vertical": "Dọc",
+    "random": "Xếp ngẫu nhiên",
+    "clear": "Xoá hết",
+    "done": "Xong, vào trận!",
+    "placed": "đã đặt",
+    "cannot": "Không đặt được ở đây."
+  },
+  "waiting": "Đối thủ đang xếp tàu…",
+  "yourTurn": "Chọn một ô trên biển đối thủ để bắn.",
+  "theirTurn": "Đối thủ đang ngắm bắn…",
+  "afloat": "Tàu đối thủ",
+  "lastHit": "{who} bắn {cell}: trúng!",
+  "lastMiss": "{who} bắn {cell}: trượt.",
+  "lastSunk": "{who} bắn {cell}: chìm {ship}!",
+  "you": "Bạn",
+  "opponent": "Đối thủ",
+  "handoff": {
+    "title": "Đưa máy cho {player}",
+    "text": "Người kia đừng nhìn nhé! Bấm nút khi đã sẵn sàng.",
+    "show": "Tôi là {player}: hiện bàn của tôi"
+  },
+  "errors": {
+    "wrong_phase": "Bây giờ không làm việc đó được.",
+    "bad_fleet": "Cần xếp đủ 5 tàu.",
+    "out_of_bounds": "Ra ngoài biển rồi.",
+    "overlap": "Hai tàu không được chồng lên nhau.",
+    "already_shot": "Ô này đã bắn rồi."
+  },
+  "reasons": {
+    "fleet_sunk": "bắn chìm toàn bộ hạm đội"
+  },
+  "config": {}
+}

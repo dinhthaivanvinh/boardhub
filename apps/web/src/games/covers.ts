@@ -5,6 +5,7 @@ import caro from '@bg/game-caro/cover.svg';
 import fourInARow from '@bg/game-four-in-a-row/cover.svg';
 import reversi from '@bg/game-reversi/cover.svg';
 import xiangqi from '@bg/game-xiangqi/cover.svg';
+import coGanh from '@bg/game-co-ganh/cover.svg';
 import type { GameId } from './catalog';
 
 export const COVERS: Record<GameId, StaticImageData> = {
@@ -12,4 +13,5 @@ export const COVERS: Record<GameId, StaticImageData> = {
   'four-in-a-row': fourInARow,
   reversi,
   xiangqi,
+  'co-ganh': coGanh,
 };

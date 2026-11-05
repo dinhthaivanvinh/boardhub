@@ -14,6 +14,7 @@ const config: NextConfig = {
     '@bg/game-four-in-a-row',
     '@bg/game-xiangqi',
     '@bg/game-reversi',
+    '@bg/game-co-ganh',
   ],
   // Let phones and other machines on the home network use `pnpm dev` through the LAN IP
   // (Next.js blocks dev assets for hosts other than localhost). Dev only; `*` is one label of the hostname.

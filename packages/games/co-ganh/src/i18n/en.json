@@ -1,0 +1,26 @@
+{
+  "name": "Co ganh",
+  "shortDescription": "A Vietnamese folk game: carry and surround enemy pieces to turn them into yours.",
+  "rules": "5 × 5 points, 8 pieces each. Red moves first.\n\nEach turn, move **one piece one step** along a line to an empty neighbouring point. Only points with diagonal lines allow diagonal moves.\n\n**Carry (gánh):** moving between two enemy pieces on one straight line turns both into your pieces. One move can carry several pairs. Moving between two enemy pieces yourself never costs you a piece.\n\n**Surround (vây):** after a move, any enemy piece or group of pieces with no way to move becomes yours.\n\n**Open (mở):** if your opponent just left a point empty and you can carry by moving into it, you **must** do so. That point is outlined.\n\nA side with no pieces left loses. 60 moves each without a capture is a draw.",
+  "pieces": { "0": "Red", "1": "Blue" },
+  "boardLabel": "Co ganh board",
+  "cellLabel": "Column {col}, row {row}: {piece}",
+  "empty": "empty",
+  "lastMove": "{color} moved from {from} to {to}.",
+  "carried": "Carried {n}!",
+  "surrounded": "Surrounded {n}!",
+  "mustOpen": "Opened: you must move into the outlined point and carry.",
+  "errors": {
+    "out_of_bounds": "That move is off the board.",
+    "no_piece": "There is no piece there.",
+    "not_your_piece": "That is your opponent's piece.",
+    "not_adjacent": "Move one step along a line.",
+    "occupied": "That point is taken.",
+    "must_open": "Your opponent opened a point: you must move into it and carry."
+  },
+  "reasons": {
+    "all_taken": "the opponent has no pieces left",
+    "move_limit": "60 moves without a capture"
+  },
+  "config": {}
+}

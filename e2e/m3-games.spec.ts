@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 const status = (page: Page) => page.getByRole('status').first();
 
-test('the home page lists the four MVP games and nothing "coming soon"', async ({ page }) => {
+test('the home page lists the MVP games and nothing "coming soon"', async ({ page }) => {
   await page.goto('/');
   for (const name of ['Caro', 'Bốn trong hàng', 'Reversi', 'Cờ tướng']) {
     await expect(page.getByRole('link', { name: new RegExp(name) })).toBeVisible();

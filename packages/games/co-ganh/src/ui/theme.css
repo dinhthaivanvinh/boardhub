@@ -1,0 +1,98 @@
+/* Cờ gánh: bamboo-coloured board, red and blue stones. */
+[data-game='co-ganh'] {
+  --piece-p0: #dc2626;
+  --piece-p1: #2563eb;
+  --cg-board: #ecd9a8;
+  --cg-line: #7a5a2b;
+}
+@media (prefers-color-scheme: dark) {
+  [data-game='co-ganh'] {
+    --piece-p0: #f87171;
+    --piece-p1: #60a5fa;
+    --cg-board: #4a3b22;
+    --cg-line: #c9a46a;
+  }
+}
+
+.cg-board .bg-board {
+  fill: var(--cg-board, #ecd9a8);
+}
+.cg-lines line,
+.cg-lines polygon {
+  stroke: var(--cg-line, #7a5a2b);
+  stroke-width: 1.6;
+}
+.cg-stone-body {
+  stroke: rgb(0 0 0 / 0.35);
+  stroke-width: 1;
+}
+.cg-p0 .cg-stone-body {
+  fill: var(--piece-p0, #dc2626);
+}
+.cg-p1 .cg-stone-body {
+  fill: var(--piece-p1, #2563eb);
+}
+.cg-stone-shine {
+  fill: #fff;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.cg-selected .cg-stone-body {
+  stroke: var(--focus-ring, #0284c7);
+  stroke-width: 3.5;
+}
+.cg-target {
+  fill: var(--focus-ring, #0284c7);
+  opacity: 0.85;
+}
+.cg-last {
+  fill: var(--highlight-last, rgb(250 204 21 / 0.45));
+}
+.cg-forced {
+  fill: none;
+  stroke: #f59e0b;
+  stroke-width: 3;
+  stroke-dasharray: 4 3;
+}
+.cg-note {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #b45309;
+}
+.cg-flip {
+  animation: cg-flip 0.45s ease-out;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes cg-flip {
+  0% {
+    transform: scaleX(0.1);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+.cg-enter {
+  animation: cg-enter 0.2s ease-out;
+}
+@keyframes cg-enter {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cg-flip,
+  .cg-enter {
+    animation: none;
+  }
+}
+
+/* Only 5 × 5 points: keep the board a comfortable size on wide screens. */
+.cg-board {
+  max-width: 34rem;
+  margin-inline: auto;
+}

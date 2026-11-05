@@ -16,6 +16,11 @@ import {
   configFields as xiangqiFields,
   PieceIcon as XiangqiPiece,
 } from '@bg/game-xiangqi';
+import {
+  Board as CoGanhBoard,
+  configFields as coGanhFields,
+  PieceIcon as CoGanhPiece,
+} from '@bg/game-co-ganh';
 import type { BoardProps, ConfigFieldSpec } from '@bg/ui';
 import type { GameId } from './catalog';
 
@@ -43,5 +48,10 @@ export const CLIENT_GAMES: Record<GameId, ClientGameEntry> = {
     Board: XiangqiBoard as ClientGameEntry['Board'],
     configFields: xiangqiFields,
     PieceIcon: XiangqiPiece,
+  },
+  'co-ganh': {
+    Board: CoGanhBoard as ClientGameEntry['Board'],
+    configFields: coGanhFields,
+    PieceIcon: CoGanhPiece,
   },
 };

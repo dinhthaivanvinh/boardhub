@@ -1,0 +1,26 @@
+{
+  "name": "Cờ gánh",
+  "shortDescription": "Trò chơi dân gian miền Trung: gánh và vây quân đối phương để biến chúng thành quân mình.",
+  "rules": "Bàn 5 × 5 giao điểm, mỗi bên 8 quân. Đỏ đi trước.\n\nMỗi lượt đi **một quân một bước** dọc theo đường kẻ tới điểm trống kề bên. Chỉ những điểm có đường chéo mới đi chéo được.\n\n**Gánh:** đi vào giữa hai quân đối phương nằm trên cùng một đường thẳng thì cả hai quân đó thành quân mình. Một nước có thể gánh nhiều cặp. Tự đi vào giữa hai quân đối phương thì không bị mất quân.\n\n**Vây (chẹt):** sau nước đi, quân hoặc nhóm quân đối phương không còn đường đi nào thì thành quân mình.\n\n**Mở:** nếu đối thủ vừa bỏ trống một điểm mà bạn có thể đi vào đó để gánh, bạn **bắt buộc** phải đi vào đó. Điểm bắt buộc được tô viền.\n\nBên nào hết quân thì thua. 60 nước mỗi bên không có quân nào bị bắt thì hòa.",
+  "pieces": { "0": "Đỏ", "1": "Xanh" },
+  "boardLabel": "Bàn cờ gánh",
+  "cellLabel": "Cột {col}, hàng {row}: {piece}",
+  "empty": "trống",
+  "lastMove": "{color} đi từ {from} đến {to}.",
+  "carried": "Gánh {n} quân!",
+  "surrounded": "Vây {n} quân!",
+  "mustOpen": "Bị mở: bạn phải đi vào điểm được tô viền để gánh.",
+  "errors": {
+    "out_of_bounds": "Nước đi nằm ngoài bàn cờ.",
+    "no_piece": "Không có quân ở đó.",
+    "not_your_piece": "Đó là quân của đối thủ.",
+    "not_adjacent": "Chỉ được đi một bước dọc theo đường kẻ.",
+    "occupied": "Điểm đó đã có quân.",
+    "must_open": "Đối thủ vừa mở: bạn phải đi vào điểm được tô viền để gánh."
+  },
+  "reasons": {
+    "all_taken": "đối thủ hết quân",
+    "move_limit": "60 nước không bắt quân"
+  },
+  "config": {}
+}

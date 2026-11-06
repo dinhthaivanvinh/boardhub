@@ -38,6 +38,18 @@
 - [x] `wheel` > 60 người quay theo nhóm 12 (O-07 §3); `GET /api/office/:code/draws`
 - [x] Điện thoại: sau lượt đầu hiện "Chờ chủ trì quay lượt tiếp theo"
 
+## P1 — Khu Tiệc nhóm: Lì xì Tết (ADR-0008)
+
+- [x] Bốc thăm có phần thưởng: `DrawRequest.prizes`, `drawPrizes`, `verifyDraw` kiểm cả phần thưởng; cột `prizes`,
+      `awarded` trong `office_draws`
+- [x] Gói `@bg/office-li-xi`: mệnh giá và số tờ (có/không giới hạn), chồng phong bao, thứ tự ngẫu nhiên/theo lúc vào
+- [x] Khu `/party` (cổng, menu, trang danh sách), form tạo phòng có xem trước tổng tiền, phiên ở `/party/s/:code`
+- [x] Sân khấu căn phòng Tết: đèn rọi, bước lên bục, phong bao mở, tờ tiền cách điệu, lời chúc, pháo giấy/tiền
+      vàng/pháo hoa; âm thanh và nhạc nền Tết tổng hợp bằng Web Audio
+- [x] Chủ trì (Bắt đầu, Mời người tiếp theo / Space, trình chiếu), điện thoại ("Đến lượt bạn!"), trang kiểm chứng
+- [x] E2E `e2e/party-li-xi.spec.ts`
+- **Demo:** cả nhà quét QR, ông bà không có điện thoại được thêm tên; từng người lên nhận phong bao trên TV.
+
 ## O5 — Thêm hoạt động
 
 - [ ] Chia đội (`team-split`) · Thứ tự ngẫu nhiên (`random-order`) · Bốc quà (`prize-draw`)

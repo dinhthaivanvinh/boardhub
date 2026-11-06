@@ -14,8 +14,10 @@ bốc ngẫu nhiên công bằng (commit–reveal) người được chọn.
 | [O-07 UX](07-ux-guidelines.md)                       | Ba màn, hiệu ứng bốc, đồng bộ thời gian, điện thoại, a11y     |
 | [O-08 Lộ trình](08-roadmap.md)                       | Mốc O0–O5                                                     |
 | [Hoạt động: Thú may mắn](activities/lucky-animal.md) | Đặc tả hoạt động đầu tiên                                     |
+| [Tiệc nhóm: Lì xì Tết](activities/li-xi.md)          | Hoạt động đầu tiên của khu Tiệc nhóm (`/party`, ADR-0008)     |
 | [Mẫu đặc tả hoạt động](activities/_template.md)      | Copy khi thêm hoạt động mới                                   |
 
 ADR liên quan: [0005](../adr/0005-office-activities-contract.md) hợp đồng hoạt động ·
 [0006](../adr/0006-fair-draw-commit-reveal.md) bốc thăm commit–reveal ·
-[0007](../adr/0007-two-areas-information-architecture.md) hai khu & URL.
+[0007](../adr/0007-two-areas-information-architecture.md) hai khu & URL ·
+[0008](../adr/0008-party-area-on-office-sessions.md) khu Tiệc nhóm trên phiên Văn phòng, bốc thăm có phần thưởng.

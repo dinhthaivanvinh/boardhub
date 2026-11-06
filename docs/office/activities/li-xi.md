@@ -72,8 +72,16 @@ Không có thông tin ẩn: mọi màn thấy như nhau (A4).
   tiếng giấy khi mở phong bao, "ting" và pháo khi tiền xòe ra.
 - Tờ tiền là **hình cách điệu** (màu, số tiền, hoa mai), không mô phỏng tiền thật.
 
+> Đã làm (`apps/web/src/features/party/li-xi`): `timeline.ts` (các bước sau landing: walk 1,4 s, envelope 0,8 s,
+> shake 1 s, open 0,6 s, note 1 s, rồi shown), `LiXiStage` (sân khấu, cũng dùng cỡ nhỏ ở màn chủ trì), `LiXiHostPanel`,
+> `LiXiPhone`, `tet-audio.ts` (âm thanh và nhạc), `view.ts` (giấu quà của lượt đang chạy, số người chờ tính từ danh
+> sách người trong phòng vì view của hoạt động chỉ gửi lại sau mỗi hành động). Nút "Mời người tiếp theo" chỉ bật khi
+> phong bao trước đã mở xong. Lời chúc chọn theo `drawId` (không ngẫu nhiên) nên mọi màn giống nhau.
+
 ## 8. Kiểm thử
 
 `packages/office/li-xi/test`: quyền chủ trì, giai đoạn, chồng phong bao (có/không giới hạn, lời chúc), phát hết 20 người
 đúng số tờ, người vào muộn, thứ tự `joined`, không mutate. `apps/server/test/office-socket.test.ts`: một lượt qua socket,
-không lộ seed/phong bao trước reveal, `verifyDraw` đúng. E2E: `e2e/party-li-xi.spec.ts`.
+không lộ seed/phong bao trước reveal, `verifyDraw` đúng. `apps/web/test/li-xi.test.ts`: khu của phiên, xem trước tiền, dòng thời gian, giấu quà. E2E:
+`e2e/party-li-xi.spec.ts` (chủ trì + sân khấu + điện thoại + người vắng mặt, hết tờ có giới hạn, kiểm chứng; và bản
+không hiệu ứng).

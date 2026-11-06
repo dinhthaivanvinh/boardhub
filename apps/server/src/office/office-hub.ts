@@ -416,7 +416,8 @@ export class OfficeHub {
 
   async exists(code: string) {
     const session = await this.o.store.get(code);
-    return session ? { exists: true, status: session.status, activityId: session.activityId }
+    return session
+      ? { exists: true, status: session.status, activityId: session.activityId }
       : { exists: false, status: null, activityId: null };
   }
 

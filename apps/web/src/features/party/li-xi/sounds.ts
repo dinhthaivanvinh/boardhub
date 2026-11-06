@@ -8,6 +8,7 @@ import {
   playGong,
   playRustle,
   playShake,
+  playSlide,
   playTing,
   startLionDrums,
   startTetMusic,
@@ -57,6 +58,9 @@ export function useLiXiSounds(
         break;
       case 'open':
         playRustle();
+        break;
+      case 'pull':
+        playSlide();
         break;
       case 'note':
         playTing();

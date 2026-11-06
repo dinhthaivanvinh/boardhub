@@ -151,12 +151,12 @@
   justify-content: center;
   gap: 1.25rem;
   min-height: 18rem;
-  padding-top: 8rem;
+  padding-top: 11rem;
   padding-bottom: 0.8rem;
 }
 .lixi-stage:not(.lixi-stage-big) .lixi-podium-stage {
   min-height: 10rem;
-  padding-top: 5rem;
+  padding-top: 7.5rem;
 }
 .lixi-spot {
   display: flex;
@@ -195,6 +195,10 @@
 /* The envelope: flies in, shakes, opens, the note slides out (data-step; --t = time already gone). */
 .lixi-envelope {
   --w: 110px;
+  /* Where the open note ends up: centred above the envelope. */
+  --up: calc(var(--w) * -1.2);
+  /* ...and a little towards the person, so it stays over the podium. */
+  --left: calc(var(--w) * -0.45);
   position: relative;
   width: var(--w);
   height: calc(var(--w) * 4 / 3);
@@ -232,13 +236,15 @@
   display: block;
   width: 100%;
 }
+/* The note stands upright inside, smaller than the envelope, so nothing of it shows until it is pulled
+   out (pull); then it grows, turns flat and shakes about (note), and keeps a little wiggle (shown). */
 .lixi-note-slot {
   position: absolute;
-  top: 6%;
+  top: 50%;
   left: 50%;
   z-index: 1;
-  width: 150%;
-  transform: translate(-50%, 0);
+  width: 125%;
+  transform: translate(-50%, -50%) rotate(90deg);
 }
 .lixi-note-slot::before {
   content: '';
@@ -267,16 +273,23 @@
 .lixi-envelope[data-step='open'] .lixi-envelope-flap {
   animation: lixi-flap 0.6s ease-out var(--t) both;
 }
+.lixi-envelope[data-step='pull'] .lixi-envelope-flap,
 .lixi-envelope[data-step='note'] .lixi-envelope-flap,
 .lixi-envelope[data-step='shown'] .lixi-envelope-flap {
   z-index: 0;
   transform: rotateX(180deg);
 }
+.lixi-envelope[data-step='pull'] .lixi-note-slot {
+  animation: lixi-note-pull 0.7s cubic-bezier(0.3, 0, 0.3, 1) var(--t) both;
+}
 .lixi-envelope[data-step='note'] .lixi-note-slot {
-  animation: lixi-note-out 1s cubic-bezier(0.2, 1.2, 0.4, 1) var(--t) both;
+  z-index: 5;
+  animation: lixi-note-zoom 1.3s ease-out var(--t) both;
 }
 .lixi-envelope[data-step='shown'] .lixi-note-slot {
-  transform: translate(-50%, -88%) rotate(-5deg) scale(1.15);
+  z-index: 5;
+  transform: translate(-50%, -50%) translate(var(--left), var(--up)) scale(1.58);
+  animation: lixi-note-wiggle 0.55s ease-in-out var(--t) 6 both;
 }
 .lixi-envelope[data-step='note'] .lixi-note-slot::before,
 .lixi-envelope[data-step='shown'] .lixi-note-slot::before {
@@ -317,12 +330,49 @@
     transform: rotateX(180deg);
   }
 }
-@keyframes lixi-note-out {
+@keyframes lixi-note-pull {
   0% {
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%) rotate(90deg);
   }
   100% {
-    transform: translate(-50%, -88%) rotate(-5deg) scale(1.15);
+    transform: translate(-50%, -50%) translateY(calc(var(--w) * -1.3)) rotate(90deg);
+  }
+}
+@keyframes lixi-note-zoom {
+  0% {
+    transform: translate(-50%, -50%) translateY(calc(var(--w) * -1.3)) rotate(90deg) scale(1);
+  }
+  45% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) rotate(-12deg) scale(1.7);
+  }
+  58% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) rotate(9deg) scale(1.62);
+  }
+  70% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) rotate(-7deg) scale(1.6);
+  }
+  82% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) rotate(4deg) scale(1.58);
+  }
+  92% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) rotate(-2deg) scale(1.58);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) scale(1.58);
+  }
+}
+@keyframes lixi-note-wiggle {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) scale(1.58);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) translateX(-3px) rotate(-3deg)
+      scale(1.58);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(var(--left), var(--up)) translateX(3px) rotate(3deg)
+      scale(1.58);
   }
 }
 @keyframes lixi-glow {

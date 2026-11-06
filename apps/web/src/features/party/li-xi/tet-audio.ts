@@ -4,8 +4,8 @@ import { audio, noiseBuffer } from '@/features/office/draw-player/sounds';
 
 /*
  * Tết sounds for Lì xì, all synthesised with Web Audio (no audio files): a lion-dance drum roll with
- * cymbals, a gong, rustling paper, a "ting", firecrackers and fireworks, and an original pentatonic tune
- * for bamboo flute (sáo), zither (đàn tranh), drum and small cymbals.
+ * cymbals, a gong, rustling paper, a "ting", firecrackers and fireworks, and a bouncy original tune
+ * for bamboo flute (sáo), zither (đàn tranh), bass, drums, cymbals and a wood block (mõ).
  */
 
 /** Everything goes through one bus, so the music can be ducked under the draw. */
@@ -133,6 +133,25 @@ export function playGong() {
   drum(a, at, 0.8, sfx, 0.8);
 }
 
+/** The note sliding up out of the envelope. */
+export function playSlide() {
+  const g = graph();
+  if (!g) return;
+  const { a, sfx } = g;
+  const at = a.currentTime + 0.01;
+  const src = a.createBufferSource();
+  src.buffer = noiseBuffer(a);
+  src.loop = true;
+  const f = a.createBiquadFilter();
+  f.type = 'bandpass';
+  f.Q.value = 3;
+  f.frequency.setValueAtTime(900, at);
+  f.frequency.exponentialRampToValueAtTime(4200, at + 0.5);
+  src.connect(f).connect(env(a, at, 0.12, 0.08, 0.45, sfx));
+  src.start(at);
+  src.stop(at + 0.6);
+}
+
 /** Paper: the envelope's flap opening. */
 export function playRustle() {
   const g = graph();
@@ -223,34 +242,38 @@ const NOTE = (name: string) => {
   return 440 * 2 ** ((semis + (Number(m[3]) - 4) * 12 - 9) / 12);
 };
 
-/** An original tune on the scale C D F G A (like the "hò xự xang xê cống" of Vietnamese folk music). */
+/**
+ * An original, bouncy tune on the major pentatonic C D E G A (the bright scale of Vietnamese spring
+ * songs): two eight-bar halves, mostly quavers, over an oom-pah bass, a zither and festival drums.
+ */
 const TUNE = [
-  'G4/1 A4/0.5 C5/0.5 D5/1 C5/1',
-  'A4/1 G4/0.5 A4/0.5 C5/2',
-  'D5/1 F5/0.5 D5/0.5 C5/1 A4/1',
-  'G4/1 A4/1 G4/2',
-  'C5/0.5 D5/0.5 F5/1 G5/1 F5/0.5 D5/0.5',
-  'C5/1 D5/0.5 C5/0.5 A4/2',
-  'G4/1 A4/0.5 C5/0.5 D5/1 F5/0.5 D5/0.5',
-  'C5/3 -/1',
-  'A5/1 G5/0.5 F5/0.5 G5/1 A5/1',
-  'G5/1 F5/0.5 D5/0.5 C5/2',
-  'D5/0.5 F5/0.5 G5/1 F5/0.5 D5/0.5 C5/1',
-  'A4/1 C5/1 D5/2',
-  'F5/1 D5/0.5 C5/0.5 A4/1 C5/1',
-  'D5/1 C5/0.5 A4/0.5 G4/2',
-  'A4/0.5 C5/0.5 D5/1 C5/0.5 A4/0.5 G4/1',
-  'C5/3 -/1',
+  'E5/0.5 G5/0.5 A5/0.5 G5/0.5 E5/1 D5/1',
+  'C5/0.5 D5/0.5 E5/0.5 G5/0.5 E5/2',
+  'D5/0.5 E5/0.5 D5/0.5 C5/0.5 A4/1 C5/1',
+  'D5/0.5 E5/0.5 D5/0.5 C5/0.5 D5/2',
+  'E5/0.5 G5/0.5 A5/0.5 C6/0.5 A5/1 G5/1',
+  'E5/0.5 G5/0.5 E5/0.5 D5/0.5 C5/1 A4/1',
+  'G4/0.5 A4/0.5 C5/0.5 D5/0.5 E5/1 D5/0.5 E5/0.5',
+  'C5/1.5 G4/0.5 C5/1 -/1',
+  'A5/0.5 A5/0.5 G5/0.5 E5/0.5 G5/1 A5/1',
+  'G5/0.5 E5/0.5 D5/0.5 E5/0.5 G5/2',
+  'E5/0.5 E5/0.5 D5/0.5 C5/0.5 D5/1 E5/1',
+  'D5/0.5 C5/0.5 A4/0.5 C5/0.5 D5/2',
+  'E5/0.5 G5/0.5 A5/1 G5/0.5 A5/0.5 C6/1',
+  'A5/0.5 G5/0.5 E5/0.5 G5/0.5 A5/2',
+  'G5/0.5 E5/0.5 D5/0.5 C5/0.5 D5/0.5 E5/0.5 G5/1',
+  'C6/1 G5/0.5 E5/0.5 C5/1 -/1',
 ];
-/** The zither's chord under each bar. */
-const CHORDS = ['C', 'F', 'F', 'G', 'C', 'Am', 'F', 'C', 'F', 'C', 'F', 'G', 'F', 'G', 'G', 'C'];
+/** The chord under each bar. */
+const CHORDS = ['C', 'C', 'Am', 'G', 'C', 'Am', 'G', 'C', 'F', 'C', 'Am', 'G', 'F', 'Am', 'G', 'C'];
+/** Root, fifth, octave, fifth (the bass takes the first two). */
 const ARP: Record<string, string[]> = {
   C: ['C3', 'G3', 'C4', 'G3'],
   F: ['F2', 'C3', 'F3', 'C3'],
   G: ['G2', 'D3', 'G3', 'D3'],
   Am: ['A2', 'E3', 'A3', 'E3'],
 };
-const BPM = 96;
+const BPM = 138;
 
 /** Sáo: a breathy flute with a little scoop into the note and a late vibrato. */
 function sao(a: AudioContext, out: AudioNode, f: number, at: number, length: number) {
@@ -299,6 +322,27 @@ function tranh(a: AudioContext, out: AudioNode, f: number, at: number, volume: n
   o2.stop(at + 1.4);
 }
 
+/** Mõ: a wooden knock on the off-beats. */
+function mo(a: AudioContext, out: AudioNode, at: number, volume: number) {
+  const o = a.createOscillator();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(1150, at);
+  o.frequency.exponentialRampToValueAtTime(760, at + 0.04);
+  o.connect(env(a, at, volume, 0.001, 0.07, out));
+  o.start(at);
+  o.stop(at + 0.1);
+}
+
+/** A plucked bass, short so it bounces. */
+function bass(a: AudioContext, out: AudioNode, f: number, at: number, volume: number) {
+  const o = a.createOscillator();
+  o.type = 'triangle';
+  o.frequency.value = f;
+  o.connect(env(a, at, volume, 0.004, 0.32, out));
+  o.start(at);
+  o.stop(at + 0.4);
+}
+
 function scheduleBar(a: AudioContext, out: AudioNode, bar: number, at: number) {
   const beat = 60 / BPM;
   let b = 0;
@@ -309,12 +353,26 @@ function scheduleBar(a: AudioContext, out: AudioNode, bar: number, at: number) {
     b += beats;
   }
   const arp = ARP[CHORDS[bar]!]!;
+  // Oom-pah: root on 1 and 3, fifth on 2 and 4; the zither runs up and down above.
+  for (let i = 0; i < 4; i++) bass(a, out, NOTE(arp[i % 2]!), at + i * beat, i % 2 === 0 ? 0.2 : 0.13);
   for (let i = 0; i < 8; i++)
-    tranh(a, out, NOTE(arp[i % 4]!), at + i * beat * 0.5, i % 4 === 0 ? 0.09 : 0.05);
-  drum(a, at, 0.22, out);
-  drum(a, at + 2 * beat, 0.16, out, 1.2);
-  drum(a, at + 3.5 * beat, 0.1, out, 1.3);
-  if (bar % 2 === 0) cymbal(a, at, 0.035, out, 0.5);
+    tranh(
+      a,
+      out,
+      NOTE(arp[[0, 1, 2, 3, 2, 1, 2, 3][i]!]!) * 2,
+      at + i * beat * 0.5,
+      i % 2 === 0 ? 0.06 : 0.04,
+    );
+  // Festival drums: tùng on 1 and 3 with pick-ups, cắc (a small cymbal) on 2 and 4, mõ on the off-beats.
+  drum(a, at, 0.26, out);
+  drum(a, at + 1.5 * beat, 0.12, out, 1.25);
+  drum(a, at + 2 * beat, 0.22, out);
+  drum(a, at + 3.5 * beat, 0.14, out, 1.3);
+  if (bar % 2 === 1) drum(a, at + 3.75 * beat, 0.12, out, 1.4);
+  cymbal(a, at + beat, 0.03, out, 0.14);
+  cymbal(a, at + 3 * beat, 0.03, out, 0.14);
+  for (let i = 0; i < 4; i++) mo(a, out, at + (i + 0.5) * beat, 0.07);
+  if (bar % 4 === 0) cymbal(a, at, 0.06, out, 0.8);
 }
 
 /** Starts the Tết tune, looping; returns a function that fades it out. */

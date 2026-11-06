@@ -12,7 +12,10 @@ export const LI_XI_STEPS = [
   ['envelope', 800],
   ['shake', 1000],
   ['open', 600],
-  ['note', 1000],
+  /** The note comes up out of the envelope, still upright. */
+  ['pull', 700],
+  /** It grows, turns flat and shakes about: the amount is shown. */
+  ['note', 1300],
 ] as const;
 
 export type LiXiStep = (typeof LI_XI_STEPS)[number][0] | 'shown';

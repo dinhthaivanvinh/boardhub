@@ -6,9 +6,10 @@
 ## 1. Tổng quan
 
 - Người lì xì (chủ trì) tạo phòng, đặt các mệnh giá và số tờ, gửi QR/link. Người không có điện thoại thì chủ trì tự thêm tên.
-- Mọi người vào bằng điện thoại, đặt tên và chọn con vật đại diện (studio con vật dùng chung với khu Văn phòng).
+- Mọi người quét QR/mở link là vào thẳng căn phòng Tết trên điện thoại (tự vào phiên bằng con vật đã lưu; đổi tên/con
+  vật ngay trong phòng, studio con vật dùng chung với khu Văn phòng).
 - Chủ trì bấm **Bắt đầu**: màn sân khấu thành căn phòng ngày Tết có mọi người. Mỗi lượt, chủ trì bấm **Mời người tiếp theo**:
-  một người được gọi lên phía trước, phong bao mở ra, tờ tiền xòe ra mệnh giá.
+  một người được gọi lên phía trước, phong bao mở ra, tờ tiền được rút ra, phóng to và xoay ngang.
 - Người tham gia: 1–200. Chủ trì mặc định không nhận (`hostReceives = false`).
 - Mode hiệu ứng: `li-xi` (một mode duy nhất).
 
@@ -64,17 +65,20 @@ Không có thông tin ẩn: mọi màn thấy như nhau (A4).
 
 - **Sân khấu:** căn phòng ngày Tết (tường đỏ, đèn lồng đung đưa, cành mai và cành đào, dây pháo, cánh hoa rơi), mọi người
   đứng thành hàng. Mỗi lượt: đèn rọi nhảy qua mọi người (trống), dừng ở người được gọi (chiêng), người đó bước lên bục,
-  phong bao đỏ bay vào, rung, nắp mở, tờ tiền trượt ra và xòe, số tiền hiện lớn kèm một lời chúc Tết, pháo giấy và tiền
+  phong bao đỏ bay vào, rung, nắp mở; tờ tiền nằm dọc, nhỏ hơn phong bao nên bị che hoàn toàn, được rút lên, rồi phóng to,
+  xoay ngang và rung lắc; số tiền hiện lớn kèm một lời chúc Tết, pháo giấy và tiền
   vàng bung ra; mệnh giá lớn nhất có pháo hoa. Bên cạnh: chồng phong bao còn lại, danh sách đã nhận, tổng tiền.
-- **Điện thoại:** "Đến lượt bạn!" khi được gọi (rung), rồi phong bao của mình và lời chúc; người khác thấy ai nhận bao nhiêu.
+- **Điện thoại:** chính căn phòng Tết (cỡ nhỏ, thấy mọi người và bàn phong bao), phía trên là dòng của riêng mình:
+  "Đến lượt bạn!" khi được gọi (rung), rồi số tiền của mình; người khác thấy ai nhận bao nhiêu. Âm thanh tắt mặc định
+  (TV phát cho cả phòng), bật bằng nút loa.
 - **Chủ trì:** cài đặt và xem trước, Bắt đầu, Mời người tiếp theo (phím Space), danh sách đã nhận, tổng tiền.
-- **Âm thanh:** nhạc nền Tết (ngũ cung, sáo, đàn tranh, trống lân, chũm chọe), trống dồn khi chọn, chiêng khi dừng,
-  tiếng giấy khi mở phong bao, "ting" và pháo khi tiền xòe ra.
+- **Âm thanh:** nhạc nền Tết nhanh, vui (138 BPM, ngũ cung trưởng; sáo, đàn tranh, bass nhún, trống tùng–cắc, mõ, chũm chọe), trống dồn khi chọn, chiêng khi dừng,
+  tiếng giấy khi mở phong bao, tiếng vút khi rút tiền, "ting" và pháo khi tiền xòe ra.
 - Tờ tiền là **hình cách điệu** (màu, số tiền, hoa mai), không mô phỏng tiền thật.
 
 > Đã làm (`apps/web/src/features/party/li-xi`): `timeline.ts` (các bước sau landing: walk 1,4 s, envelope 0,8 s,
-> shake 1 s, open 0,6 s, note 1 s, rồi shown), `LiXiStage` (sân khấu, cũng dùng cỡ nhỏ ở màn chủ trì), `LiXiHostPanel`,
-> `LiXiPhone`, `tet-audio.ts` (âm thanh và nhạc), `view.ts` (giấu quà của lượt đang chạy, số người chờ tính từ danh
+> shake 1 s, open 0,6 s, pull 0,7 s, note 1,3 s, rồi shown), `LiXiStage` (sân khấu, cũng dùng cỡ nhỏ ở màn chủ trì), `LiXiHostPanel`,
+> `LiXiMember` (màn điện thoại: tự vào phiên, `LiXiStage` cỡ nhỏ + `LiXiPhone`), `tet-audio.ts` (âm thanh và nhạc), `view.ts` (giấu quà của lượt đang chạy, số người chờ tính từ danh
 > sách người trong phòng vì view của hoạt động chỉ gửi lại sau mỗi hành động). Nút "Mời người tiếp theo" chỉ bật khi
 > phong bao trước đã mở xong. Lời chúc chọn theo `drawId` (không ngẫu nhiên) nên mọi màn giống nhau.
 

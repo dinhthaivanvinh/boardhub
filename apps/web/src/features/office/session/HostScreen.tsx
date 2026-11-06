@@ -7,6 +7,7 @@ import type { Rng } from '@bg/engine';
 import { errorKey } from '@/game-runtime/error-key';
 import { useOfficeSession } from '@/office/use-office-session';
 import { SoundToggle } from '../draw-player/SoundToggle';
+import { LiXiHostPanel } from '@/features/party/li-xi/LiXiHostPanel';
 import { DrawPanel } from './DrawPanel';
 import { PresentationMode } from './PresentationMode';
 import { ReactionLayer } from './Reactions';
@@ -77,6 +78,15 @@ export function HostScreen({ code }: { code: string }) {
 
         {session.activityId === 'lucky-animal' && (
           <DrawPanel
+            code={code}
+            session={session}
+            serverOffset={api.serverOffset}
+            onAction={(a) => void run(api.action(a))}
+          />
+        )}
+
+        {session.activityId === 'li-xi' && (
+          <LiXiHostPanel
             code={code}
             session={session}
             serverOffset={api.serverOffset}

@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Avatar } from '@bg/avatars';
-import { commitment, drawWinners } from '@bg/office-core';
+import { commitment, drawPrizes, drawWinners } from '@bg/office-core';
 import type { OfficeDrawRecord } from '@bg/protocol';
 import { fetchDraw } from '@/office/draw-api';
 import { animalLabel, Connecting, useAreaHome } from './shared';
 
-type Check = { commitmentOk: boolean; winnersOk: boolean; again: string[] };
+type Check = { commitmentOk: boolean; winnersOk: boolean; again: string[]; prizesOk: boolean | null };
 
 /** Recomputes a draw in this browser, with the same code as the server (ADR-0006). */
 function check(d: OfficeDrawRecord): Check {
@@ -31,8 +31,18 @@ function check(d: OfficeDrawRecord): Check {
   } catch {
     again = [];
   }
-  const winnersOk = again.length === d.winners.length && again.every((w, i) => w === d.winners[i]);
-  return { commitmentOk, winnersOk, again };
+  const same = (a: string[], b: string[]) => a.length === b.length && a.every((x, i) => x === b[i]);
+  const winnersOk = same(again, d.winners);
+  // Draws that also hand out prizes (Lì xì envelopes): the same seed picks each winner's prize.
+  let prizesOk: boolean | null = null;
+  if (d.prizes || d.awarded) {
+    try {
+      prizesOk = !!d.prizes && !!d.awarded && same(drawPrizes(d.seed, d.drawId, d.prizes, d.n), d.awarded);
+    } catch {
+      prizesOk = false;
+    }
+  }
+  return { commitmentOk, winnersOk, again, prizesOk };
 }
 
 /** /office/s/[code]/verify/[drawId]: anyone can check that a draw was fair (docs/office/07 §7). */
@@ -70,7 +80,7 @@ export function VerifyScreen({ code, drawId }: { code: string; drawId: string })
   }
 
   const { draw: d, check: c } = state;
-  const ok = c.commitmentOk && c.winnersOk;
+  const ok = c.commitmentOk && c.winnersOk && c.prizesOk !== false;
   const nameOf = (id: string) => d.candidates.find((x) => x.id === id)?.name ?? id;
   const time = new Date(d.revealedAt).toLocaleString();
 
@@ -134,8 +144,28 @@ export function VerifyScreen({ code, drawId }: { code: string; drawId: string })
             {t('recomputed')}: {c.again.map(nameOf).join(', ') || '—'}
           </p>
         )}
+        {c.prizesOk !== null && (
+          <CheckLine ok={c.prizesOk} label={t('stepPrizes', { total: d.prizes?.length ?? 0 })} />
+        )}
         <p className="mt-2 text-xs text-[var(--muted)]">{t('how')}</p>
       </section>
+
+      {d.prizes && (
+        <section className="card" data-testid="verify-prizes">
+          <h2 className="mb-2 font-semibold">{t('prizes', { n: d.prizes.length })}</h2>
+          <p className="mb-2 text-sm">
+            {t('awarded')}: <strong className="font-mono">{(d.awarded ?? []).join(', ') || '—'}</strong>
+          </p>
+          <ol className="grid grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] gap-x-3 gap-y-1 font-mono text-xs">
+            {d.prizes.map((p, i) => (
+              <li key={p} className={d.awarded?.includes(p) ? 'font-bold text-[var(--accent)]' : ''}>
+                <span className="text-[var(--muted)]">{i}.</span> {p}
+              </li>
+            ))}
+          </ol>
+          <p className="mt-2 text-xs text-[var(--muted)]">{t('prizesHow')}</p>
+        </section>
+      )}
 
       <section className="card">
         <h2 className="mb-2 font-semibold">{t('pool', { n: d.candidates.length })}</h2>

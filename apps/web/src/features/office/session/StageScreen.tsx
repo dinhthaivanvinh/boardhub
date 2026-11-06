@@ -9,11 +9,12 @@ import { useOfficeSound } from '../draw-player/sounds';
 import { SoundToggle } from '../draw-player/SoundToggle';
 import { isRevealed } from '../draw-player/timeline';
 import { ReactionLayer } from './Reactions';
-import { Connecting, Herd, herdSize, joinUrl, OfficeError, QrCode } from './shared';
+import { Connecting, Herd, herdSize, joinUrl, OfficeError, QrCode, useAreaRedirect } from './shared';
 
 /** The projector: big title, code and QR, and everyone's animal (docs/office/07 §2). No controls. */
 export function StageScreen({ code }: { code: string }) {
   const { session, joinError, serverOffset, reactions } = useOfficeSession(code, 'stage', true);
+  useAreaRedirect(session?.activityId);
   if (joinError && !session) return <OfficeError code={joinError} />;
   if (!session) return <Connecting />;
   return <StageView code={code} session={session} serverOffset={serverOffset} reactions={reactions} />;
@@ -39,7 +40,7 @@ export function StageView({
   const t = useTranslations('officeSession');
   const sound = useOfficeSound((s) => s.on);
   const people = session.participants;
-  const url = joinUrl(code);
+  const url = joinUrl(code, session.activityId);
 
   return (
     <div className="office-stage" data-testid="office-stage">

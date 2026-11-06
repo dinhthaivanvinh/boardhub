@@ -1,7 +1,7 @@
-/** The two areas and their pages, shared by the header menus and the phone menu (ADR-0007). */
+/** The three areas and their pages, shared by the header menus and the phone menu (ADR-0007, ADR-0008). */
 export interface NavGroup {
   /** i18n key under nav.* for the group name. */
-  key: 'boardGames' | 'office';
+  key: 'boardGames' | 'office' | 'party';
   /** Paths that belong to the group (for highlighting the current area). */
   prefixes: string[];
   links: { href: string; key: string }[];
@@ -24,6 +24,11 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { href: '/office', key: 'activities' },
       { href: '/office/avatar', key: 'myAnimal' },
     ],
+  },
+  {
+    key: 'party',
+    prefixes: ['/party'],
+    links: [{ href: '/party', key: 'partyGames' }],
   },
 ];
 

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { SESSION_PATH_RE } from '@/office/areas';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
@@ -51,7 +52,7 @@ export function AvatarStudio() {
   const [save, setSave] = useState<SaveState>('idle');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const back = useSearchParams().get('back');
-  const backTo = back && /^\/office\/s\/[A-Z0-9]{6}$/.test(back) ? back : null;
+  const backTo = back && SESSION_PATH_RE.test(back) ? back : null;
 
   // Load: the saved avatar, or the player's default one.
   useEffect(() => {

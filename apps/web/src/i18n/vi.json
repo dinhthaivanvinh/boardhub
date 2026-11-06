@@ -17,7 +17,9 @@
     "catalog": "Danh mục game",
     "activities": "Hoạt động",
     "myAnimal": "Thú của tôi",
-    "admin": "Quản trị"
+    "admin": "Quản trị",
+    "party": "Tiệc nhóm",
+    "partyGames": "Trò chơi"
   },
   "catalog": {
     "title": "Chọn một game",
@@ -391,6 +393,12 @@
       "title": "Văn phòng",
       "text": "Mỗi người một con vật tự trang trí. Bốc thăm công bằng ai đi mua trà sữa, ai thuyết trình trước, chia đội…",
       "cta": "Vào khu Văn phòng"
+    },
+    "party": {
+      "badge": "Mới · Tết",
+      "title": "Tiệc nhóm",
+      "text": "Trò chơi cho cả nhà, cả hội: lì xì đầu năm trên màn hình lớn, mọi người vào bằng điện thoại.",
+      "cta": "Vào khu Tiệc nhóm"
     }
   },
   "office": {
@@ -554,7 +562,8 @@
     "create": "Tạo phiên",
     "untitled": "Ai được chọn?",
     "activity": {
-      "lucky-animal": "Thú may mắn"
+      "lucky-animal": "Thú may mắn",
+      "li-xi": "Lì xì Tết"
     },
     "qrLabel": "Mã QR để vào phiên: {url}",
     "joinAt": "Quét QR hoặc mở",
@@ -748,5 +757,73 @@
     "effects": "Hiệu ứng",
     "music": "Nhạc nền",
     "volume": "Âm lượng {what}"
+  },
+  "party": {
+    "title": "Tiệc nhóm",
+    "badge": "Chơi cùng cả nhà",
+    "tagline": "Một người mở phòng trên TV hay máy chiếu, mọi người quét QR vào bằng điện thoại với con vật của riêng mình. Không có điện thoại? Chủ phòng thêm tên giúp.",
+    "gamesTitle": "Các trò chơi",
+    "soon": "Sắp ra mắt",
+    "play": "Chơi ngay",
+    "myAnimal": "Thú của tôi",
+    "how": {
+      "title": "Cách chơi",
+      "create": {
+        "title": "Mở phòng",
+        "text": "Chọn trò chơi, cài đặt (ví dụ các mệnh giá lì xì), rồi chiếu mã và QR lên màn hình."
+      },
+      "join": {
+        "title": "Mọi người vào",
+        "text": "Quét QR, đặt tên và chọn con vật. Ai không có điện thoại thì chủ phòng thêm tên."
+      },
+      "play": {
+        "title": "Cùng xem",
+        "text": "Hiệu ứng, nhạc và âm thanh chạy cùng lúc trên mọi màn hình. Kết quả công bằng, kiểm chứng được."
+      }
+    },
+    "games": {
+      "li-xi": {
+        "name": "Lì xì Tết",
+        "text": "Lần lượt từng người được gọi lên, mở phong bao đỏ và xem mình nhận được bao nhiêu. Bạn tự đặt mệnh giá và số tờ."
+      },
+      "tet-quiz": {
+        "name": "Đố vui ngày Tết",
+        "text": "Cả nhà cùng trả lời câu đố trên điện thoại, ai nhanh nhất?"
+      },
+      "fortune-shake": {
+        "name": "Lắc lộc đầu xuân",
+        "text": "Mỗi người một lượt lắc, nhận một lời chúc may mắn."
+      }
+    }
+  },
+  "liXiNew": {
+    "title": "Tạo phòng lì xì",
+    "titleLabel": "Tên phòng",
+    "titlePlaceholder": "Lì xì đầu năm",
+    "denominations": "Các mệnh giá",
+    "denominationsHint": "Mỗi mệnh giá một dòng. Đặt \"không giới hạn\" cho một mệnh giá để ai cũng có phần.",
+    "value": "Mệnh giá",
+    "count": "Số tờ",
+    "unlimited": "Không giới hạn",
+    "addRow": "Thêm mệnh giá",
+    "removeRow": "Bỏ dòng {value}",
+    "order": "Ai được gọi tiếp",
+    "orderRandom": "Ngẫu nhiên",
+    "orderJoined": "Theo thứ tự vào phòng",
+    "hostReceives": "Tôi cũng nhận lì xì",
+    "previewTitle": "Xem trước",
+    "previewPeople": "Nếu có {n} người nhận",
+    "previewRow": "{count} người × {value}",
+    "previewWishes": "{count} người nhận lời chúc (hết tiền)",
+    "previewTotal": "Tổng: {total}",
+    "create": "Tạo phòng",
+    "errors": {
+      "duplicate": "Mỗi mệnh giá chỉ một dòng.",
+      "unlimited": "Chỉ một mệnh giá được không giới hạn.",
+      "range": "Mệnh giá từ 1.000 đến 10.000.000 đ, số tờ từ 1 đến 500.",
+      "empty": "Cần ít nhất một mệnh giá."
+    },
+    "previewRandom": "{n} phong bao bốc ngẫu nhiên trong {limited} tờ đã đặt",
+    "previewRange": "Tổng từ {min} đến {max}"
   }
 }

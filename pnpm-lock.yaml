@@ -252,6 +252,9 @@ importers:
       '@bg/office-core':
         specifier: workspace:*
         version: link:../../packages/office-core
+      '@bg/office-li-xi':
+        specifier: workspace:*
+        version: link:../../packages/office/li-xi
       '@bg/office-lucky-animal':
         specifier: workspace:*
         version: link:../../packages/office/lucky-animal

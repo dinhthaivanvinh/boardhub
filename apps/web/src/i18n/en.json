@@ -17,7 +17,9 @@
     "catalog": "All games",
     "activities": "Activities",
     "myAnimal": "My animal",
-    "admin": "Admin"
+    "admin": "Admin",
+    "party": "Party",
+    "partyGames": "Games"
   },
   "catalog": {
     "title": "Pick a game",
@@ -391,6 +393,12 @@
       "title": "Office",
       "text": "Everyone gets an animal they dress up themselves. Fairly draw who buys the bubble tea, who presents first, split teams…",
       "cta": "Go to Office"
+    },
+    "party": {
+      "badge": "New · Tết",
+      "title": "Party games",
+      "text": "Games for the whole family or crew: New Year lucky money on the big screen, everyone joins from their phone.",
+      "cta": "Go to Party games"
     }
   },
   "office": {
@@ -554,7 +562,8 @@
     "create": "Create session",
     "untitled": "Who gets picked?",
     "activity": {
-      "lucky-animal": "Lucky animal"
+      "lucky-animal": "Lucky animal",
+      "li-xi": "Lucky money (Tết)"
     },
     "qrLabel": "QR code to join: {url}",
     "joinAt": "Scan the QR or open",
@@ -748,5 +757,73 @@
     "effects": "Effects",
     "music": "Music",
     "volume": "{what} volume"
+  },
+  "party": {
+    "title": "Party games",
+    "badge": "Play together",
+    "tagline": "One person opens a room on the TV or projector, everyone scans the QR code and joins with their own animal. No phone? The host adds their name.",
+    "gamesTitle": "Games",
+    "soon": "Coming soon",
+    "play": "Play now",
+    "myAnimal": "My animal",
+    "how": {
+      "title": "How it works",
+      "create": {
+        "title": "Open a room",
+        "text": "Pick a game, set it up (for example the lucky money notes), then show the code and QR code."
+      },
+      "join": {
+        "title": "Everyone joins",
+        "text": "Scan the QR code, enter a name and pick an animal. The host adds anyone without a phone."
+      },
+      "play": {
+        "title": "Watch together",
+        "text": "Effects, music and sounds play on every screen at once. Results are fair and verifiable."
+      }
+    },
+    "games": {
+      "li-xi": {
+        "name": "Lucky money (Tết)",
+        "text": "One by one, people are called up to open a red envelope and see how much they got. You set the notes and how many of each."
+      },
+      "tet-quiz": {
+        "name": "New Year quiz",
+        "text": "Everyone answers riddles on their phone. Who is fastest?"
+      },
+      "fortune-shake": {
+        "name": "Spring fortune shake",
+        "text": "Everyone takes a shake and gets a lucky wish."
+      }
+    }
+  },
+  "liXiNew": {
+    "title": "New lucky money room",
+    "titleLabel": "Room name",
+    "titlePlaceholder": "New Year lucky money",
+    "denominations": "Notes",
+    "denominationsHint": "One row per value. Make one value \"unlimited\" so that everyone gets something.",
+    "value": "Value",
+    "count": "How many",
+    "unlimited": "Unlimited",
+    "addRow": "Add a value",
+    "removeRow": "Remove row {value}",
+    "order": "Who is called next",
+    "orderRandom": "At random",
+    "orderJoined": "In the order people joined",
+    "hostReceives": "I receive lucky money too",
+    "previewTitle": "Preview",
+    "previewPeople": "With {n} people receiving",
+    "previewRow": "{count} × {value}",
+    "previewWishes": "{count} get a wish (no money left)",
+    "previewTotal": "Total: {total}",
+    "create": "Create room",
+    "errors": {
+      "duplicate": "One row per value.",
+      "unlimited": "Only one value can be unlimited.",
+      "range": "Values from 1,000 to 10,000,000 VND, 1 to 500 notes.",
+      "empty": "Add at least one value."
+    },
+    "previewRandom": "{n} envelopes drawn at random from the {limited} notes",
+    "previewRange": "Total between {min} and {max}"
   }
 }

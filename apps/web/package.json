@@ -23,6 +23,7 @@
     "@bg/game-reversi": "workspace:*",
     "@bg/game-xiangqi": "workspace:*",
     "@bg/office-core": "workspace:*",
+    "@bg/office-li-xi": "workspace:*",
     "@bg/office-lucky-animal": "workspace:*",
     "@bg/protocol": "workspace:*",
     "@bg/ui": "workspace:*",

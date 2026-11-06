@@ -7,7 +7,7 @@ import { Avatar } from '@bg/avatars';
 import { commitment, drawWinners } from '@bg/office-core';
 import type { OfficeDrawRecord } from '@bg/protocol';
 import { fetchDraw } from '@/office/draw-api';
-import { animalLabel, Connecting } from './shared';
+import { animalLabel, Connecting, useAreaHome } from './shared';
 
 type Check = { commitmentOk: boolean; winnersOk: boolean; again: string[] };
 
@@ -39,6 +39,7 @@ function check(d: OfficeDrawRecord): Check {
 export function VerifyScreen({ code, drawId }: { code: string; drawId: string }) {
   const t = useTranslations('officeSession.verify');
   const tAvatar = useTranslations('avatar');
+  const home = useAreaHome();
   const [state, setState] = useState<{ draw: OfficeDrawRecord; check: Check } | { error: string } | null>(
     null,
   );
@@ -61,7 +62,7 @@ export function VerifyScreen({ code, drawId }: { code: string; drawId: string })
         <p role="alert" className="text-lg font-semibold">
           {state.error === 'office.not_found' ? t('notFound') : t('loadFailed')}
         </p>
-        <Link href="/office" className="btn mt-4">
+        <Link href={home} className="btn mt-4">
           ← {t('back')}
         </Link>
       </div>

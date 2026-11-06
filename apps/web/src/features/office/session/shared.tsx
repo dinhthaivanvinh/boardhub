@@ -1,17 +1,37 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import { Avatar, type AvatarData } from '@bg/avatars';
 import type { OfficeParticipant } from '@bg/protocol';
 import { errorKey } from '@/game-runtime/error-key';
+import { areaHome, areaOf, sessionPath } from '@/office/areas';
 
 /** The link people open (or scan) to join. */
-export function joinUrl(code: string): string {
-  if (typeof window === 'undefined') return `/office/s/${code}`;
-  return `${window.location.origin}/office/s/${code}`;
+export function joinUrl(code: string, activityId: string): string {
+  const path = sessionPath(activityId, code);
+  if (typeof window === 'undefined') return path;
+  return `${window.location.origin}${path}`;
+}
+
+/** A session opened under the other area (an old link, a typed code) moves to its own area, same sub-page. */
+export function useAreaRedirect(activityId: string | undefined) {
+  const pathname = usePathname();
+  const router = useRouter();
+  useEffect(() => {
+    if (!activityId || !pathname) return;
+    const want = areaHome(areaOf(activityId));
+    const m = /^\/(office|party)(\/s\/.*)$/.exec(pathname);
+    if (m && `/${m[1]}` !== want) router.replace(`${want}${m[2]}${window.location.search}`);
+  }, [activityId, pathname, router]);
+}
+
+/** The area home for the page we are on (/office or /party). */
+export function useAreaHome(): string {
+  return areaHome(usePathname()?.startsWith('/party') ? 'party' : 'office');
 }
 
 export function QrCode({ value, size = 220 }: { value: string; size?: number }) {
@@ -85,6 +105,7 @@ export function Herd({
 
 export function OfficeError({ code }: { code: string }) {
   const t = useTranslations();
+  const home = useAreaHome();
   const known = ['office.not_found', 'office.closed', 'office.locked'].includes(code);
   return (
     <div className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-20 text-center">
@@ -94,8 +115,8 @@ export function OfficeError({ code }: { code: string }) {
       <p role="alert" className="text-lg font-semibold">
         {known ? t(`officeSession.errors.${code.slice('office.'.length)}`) : t(errorKey(code))}
       </p>
-      <Link href="/office" className="btn">
-        ← {t('office.title')}
+      <Link href={home} className="btn">
+        ← {t(home === '/party' ? 'party.title' : 'office.title')}
       </Link>
     </div>
   );

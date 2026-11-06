@@ -10,7 +10,8 @@ import { SoundToggle } from '../draw-player/SoundToggle';
 import { DrawPanel } from './DrawPanel';
 import { PresentationMode } from './PresentationMode';
 import { ReactionLayer } from './Reactions';
-import { animalLabel, Connecting, joinUrl, OfficeError, QrCode } from './shared';
+import { sessionPath } from '@/office/areas';
+import { animalLabel, Connecting, joinUrl, OfficeError, QrCode, useAreaRedirect } from './shared';
 
 const uiRng: Rng = {
   next: () => Math.random(),
@@ -24,6 +25,7 @@ export function HostScreen({ code }: { code: string }) {
   const tAll = useTranslations();
   const tAvatar = useTranslations('avatar');
   const api = useOfficeSession(code, 'host', true);
+  useAreaRedirect(api.session?.activityId);
   const [error, setError] = useState<string | null>(null);
   const [absentName, setAbsentName] = useState('');
   const [copied, setCopied] = useState(false);
@@ -35,7 +37,7 @@ export function HostScreen({ code }: { code: string }) {
   if (!session.me.isHost) return <OfficeError code="office.not_host" />;
 
   const run = async (p: Promise<string | null>) => setError(await p);
-  const url = joinUrl(code);
+  const url = joinUrl(code, session.activityId);
   const closed = session.status === 'closed';
   const locked = session.status === 'locked';
 
@@ -143,7 +145,7 @@ export function HostScreen({ code }: { code: string }) {
             {copied ? `✓ ${t('copied')}` : t('copyLink')}
           </button>
           <a
-            href={`/office/s/${code}/screen`}
+            href={sessionPath(session.activityId, code, '/screen')}
             target="_blank"
             rel="noreferrer"
             className="btn btn-primary w-full"

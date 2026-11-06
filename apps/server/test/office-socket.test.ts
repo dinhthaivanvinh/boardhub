@@ -149,11 +149,11 @@ describe('office namespace', () => {
       activityId: 'lucky-animal',
     });
     const hit = await server.app.inject({ method: 'GET', url: `/api/office/${session.code}` });
-    expect(hit.json()).toEqual({ exists: true, status: 'open' });
+    expect(hit.json()).toEqual({ exists: true, status: 'open', activityId: 'lucky-animal' });
     const miss = await server.app.inject({ method: 'GET', url: '/api/office/QQQQQQ' });
-    expect(miss.json()).toEqual({ exists: false, status: null });
+    expect(miss.json()).toEqual({ exists: false, status: null, activityId: null });
     const bad = await server.app.inject({ method: 'GET', url: '/api/office/nope' });
-    expect(bad.json()).toEqual({ exists: false, status: null });
+    expect(bad.json()).toEqual({ exists: false, status: null, activityId: null });
   });
 });
 

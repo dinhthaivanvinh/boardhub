@@ -743,3 +743,99 @@
     display: none;
   }
 }
+
+/* ---------- Fit the Tết room to the screen (projector and presentation): the TV never scrolls ---------- */
+.office-stage.office-stage-tet:not(.lixi-member) {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 3.6rem);
+  min-height: 32rem;
+  padding: clamp(0.75rem, 2.5vh, 2rem) clamp(1rem, 4vw, 3rem) clamp(0.75rem, 2vh, 1.5rem);
+}
+.office-present .office-stage.office-stage-tet {
+  height: 100vh;
+  min-height: 32rem;
+}
+.office-stage-tet:not(.lixi-member) .office-stage-head {
+  flex: none;
+  gap: 1rem;
+}
+.office-stage-tet:not(.lixi-member) .office-stage-title {
+  font-size: clamp(1.8rem, min(5vw, 7vh), 4rem);
+}
+.office-stage-tet:not(.lixi-member) .office-stage-join {
+  padding: clamp(0.4rem, 1.2vh, 0.9rem) 1rem;
+}
+.office-stage-tet:not(.lixi-member) .office-qr {
+  width: clamp(72px, 15vh, 168px) !important;
+  height: clamp(72px, 15vh, 168px) !important;
+}
+.office-stage-tet:not(.lixi-member) .office-stage-code {
+  font-size: clamp(1.6rem, 5vh, 3.5rem);
+}
+.office-stage-tet:not(.lixi-member) .office-stage-count {
+  flex: none;
+  margin: clamp(0.2rem, 1vh, 0.75rem) 0;
+  font-size: clamp(1rem, 2.6vh, 1.5rem);
+}
+.office-stage-tet > .lixi-stage-big {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}
+.lixi-stage-big {
+  /* The envelope and the person at the front follow the screen's height. */
+  --env: clamp(96px, 17vh, 170px);
+  --front: clamp(84px, 15vh, 150px);
+}
+.lixi-stage-big .lixi-layout {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
+}
+.lixi-stage-big .lixi-floor {
+  min-height: 0;
+}
+.lixi-stage-big .lixi-front {
+  flex: 1 1 auto;
+}
+.lixi-stage-big .lixi-podium-stage {
+  min-height: 0;
+  /* Room above the envelope for the note once it is out and flat. */
+  padding-top: calc(var(--env) * 1.08);
+}
+.lixi-stage-big .lixi-envelope-big {
+  --w: var(--env);
+}
+.lixi-stage-big .lixi-spot {
+  min-width: var(--front);
+  min-height: var(--front);
+}
+.lixi-stage-big .lixi-receiver svg {
+  width: var(--front);
+  height: var(--front);
+}
+.lixi-stage-big .lixi-giver svg {
+  width: calc(var(--front) * 0.64);
+  height: calc(var(--front) * 0.64);
+}
+.lixi-stage-big .lixi-status {
+  font-size: clamp(1.3rem, min(2.6vw, 4.5vh), 2.4rem);
+}
+.lixi-stage-big .lixi-amount {
+  font-size: clamp(2.2rem, min(6vw, 10vh), 5.5rem);
+}
+.lixi-stage-big .lixi-crowd {
+  flex: 0 1 auto;
+  min-height: calc(var(--cell) + 3.5rem);
+  overflow-y: auto;
+}
+.lixi-stage-big .lixi-person-avatar > svg {
+  width: var(--cell);
+  height: var(--cell);
+}
+.lixi-stage-big .lixi-side {
+  max-height: 100%;
+  overflow-y: auto;
+}

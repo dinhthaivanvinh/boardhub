@@ -1,6 +1,7 @@
 import { valueOf, type Gift, type LiXiView } from '@bg/office-li-xi';
 import type { OfficeDrawRecord, OfficeDrawStarted, OfficeSnapshot } from '@bg/protocol';
 import { isRevealed } from '@/features/office/draw-player/timeline';
+import { lastOne } from './timeline';
 
 function asLiXiView(activity: unknown): LiXiView | null {
   const v = activity as Partial<LiXiView> | null;
@@ -45,7 +46,11 @@ export function giftOf(
   view: LiXiView,
   draw: OfficeDrawStarted | OfficeDrawRecord,
 ): Pick<Gift, 'recipient' | 'envelope' | 'value' | 'name' | 'avatar'> | null {
-  if (!isRevealed(draw)) return null;
+  if (!isRevealed(draw)) {
+    // The last person walks up before the reveal: who it is is known, their envelope is not (yet).
+    const who = lastOne(draw) ? draw.candidates[0] : undefined;
+    return who ? { recipient: who.id, envelope: '', value: 0, name: who.name, avatar: who.avatar } : null;
+  }
   const recipient = draw.winners[0];
   const envelope = draw.awarded?.[0];
   const who = draw.candidates.find((c) => c.id === recipient);

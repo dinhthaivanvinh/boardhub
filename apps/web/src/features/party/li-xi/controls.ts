@@ -1,15 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { DRAW_LANDING_MS } from '@bg/office-core';
 import type { OfficeSnapshot } from '@bg/protocol';
-import { LI_XI_GIFT_MS } from './timeline';
+import { turnEndsAt } from './timeline';
 import { liXiViewOf } from './view';
 
-/** When the turn now playing has finished on every screen (server time), or 0 without one. */
-function turnEndsAt(session: OfficeSnapshot): number {
+/** When the turn now playing has finished on every screen (server time): 0 without one, Infinity while unknown. */
+function endOfTurn(session: OfficeSnapshot): number {
   const d = session.draw;
-  return d && d.mode === 'li-xi' ? d.revealAt + DRAW_LANDING_MS + LI_XI_GIFT_MS : 0;
+  return d && d.mode === 'li-xi' ? (turnEndsAt(d) ?? Infinity) : 0;
 }
 
 /**
@@ -18,11 +17,11 @@ function turnEndsAt(session: OfficeSnapshot): number {
  */
 export function useLiXiControls(session: OfficeSnapshot, serverOffset: number) {
   const view = liXiViewOf(session);
-  const endsAt = turnEndsAt(session);
+  const endsAt = endOfTurn(session);
   const [now, setNow] = useState(() => Date.now() + serverOffset);
   useEffect(() => {
     const left = endsAt - (Date.now() + serverOffset);
-    if (left <= 0) return;
+    if (left <= 0 || !Number.isFinite(left)) return;
     const id = window.setTimeout(() => setNow(Date.now() + serverOffset), left + 50);
     return () => window.clearTimeout(id);
   }, [endsAt, serverOffset]);

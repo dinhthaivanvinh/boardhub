@@ -80,7 +80,9 @@ Không có thông tin ẩn: mọi màn thấy như nhau (A4).
 > shake 1 s, open 0,6 s, pull 0,7 s, note 1,3 s, rồi shown), `LiXiStage` (sân khấu, cũng dùng cỡ nhỏ ở màn chủ trì), `LiXiHostPanel`,
 > `LiXiMember` (màn điện thoại: tự vào phiên, `LiXiStage` cỡ nhỏ + `LiXiPhone`), `tet-audio.ts` (âm thanh và nhạc), `view.ts` (giấu quà của lượt đang chạy, số người chờ tính từ danh
 > sách người trong phòng vì view của hoạt động chỉ gửi lại sau mỗi hành động). Nút "Mời người tiếp theo" chỉ bật khi
-> phong bao trước đã mở xong. Lời chúc chọn theo `drawId` (không ngẫu nhiên) nên mọi màn giống nhau.
+> phong bao trước đã mở xong. Khi chỉ còn **một người** thì không cần đèn rọi: người đó bước lên ngay khi lượt bắt đầu, phong bao rung
+> chờ đến lúc công bố (giá trị tờ tiền vẫn bí mật đến lúc đó và nằm khuất trong phong bao), rồi mở. Sân khấu (máy chiếu,
+> trình chiếu) luôn vừa khít chiều cao màn hình: kích thước co theo chiều cao, hàng người tự cuộn khi đông. Lời chúc chọn theo `drawId` (không ngẫu nhiên) nên mọi màn giống nhau.
 
 ## 8. Kiểm thử
 

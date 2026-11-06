@@ -5,7 +5,13 @@ import { settingsSchema, type LiXiView } from '@bg/office-li-xi';
 import type { OfficeDrawRecord, OfficeSnapshot } from '@bg/protocol';
 import { areaOf, sessionPath, SESSION_PATH_RE } from '@/office/areas';
 import { formatVnd, previewOf, shortVnd } from '@/features/party/money';
-import { LI_XI_GIFT_MS, LI_XI_STEPS, liXiPhaseAt, reached } from '@/features/party/li-xi/timeline';
+import {
+  LI_XI_GIFT_MS,
+  LI_XI_STEPS,
+  liXiPhaseAt,
+  reached,
+  turnEndsAt,
+} from '@/features/party/li-xi/timeline';
 import { giftOf, heldBack, liXiViewOf, wishIndex } from '@/features/party/li-xi/view';
 
 const settings = settingsSchema.parse({
@@ -105,6 +111,23 @@ describe('Lì xì timeline', () => {
     expect(end).toMatchObject({ kind: 'gift', step: 'shown' });
     expect(reached(end, 'note')).toBe(true);
     expect(reached(liXiPhaseAt(record, after(10), true), 'note')).toBe(false);
+  });
+
+  it('calls the last person straight up: no spotlight, the envelope shakes until the reveal', () => {
+    const only = { ...record, candidates: [record.candidates[1]!], revealedAt: 3_600 } as OfficeDrawRecord;
+    const { seed: _s, winners: _w, awarded: _a, revealedAt: _r, ...started } = only;
+    expect(liXiPhaseAt(started, 500, true).kind).toBe('countdown');
+    expect(liXiPhaseAt(started, 1_100, true)).toMatchObject({ kind: 'gift', step: 'walk' });
+    expect(liXiPhaseAt(started, 4_500, true)).toMatchObject({ kind: 'gift', step: 'shake' });
+    expect(liXiPhaseAt(started, 9_000, true)).toMatchObject({ kind: 'gift', step: 'shake' });
+    expect(turnEndsAt(started)).toBeNull();
+    // Revealed on time: the envelope opens right after the shake, long before a spotlight would end.
+    expect(liXiPhaseAt(only, 4_300, true)).toMatchObject({ kind: 'gift', step: 'open' });
+    expect(turnEndsAt(only)).toBe(1_000 + LI_XI_GIFT_MS);
+    expect(turnEndsAt(record)).toBe(5_000 + DRAW_LANDING_MS + LI_XI_GIFT_MS);
+    // Who it is shows at once; the envelope's value only after the reveal.
+    expect(giftOf(view, started)).toMatchObject({ recipient: 'b', value: 0 });
+    expect(giftOf(view, { ...started, candidates: record.candidates })).toBeNull();
   });
 
   it('without animations, the envelope is simply open at the reveal', () => {

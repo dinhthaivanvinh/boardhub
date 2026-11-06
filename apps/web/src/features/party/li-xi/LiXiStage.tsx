@@ -7,13 +7,13 @@ import { DRAW_LANDING_MS } from '@bg/office-core';
 import type { LiXiView } from '@bg/office-li-xi';
 import type { OfficeDrawRecord, OfficeDrawStarted, OfficeParticipant, OfficeSnapshot } from '@bg/protocol';
 import { buildUpSpot, landingSpot } from '@/features/office/draw-player/spotlight-math';
-import { easeInOut } from '@/features/office/draw-player/timeline';
+import { easeInOut, isRevealed } from '@/features/office/draw-player/timeline';
 import { useDrawAnimations } from '@/features/office/draw-player/use-draw-clock';
 import { animalLabel } from '@/features/office/session/shared';
 import { formatVnd } from '../money';
 import { Celebration, Envelope, Note } from './Envelope';
 import { TetRoom } from './TetRoom';
-import { reached, type LiXiPhase } from './timeline';
+import { calledId, lastOne, reached, type LiXiPhase } from './timeline';
 import { useLiXiClock } from './use-li-xi-clock';
 import { useLiXiSounds, useTetMusic } from './sounds';
 import { liXiViewOf, giftOf, heldBack, topValue, WISH_COUNT, wishIndex } from './view';
@@ -107,7 +107,7 @@ export function LiXiStage({
             <div className="lixi-podium">
               <div className="lixi-podium-text">
                 <p className="lixi-status" role="status" aria-live="polite" data-testid="li-xi-status">
-                  {statusText(t, view, phase, gift)}
+                  {statusText(t, view, phase, gift, !!draw && lastOne(draw))}
                 </p>
                 {inGift && gift && reached(phase, 'note') && (
                   <p className="lixi-amount" data-testid="li-xi-amount">
@@ -148,7 +148,8 @@ export function LiXiStage({
             ref={crowdBox}
             className="lixi-crowd"
             data-calling={phase && !inGift ? 'true' : undefined}
-            style={{ '--cell': `${size}px` } as CSSProperties}
+            // On the big screen, a short screen makes everyone a little smaller.
+            style={{ '--cell': big ? `min(${size}px, ${size / 10}vh)` : `${size}px` } as CSSProperties}
           >
             <ul className="lixi-crowd-grid">
               {crowd.map((p) => (
@@ -190,8 +191,9 @@ function statusText(
   view: LiXiView,
   phase: LiXiPhase | null,
   gift: ReturnType<typeof giftOf>,
+  last: boolean,
 ): string {
-  if (phase && phase.kind !== 'gift') return t('calling');
+  if (phase && phase.kind !== 'gift') return last && gift ? t('called', { name: gift.name }) : t('calling');
   if (phase?.kind === 'gift' && gift) {
     if (!reached(phase, 'note')) return t('called', { name: gift.name });
     return gift.value > 0 ? t('got', { name: gift.name }) : t('gotWish', { name: gift.name });
@@ -309,7 +311,7 @@ function frame(p: LiXiPhase, draw: OfficeDrawStarted | OfficeDrawRecord | null, 
       ? buildUpSpot(draw.drawId, count, p.t)
       : p.kind === 'landing'
         ? landingSpot(p.record, count, p.t)
-        : p.kind === 'gift' && p.step === 'walk' && p.t < 300
+        : p.kind === 'gift' && p.step === 'walk' && p.t < 300 && isRevealed(p.record) && !lastOne(p.record)
           ? landingSpot(p.record, count, DRAW_LANDING_MS)
           : null;
   const box = r.crowdBox.current;
@@ -324,14 +326,19 @@ function frame(p: LiXiPhase, draw: OfficeDrawStarted | OfficeDrawRecord | null, 
       const pb = centre(b, base);
       const rad = light.offsetWidth / 2;
       light.style.opacity = '1';
-      light.style.transform = `translate3d(${pa.x + (pb.x - pa.x) * s.f - rad}px, ${pa.y + (pb.y - pa.y) * s.f - rad}px, 0)`;
+      // The light lives inside the crowd box, which may scroll when the room is full.
+      const y = pa.y + (pb.y - pa.y) * s.f + box.scrollTop;
+      light.style.transform = `translate3d(${pa.x + (pb.x - pa.x) * s.f - rad}px, ${y - rad}px, 0)`;
+      // While it lands, keep the person it lands on in view.
+      if (p.kind === 'landing' && (y - rad < box.scrollTop || y + rad > box.scrollTop + box.clientHeight))
+        box.scrollTop = y - box.clientHeight / 2;
     }
   }
 
   // The walk: from their place in the crowd up to the podium, with a little hop in each step.
   const w = r.walker.current;
   if (p.kind !== 'gift' || p.step !== 'walk' || !w) return;
-  const from = r.cells.current.get(p.record.winners[0] ?? '');
+  const from = r.cells.current.get(calledId(p.record) ?? '');
   const to = r.spot.current;
   const floor = r.floor.current;
   if (!from || !to || !floor) return;

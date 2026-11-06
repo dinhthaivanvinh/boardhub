@@ -649,7 +649,11 @@
       "pool": "Candidates ({n}, in the order used)",
       "notFound": "This draw wasn't found (or hasn't finished yet).",
       "loadFailed": "Couldn't load the data. Please try again later.",
-      "back": "Back to Office"
+      "back": "Back to Office",
+      "stepPrizes": "Recompute the prize of the person picked, with the same seed, from the {total} prizes public from the start",
+      "prizes": "Prizes at the time of the draw ({n})",
+      "awarded": "Awarded",
+      "prizesHow": "For Lucky money: L = limited note, U = unlimited note, B = a wish; the number after it is the value row."
     },
     "sound": {
       "label": "Sound",
@@ -825,5 +829,58 @@
     },
     "previewRandom": "{n} envelopes drawn at random from the {limited} notes",
     "previewRange": "Total between {min} and {max}"
+  },
+  "liXi": {
+    "giver": "Giving",
+    "calling": "Who will be called up?",
+    "called": "{name}, come up for your lucky money!",
+    "got": "{name} got",
+    "gotWish": "{name} got a wish",
+    "wishOnly": "A lucky wish",
+    "waitingStart": "Waiting for the host to start…",
+    "readyNext": "Calling the next person soon…",
+    "done": "All the lucky money is given!",
+    "doneText": "{n} people received {total} in all. Happy New Year!",
+    "pile": "On the table",
+    "notesLeft": "{n} left",
+    "given": "Received ({n})",
+    "noneYet": "Nobody yet.",
+    "total": "Given so far",
+    "waiting": "{n} waiting",
+    "wishes": {
+      "0": "Health and prosperity",
+      "1": "May all go as you wish",
+      "2": "Wealth and good fortune",
+      "3": "Good health all year",
+      "4": "Money flowing in like water",
+      "5": "A peaceful new year",
+      "6": "Success in your studies",
+      "7": "Success in all you do",
+      "8": "Riches and luck",
+      "9": "A whole year of joy",
+      "10": "Eat well and grow tall",
+      "11": "All the best things"
+    }
+  },
+  "liXiHost": {
+    "settingsTitle": "Red envelopes",
+    "giving": "Giving lucky money",
+    "previewNow": "With the {n} people waiting in the room",
+    "needPeople": "At least one person must be in the room to start.",
+    "start": "Start giving",
+    "next": "Call the next person",
+    "opening": "Opening the envelope…",
+    "spaceHint": "Or press Space",
+    "allDone": "Everyone has their lucky money: {total} in all",
+    "verifyTitle": "Check each turn"
+  },
+  "liXiPhone": {
+    "watch": "Look at the screen… who will be called?",
+    "yourTurn": "Your turn!",
+    "opening": "Your envelope is opening…",
+    "otherGot": "{name} got {amount}",
+    "yours": "Your envelope: {amount}",
+    "waitingYou": "Waiting for your turn · {n} waiting",
+    "waitingOthers": "{n} still waiting for lucky money"
   }
 }

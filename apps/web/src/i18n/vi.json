@@ -649,7 +649,11 @@
       "pool": "Danh sách ứng viên ({n} người, theo thứ tự tính)",
       "notFound": "Không tìm thấy lượt bốc này (hoặc chưa quay xong).",
       "loadFailed": "Không tải được dữ liệu. Thử lại sau nhé.",
-      "back": "Về Văn phòng"
+      "back": "Về Văn phòng",
+      "stepPrizes": "Tính lại phần thưởng của người được chọn từ cùng seed, trong {total} phần thưởng công khai từ đầu",
+      "prizes": "Các phần thưởng lúc bốc ({n})",
+      "awarded": "Được trao",
+      "prizesHow": "Với Lì xì: L = tờ có giới hạn, U = tờ không giới hạn, B = lời chúc; số đầu là dòng mệnh giá."
     },
     "sound": {
       "label": "Âm thanh",
@@ -825,5 +829,58 @@
     },
     "previewRandom": "{n} phong bao bốc ngẫu nhiên trong {limited} tờ đã đặt",
     "previewRange": "Tổng từ {min} đến {max}"
+  },
+  "liXi": {
+    "giver": "Người lì xì",
+    "calling": "Ai sẽ được gọi lên đây?",
+    "called": "Mời {name} lên nhận lì xì!",
+    "got": "{name} nhận được",
+    "gotWish": "{name} nhận được lời chúc",
+    "wishOnly": "Một lời chúc may mắn",
+    "waitingStart": "Chờ người lì xì bắt đầu…",
+    "readyNext": "Sắp mời người tiếp theo…",
+    "done": "Đã lì xì xong!",
+    "doneText": "{n} người nhận lì xì, tổng {total}. Chúc mừng năm mới!",
+    "pile": "Trên bàn",
+    "notesLeft": "còn {n} tờ",
+    "given": "Đã nhận ({n})",
+    "noneYet": "Chưa ai nhận.",
+    "total": "Tổng đã lì xì",
+    "waiting": "{n} người đang chờ",
+    "wishes": {
+      "0": "An khang thịnh vượng",
+      "1": "Vạn sự như ý",
+      "2": "Tấn tài tấn lộc",
+      "3": "Sức khỏe dồi dào",
+      "4": "Tiền vô như nước",
+      "5": "Năm mới bình an",
+      "6": "Học hành tấn tới",
+      "7": "Công thành danh toại",
+      "8": "Phát tài phát lộc",
+      "9": "Cả năm vui vẻ",
+      "10": "Hay ăn chóng lớn",
+      "11": "Mọi điều tốt lành"
+    }
+  },
+  "liXiHost": {
+    "settingsTitle": "Phong bao lì xì",
+    "giving": "Đang lì xì",
+    "previewNow": "Với {n} người đang chờ trong phòng",
+    "needPeople": "Cần ít nhất một người nhận trong phòng để bắt đầu.",
+    "start": "Bắt đầu lì xì",
+    "next": "Mời người tiếp theo",
+    "opening": "Đang mở phong bao…",
+    "spaceHint": "Hoặc nhấn phím Space",
+    "allDone": "Đã lì xì cho mọi người, tổng {total}",
+    "verifyTitle": "Kiểm chứng từng lượt"
+  },
+  "liXiPhone": {
+    "watch": "Nhìn lên màn hình… ai sẽ được gọi?",
+    "yourTurn": "Đến lượt bạn!",
+    "opening": "Phong bao đang mở…",
+    "otherGot": "{name} nhận được {amount}",
+    "yours": "Phong bao của bạn: {amount}",
+    "waitingYou": "Chờ đến lượt bạn · còn {n} người chờ",
+    "waitingOthers": "Còn {n} người chờ nhận lì xì"
   }
 }

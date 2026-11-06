@@ -9,6 +9,7 @@
 @import '@bg/game-ban-tau/theme.css';
 @import '@bg/game-chess/theme.css';
 @import './party.css';
+@import './party-li-xi.css';
 /* Tailwind classes used inside workspace packages. */
 @source '../../../../packages';
 

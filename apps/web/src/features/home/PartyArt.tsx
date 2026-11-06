@@ -91,7 +91,7 @@ export function PartyArt({ className }: { className?: string }) {
           <circle cx="70" cy="-12" r="14" fill="none" stroke="#15803d" strokeWidth="2" />
           <text
             x="150"
-            y="8"
+            y="-6"
             textAnchor="end"
             fontSize="26"
             fontWeight="800"

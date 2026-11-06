@@ -8,6 +8,8 @@ import {
   type OfficeServerToClientEvents,
   type OfficeSnapshot,
 } from '@bg/protocol';
+import { defaultAvatar } from '@bg/avatars/random';
+import { verifyDraw } from '@bg/office-core';
 import { buildServer } from '../src/app';
 import { loadConfig } from '../src/config';
 
@@ -147,11 +149,11 @@ describe('office namespace', () => {
       activityId: 'lucky-animal',
     });
     const hit = await server.app.inject({ method: 'GET', url: `/api/office/${session.code}` });
-    expect(hit.json()).toEqual({ exists: true, status: 'open' });
+    expect(hit.json()).toEqual({ exists: true, status: 'open', activityId: 'lucky-animal' });
     const miss = await server.app.inject({ method: 'GET', url: '/api/office/QQQQQQ' });
-    expect(miss.json()).toEqual({ exists: false, status: null });
+    expect(miss.json()).toEqual({ exists: false, status: null, activityId: null });
     const bad = await server.app.inject({ method: 'GET', url: '/api/office/nope' });
-    expect(bad.json()).toEqual({ exists: false, status: null });
+    expect(bad.json()).toEqual({ exists: false, status: null, activityId: null });
   });
 });
 
@@ -234,4 +236,70 @@ describe('a draw over sockets', () => {
     const none = await server.app.inject({ method: 'GET', url: '/api/office/ZZZZZZ/draws' });
     expect(none.statusCode).toBe(404);
   }, 15_000);
+});
+
+describe('Lì xì over sockets', () => {
+  it('one draw picks the person and the envelope; envelopes stay secret until the reveal and verify', async () => {
+    const host = await open((await guest('Host')).token);
+    const { session } = await ok<{ session: OfficeSnapshot }>(host, 'office:create', {
+      activityId: 'li-xi',
+      settings: {
+        denominations: [
+          { value: 500_000, count: 1 },
+          { value: 50_000, count: null },
+        ],
+      },
+    });
+    const code = session.code;
+    const stage = await open((await guest('Projector')).token);
+    await ok(stage, 'office:join', { code, screen: 'stage' });
+    for (const name of ['An', 'Bình']) {
+      const phone = await open((await guest(name)).token);
+      await ok(phone, 'office:join', { code, screen: 'participant' });
+    }
+    // Someone without a phone, added by the host.
+    await ok(host, 'office:host', {
+      code,
+      op: 'add-absent',
+      name: 'Bà Nội',
+      avatar: defaultAvatar('ba-noi'),
+    });
+
+    expect(await emit(host, 'office:action', { code, action: { kind: 'next' } })).toMatchObject({
+      ok: false,
+      code: 'office.bad_action',
+    });
+    await ok(host, 'office:action', { code, action: { kind: 'start' } });
+
+    const startedOnStage = next(stage, 'office:draw-started');
+    const revealedOnStage = next(stage, 'office:draw-revealed');
+    const giftOnStage = next(
+      stage,
+      'office:activity',
+      (e) => (e.view as { gifts: unknown[] }).gifts.length > 0,
+    );
+    await ok(host, 'office:action', { code, action: { kind: 'next' } });
+    const started = await startedOnStage;
+    // The table is public: one 500.000 and two 50.000 for three people; who gets which is not.
+    expect(started.draw.prizes).toEqual(['L0-1', 'U1-1', 'U1-2']);
+    expect(JSON.stringify(started)).not.toMatch(/"seed"|"winners"|"awarded"/);
+
+    const revealed = await revealedOnStage;
+    expect(revealed.draw.awarded).toHaveLength(1);
+    expect(verifyDraw({ ...revealed.draw, candidates: revealed.draw.candidates.map((c) => c.id) })).toBe(
+      true,
+    );
+    const view = (await giftOnStage).view as { gifts: { recipient: string; value: number }[] };
+    expect(view.gifts).toEqual([
+      expect.objectContaining({
+        recipient: revealed.draw.winners[0],
+        value: revealed.draw.awarded![0] === 'L0-1' ? 500_000 : 50_000,
+      }),
+    ]);
+    const stored = await server.app.inject({
+      method: 'GET',
+      url: `/api/office/${code}/draws/${revealed.draw.drawId}`,
+    });
+    expect(stored.json()).toEqual(revealed.draw);
+  }, 20_000);
 });

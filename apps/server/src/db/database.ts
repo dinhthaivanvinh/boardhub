@@ -81,6 +81,9 @@ export interface OfficeDrawsTable {
   commitment: string;
   seed: string;
   winners: ColumnType<string[], string, string>;
+  /** Prize pool and the prize of each winner, for draws that hand out prizes (Lì xì). */
+  prizes: ColumnType<string[] | null, string | null | undefined, string | null>;
+  awarded: ColumnType<string[] | null, string | null | undefined, string | null>;
   starts_at: Date;
   reveal_at: Date;
   revealed_at: Date;
@@ -317,6 +320,16 @@ const MIGRATIONS: Record<string, Migration> = {
     async down(db) {
       for (const t of ['user_sanctions', 'player_reports', 'game_settings'])
         await db.schema.dropTable(t).execute();
+    },
+  },
+  '2026_11_11_001_draw_prizes': {
+    async up(db) {
+      await db.schema.alterTable('office_draws').addColumn('prizes', 'jsonb').execute();
+      await db.schema.alterTable('office_draws').addColumn('awarded', 'jsonb').execute();
+    },
+    async down(db) {
+      await db.schema.alterTable('office_draws').dropColumn('awarded').execute();
+      await db.schema.alterTable('office_draws').dropColumn('prizes').execute();
     },
   },
   '2026_11_07_001_avatars': {

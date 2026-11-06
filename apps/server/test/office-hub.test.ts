@@ -257,8 +257,8 @@ describe('expiry', () => {
   });
 
   it('the portal can ask whether a code is an office session', async () => {
-    expect(await t.hub.exists(code)).toEqual({ exists: true, status: 'open' });
-    expect(await t.hub.exists('QQQQQQ')).toEqual({ exists: false, status: null });
+    expect(await t.hub.exists(code)).toEqual({ exists: true, status: 'open', activityId: 'lucky-animal' });
+    expect(await t.hub.exists('QQQQQQ')).toEqual({ exists: false, status: null, activityId: null });
   });
 });
 

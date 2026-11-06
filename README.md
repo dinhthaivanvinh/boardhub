@@ -2,7 +2,7 @@
 
 Board games and team activities that run in the browser. No install, no download.
 
-BoardHub has two areas:
+BoardHub has three areas:
 
 - **Board games**: classic and Vietnamese folk games. You can play with a friend on one screen, against the computer, or
   online in a private room. Quick match comes with ratings and a leaderboard, and you can watch live games and replay
@@ -10,6 +10,11 @@ BoardHub has two areas:
 - **Office**: activities for a team gathered around a projector. Everyone joins from their phone with their own animal
   avatar, and a fair, verifiable lucky draw picks winners ("Thú may mắn") with race, wheel, spotlight and claw-machine
   animations.
+- **Party games**: games for family and friends in one room, on the same session machinery as the office area.
+  The first is **Lì xì Tết** (New Year lucky money): the host sets the notes and how many of each, everyone joins by
+  QR code (the host adds anyone without a phone), and one by one people are called up to open a red envelope in a Tết
+  room with lanterns, music and firecrackers. Who is called and which envelope they get come from one fair,
+  verifiable draw.
 
 The interface is in Vietnamese (default) and English.
 
@@ -203,6 +208,7 @@ Most documents are written in Vietnamese.
 | Bots, frontend, testing  | [07 Bots](docs/07-bots.md) · [08 Frontend](docs/08-frontend-guidelines.md) · [10 Testing](docs/10-testing-strategy.md) |
 | Conventions and roadmap  | [09 Conventions](docs/09-conventions.md) · [11 Roadmap](docs/11-roadmap.md) · [Glossary](docs/glossary.md)             |
 | Office area              | [docs/office](docs/office/README.md)                                                                                   |
+| Party games              | [ADR-0008](docs/adr/0008-party-area-on-office-sessions.md) · [Lì xì Tết](docs/office/activities/li-xi.md)              |
 
 ## Adding a game
 

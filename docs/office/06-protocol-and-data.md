@@ -57,7 +57,7 @@ Người tham gia chưa bấm "Vào phiên" xem trước bằng màn `stage`.
 
 | Method + path                         | Trả về                                                                                                                        |
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `GET /api/office/:code`               | `{ exists, status }` — ô nhập mã ở cổng thử mã phiên trước                                                                    |
+| `GET /api/office/:code`               | `{ exists, status, activityId }` — ô nhập mã thử mã phiên trước, `activityId` chọn khu (ADR-0008)                             |
 | `GET /api/me/avatar`                  | `{ avatar: Avatar \| null }`                                                                                                  |
 | `PUT /api/me/avatar`                  | body `{ avatar }` → `{ avatar }` (zod, chỉ catalog)                                                                           |
 | `GET /api/office/:code/draws`         | `{ draws: DrawRecord[] }` mới nhất trước: phiên còn sống lấy từ snapshot, phiên đã hết hạn lấy từ Postgres (404 nếu không có) |
@@ -105,6 +105,8 @@ office_draws
   commitment      text       hex sha256(seed)
   seed            text       hex; chỉ trả ra API sau revealed_at
   winners         jsonb      [id]
+  prizes          jsonb      null, hoặc kho phần quà đã sắp xếp (vd. phong bao Lì xì) — migration 2026_11_11_001_draw_prizes
+  awarded         jsonb      null, hoặc phần quà của từng người thắng (cùng thứ tự với winners)
   starts_at       timestamptz  lúc build-up bắt đầu
   reveal_at       timestamptz  lúc landing bắt đầu
   revealed_at     timestamptz  lúc server công bố seed (= reveal_at − 400 ms)

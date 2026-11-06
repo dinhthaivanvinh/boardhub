@@ -3,17 +3,19 @@
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { OfficeSnapshot } from '@bg/protocol';
+import { LiXiStage } from '@/features/party/li-xi/LiXiStage';
 import { useOfficeSession, type LiveReaction } from '@/office/use-office-session';
 import { DrawPlayer } from '../draw-player/DrawPlayer';
 import { useOfficeSound } from '../draw-player/sounds';
 import { SoundToggle } from '../draw-player/SoundToggle';
 import { isRevealed } from '../draw-player/timeline';
 import { ReactionLayer } from './Reactions';
-import { Connecting, Herd, herdSize, joinUrl, OfficeError, QrCode } from './shared';
+import { Connecting, Herd, herdSize, joinUrl, OfficeError, QrCode, useAreaRedirect } from './shared';
 
 /** The projector: big title, code and QR, and everyone's animal (docs/office/07 §2). No controls. */
 export function StageScreen({ code }: { code: string }) {
   const { session, joinError, serverOffset, reactions } = useOfficeSession(code, 'stage', true);
+  useAreaRedirect(session?.activityId);
   if (joinError && !session) return <OfficeError code={joinError} />;
   if (!session) return <Connecting />;
   return <StageView code={code} session={session} serverOffset={serverOffset} reactions={reactions} />;
@@ -39,10 +41,11 @@ export function StageView({
   const t = useTranslations('officeSession');
   const sound = useOfficeSound((s) => s.on);
   const people = session.participants;
-  const url = joinUrl(code);
+  const url = joinUrl(code, session.activityId);
+  const liXi = session.activityId === 'li-xi';
 
   return (
-    <div className="office-stage" data-testid="office-stage">
+    <div className={liXi ? 'office-stage office-stage-tet' : 'office-stage'} data-testid="office-stage">
       <header className="office-stage-head">
         <div>
           <p className="office-stage-kicker">{t(`activity.${session.activityId}`)}</p>
@@ -68,20 +71,26 @@ export function StageView({
             ? t('lockedCount', { n: people.length })
             : t('count', { n: people.length })}
       </p>
-      {session.draw && (
-        <DrawPlayer
-          key={session.draw.drawId}
-          code={code}
-          draw={session.draw}
-          serverOffset={serverOffset}
-          sound={sound}
-          big
-        />
-      )}
-      {session.draw && !isRevealed(session.draw) ? null : people.length === 0 ? (
-        <p className="office-stage-empty">{t('waitingFirst')}</p>
+      {liXi ? (
+        <LiXiStage session={session} serverOffset={serverOffset} sound={sound} />
       ) : (
-        <Herd people={people} size={herdSize(people.length)} showNames={people.length <= 60} />
+        <>
+          {session.draw && (
+            <DrawPlayer
+              key={session.draw.drawId}
+              code={code}
+              draw={session.draw}
+              serverOffset={serverOffset}
+              sound={sound}
+              big
+            />
+          )}
+          {session.draw && !isRevealed(session.draw) ? null : people.length === 0 ? (
+            <p className="office-stage-empty">{t('waitingFirst')}</p>
+          ) : (
+            <Herd people={people} size={herdSize(people.length)} showNames={people.length <= 60} />
+          )}
+        </>
       )}
       <ReactionLayer reactions={reactions} people={people} />
       <div className="office-stage-corner">

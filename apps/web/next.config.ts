@@ -21,6 +21,7 @@ const config: NextConfig = {
     '@bg/avatars',
     '@bg/office-core',
     '@bg/office-lucky-animal',
+    '@bg/office-li-xi',
   ],
   // Let phones and other machines on the home network use `pnpm dev` through the LAN IP
   // (Next.js blocks dev assets for hosts other than localhost). Dev only; `*` is one label of the hostname.

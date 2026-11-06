@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { JoinRoomForm } from '@/features/home/JoinRoomForm';
 import { OfficeArt } from '@/features/home/OfficeArt';
+import { PartyArt } from '@/features/home/PartyArt';
 import { GAME_IDS } from '@/games/catalog';
 import { COVERS } from '@/games/covers';
 import { toLocale } from '@/i18n/messages';
@@ -15,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return publicPage({ description: t('tagline'), path: '/', locale: toLocale(await getLocale()) });
 }
 
-/** The portal: two areas side by side (ADR-0007). */
+/** The portal: the areas side by side (ADR-0007, ADR-0008). */
 export default async function PortalPage() {
   const t = await getTranslations('portal');
   const locale = toLocale(await getLocale());
@@ -37,7 +38,7 @@ export default async function PortalPage() {
         </h1>
         <p className="mt-3 max-w-2xl text-lg text-[var(--muted)]">{t('tagline')}</p>
 
-        <ul className="mt-10 grid gap-6 md:grid-cols-2">
+        <ul className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <li>
             <Link href="/board-games" className="area-card group" data-testid="area-board-games">
               <div className="area-card-art area-card-collage" aria-hidden="true">
@@ -66,6 +67,21 @@ export default async function PortalPage() {
                 <p className="text-[var(--muted)]">{t('office.text')}</p>
                 <span className="game-card-cta mt-2">
                   {t('office.cta')} <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </Link>
+          </li>
+          <li>
+            <Link href="/party" className="area-card group" data-testid="area-party">
+              <div className="area-card-art area-card-art-party" aria-hidden="true">
+                <PartyArt className="h-full w-full" />
+              </div>
+              <div className="flex flex-1 flex-col gap-2 p-6">
+                <p className="chip chip-accent self-start">{t('party.badge')}</p>
+                <h2 className="text-2xl font-bold">{t('party.title')}</h2>
+                <p className="text-[var(--muted)]">{t('party.text')}</p>
+                <span className="game-card-cta mt-2">
+                  {t('party.cta')} <span aria-hidden="true">→</span>
                 </span>
               </div>
             </Link>

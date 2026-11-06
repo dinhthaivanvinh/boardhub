@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { serverUrl } from '@/online/api';
+import { sessionPath } from '@/office/areas';
 
 export function JoinRoomForm() {
   const t = useTranslations('online');
@@ -18,9 +19,9 @@ export function JoinRoomForm() {
         e.preventDefault();
         if (!valid) return;
         void fetch(`${serverUrl()}/api/office/${code}`)
-          .then((r) => r.json() as Promise<{ exists?: boolean }>)
-          .catch(() => ({ exists: false }))
-          .then((r) => router.push(r.exists ? `/office/s/${code}` : `/room/${code}`));
+          .then((r) => r.json() as Promise<{ exists?: boolean; activityId?: string | null }>)
+          .catch(() => ({ exists: false, activityId: null }))
+          .then((r) => router.push(r.exists ? sessionPath(r.activityId, code) : `/room/${code}`));
       }}
     >
       <label className="flex flex-1 flex-col gap-1 text-sm font-medium">

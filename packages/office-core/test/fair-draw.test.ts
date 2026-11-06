@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { commitment, drawWinners, verifyDraw } from '../src/fair-draw';
+import { commitment, drawPrizes, drawWinners, verifyDraw } from '../src/fair-draw';
 
 const SEED = '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08';
 const people = Array.from({ length: 10 }, (_, i) => `user-${i}`);
@@ -53,5 +53,39 @@ describe('fair draw', () => {
       counts.set(w!, (counts.get(w!) ?? 0) + 1);
     }
     for (const p of people) expect(Math.abs((counts.get(p) ?? 0) / N - 0.1)).toBeLessThan(0.005);
+  }, 60_000);
+
+  it('prizes: one per winner, from the same seed, independent of the winners, and verifiable', () => {
+    const prizes = ['L0-1', 'L0-2', 'L1-1', 'U2-1', 'U2-2', 'U2-3'];
+    const winners = drawWinners(SEED, 'draw-9', people, 2);
+    const awarded = drawPrizes(SEED, 'draw-9', prizes, 2);
+    expect(new Set(awarded).size).toBe(2);
+    expect(drawPrizes(SEED, 'draw-9', [...prizes].reverse(), 2)).toEqual(awarded);
+    // Different HMAC messages: the prize stream is not the winner stream on the same pool.
+    expect(drawPrizes(SEED, 'draw-9', people, 2)).not.toEqual(winners);
+    const record = {
+      drawId: 'draw-9',
+      commitment: commitment(SEED),
+      seed: SEED,
+      candidates: people,
+      n: 2,
+      winners,
+      prizes,
+      awarded,
+    };
+    expect(verifyDraw(record)).toBe(true);
+    expect(verifyDraw({ ...record, awarded: [...awarded].reverse() })).toBe(false);
+    expect(verifyDraw({ ...record, prizes: prizes.slice(1) })).toBe(false);
+    expect(verifyDraw({ ...record, awarded: undefined })).toBe(false);
+    // Old draws (no prizes at all) still verify.
+    expect(verifyDraw({ ...record, prizes: undefined, awarded: undefined })).toBe(true);
+  });
+
+  it('prizes are uniform too: 3 big of 10 envelopes go to 30% ± 0.6% of the picks', () => {
+    const pool = Array.from({ length: 10 }, (_, i) => (i < 3 ? `big-${i}` : `small-${i}`));
+    let big = 0;
+    const N = 60_000;
+    for (let i = 0; i < N; i++) if (drawPrizes(SEED, `p${i}`, pool, 1)[0]!.startsWith('big')) big++;
+    expect(Math.abs(big / N - 0.3)).toBeLessThan(0.006);
   }, 60_000);
 });

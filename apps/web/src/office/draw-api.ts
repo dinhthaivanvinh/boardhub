@@ -12,6 +12,8 @@ const DrawRecordSchema = z.object({
   commitment: z.string(),
   seed: z.string(),
   winners: z.array(z.string()),
+  prizes: z.array(z.string()).optional(),
+  awarded: z.array(z.string()).optional(),
   startsAt: z.number(),
   revealAt: z.number(),
   revealedAt: z.number(),
@@ -25,5 +27,8 @@ export async function fetchDraw(code: string, drawId: string): Promise<ApiResult
   );
   if (!res.ok) return res;
   const parsed = DrawRecordSchema.safeParse(res.data);
-  return parsed.success ? { ok: true, data: parsed.data } : { ok: false, code: 'protocol.bad_response' };
+  if (!parsed.success) return { ok: false, code: 'protocol.bad_response' };
+  // Leave out absent optional fields (exactOptionalPropertyTypes).
+  const { prizes, awarded, ...rest } = parsed.data;
+  return { ok: true, data: { ...rest, ...(prizes && { prizes }), ...(awarded && { awarded }) } };
 }

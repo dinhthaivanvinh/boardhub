@@ -42,6 +42,11 @@ chỉ chạy 12 con có thứ hạng ngẫu nhiên trong build-up, người th�
 > thắng, nửa sau vòng quay của nhóm đó dừng ở người thắng. `spotlight`/`claw` chơi trên lưới đàn thú; với N > 1 đèn/
 > càng chỉ dừng ở người thắng đầu tiên, thẻ kết quả ghi đủ N người.
 
+> `li-xi` (khu Tiệc nhóm): đèn rọi như `spotlight` trên đám đông, rồi sau landing thêm các bước tính theo giờ máy chủ:
+> bước lên bục 1,4 s → phong bao bay vào 0,8 s → rung 1 s → mở nắp 0,6 s → tờ tiền trượt ra 1 s → hiện số tiền và lời
+> chúc. Phần quà của lượt đang chạy được giấu trên mọi màn (bảng bên, điện thoại, chủ trì) đến khi phong bao mở.
+> Chi tiết: [activities/li-xi.md](activities/li-xi.md) §7.
+
 ## 4. Kết quả
 
 - Thẻ người thắng giữa màn: avatar 320 px, tên, tiêu đề phiên ("đi mua trà sữa 🧋"), pháo hoa (giống
@@ -68,6 +73,10 @@ Trống dồn khi build-up, "ting" khi về đích, tiếng reo; chỉ phát ở
 localStorage. Âm thanh tự tạo hoặc giấy phép CC0, ghi nguồn trong [assets.md](assets.md) (hiện tại: tổng hợp bằng
 Web Audio, không có tệp âm thanh). Cảm xúc từ điện thoại bay lên trên sân khấu kèm con vật người gửi, có tiếng "pop" nhỏ
 khi bật âm thanh.
+
+Lì xì có bộ âm thanh riêng (cũng tổng hợp): trống lân và chũm chọe khi đèn chạy, chiêng khi dừng, tiếng giấy khi mở
+phong bao, "ting" và pháo khi tiền xòe ra, pháo hoa với mệnh giá lớn nhất, và nhạc nền ngũ cung (sáo, đàn tranh, trống,
+chũm chọe) chỉ trên sân khấu.
 
 ## 8. Truy cập
 

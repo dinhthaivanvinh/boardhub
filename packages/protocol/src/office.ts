@@ -88,6 +88,8 @@ export interface OfficeDrawStarted {
   candidates: OfficeDrawCandidate[];
   /** sha256(seed), hex. */
   commitment: string;
+  /** Sorted prize pool when the draw also hands out prizes (e.g. Lì xì envelopes); public like candidates. */
+  prizes?: string[];
   /** Server times (ms): build-up runs from startsAt, landing from revealAt. */
   startsAt: number;
   revealAt: number;
@@ -97,6 +99,8 @@ export interface OfficeDrawStarted {
 export interface OfficeDrawRecord extends OfficeDrawStarted {
   seed: string;
   winners: string[];
+  /** The prize of each winner (same order), when the draw has prizes. */
+  awarded?: string[];
   revealedAt: number;
 }
 

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { OfficeSnapshot } from '@bg/protocol';
 import { errorKey } from '@/game-runtime/error-key';
 import type { LiveReaction } from '@/office/use-office-session';
+import { useLiXiControls } from '@/features/party/li-xi/controls';
 import { drawReadiness, useSpaceToSpin } from './DrawPanel';
 import { StageView } from './StageScreen';
 
@@ -31,11 +32,11 @@ export function PresentationMode({
   const tAll = useTranslations();
   const [error, setError] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
-  const { canDraw, running } = drawReadiness(session);
+  const primary = usePrimaryAction(session, serverOffset);
   const spin = () => {
-    void onAction({ kind: 'draw' }).then(setError);
+    if (primary.action) void onAction({ kind: primary.action }).then(setError);
   };
-  useSpaceToSpin(canDraw, spin);
+  useSpaceToSpin(primary.can, spin);
 
   // Full screen while presenting (if the browser allows it); Esc leaves.
   useEffect(() => {
@@ -70,11 +71,11 @@ export function PresentationMode({
             <button
               type="button"
               className="btn btn-primary"
-              disabled={!canDraw}
+              disabled={!primary.can}
               onClick={spin}
               data-testid="present-spin"
             >
-              {running ? t('spinning') : t('spin')}
+              {primary.label}
             </button>
             <button type="button" className="btn" onClick={onExit}>
               {t('exit')}
@@ -84,4 +85,20 @@ export function PresentationMode({
       />
     </div>
   );
+}
+
+/** The one button of the presentation: spin (Thú may mắn), or start / call the next person (Lì xì). */
+function usePrimaryAction(session: OfficeSnapshot, serverOffset: number) {
+  const t = useTranslations('officeSession.present');
+  const tLiXi = useTranslations('liXiHost');
+  const liXi = useLiXiControls(session, serverOffset);
+  if (session.activityId === 'li-xi') {
+    return {
+      action: liXi.action,
+      can: liXi.can,
+      label: liXi.playing ? tLiXi('opening') : liXi.action === 'start' ? tLiXi('start') : tLiXi('next'),
+    };
+  }
+  const { canDraw, running } = drawReadiness(session);
+  return { action: 'draw' as const, can: canDraw, label: running ? t('spinning') : t('spin') };
 }

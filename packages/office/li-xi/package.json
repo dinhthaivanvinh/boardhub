@@ -1,0 +1,25 @@
+{
+  "name": "@bg/office-li-xi",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./i18n/*": "./src/i18n/*"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@bg/office-core": "workspace:*",
+    "zod": "catalog:",
+    "@bg/avatars": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

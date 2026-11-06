@@ -14,14 +14,15 @@ export const useOfficeSound = create<{ on: boolean; toggle(): void }>()(
 let ctx: AudioContext | null = null;
 let noise: AudioBuffer | null = null;
 
-function audio(): AudioContext | null {
+/** The office audio context (shared with the party games), or null without Web Audio. */
+export function audio(): AudioContext | null {
   if (typeof window === 'undefined' || !('AudioContext' in window)) return null;
   ctx ??= new AudioContext();
   if (ctx.state === 'suspended') void ctx.resume();
   return ctx;
 }
 
-function noiseBuffer(a: AudioContext): AudioBuffer {
+export function noiseBuffer(a: AudioContext): AudioBuffer {
   if (noise) return noise;
   noise = a.createBuffer(1, a.sampleRate, a.sampleRate);
   const data = noise.getChannelData(0);

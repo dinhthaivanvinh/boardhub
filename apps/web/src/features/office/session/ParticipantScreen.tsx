@@ -11,7 +11,9 @@ import { ensureToken, useSession } from '@/online/session';
 import { downloadAnimalCard } from '../animal-card';
 import { ParticipantDraw } from './ParticipantDraw';
 import { ReactionBar } from './Reactions';
-import { animalLabel, Connecting, OfficeError } from './shared';
+import { LiXiMember } from '@/features/party/li-xi/LiXiMember';
+import { sessionPath } from '@/office/areas';
+import { animalLabel, Connecting, OfficeError, useAreaRedirect } from './shared';
 
 /** The phone: your animal, the "Join" button, then "waiting for the host" (docs/office/07 §6). */
 export function ParticipantScreen({ code }: { code: string }) {
@@ -20,6 +22,7 @@ export function ParticipantScreen({ code }: { code: string }) {
   const tAvatar = useTranslations('avatar');
   const user = useSession((s) => s.user);
   const api = useOfficeSession(code, 'participant', false);
+  useAreaRedirect(api.session?.activityId);
   const [avatar, setAvatar] = useState<AvatarData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [joining, setJoining] = useState(false);
@@ -58,6 +61,9 @@ export function ParticipantScreen({ code }: { code: string }) {
   if (!session || !avatar || !user) return <Connecting />;
   if (session.status === 'closed') return <OfficeError code="office.closed" />;
 
+  if (session.activityId === 'li-xi')
+    return <LiXiMember code={code} session={session} api={api} avatar={avatar} name={user.displayName} />;
+
   const joined = Boolean(me);
   const label = animalLabel(tAvatar, { name: me?.name ?? user.displayName, avatar: me?.avatar ?? avatar });
 
@@ -94,7 +100,7 @@ export function ParticipantScreen({ code }: { code: string }) {
             <br />
             {session.history.length > 0 ? t('waitNext') : t('waitHost')}
           </p>
-          <Link href={`/office/avatar?back=/office/s/${code}`} className="btn w-full">
+          <Link href={`/office/avatar?back=${sessionPath(session.activityId, code)}`} className="btn w-full">
             🐾 {t('changeAnimal')}
           </Link>
           <button
@@ -132,7 +138,7 @@ export function ParticipantScreen({ code }: { code: string }) {
           >
             {t('joinWith')}
           </button>
-          <Link href={`/office/avatar?back=/office/s/${code}`} className="btn w-full">
+          <Link href={`/office/avatar?back=${sessionPath(session.activityId, code)}`} className="btn w-full">
             🐾 {t('changeAnimalFirst')}
           </Link>
           <p className="text-sm text-[var(--muted)]">{t('count', { n: session.participants.length })}</p>

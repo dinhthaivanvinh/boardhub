@@ -69,11 +69,111 @@
     linear-gradient(180deg, #b91c1c, #7f1d1d);
   border: 2px solid #facc15;
 }
-.lixi-phone-envelope {
-  padding-top: 4.5rem;
-}
 .lixi-phone-amount {
   font-size: 2.4rem;
   font-weight: 900;
   color: #fde047;
+}
+
+/* Lì xì: a member's phone is the Tết room itself. */
+.office-stage.lixi-member {
+  min-height: 100vh;
+  padding: 0.75rem 0.75rem 5rem;
+}
+.lixi-member > * {
+  position: relative;
+  z-index: 1;
+}
+.lixi-member > .office-stage-corner {
+  position: fixed;
+  z-index: 40;
+}
+.lixi-member-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.lixi-member .office-stage-kicker {
+  font-size: 0.85rem;
+}
+.lixi-member-title {
+  overflow: hidden;
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lixi-member-me {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 45%;
+  padding: 0.2rem 0.75rem 0.2rem 0.2rem;
+  border-radius: 999px;
+  background: rgb(69 10 10 / 0.7);
+  border: 1px solid rgb(250 204 21 / 0.4);
+}
+.lixi-member-name {
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lixi-member-mine,
+.lixi-member-join {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--fg);
+}
+.lixi-member-mine .lixi-phone-mine {
+  padding: 0.75rem 1rem;
+  gap: 0.25rem;
+}
+.lixi-member-mine [data-testid='li-xi-phone-status'] {
+  color: #fde68a;
+  text-align: center;
+}
+.lixi-member .lixi-stage:not(.lixi-stage-big) {
+  padding: 0.5rem 0;
+  background: none;
+  overflow: visible;
+}
+.lixi-member-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 28rem;
+  margin: 1.25rem auto 0;
+}
+.lixi-member .btn:not(.btn-primary) {
+  color: #fff7ed;
+  background: rgb(69 10 10 / 0.6);
+  border-color: rgb(250 204 21 / 0.4);
+}
+.lixi-member-count {
+  color: #fde68a;
+  text-align: center;
+}
+.lixi-member-mine .card {
+  color: #fff7ed;
+  background: rgb(69 10 10 / 0.75);
+  border-color: rgb(250 204 21 / 0.4);
+}
+@media (max-width: 640px) {
+  /* On a phone: the person and the envelope first, then the words. */
+  .lixi-member .lixi-podium {
+    flex-direction: column-reverse;
+  }
+  .lixi-member .lixi-podium-text {
+    flex-basis: auto;
+  }
+  .lixi-member .lixi-front {
+    flex-direction: column;
+    align-items: center;
+  }
 }

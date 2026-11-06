@@ -25,18 +25,21 @@ export const liXiDraw = (session: OfficeSnapshot): OfficeDrawStarted | OfficeDra
 /**
  * The Tết room on the big screen (docs/office/activities/li-xi.md §7): everyone in the room, a light
  * picks who comes up, they walk to the front and open their envelope. Also used, smaller, on the host
- * console. Everything is timed on server time, so every screen shows the same moment.
+ * console and on members' phones. Everything is timed on server time, so every screen shows the same moment.
  */
 export function LiXiStage({
   session,
   serverOffset,
   big = true,
   sound = false,
+  music = big,
 }: {
   session: OfficeSnapshot;
   serverOffset: number;
   big?: boolean;
   sound?: boolean;
+  /** The background tune (on the projector by default). */
+  music?: boolean;
 }) {
   const t = useTranslations('liXi');
   const tAvatar = useTranslations('avatar');
@@ -65,7 +68,7 @@ export function LiXiStage({
     top,
     full && draw ? (giftOf(full, draw)?.value ?? null) : null,
   );
-  useTetMusic(sound && big);
+  useTetMusic(sound && music);
 
   if (!full) return null;
   const open = !draw || phase === null || reached(phase, 'note');

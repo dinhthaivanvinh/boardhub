@@ -3,17 +3,17 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import type { OfficeSnapshot } from '@bg/protocol';
+import { useDrawAnimations } from '@/features/office/draw-player/use-draw-clock';
 import { formatVnd } from '../money';
-import { Envelope } from './Envelope';
 import { liXiDraw } from './LiXiStage';
 import { reached } from './timeline';
 import { useLiXiClock } from './use-li-xi-clock';
-import { liXiViewOf, giftOf, heldBack, WISH_COUNT, wishIndex } from './view';
+import { liXiViewOf, giftOf, heldBack } from './view';
 
 /**
- * The phone during Lì xì: "look at the screen" while the light looks, "Your turn!" (with a buzz) when it
- * stops on you, then your own envelope opening in your hand. Others see who got what. Same clock as the
- * stage, so a phone never spoils the moment.
+ * A member's own line above the Tết room on their phone: "look at the screen" while the light looks,
+ * "Your turn!" (with a buzz) when it stops on you, then what was in your envelope. Others see who got
+ * what. Same clock as the stage, so a phone never spoils the moment.
  */
 export function LiXiPhone({ session, serverOffset }: { session: OfficeSnapshot; serverOffset: number }) {
   const t = useTranslations('liXiPhone');
@@ -21,7 +21,7 @@ export function LiXiPhone({ session, serverOffset }: { session: OfficeSnapshot; 
   const locale = useLocale();
   const full = liXiViewOf(session);
   const draw = liXiDraw(session);
-  const phase = useLiXiClock(draw, serverOffset, true);
+  const phase = useLiXiClock(draw, serverOffset, useDrawAnimations());
   const meId = session.me.id;
   const gift = full && draw ? giftOf(full, draw) : null;
   const inGift = phase?.kind === 'gift';
@@ -53,15 +53,11 @@ export function LiXiPhone({ session, serverOffset }: { session: OfficeSnapshot; 
           data-testid="li-xi-my-turn"
         >
           <p className="text-2xl font-black">🎉 {t('yourTurn')}</p>
-          <div className="lixi-phone-envelope">
-            <Envelope step={phase.step === 'walk' ? 'envelope' : phase.step} t={phase.t} value={gift.value} />
-          </div>
           {reached(phase, 'note') ? (
             <>
               <p className="lixi-phone-amount" data-testid="li-xi-my-amount">
                 {money(gift.value)}
               </p>
-              <p className="italic">“{tLiXi(`wishes.${wishIndex(draw.drawId, WISH_COUNT)}`)}”</p>
             </>
           ) : (
             <p>{t('opening')}</p>

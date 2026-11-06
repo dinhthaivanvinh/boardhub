@@ -1,12 +1,17 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 
-async function newPage(browser: Browser, reducedMotion: 'reduce' | 'no-preference' = 'no-preference') {
-  return (await browser.newContext({ reducedMotion, viewport: { width: 1440, height: 900 } })).newPage();
+async function newPage(
+  browser: Browser,
+  reducedMotion: 'reduce' | 'no-preference' = 'no-preference',
+  viewport = { width: 1440, height: 900 },
+) {
+  return (await browser.newContext({ reducedMotion, viewport })).newPage();
 }
 
 /** Screenshots for a manual look, when SHOTS is set to a folder. */
 const shot = async (page: Page, name: string) => {
-  if (process.env.SHOTS) await page.screenshot({ path: `${process.env.SHOTS}/${name}.png` });
+  if (process.env.SHOTS)
+    await page.screenshot({ path: `${process.env.SHOTS}/${name}.png`, fullPage: name.startsWith('phone') });
 };
 
 test('Lì xì: create the room, call people up one by one, every envelope from the pile', async ({
@@ -42,16 +47,19 @@ test('Lì xì: create the room, call people up one by one, every envelope from t
   await expect(stage.getByTestId('li-xi-stage')).toBeVisible();
   await expect(stage.getByTestId('li-xi-status')).toHaveText('Chờ người lì xì bắt đầu…');
 
-  // A phone joins (an old /office link still lands in the party area); grandma has no phone.
-  const phone = await newPage(browser);
+  // A phone scans the code and is straight in the Tết room (an old /office link still lands in the party
+  // area); grandma has no phone.
+  const phone = await newPage(browser, 'no-preference', { width: 390, height: 844 });
   await phone.goto(`/office/s/${code}`);
   await expect(phone).toHaveURL(new RegExp(`/party/s/${code}$`));
-  await phone.getByRole('button', { name: 'Vào phiên với con vật này' }).click();
+  await expect(phone.getByTestId('li-xi-member')).toBeVisible();
   await expect(phone.getByTestId('li-xi-phone-status')).toHaveText('Chờ người lì xì bắt đầu…');
   await host.getByLabel('Thêm người vắng mặt').fill('Bà nội');
   await host.getByRole('button', { name: '+ Thêm', exact: true }).click();
   await expect(stage.getByTestId('li-xi-person')).toHaveCount(2);
   await expect(host.getByTestId('li-xi-host')).toContainText('Với 2 người đang chờ');
+  // The phone shows the room too, with everyone in it.
+  await expect(phone.getByTestId('li-xi-person')).toHaveCount(2);
   await shot(stage, 'stage-waiting');
   await shot(host, 'host-settings');
 
@@ -69,11 +77,13 @@ test('Lì xì: create the room, call people up one by one, every envelope from t
   await expect(stage.getByTestId('li-xi-amount')).toBeVisible({ timeout: 10_000 });
   await stage.waitForTimeout(600);
   await shot(stage, 'stage-note');
+  await shot(phone, 'phone-note');
   const first = (await stage.getByTestId('li-xi-receiver').textContent())!.trim();
   // The table shows it once the envelope is open; the host can call the next person when it is over.
   await expect(stage.getByTestId('li-xi-gifts')).toContainText(first);
   await expect(host.getByTestId('li-xi-act')).toBeEnabled({ timeout: 5_000 });
   await shot(phone, 'phone-after-first');
+  await expect(phone.getByTestId('li-xi-gifts')).toContainText(first);
 
   // The second (and last) person.
   await host.getByTestId('li-xi-act').click();

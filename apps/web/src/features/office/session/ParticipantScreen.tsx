@@ -11,7 +11,7 @@ import { ensureToken, useSession } from '@/online/session';
 import { downloadAnimalCard } from '../animal-card';
 import { ParticipantDraw } from './ParticipantDraw';
 import { ReactionBar } from './Reactions';
-import { LiXiPhone } from '@/features/party/li-xi/LiXiPhone';
+import { LiXiMember } from '@/features/party/li-xi/LiXiMember';
 import { sessionPath } from '@/office/areas';
 import { animalLabel, Connecting, OfficeError, useAreaRedirect } from './shared';
 
@@ -61,6 +61,9 @@ export function ParticipantScreen({ code }: { code: string }) {
   if (!session || !avatar || !user) return <Connecting />;
   if (session.status === 'closed') return <OfficeError code="office.closed" />;
 
+  if (session.activityId === 'li-xi')
+    return <LiXiMember code={code} session={session} api={api} avatar={avatar} name={user.displayName} />;
+
   const joined = Boolean(me);
   const label = animalLabel(tAvatar, { name: me?.name ?? user.displayName, avatar: me?.avatar ?? avatar });
 
@@ -83,8 +86,7 @@ export function ParticipantScreen({ code }: { code: string }) {
       )}
       {joined ? (
         <>
-          {session.activityId === 'li-xi' && <LiXiPhone session={session} serverOffset={api.serverOffset} />}
-          {session.activityId !== 'li-xi' && session.draw && (
+          {session.draw && (
             <ParticipantDraw
               key={session.draw.drawId}
               draw={session.draw}
@@ -95,12 +97,8 @@ export function ParticipantScreen({ code }: { code: string }) {
           <ReactionBar onReact={api.react} />
           <p className="card w-full text-[var(--muted)]" role="status" data-testid="participant-status">
             ✓ {t('youAreIn')} · {t('count', { n: session.participants.length })}
-            {session.activityId !== 'li-xi' && (
-              <>
-                <br />
-                {session.history.length > 0 ? t('waitNext') : t('waitHost')}
-              </>
-            )}
+            <br />
+            {session.history.length > 0 ? t('waitNext') : t('waitHost')}
           </p>
           <Link href={`/office/avatar?back=${sessionPath(session.activityId, code)}`} className="btn w-full">
             🐾 {t('changeAnimal')}

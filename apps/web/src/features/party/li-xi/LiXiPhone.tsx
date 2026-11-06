@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import type { OfficeSnapshot } from '@bg/protocol';
-import { useDrawAnimations } from '@/features/office/draw-player/use-draw-clock';
+import { usePartyAnimations } from '@/features/office/draw-player/use-draw-clock';
 import { formatVnd } from '../money';
 import { liXiDraw } from './LiXiStage';
 import { reached } from './timeline';
@@ -21,7 +21,7 @@ export function LiXiPhone({ session, serverOffset }: { session: OfficeSnapshot; 
   const locale = useLocale();
   const full = liXiViewOf(session);
   const draw = liXiDraw(session);
-  const phase = useLiXiClock(draw, serverOffset, useDrawAnimations());
+  const phase = useLiXiClock(draw, serverOffset, usePartyAnimations());
   const meId = session.me.id;
   const gift = full && draw ? giftOf(full, draw) : null;
   const inGift = phase?.kind === 'gift';

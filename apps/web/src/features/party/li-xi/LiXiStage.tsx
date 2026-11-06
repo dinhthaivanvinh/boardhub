@@ -8,7 +8,7 @@ import type { LiXiView } from '@bg/office-li-xi';
 import type { OfficeDrawRecord, OfficeDrawStarted, OfficeParticipant, OfficeSnapshot } from '@bg/protocol';
 import { buildUpSpot, landingSpot } from '@/features/office/draw-player/spotlight-math';
 import { easeInOut, isRevealed } from '@/features/office/draw-player/timeline';
-import { useDrawAnimations } from '@/features/office/draw-player/use-draw-clock';
+import { usePartyAnimations } from '@/features/office/draw-player/use-draw-clock';
 import { animalLabel } from '@/features/office/session/shared';
 import { formatVnd } from '../money';
 import { Celebration, Envelope, Note } from './Envelope';
@@ -44,7 +44,7 @@ export function LiXiStage({
   const t = useTranslations('liXi');
   const tAvatar = useTranslations('avatar');
   const locale = useLocale();
-  const animate = useDrawAnimations();
+  const animate = usePartyAnimations();
   const full = liXiViewOf(session);
   const draw = liXiDraw(session);
 

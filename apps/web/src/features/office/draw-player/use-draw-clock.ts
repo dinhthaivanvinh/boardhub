@@ -24,6 +24,15 @@ export function useDrawAnimations(): boolean {
   return animations && !reduced;
 }
 
+/**
+ * For party activities whose animation is the whole point (Lì xì): only the in-app "Animations" setting
+ * turns them off. Many Android phones report "reduce motion" whenever battery saver is on, which would
+ * otherwise leave a still room with nothing happening.
+ */
+export function usePartyAnimations(): boolean {
+  return useSettings((s) => s.animations);
+}
+
 /** Changes only when the phase (or the countdown second) changes: that is all React needs to re-render. */
 const phaseKey = (p: DrawPhase) => (p.kind === 'countdown' ? `c${Math.ceil(p.msLeft / 1000)}` : p.kind);
 

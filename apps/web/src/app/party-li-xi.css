@@ -734,15 +734,8 @@
 .lixi-still *::before {
   animation: none !important;
 }
-@media (prefers-reduced-motion: reduce) {
-  .lixi-stage *,
-  .lixi-stage *::before {
-    animation: none !important;
-  }
-  .tet-petal {
-    display: none;
-  }
-}
+/* No prefers-reduced-motion here on purpose: many Android phones report it in battery saver. The in-app
+   "Animations" setting (.lixi-still) is what turns the room still. */
 
 /* ---------- Fit the Tết room to the screen (projector and presentation): the TV never scrolls ---------- */
 .office-stage.office-stage-tet:not(.lixi-member) {

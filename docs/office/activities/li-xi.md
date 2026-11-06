@@ -74,6 +74,9 @@ Không có thông tin ẩn: mọi màn thấy như nhau (A4).
 - **Chủ trì:** cài đặt và xem trước, Bắt đầu, Mời người tiếp theo (phím Space), danh sách đã nhận, tổng tiền.
 - **Âm thanh:** nhạc nền Tết nhanh, vui (138 BPM, ngũ cung trưởng; sáo, đàn tranh, bass nhún, trống tùng–cắc, mõ, chũm chọe), trống dồn khi chọn, chiêng khi dừng,
   tiếng giấy khi mở phong bao, tiếng vút khi rút tiền, "ting" và pháo khi tiền xòe ra.
+- **Hiệu ứng:** chỉ tắt bằng cài đặt "Hiệu ứng" của app (`usePartyAnimations`), **không** theo
+  `prefers-reduced-motion` của hệ điều hành: nhiều máy Android tự bật cờ này khi tiết kiệm pin, làm căn phòng đứng im
+  (khác với các hoạt động văn phòng, vốn vẫn theo cờ này).
 - Tờ tiền là **hình cách điệu** (màu, số tiền, hoa mai), không mô phỏng tiền thật.
 
 > Đã làm (`apps/web/src/features/party/li-xi`): `timeline.ts` (các bước sau landing: walk 1,4 s, envelope 0,8 s,

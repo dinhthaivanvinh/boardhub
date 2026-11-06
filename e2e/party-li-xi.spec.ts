@@ -110,15 +110,38 @@ test('Lì xì: create the room, call people up one by one, every envelope from t
   await expect(verify.getByTestId('verify-prizes')).toBeVisible();
 });
 
-test('Lì xì without animations: the result simply appears', async ({ browser }) => {
-  test.skip(test.info().project.name !== 'desktop', 'desktop only');
-  const host = await newPage(browser, 'reduce');
+async function roomWithOneGuest(host: Page) {
   await host.goto('/party/li-xi/new');
   await host.getByRole('button', { name: 'Tạo phòng' }).click();
   await expect(host).toHaveURL(/\/host$/);
   await host.getByLabel('Thêm người vắng mặt').fill('Ông ngoại');
   await host.getByRole('button', { name: '+ Thêm', exact: true }).click();
+}
+
+// Many Android phones report "reduce motion" in battery saver: the room must still come alive there.
+test('Lì xì keeps its animations when the system asks for reduced motion', async ({ browser }) => {
+  test.skip(test.info().project.name !== 'desktop', 'desktop only');
+  const host = await newPage(browser, 'reduce');
+  await roomWithOneGuest(host);
   await host.getByTestId('li-xi-act').click();
+  const stage = host.getByTestId('li-xi-stage');
+  await expect(stage).not.toHaveClass(/lixi-still/);
+  const lantern = host.locator('.tet-lantern').first();
+  expect(await lantern.evaluate((el) => getComputedStyle(el).animationName)).not.toBe('none');
+  await host.getByTestId('li-xi-act').click();
+  await expect(host.getByTestId('li-xi-receiver')).toBeVisible({ timeout: 10_000 });
+  await expect(host.getByTestId('li-xi-amount')).toHaveText(/500\.000|200\.000|50\.000/, { timeout: 15_000 });
+});
+
+test('Lì xì with Animations turned off in the app: the result simply appears', async ({ browser }) => {
+  test.skip(test.info().project.name !== 'desktop', 'desktop only');
+  const host = await newPage(browser);
+  await host.addInitScript(() =>
+    localStorage.setItem('bg-board-settings', JSON.stringify({ state: { animations: false }, version: 0 })),
+  );
+  await roomWithOneGuest(host);
+  await host.getByTestId('li-xi-act').click();
+  await expect(host.getByTestId('li-xi-stage')).toHaveClass(/lixi-still/);
   await host.getByTestId('li-xi-act').click();
   await expect(host.getByTestId('li-xi-amount')).toBeVisible({ timeout: 10_000 });
   await expect(host.getByTestId('li-xi-amount')).toHaveText(/500\.000|200\.000|50\.000/);

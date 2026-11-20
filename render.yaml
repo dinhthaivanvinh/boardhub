@@ -1,0 +1,25 @@
+# Render Blueprint for the game server (apps/server). The web app is deployed separately (Vercel).
+# Free plan: the service sleeps after ~15 min idle and in-memory rooms/accounts are lost on restart.
+# Add REDIS_URL (Upstash) and DATABASE_URL (Neon) in the dashboard to persist them.
+services:
+  - type: web
+    name: boardhub-server
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: corepack enable && pnpm install --frozen-lockfile
+    startCommand: pnpm --filter @bg/server start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      # Set in the dashboard: the public URL(s) of the web app, comma-separated,
+      # e.g. https://boardhub.vercel.app
+      - key: CORS_ORIGIN
+        sync: false
+      # Optional persistence (leave unset to keep everything in memory):
+      # - REDIS_URL, DATABASE_URL

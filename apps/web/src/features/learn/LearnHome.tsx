@@ -36,18 +36,6 @@ export function LearnHome() {
         </ul>
       </section>
       <section>
-        <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.specialsHeading')}</h2>
-        <ul className="grid gap-3">
-          {SPECIAL_LESSONS.map((l) =>
-            item(
-              l.id,
-              t(`games.chess.learn.specials.${l.id}.name`),
-              t(`games.chess.learn.specials.${l.id}.meet`),
-            ),
-          )}
-        </ul>
-      </section>
-      <section>
         <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.openingsHeading')}</h2>
         <ul className="grid gap-3">
           {OPENING_LESSONS.map((l) =>
@@ -55,6 +43,18 @@ export function LearnHome() {
               l.id,
               t(`games.chess.learn.openings.${l.id}.name`),
               t(`games.chess.learn.openings.${l.id}.intro`),
+            ),
+          )}
+        </ul>
+      </section>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.specialsHeading')}</h2>
+        <ul className="grid gap-3">
+          {SPECIAL_LESSONS.map((l) =>
+            item(
+              l.id,
+              t(`games.chess.learn.specials.${l.id}.name`),
+              t(`games.chess.learn.specials.${l.id}.meet`),
             ),
           )}
         </ul>

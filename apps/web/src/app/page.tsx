@@ -17,8 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const STEPS = [
   { key: 'pieces', href: '/learn/chess/pawn' },
-  { key: 'special', href: '/learn/chess/castling' },
   { key: 'openings', href: '/learn/chess/italian' },
+  { key: 'special', href: '/learn/chess/castling' },
   { key: 'play', href: '/games/chess' },
 ] as const;
 
@@ -67,32 +67,6 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-6 md:py-8">
-        <section aria-labelledby="home-path">
-          <h2 id="home-path" className="text-xl font-bold">
-            {t('path.title')}
-          </h2>
-          <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('path.text')}</p>
-          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((step, i) => (
-              <li key={step.key}>
-                <Link href={step.href} className="card home-step group h-full">
-                  <span className="flex items-center gap-2">
-                    <span className="home-step-number" aria-hidden="true">
-                      {i + 1}
-                    </span>
-                    <h3 className="font-semibold">{t(`path.${step.key}.title`)}</h3>
-                  </span>
-                  <p className="mt-2 text-sm leading-snug text-[var(--muted)]">
-                    {t(`path.${step.key}.text`)}
-                  </p>
-                  <span className="game-card-cta mt-2">
-                    {t(`path.${step.key}.cta`)} <span aria-hidden="true">→</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </section>
         <section aria-labelledby="home-what">
           <h2 id="home-what" className="text-xl font-bold">
             {t('what.title')}
@@ -123,6 +97,33 @@ export default async function HomePage() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section aria-labelledby="home-path">
+          <h2 id="home-path" className="text-xl font-bold">
+            {t('path.title')}
+          </h2>
+          <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('path.text')}</p>
+          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((step, i) => (
+              <li key={step.key}>
+                <Link href={step.href} className="card home-step group h-full">
+                  <span className="flex items-center gap-2">
+                    <span className="home-step-number" aria-hidden="true">
+                      {i + 1}
+                    </span>
+                    <h3 className="font-semibold">{t(`path.${step.key}.title`)}</h3>
+                  </span>
+                  <p className="mt-2 text-sm leading-snug text-[var(--muted)]">
+                    {t(`path.${step.key}.text`)}
+                  </p>
+                  <span className="game-card-cta mt-2">
+                    {t(`path.${step.key}.cta`)} <span aria-hidden="true">→</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section aria-labelledby="home-more" className="grid gap-6 md:grid-cols-2">

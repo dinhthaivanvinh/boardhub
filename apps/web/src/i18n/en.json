@@ -415,6 +415,11 @@
         "text": "How each piece moves: watch, then try.",
         "cta": "Learn the pieces"
       },
+      "capture": {
+        "title": "Capturing and protecting",
+        "text": "Which pieces to take, and how not to lose yours.",
+        "cta": "Learn capturing"
+      },
       "checkmate": {
         "title": "Check and checkmate",
         "text": "Save your king in check, then catch the enemy king.",

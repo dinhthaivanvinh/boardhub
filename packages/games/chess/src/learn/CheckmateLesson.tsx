@@ -1,9 +1,9 @@
 'use client';
 
-import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Translator } from '@bg/ui';
 import { fromFen, inCheck, kingSquare, makeMove, squareName, squareOf } from '../rules/board';
-import type { ChessMove, Piece, Position } from '../rules/types';
+import type { ChessMove } from '../rules/types';
 import {
   CHECK_ROUNDS,
   CHECKMATE_LESSON_ID,
@@ -23,6 +23,7 @@ import {
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { movesFrom, targetsFrom } from './logic';
 import { ReadAloud, type VoiceState } from './ReadAloud';
+import { Panel, type RoundProps, Stage, type Tx, useMoveBoard, useTimers } from './rounds';
 
 type Stage = 'meet' | 'check' | 'escape' | 'judge' | 'mate' | 'done';
 const STAGES: Stage[] = ['meet', 'check', 'escape', 'judge', 'mate', 'done'];
@@ -35,18 +36,6 @@ type Props = {
   lang?: string;
   /** Pause before the next question after a right answer, and before a wrong try is shown undone, in ms. */
   advanceDelay?: number;
-};
-
-type Tx = (key: string, values?: Record<string, string | number>) => string;
-type RoundProps<R> = {
-  round: R;
-  progress: string;
-  t: Translator;
-  c: Tx;
-  animate: boolean;
-  voice: VoiceState;
-  delay: number;
-  onSolved(): void;
 };
 
 /** Check, how to save the king, mate or not, and finding mate in one: "Bắt vua". */
@@ -96,6 +85,7 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
       )}
       {stage === 'check' && (
         <Stage
+          finishedBoard={start.board}
           kind="check"
           rounds={CHECK_ROUNDS}
           render={(props) => <CheckRoundView {...props} />}
@@ -105,6 +95,7 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
       )}
       {stage === 'escape' && (
         <Stage
+          finishedBoard={start.board}
           kind="escape"
           rounds={ESCAPE_ROUNDS}
           render={(props) => <EscapeRoundView {...props} />}
@@ -114,6 +105,7 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
       )}
       {stage === 'judge' && (
         <Stage
+          finishedBoard={start.board}
           kind="judge"
           rounds={JUDGE_ROUNDS}
           render={(props) => <JudgeRoundView {...props} />}
@@ -123,6 +115,7 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
       )}
       {stage === 'mate' && (
         <Stage
+          finishedBoard={start.board}
           kind="mate"
           rounds={MATE_ROUNDS}
           render={(props) => <MateRoundView {...props} />}
@@ -143,102 +136,6 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
         </LessonLayout>
       )}
     </section>
-  );
-}
-
-/** Runs the rounds of one stage in order: a right answer moves on by itself, the last one shows Continue. */
-function Stage<R>({
-  kind,
-  rounds,
-  render,
-  t,
-  c,
-  animate,
-  voice,
-  delay,
-  onNext,
-}: {
-  kind: string;
-  rounds: R[];
-  render(props: RoundProps<R>): ReactNode;
-  t: Translator;
-  c: Tx;
-  animate: boolean;
-  voice: VoiceState;
-  delay: number;
-  onNext(): void;
-}) {
-  const [index, setIndex] = useState(0);
-  const [solved, setSolved] = useState(false);
-  const finished = index >= rounds.length;
-
-  useEffect(() => {
-    if (!solved) return;
-    const id = setTimeout(() => {
-      setIndex((i) => i + 1);
-      setSolved(false);
-    }, delay);
-    return () => clearTimeout(id);
-  }, [solved, delay]);
-
-  if (finished) {
-    const board = fromFen(CHECK_ROUNDS[0]!.fen).board;
-    return (
-      <LessonLayout board={<LearnBoard board={board} t={t} animate={animate} />}>
-        <p className="ch-learn-text">{c(`intro.${kind}`)}</p>
-        <p className="ch-learn-status" role="status" aria-live="polite">
-          {c('allDone')}
-        </p>
-        <button type="button" className="btn btn-primary" onClick={onNext}>
-          {t('games.chess.learn.next')}
-        </button>
-      </LessonLayout>
-    );
-  }
-  return (
-    <Fragment key={index}>
-      {render({
-        round: rounds[index]!,
-        progress: `${index + 1}/${rounds.length}`,
-        t,
-        c,
-        animate,
-        voice,
-        delay,
-        onSolved: () => setSolved(true),
-      })}
-    </Fragment>
-  );
-}
-
-/** The side panel every round shares: what to do, the voice, and the message. */
-function Panel({
-  kind,
-  prompt,
-  progress,
-  message,
-  extra,
-  props,
-}: {
-  kind: string;
-  prompt: string;
-  progress: string;
-  message: string;
-  extra?: ReactNode;
-  props: Pick<RoundProps<unknown>, 'c' | 't' | 'voice'>;
-}) {
-  return (
-    <>
-      <p className="ch-learn-text">{props.c(`intro.${kind}`)}</p>
-      <p className="ch-learn-idea" data-testid="mate-prompt">
-        <strong>{progress}</strong> {prompt}
-      </p>
-      <ReadAloud text={prompt} voice={props.voice} t={props.t} />
-      {extra}
-      <p className="ch-learn-status" role="status" aria-live="polite">
-        {message}
-      </p>
-    </>
   );
 }
 
@@ -282,31 +179,6 @@ function CheckRoundView(props: RoundProps<CheckRound>) {
       />
     </LessonLayout>
   );
-}
-
-type Slide = { id: number; from: number; to: number; piece: Piece };
-
-/** Select a piece and a square with the legal moves of a position, and show the result with a slide. */
-function useMoveBoard(start: Position) {
-  const [pos, setPos] = useState(start);
-  const [selected, setSelected] = useState<number | null>(null);
-  const [slide, setSlide] = useState<Slide | null>(null);
-  const [count, setCount] = useState(0);
-  // The piece that just moved is drawn by the slide, so it leaves the board array.
-  const board = slide ? pos.board.map((p, i) => (i === slide.to ? null : p)) : pos.board;
-  const play = (next: Position, move: ChessMove) => {
-    const id = count + 1;
-    setCount(id);
-    setSlide({ id, from: move.from, to: move.to, piece: next.board[move.to] as Piece });
-    setPos(next);
-    setSelected(null);
-  };
-  const reset = () => {
-    setPos(start);
-    setSlide(null);
-    setSelected(null);
-  };
-  return { pos, board, selected, setSelected, slide, play, reset };
 }
 
 /** Save the king in the way the question asks: run, block or capture. */
@@ -537,9 +409,3 @@ const hintText = (c: Tx, level: number, move: ChessMove) =>
   level === 1
     ? c('mate.hint1', { from: squareName(move.from) })
     : c('mate.hint2', { from: squareName(move.from), to: squareName(move.to) });
-
-/** Timers kept in a ref so they are cleared when the round goes away. */
-function useTimers() {
-  const [ref] = useState(() => ({ current: [] as ReturnType<typeof setTimeout>[] }));
-  return ref;
-}

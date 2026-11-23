@@ -364,6 +364,57 @@
       "done": "You know how to save the king and catch the king!",
       "fun": "When you give checkmate, say it out loud: \"Checkmate!\". You won the game."
     },
-    "checkmateHeading": "Catch the king"
+    "checkmateHeading": "Catch the king",
+    "capture": {
+      "name": "Capturing and protecting",
+      "stage": {
+        "meet": "Capturing",
+        "take": "Try it",
+        "attacked": "In danger",
+        "safe": "Should I take?",
+        "value": "Which is worth more?",
+        "done": "Done"
+      },
+      "meet": "When your piece moves onto a square with an enemy piece, you \"capture\" it and it leaves the board. But the enemy can capture your pieces too! You need to know which of your pieces is in danger and which one is protected.",
+      "intro": {
+        "take": "Capture a black piece. Tap a white piece, then the black piece it can take. A circle around a black piece means it can be taken.",
+        "attacked": "This time Black moves. Find the white piece in danger: some black piece can take it.",
+        "safe": "The white piece can take a black piece. But look: does anything protect that black piece? If so, you will be taken back.",
+        "value": "Each piece is worth a different amount: pawn 1, knight and bishop 3, rook 5, queen 9. Trading a big piece for a small one is a loss."
+      },
+      "prompt": {
+        "take": "Capture a black piece.",
+        "attacked": "Which white piece is in danger?",
+        "safe": "The white piece can take this black piece. Should it?",
+        "value": "Which piece is worth more?"
+      },
+      "take": {
+        "illegal": "That piece cannot go there.",
+        "notCapture": "That is just a move, not a capture. Choose a move that takes a black piece.",
+        "right": "You captured a black piece!",
+        "hint": "Hint: the highlighted black pieces can be taken."
+      },
+      "attacked": {
+        "wrong": "That piece is safe. Find the white piece that a black piece can take.",
+        "right": "Correct! The highlighted black piece can take that white piece.",
+        "hint": "Hint: the highlighted black piece is aiming at a white piece."
+      },
+      "safe": {
+        "eat": "Take it!",
+        "skip": "Don't take",
+        "rightFree": "Correct! Nothing protects that black piece, so it is free to take.",
+        "rightGuarded": "Correct! That black piece is protected (the highlighted piece takes back). You would lose your piece.",
+        "wrongFree": "Not quite. Nothing protects that black piece, so taking it is safe.",
+        "wrongGuarded": "Not quite. A black piece protects it: you would be taken back."
+      },
+      "value": {
+        "right": "Correct! The {big} is worth {bigPoints} points, more than the {small} ({smallPoints} points).",
+        "wrong": "Not quite. Remember: pawn 1, knight and bishop 3, rook 5, queen 9."
+      },
+      "allDone": "Great job! You finished this part.",
+      "done": "You can capture pieces and you know which pieces need protecting!",
+      "fun": "From now on, before you capture, ask: does anything protect that piece?"
+    },
+    "captureHeading": "Capturing and protecting"
   }
 }

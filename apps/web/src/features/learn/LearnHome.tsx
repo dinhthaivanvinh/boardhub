@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import {
+  CAPTURE_LESSON_ID,
   CHECKMATE_LESSON_ID,
   COORDINATES_LESSON_ID,
   OPENING_LESSONS,
@@ -49,6 +50,12 @@ export function LearnHome() {
           {PIECE_LESSONS.map((l) =>
             item(l.id, t(`games.chess.pieceNames.${l.piece}`), t(`games.chess.learn.pieces.${l.id}.meet`)),
           )}
+        </ul>
+      </section>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.captureHeading')}</h2>
+        <ul className="grid gap-3">
+          {item(CAPTURE_LESSON_ID, t('games.chess.learn.capture.name'), t('games.chess.learn.capture.meet'))}
         </ul>
       </section>
       <section>

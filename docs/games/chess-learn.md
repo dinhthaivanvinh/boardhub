@@ -1,6 +1,6 @@
 # Cờ vua: chế độ Học (spec)
 
-Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài chiếu hết, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
+Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài ăn quân, bài chiếu hết, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
 
 ## 1. Nguyên tắc
 
@@ -67,6 +67,16 @@ Các bước: gặp bàn cờ → **Hàng số** (bấm cả hàng) → **Cột 
 đáp án sai là ô cùng cột và ô cùng hàng, đúng thứ bé hay nhầm). Mỗi bước 5 câu; đúng thì tự sang câu sau, sai thì thử lại
 không giới hạn kèm nhắc luật. Câu hỏi sinh bằng hàm thuần có seed cố định (`coordRounds`), nên lặp lại được và test được.
 Chưa có bài "Đặt quân" (đặt vua vào ô e1).
+
+## 3d. Bài Ăn quân và bảo vệ (chặng 2)
+
+Bài `/learn/chess/capture`, sau bài quân cờ và trước bài chiếu hết. Bé cầm quân trắng, trừ bước "Bị đe doạ" (đen đi).
+
+Các bước: gặp ăn quân → **Thử ăn** (5 thế: xe, tượng, mã, tốt, hậu; nước đi thường không được tính, mọi nước ăn đều đúng; có Gợi ý) → **Bị đe doạ** (5 thế: bấm quân trắng mà một quân đen ăn được; mỗi thế có một quân trắng an toàn làm mồi nhử) → **Nên ăn không?** (6 thế: 3 quân đen không ai bảo vệ, 3 quân có người bảo vệ; đáp án đúng thì quân sẽ ăn lại được tô sáng) → **Quân nào quý?** (5 cặp, không có cặp bằng nhau: tốt 1, mã và tượng 3, xe 5, hậu 9; bấm nút hoặc bấm quân trên bàn).
+
+Đáp án của mọi thế do engine tính (`capturable`, `attackers`, `recapturers`), không viết tay; test kiểm tra từng FEN. Khung các vòng câu hỏi dùng chung với bài chiếu hết (`learn/rounds.tsx`).
+
+Chưa có: đổi quân (đổi xe lấy tốt, lời hay lỗ), nhiều quân cùng bảo vệ, quân bị ghim.
 
 ## 3c. Bài Bắt vua: chiếu và chiếu hết (chặng 3)
 

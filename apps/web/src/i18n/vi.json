@@ -415,6 +415,11 @@
         "text": "Mỗi quân đi như thế nào, xem và tự thử.",
         "cta": "Học quân cờ"
       },
+      "capture": {
+        "title": "Ăn quân và bảo vệ",
+        "text": "Ăn quân nào, và tránh để quân mình bị ăn.",
+        "cta": "Học ăn quân"
+      },
       "checkmate": {
         "title": "Chiếu và chiếu hết",
         "text": "Cứu vua khi bị chiếu, rồi tự bắt vua đối phương.",

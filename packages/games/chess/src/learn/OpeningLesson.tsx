@@ -5,7 +5,8 @@ import type { Translator } from '@bg/ui';
 import { squareName } from '../rules/board';
 import type { OpeningLessonData } from './data';
 import { LearnBoard, LessonLayout } from './LearnBoard';
-import { canSpeak, speak, stopSpeaking } from './speech';
+import { ReadAloud, type VoiceState } from './ReadAloud';
+import { speak } from './speech';
 import { movesFrom, parseMove, positionsOf, targetsFrom } from './logic';
 
 type Props = {
@@ -32,12 +33,8 @@ export function OpeningLesson({ lesson, t, animate, onComplete, opponentDelay = 
   const [selected, setSelected] = useState<number | null>(null);
   const [hint, setHint] = useState(0);
   const [wrong, setWrong] = useState(0);
-  const [voice, setVoice] = useState(false);
   const [autoRead, setAutoRead] = useState(false);
-  useEffect(() => {
-    setVoice(canSpeak());
-    return stopSpeaking;
-  }, []);
+  const voice: VoiceState = { lang, auto: autoRead, onAuto: setAutoRead };
   const [feedback, setFeedback] = useState<'idle' | 'wrong' | 'right'>('idle');
 
   const pos = positions[ply]!;
@@ -100,13 +97,6 @@ export function OpeningLesson({ lesson, t, animate, onComplete, opponentDelay = 
         : common('hintTo', { from: squareName(expected.from), square: squareName(expected.to) })
       : '';
 
-  // Read-aloud: on demand with the buttons, or by itself when the child turned it on.
-  useEffect(() => {
-    if (autoRead && idea) speak(idea, lang);
-    // Only when the position changes, not when the toggle is turned off.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoRead, shown]);
-
   return (
     <section className="ch-learn" aria-label={t(key('name'))}>
       <h2 className="ch-learn-title">{t(key('name'))}</h2>
@@ -155,7 +145,7 @@ export function OpeningLesson({ lesson, t, animate, onComplete, opponentDelay = 
               onClick={() => {
                 const next = hint + 1;
                 setHint(next);
-                if (voice && expected) {
+                if (expected) {
                   speak(
                     next === 1
                       ? common('hintFrom', { square: squareName(expected.from) })
@@ -177,24 +167,8 @@ export function OpeningLesson({ lesson, t, animate, onComplete, opponentDelay = 
             {hintText}
           </p>
         )}
-        {voice && !finished && idea && (
-          <div className="ch-learn-actions">
-            <button
-              type="button"
-              className="btn"
-              onClick={() => speak(hintText ? `${idea} ${hintText}` : idea, lang)}
-            >
-              🔊 {common('readAloud')}
-            </button>
-            <label className="ch-learn-toggle">
-              <input
-                type="checkbox"
-                checked={autoRead}
-                onChange={(e) => (setAutoRead(e.target.checked), stopSpeaking())}
-              />{' '}
-              {common('autoRead')}
-            </label>
-          </div>
+        {!finished && idea && (
+          <ReadAloud text={hintText ? `${idea} ${hintText}` : idea} voice={voice} t={t} />
         )}
 
         {finished && (

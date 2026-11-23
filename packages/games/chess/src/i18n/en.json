@@ -261,6 +261,7 @@
         "try": "Tap the white pawn, then tap e8. Then choose the piece you want the pawn to become.",
         "fun": "Most players choose the queen because she is the strongest. You can have several queens at once!"
       }
-    }
+    },
+    "noVoice": "Your device has no English voice, so it cannot read aloud. Install one in your device speech settings, or try Microsoft Edge."
   }
 }

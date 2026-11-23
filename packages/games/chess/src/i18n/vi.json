@@ -261,6 +261,7 @@
         "try": "Bấm tốt trắng, rồi bấm ô e8. Sau đó chọn quân mà con muốn tốt biến thành.",
         "fun": "Phần lớn người chọn Hậu vì hậu mạnh nhất. Con có thể có nhiều hậu cùng lúc!"
       }
-    }
+    },
+    "noVoice": "Máy của bạn chưa có giọng đọc tiếng Việt nên không thể đọc to. Hãy cài giọng tiếng Việt trong cài đặt giọng nói của thiết bị, hoặc thử trình duyệt Microsoft Edge."
   }
 }

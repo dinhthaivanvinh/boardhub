@@ -14,3 +14,4 @@ export type { LessonId, PieceLessonData, OpeningLessonData } from './learn/data'
 export { PieceLesson } from './learn/PieceLesson';
 export { OpeningLesson } from './learn/OpeningLesson';
 export { readProgress, markDone } from './learn/progress';
+export { ReadAloud } from './learn/ReadAloud';

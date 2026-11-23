@@ -6,6 +6,7 @@ import { makeMove, squareOf } from '../rules/board';
 import type { Piece } from '../rules/types';
 import type { PieceLessonData } from './data';
 import { LearnBoard, LessonLayout } from './LearnBoard';
+import { ReadAloud, type VoiceState } from './ReadAloud';
 import { challengePosition, demoPosition, demoSquares, movesFrom, squaresToFind, targetsFrom } from './logic';
 
 type Stage = 'meet' | 'watch' | 'try' | 'challenge' | 'done';
@@ -13,11 +14,26 @@ const STAGES: Stage[] = ['meet', 'watch', 'try', 'challenge', 'done'];
 // Slow on purpose: a child needs time to see where the piece goes.
 const STEP_MS = 2800;
 
-type Props = { lesson: PieceLessonData; t: Translator; animate: boolean; onComplete?(id: string): void };
-type StageProps = { lesson: PieceLessonData; t: Translator; animate: boolean; text: string; onNext(): void };
+type Props = {
+  lesson: PieceLessonData;
+  t: Translator;
+  animate: boolean;
+  onComplete?(id: string): void; /** Language of the read-aloud voice: 'vi' or 'en'. */
+  lang?: string;
+};
+type StageProps = {
+  lesson: PieceLessonData;
+  t: Translator;
+  animate: boolean;
+  text: string;
+  voice: VoiceState;
+  onNext(): void;
+};
 
 /** Meet the piece, watch how it moves, find its squares, then one small challenge. */
-export function PieceLesson({ lesson, t, animate, onComplete }: Props) {
+export function PieceLesson({ lesson, t, animate, onComplete, lang = 'vi' }: Props) {
+  const [auto, setAuto] = useState(false);
+  const voice: VoiceState = { lang, auto, onAuto: setAuto };
   const [stage, setStage] = useState<Stage>('meet');
   const text = (key: string) => t(`games.chess.learn.pieces.${lesson.id}.${key}`);
   const common = (key: string, values?: Record<string, string | number>) =>
@@ -49,6 +65,7 @@ export function PieceLesson({ lesson, t, animate, onComplete }: Props) {
           }
         >
           <p className="ch-learn-text">{text('meet')}</p>
+          <ReadAloud text={text('meet')} voice={voice} t={t} />
 
           <button type="button" className="btn" onClick={() => setStage('watch')}>
             {common('next')}
@@ -56,10 +73,18 @@ export function PieceLesson({ lesson, t, animate, onComplete }: Props) {
         </LessonLayout>
       )}
       {stage === 'watch' && (
-        <Watch lesson={lesson} t={t} animate={animate} text={text('move')} onNext={() => setStage('try')} />
+        <Watch
+          voice={voice}
+          lesson={lesson}
+          t={t}
+          animate={animate}
+          text={text('move')}
+          onNext={() => setStage('try')}
+        />
       )}
       {stage === 'try' && (
         <Try
+          voice={voice}
           lesson={lesson}
           t={t}
           animate={animate}
@@ -69,6 +94,7 @@ export function PieceLesson({ lesson, t, animate, onComplete }: Props) {
       )}
       {stage === 'challenge' && (
         <Challenge
+          voice={voice}
           lesson={lesson}
           t={t}
           animate={animate}
@@ -85,6 +111,7 @@ export function PieceLesson({ lesson, t, animate, onComplete }: Props) {
             {common('pieceDone', { piece: name })}
           </p>
           <p className="ch-learn-text">{text('fun')}</p>
+          <ReadAloud text={text('fun')} voice={voice} t={t} />
           <button type="button" className="btn" onClick={() => setStage('meet')}>
             {common('again')}
           </button>
@@ -94,7 +121,7 @@ export function PieceLesson({ lesson, t, animate, onComplete }: Props) {
   );
 }
 
-function Watch({ lesson, t, animate, text, onNext }: StageProps) {
+function Watch({ lesson, t, animate, text, voice, onNext }: StageProps) {
   const pos = useMemo(() => demoPosition(lesson), [lesson]);
   const from = squareOf(lesson.from);
   const piece = pos.board[from] as Piece;
@@ -126,6 +153,7 @@ function Watch({ lesson, t, animate, text, onNext }: StageProps) {
       }
     >
       <p className="ch-learn-text">{text}</p>
+      <ReadAloud text={text} voice={voice} t={t} />
 
       <div className="ch-learn-actions">
         {animate && (
@@ -141,7 +169,7 @@ function Watch({ lesson, t, animate, text, onNext }: StageProps) {
   );
 }
 
-function Try({ lesson, t, animate, text, onNext }: StageProps) {
+function Try({ lesson, t, animate, text, voice, onNext }: StageProps) {
   const pos = useMemo(() => demoPosition(lesson), [lesson]);
   const from = squareOf(lesson.from);
   const targets = useMemo(() => new Set(targetsFrom(pos, from)), [pos, from]);
@@ -170,6 +198,7 @@ function Try({ lesson, t, animate, text, onNext }: StageProps) {
       }
     >
       <p className="ch-learn-text">{text}</p>
+      <ReadAloud text={text} voice={voice} t={t} />
 
       <p className="ch-learn-status" role="status" aria-live="polite">
         {done
@@ -187,7 +216,7 @@ function Try({ lesson, t, animate, text, onNext }: StageProps) {
   );
 }
 
-function Challenge({ lesson, t, animate, text, onNext }: StageProps) {
+function Challenge({ lesson, t, animate, text, voice, onNext }: StageProps) {
   const start = useMemo(() => challengePosition(lesson), [lesson]);
   const goal = squareOf(lesson.challenge.goal);
   const [pos, setPos] = useState(start);
@@ -240,6 +269,7 @@ function Challenge({ lesson, t, animate, text, onNext }: StageProps) {
       }
     >
       <p className="ch-learn-text">{text}</p>
+      <ReadAloud text={text} voice={voice} t={t} />
 
       <p className="ch-learn-status" role="status" aria-live="polite">
         {message === 'won'

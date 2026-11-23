@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-import { groupOf, NAV_GROUPS } from './nav-links';
+import { groupOf, linkOf, NAV_GROUPS, NAV_LINKS } from './nav-links';
 
 /** Header menus for wide screens: "Board game ▾" and "Văn phòng ▾". */
 export function NavMenus() {
@@ -13,6 +13,7 @@ export function NavMenus() {
   const [open, setOpen] = useState<string | null>(null);
   const root = useRef<HTMLElement>(null);
   const current = groupOf(pathname);
+  const currentLink = linkOf(pathname);
 
   useEffect(() => setOpen(null), [pathname]);
   useEffect(() => {
@@ -31,6 +32,17 @@ export function NavMenus() {
 
   return (
     <nav ref={root} className="hidden items-center gap-1 text-sm sm:flex" aria-label={t('label')}>
+      {NAV_LINKS.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className="nav-link"
+          data-current={currentLink === link.key ? 'true' : undefined}
+          aria-current={currentLink === link.key ? 'page' : undefined}
+        >
+          {t(link.key)}
+        </Link>
+      ))}
       {NAV_GROUPS.map((group) => {
         const isOpen = open === group.key;
         const id = `nav-menu-${group.key}`;

@@ -1,8 +1,8 @@
 {
   "app": {
     "name": "BoardHub",
-    "tagline": "Play board games with friends or against the computer, right in your browser.",
-    "footer": "Board games and office games, free in your browser."
+    "tagline": "Learn and play chess, plus other board games, right in your browser.",
+    "footer": "Chess and board games, free in your browser."
   },
   "nav": {
     "home": "Home",
@@ -19,7 +19,9 @@
     "myAnimal": "My animal",
     "admin": "Admin",
     "party": "Party",
-    "partyGames": "Games"
+    "partyGames": "Games",
+    "learnChess": "Learn chess",
+    "playChess": "Play chess"
   },
   "catalog": {
     "title": "Pick a game",
@@ -380,25 +382,70 @@
     }
   },
   "portal": {
-    "title": "Play together, right in your browser",
-    "tagline": "Board games with friends or the computer, and quick games for your whole office team.",
-    "boardGames": {
-      "badge": "{n} games",
-      "title": "Board games",
-      "text": "Xiangqi, Chess, Caro, O an quan, Sea Battle… Play the computer, friends with a room code, or ranked quick match.",
-      "cta": "Go to Board games"
+    "title": "Learn and play chess, right in your browser",
+    "tagline": "Meet each piece, learn famous openings one step at a time, then play the computer or your friends. Nothing to install.",
+    "ctaLearn": "Start learning",
+    "ctaPlay": "Play the computer",
+    "what": {
+      "title": "What is chess?",
+      "text": "Chess is a strategy game for two players, more than a thousand years old. Each side commands an army on the board and tries to capture the enemy king.",
+      "goal": {
+        "title": "The goal",
+        "text": "Checkmate: the enemy king is attacked and has no way to escape."
+      },
+      "board": {
+        "title": "The board",
+        "text": "64 squares (8 × 8). Each side has 16 pieces: 1 king, 1 queen, 2 rooks, 2 bishops, 2 knights and 8 pawns."
+      },
+      "first": {
+        "title": "How to play",
+        "text": "Players take turns making one move. White goes first, one piece per turn."
+      }
     },
-    "office": {
-      "badge": "New",
-      "title": "Office",
-      "text": "Everyone gets an animal they dress up themselves. Fairly draw who buys the bubble tea, who presents first, split teams…",
-      "cta": "Go to Office"
+    "path": {
+      "title": "Your learning path",
+      "text": "This order is the easiest. Every lesson is short, with pictures, a voice and a chance to try it yourself.",
+      "pieces": {
+        "title": "Meet the pieces",
+        "text": "How each piece moves: watch, then try.",
+        "cta": "Learn the pieces"
+      },
+      "special": {
+        "title": "Special moves",
+        "text": "Castling, en passant and promotion.",
+        "cta": "Learn special moves"
+      },
+      "openings": {
+        "title": "Learn openings",
+        "text": "Famous ways to start a game, explained move by move.",
+        "cta": "Learn openings"
+      },
+      "play": {
+        "title": "Play for real",
+        "text": "Play the computer at several levels, or a friend.",
+        "cta": "Play now"
+      }
     },
-    "party": {
-      "badge": "New · Tết",
-      "title": "Party games",
-      "text": "Games for the whole family or crew: New Year lucky money on the big screen, everyone joins from their phone.",
-      "cta": "Go to Party games"
+    "pieces": {
+      "title": "Meet each piece",
+      "tag": {
+        "pawn": "Moves straight, captures diagonally",
+        "rook": "Moves straight like a rail",
+        "bishop": "Moves diagonally",
+        "knight": "Jumps in an L",
+        "queen": "The strongest piece",
+        "king": "The most important piece"
+      }
+    },
+    "more": {
+      "badge": "{n} more games",
+      "title": "Like other games?",
+      "text": "Xiangqi, Caro, O an quan, Sea Battle… Play the computer, friends with a room code, or ranked quick match.",
+      "cta": "See the board games"
+    },
+    "join": {
+      "title": "Got a room code?",
+      "text": "Enter the 6-character code your friend sent to join the room."
     }
   },
   "office": {

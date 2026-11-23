@@ -18,3 +18,4 @@ export { ReadAloud } from './learn/ReadAloud';
 export { SPECIAL_LESSONS, specialLesson } from './learn/data';
 export type { SpecialLessonData } from './learn/data';
 export { SpecialLesson } from './learn/SpecialLesson';
+export { PieceGlyph } from './ui/PieceGlyph';

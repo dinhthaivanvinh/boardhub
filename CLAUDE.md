@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Nền tảng web có **ba khu**: **Board game** (nhiều game, chơi local/bot/online/replay), **Văn phòng** (hoạt động cho
+Nền tảng web hiện lấy **cờ vua** làm trang chủ (ADR-0010) và có **ba khu**: **Board game** (nhiều game, chơi local/bot/online/replay), **Văn phòng** (hoạt động cho
 nhân viên: con vật đại diện, bốc thăm công bằng, chia đội…) và **Tiệc nhóm** (`/party`, trò chơi cho gia đình/hội bạn
 như Lì xì Tết; chạy trên phiên Văn phòng, ADR-0008).
 TypeScript monorepo: `apps/web` (Next.js), `apps/server` (Fastify + Socket.IO), `packages/engine`, `packages/protocol`,

@@ -403,6 +403,8 @@
       }
     },
     "path": {
+      "title": "Your learning path",
+      "text": "This order is the easiest. Every lesson is short, with pictures, a voice and a chance to try it yourself.",
       "coordinates": {
         "title": "Meet the board",
         "text": "Read the names of the squares: number rows, letter columns.",

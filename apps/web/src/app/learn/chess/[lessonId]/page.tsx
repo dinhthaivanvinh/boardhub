@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { LESSON_IDS, openingLesson, pieceLesson, specialLesson } from '@bg/game-chess';
+import { COORDINATES_LESSON_ID, LESSON_IDS, openingLesson, pieceLesson, specialLesson } from '@bg/game-chess';
 import { LessonScreen } from '@/features/learn/LessonScreen';
 import { toLocale } from '@/i18n/messages';
 import { publicPage } from '@/seo/site';
@@ -15,11 +15,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLesson(lessonId)) return {};
   const t = await getTranslations();
   const piece = pieceLesson(lessonId);
-  const title = piece
-    ? t(`games.chess.pieceNames.${piece.piece}`)
-    : specialLesson(lessonId)
-      ? t(`games.chess.learn.specials.${lessonId}.name`)
-      : t(`games.chess.learn.openings.${openingLesson(lessonId)!.id}.name`);
+  const title =
+    lessonId === COORDINATES_LESSON_ID
+      ? t('games.chess.learn.coordinates.name')
+      : piece
+        ? t(`games.chess.pieceNames.${piece.piece}`)
+        : specialLesson(lessonId)
+          ? t(`games.chess.learn.specials.${lessonId}.name`)
+          : t(`games.chess.learn.openings.${openingLesson(lessonId)!.id}.name`);
   return publicPage({
     title: `${title} · ${t('games.chess.learn.title')}`,
     description: t('games.chess.learn.subtitle'),

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from '@bg/game-chess';
+import { COORDINATES_LESSON_ID, OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from '@bg/game-chess';
 import { useDoneLessons } from './use-progress';
 
 export function LearnHome() {
@@ -27,6 +27,16 @@ export function LearnHome() {
         <h1 className="text-3xl font-bold tracking-tight">{t('games.chess.learn.title')}</h1>
         <p className="mt-2 text-[var(--muted)]">{t('games.chess.learn.subtitle')}</p>
       </header>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.coordinatesHeading')}</h2>
+        <ul className="grid gap-3">
+          {item(
+            COORDINATES_LESSON_ID,
+            t('games.chess.learn.coordinates.name'),
+            t('games.chess.learn.coordinates.intro.rank'),
+          )}
+        </ul>
+      </section>
       <section>
         <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.piecesHeading')}</h2>
         <ul className="grid gap-3">

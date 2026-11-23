@@ -22,6 +22,9 @@ export type LearnBoardProps = {
   /** Squares to light up (last move, hint). */
   marks?: ReadonlySet<number>;
   goal?: number | null;
+  /** Rank number 1–8 to colour across the board (orange), and file index 0–7 (blue): the two lines of a coordinate. */
+  rankLine?: number | null;
+  fileLine?: number | null;
   /** Increment on every wrong try: replays the shake. */
   shake?: number;
   /** A piece gliding from `from` to `to`; it is drawn at `to`, so leave `to` empty on `board`. */
@@ -40,6 +43,8 @@ export function LearnBoard({
   captures,
   marks,
   goal = null,
+  rankLine = null,
+  fileLine = null,
   shake = 0,
   slide = null,
   onSquare,
@@ -110,6 +115,12 @@ export function LearnBoard({
             const cy = geom.y + HALF;
             return (
               <>
+                {rankLine !== null && 8 - (s >> 3) === rankLine && (
+                  <rect className="ch-rank-line" x={geom.x} y={geom.y} width={CELL} height={CELL} />
+                )}
+                {fileLine !== null && (s & 7) === fileLine && (
+                  <rect className="ch-file-line" x={geom.x} y={geom.y} width={CELL} height={CELL} />
+                )}
                 {marks?.has(s) && (
                   <rect className="ch-last" x={geom.x} y={geom.y} width={CELL} height={CELL} />
                 )}

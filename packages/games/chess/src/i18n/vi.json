@@ -262,6 +262,46 @@
         "fun": "Phần lớn người chọn Hậu vì hậu mạnh nhất. Con có thể có nhiều hậu cùng lúc!"
       }
     },
-    "noVoice": "Máy của bạn chưa có giọng đọc tiếng Việt nên không thể đọc to. Hãy cài giọng tiếng Việt trong cài đặt giọng nói của thiết bị, hoặc thử trình duyệt Microsoft Edge."
+    "noVoice": "Máy của bạn chưa có giọng đọc tiếng Việt nên không thể đọc to. Hãy cài giọng tiếng Việt trong cài đặt giọng nói của thiết bị, hoặc thử trình duyệt Microsoft Edge.",
+    "coordinates": {
+      "name": "Làm quen bàn cờ: toạ độ",
+      "stage": {
+        "meet": "Gặp bàn cờ",
+        "rank": "Hàng số",
+        "file": "Cột chữ",
+        "cross": "Hai đường gặp nhau",
+        "find": "Tự tìm ô",
+        "treasure": "Kho báu",
+        "done": "Xong"
+      },
+      "meet": "Bàn cờ giống một rạp chiếu phim, mỗi ô là một chiếc ghế. Hàng ghế có số từ 1 đến 8 (màu cam). Cột ghế có chữ từ a đến h (màu xanh). Ghế e4 là ghế ở hàng 4, cột chữ e. Hai đường cam và xanh gặp nhau ở đúng ghế đó.",
+      "intro": {
+        "rank": "Hàng ngang có số. Số 1 ở dưới cùng, số 8 ở trên cùng. Hãy bấm vào hàng được gọi tên.",
+        "file": "Cột dọc có chữ. Chữ a ở bên trái, chữ h ở bên phải. Hãy bấm vào cột được gọi tên.",
+        "cross": "Ghế được gọi tên nằm ở nơi hai đường cam và xanh gặp nhau. Hãy bấm vào đúng ghế đó.",
+        "find": "Lần này không có đường kẻ. Hãy tự tìm ghế. Cần giúp thì bấm Gợi ý.",
+        "treasure": "Có một kho báu trên bàn cờ. Hãy chọn đúng tên ô của kho báu."
+      },
+      "prompt": {
+        "rank": "Bấm vào hàng số {rank}.",
+        "file": "Bấm vào cột chữ {file}.",
+        "cross": "Tìm ô {square}: hàng {rank}, cột chữ {file}.",
+        "find": "Tìm ô {square}.",
+        "treasure": "Kho báu ở ô nào?"
+      },
+      "wrong": {
+        "rank": "Chưa đúng. Hàng có số, đếm từ dưới lên: hàng 1 ở dưới cùng.",
+        "file": "Chưa đúng. Cột có chữ, đếm từ trái sang phải: a, bê, xê, đê, e, ép, giê, hát.",
+        "cross": "Chưa đúng. Tìm nơi đường cam và đường xanh gặp nhau.",
+        "find": "Chưa đúng. Tìm hàng số trước, rồi tìm cột chữ. Cần thì bấm Gợi ý.",
+        "treasure": "Chưa đúng. Nhìn xem kho báu ở hàng số mấy và cột chữ nào."
+      },
+      "options": "Các tên ô",
+      "right": "Đúng rồi!",
+      "allDone": "Giỏi quá! Con đã làm xong phần này.",
+      "done": "Con đã biết đọc tên các ô trên bàn cờ!",
+      "fun": "Từ giờ con có thể đọc nước đi, ví dụ \"Mã đi tới f3\". Hãy thử tìm ô f3 trên bàn cờ nhé."
+    },
+    "coordinatesHeading": "Làm quen bàn cờ"
   }
 }

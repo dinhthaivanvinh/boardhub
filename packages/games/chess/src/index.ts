@@ -19,3 +19,6 @@ export { SPECIAL_LESSONS, specialLesson } from './learn/data';
 export type { SpecialLessonData } from './learn/data';
 export { SpecialLesson } from './learn/SpecialLesson';
 export { PieceGlyph } from './ui/PieceGlyph';
+export { COORDINATES_LESSON_ID } from './learn/data';
+export { CoordinatesLesson } from './learn/CoordinatesLesson';
+export { coordRounds, fileOf, rankOf } from './learn/coordinates';

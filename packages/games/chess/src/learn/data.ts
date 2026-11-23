@@ -127,7 +127,11 @@ export const SPECIAL_LESSONS: SpecialLessonData[] = [
   },
 ];
 
+/** The first lesson: reading the names of the squares ("ghế rạp chiếu phim"). */
+export const COORDINATES_LESSON_ID = 'coordinates';
+
 export const LESSON_IDS = [
+  COORDINATES_LESSON_ID,
   ...PIECE_LESSONS.map((l) => l.id),
   ...OPENING_LESSONS.map((l) => l.id),
   ...SPECIAL_LESSONS.map((l) => l.id),

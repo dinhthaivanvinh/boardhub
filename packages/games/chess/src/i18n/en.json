@@ -262,6 +262,46 @@
         "fun": "Most players choose the queen because she is the strongest. You can have several queens at once!"
       }
     },
-    "noVoice": "Your device has no English voice, so it cannot read aloud. Install one in your device speech settings, or try Microsoft Edge."
+    "noVoice": "Your device has no English voice, so it cannot read aloud. Install one in your device speech settings, or try Microsoft Edge.",
+    "coordinates": {
+      "name": "Meet the board: coordinates",
+      "stage": {
+        "meet": "Meet the board",
+        "rank": "Number rows",
+        "file": "Letter columns",
+        "cross": "Where lines cross",
+        "find": "Find it yourself",
+        "treasure": "Treasure",
+        "done": "Done"
+      },
+      "meet": "The board is like a cinema and every square is a seat. The rows are numbered 1 to 8 (orange). The columns have letters a to h (blue). Seat e4 is in row 4, column e. The orange and blue lines cross at exactly that seat.",
+      "intro": {
+        "rank": "Rows have numbers. 1 is at the bottom, 8 at the top. Tap the row you hear.",
+        "file": "Columns have letters. a is on the left, h on the right. Tap the column you hear.",
+        "cross": "The seat you hear is where the orange and blue lines cross. Tap that seat.",
+        "find": "This time there are no lines. Find the seat yourself. Tap Hint if you need help.",
+        "treasure": "There is a treasure on the board. Choose the right name for its square."
+      },
+      "prompt": {
+        "rank": "Tap row {rank}.",
+        "file": "Tap column {file}.",
+        "cross": "Find square {square}: row {rank}, column {file}.",
+        "find": "Find square {square}.",
+        "treasure": "Which square is the treasure on?"
+      },
+      "wrong": {
+        "rank": "Not quite. Rows are numbers, counted from the bottom: row 1 is at the bottom.",
+        "file": "Not quite. Columns are letters, from left to right: a, b, c, d, e, f, g, h.",
+        "cross": "Not quite. Look for where the orange and blue lines cross.",
+        "find": "Not quite. Find the row number first, then the column letter. Tap Hint if you need it.",
+        "treasure": "Not quite. Look at which row and which column the treasure is in."
+      },
+      "options": "Square names",
+      "right": "Correct!",
+      "allDone": "Great job! You finished this part.",
+      "done": "You can read the names of the squares on the board!",
+      "fun": "Now you can read moves like \"Knight to f3\". Try finding f3 on the board."
+    },
+    "coordinatesHeading": "Meet the board"
   }
 }

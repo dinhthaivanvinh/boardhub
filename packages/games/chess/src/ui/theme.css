@@ -246,3 +246,25 @@
     margin-inline: 0;
   }
 }
+
+/* Toạ độ: hàng số màu cam, cột chữ màu xanh, nhất quán trong mọi bài. */
+.ch-rank-line {
+  fill: rgb(249 115 22 / 0.4);
+}
+.ch-file-line {
+  fill: rgb(37 99 235 / 0.35);
+}
+.ch-learn-ranks {
+  color: #c2410c;
+}
+.ch-learn-files {
+  color: #1d4ed8;
+}
+@media (prefers-color-scheme: dark) {
+  .ch-learn-ranks {
+    color: #fb923c;
+  }
+  .ch-learn-files {
+    color: #60a5fa;
+  }
+}

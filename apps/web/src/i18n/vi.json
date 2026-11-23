@@ -403,6 +403,11 @@
       }
     },
     "path": {
+      "coordinates": {
+        "title": "Làm quen bàn cờ",
+        "text": "Đọc tên các ô: hàng số, cột chữ.",
+        "cta": "Học toạ độ"
+      },
       "title": "Lộ trình học",
       "text": "Học theo thứ tự này sẽ dễ nhất. Mỗi bài ngắn, có hình minh hoạ, giọng đọc và để con tự thử.",
       "pieces": {

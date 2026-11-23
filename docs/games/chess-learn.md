@@ -1,6 +1,6 @@
 # Cờ vua: chế độ Học (spec)
 
-Trạng thái: Đã làm bản đầu (6 bài quân cờ, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
+Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài chiếu hết, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
 
 ## 1. Nguyên tắc
 
@@ -56,6 +56,27 @@ type OpeningLesson = {
 
 Luồng: máy giải thích nước → trẻ tự đi nước đó (ô đúng nhấp nháy khi bấm "Gợi ý") → đối thủ đi → lặp đến hết.
 Cuối bài có tóm tắt 3 ý chính ("Chiếm trung tâm", "Phát triển quân", "Nhập thành sớm") và tuỳ chọn "Chơi tiếp với bot từ thế này".
+
+## 3b. Bài Toạ độ (chặng 0)
+
+Bài đầu tiên (`/learn/chess/coordinates`), cho bé chưa biết đọc tên ô. Ẩn dụ: bàn cờ là rạp chiếu phim, mỗi ô là một ghế;
+**hàng số màu cam**, **cột chữ màu xanh**, ô là chỗ hai đường gặp nhau. Hai màu này dùng nhất quán trong mọi bài.
+
+Các bước: gặp bàn cờ → **Hàng số** (bấm cả hàng) → **Cột chữ** (bấm cả cột) → **Hai đường gặp nhau** (luôn có đường kẻ) →
+**Tự tìm ô** (không có đường kẻ; nút Gợi ý, hoặc sai 3 lần thì tự hiện) → **Kho báu** (chọn tên ô trong 3 lựa chọn: hai
+đáp án sai là ô cùng cột và ô cùng hàng, đúng thứ bé hay nhầm). Mỗi bước 5 câu; đúng thì tự sang câu sau, sai thì thử lại
+không giới hạn kèm nhắc luật. Câu hỏi sinh bằng hàm thuần có seed cố định (`coordRounds`), nên lặp lại được và test được.
+Chưa có bài "Đặt quân" (đặt vua vào ô e1).
+
+## 3c. Bài Bắt vua: chiếu và chiếu hết (chặng 3)
+
+Bài `/learn/chess/checkmate`, cho bé đã biết quân cờ. Lời dẫn: vua rất nhát; có quân dọa thì nói "Chiếu!", hết cách cứu thì "Chiếu hết!". Bé luôn cầm quân trắng.
+
+Các bước: gặp vua → **Chiếu** (5 thế: bấm quân đang dọa vua; xe, tượng, mã, hậu, tốt) → **Cứu vua** (3 thế: chạy, ăn, che; nước cứu đúng cách nhưng sai loại được gọi tên chứ không tính) → **Chiếu hết?** (6 thế: "Cứu được" hay "Hết cách") → **Bắt vua** (6 thế chiếu hết 1 nước, hậu và xe xen kẽ).
+
+Ở bước cuối, mọi nước chiếu hết đều được chấp nhận. Nước chưa chiếu hết được chơi tiếp trên bàn: đen đáp lại (vua chạy, che hoặc ăn), thông báo nói rõ vì sao chưa phải chiếu hết (chưa chiếu, đen cứu được, hoặc hoà), rồi thế được đặt lại. Có Gợi ý hai mức. Các thế nằm trong `learn/checkmate.ts`; test dùng engine để kiểm tra từng thế (đúng là bị chiếu, đúng là chiếu hết hoặc không, có nước chiếu hết 1 nước).
+
+Chưa có: chơi trọn ván Hậu + Vua bắt Vua với máy, hoàn tác, bài xe + vua.
 
 ## 4. Tiến độ
 

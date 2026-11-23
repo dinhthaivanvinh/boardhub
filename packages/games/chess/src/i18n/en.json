@@ -262,6 +262,108 @@
         "fun": "Most players choose the queen because she is the strongest. You can have several queens at once!"
       }
     },
-    "noVoice": "Your device has no English voice, so it cannot read aloud. Install one in your device speech settings, or try Microsoft Edge."
+    "noVoice": "Your device has no English voice, so it cannot read aloud. Install one in your device speech settings, or try Microsoft Edge.",
+    "coordinates": {
+      "name": "Meet the board: coordinates",
+      "stage": {
+        "meet": "Meet the board",
+        "rank": "Number rows",
+        "file": "Letter columns",
+        "cross": "Where lines cross",
+        "find": "Find it yourself",
+        "treasure": "Treasure",
+        "done": "Done"
+      },
+      "meet": "The board is like a cinema and every square is a seat. The rows are numbered 1 to 8 (orange). The columns have letters a to h (blue). Seat e4 is in row 4, column e. The orange and blue lines cross at exactly that seat.",
+      "intro": {
+        "rank": "Rows have numbers. 1 is at the bottom, 8 at the top. Tap the row you hear.",
+        "file": "Columns have letters. a is on the left, h on the right. Tap the column you hear.",
+        "cross": "The seat you hear is where the orange and blue lines cross. Tap that seat.",
+        "find": "This time there are no lines. Find the seat yourself. Tap Hint if you need help.",
+        "treasure": "There is a treasure on the board. Choose the right name for its square."
+      },
+      "prompt": {
+        "rank": "Tap row {rank}.",
+        "file": "Tap column {file}.",
+        "cross": "Find square {square}: row {rank}, column {file}.",
+        "find": "Find square {square}.",
+        "treasure": "Which square is the treasure on?"
+      },
+      "wrong": {
+        "rank": "Not quite. Rows are numbers, counted from the bottom: row 1 is at the bottom.",
+        "file": "Not quite. Columns are letters, from left to right: a, b, c, d, e, f, g, h.",
+        "cross": "Not quite. Look for where the orange and blue lines cross.",
+        "find": "Not quite. Find the row number first, then the column letter. Tap Hint if you need it.",
+        "treasure": "Not quite. Look at which row and which column the treasure is in."
+      },
+      "options": "Square names",
+      "right": "Correct!",
+      "allDone": "Great job! You finished this part.",
+      "done": "You can read the names of the squares on the board!",
+      "fun": "Now you can read moves like \"Knight to f3\". Try finding f3 on the board."
+    },
+    "coordinatesHeading": "Meet the board",
+    "checkmate": {
+      "name": "Catch the king: check and checkmate",
+      "stage": {
+        "meet": "Meet the king",
+        "check": "Check",
+        "escape": "Save the king",
+        "judge": "Checkmate?",
+        "mate": "Catch the king",
+        "done": "Done"
+      },
+      "meet": "The king is shy! When a piece threatens to catch the king, we say \"Check!\" and the king must be saved right away. If there is no way to save the king, it is \"Checkmate!\" and the game is over. The king is never captured, but being checkmated means losing.",
+      "intro": {
+        "check": "The white king is under threat, shown by a red circle. Find the black piece that threatens the king.",
+        "escape": "When the king is in check there are three ways to save it: run (the king moves away), block (put a piece in between) or capture (take the piece that is attacking).",
+        "judge": "The king is in check. Look whether it can still be saved. If there is no way, that is checkmate.",
+        "mate": "Now you play White. Find the move that leaves the black king with no escape: checkmate!"
+      },
+      "prompt": {
+        "check": "Which piece is attacking the king? Tap that piece.",
+        "escape": {
+          "run": "Save the king by RUNNING: tap the king, then a safe square.",
+          "block": "Save the king by BLOCKING: put a piece between the attacker and the king.",
+          "capture": "Save the king by CAPTURING: take the piece that attacks the king."
+        },
+        "judge": "Can the white king still be saved?",
+        "mate": "Find the checkmate. The black king has nowhere to go."
+      },
+      "kind": {
+        "run": "running",
+        "block": "blocking",
+        "capture": "capturing"
+      },
+      "right": "Correct!",
+      "allDone": "Great job! You finished this part.",
+      "wrong": {
+        "check": "That piece does not attack the king. Find the piece aiming straight at it."
+      },
+      "escape": {
+        "illegal": "That does not save the king. Tap one of your pieces, then a square with a dot.",
+        "other": "You saved the king by {did}, but this question asks for {asked}. Try again."
+      },
+      "judge": {
+        "save": "Can be saved",
+        "mate": "No way (checkmate)",
+        "rightSave": "Correct! The king can be saved: run, block or capture.",
+        "rightMate": "Correct! No way to save the king. That is checkmate!",
+        "wrong": "Not quite. See if the king can run, block or capture."
+      },
+      "mate": {
+        "right": "Checkmate! The black king has no escape. You win!",
+        "escaped": "The black king escaped! Try another move.",
+        "stalemate": "Oh, the black king cannot move but is not in check: a draw! Try another move.",
+        "illegal": "That piece cannot go there.",
+        "hint1": "Hint: tap the piece on square {from}.",
+        "hint2": "Hint: tap the piece on {from}, then move it to {to}.",
+        "noCheck": "That move does not check the black king. Try another move.",
+        "defended": "Black found a way to save the king (block or capture)! Try another move."
+      },
+      "done": "You know how to save the king and catch the king!",
+      "fun": "When you give checkmate, say it out loud: \"Checkmate!\". You won the game."
+    },
+    "checkmateHeading": "Catch the king"
   }
 }

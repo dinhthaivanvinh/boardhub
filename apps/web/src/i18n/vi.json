@@ -1,8 +1,8 @@
 {
   "app": {
     "name": "BoardHub",
-    "tagline": "Chơi board game với bạn bè hoặc với máy, ngay trên trình duyệt.",
-    "footer": "Board game và trò chơi văn phòng, miễn phí trên trình duyệt."
+    "tagline": "Học và chơi cờ vua, cùng các board game khác, ngay trên trình duyệt.",
+    "footer": "Cờ vua và các board game, miễn phí trên trình duyệt."
   },
   "nav": {
     "home": "Trang chủ",
@@ -19,7 +19,9 @@
     "myAnimal": "Thú của tôi",
     "admin": "Quản trị",
     "party": "Tiệc nhóm",
-    "partyGames": "Trò chơi"
+    "partyGames": "Trò chơi",
+    "learnChess": "Học cờ",
+    "playChess": "Chơi cờ vua"
   },
   "catalog": {
     "title": "Chọn một game",
@@ -380,25 +382,71 @@
     }
   },
   "portal": {
-    "title": "Chơi cùng nhau, ngay trên trình duyệt",
-    "tagline": "Board game với bạn bè hoặc với máy, và những trò chơi nhanh cho cả team văn phòng.",
-    "boardGames": {
-      "badge": "{n} game",
-      "title": "Board game",
-      "text": "Cờ tướng, Cờ vua, Caro, Ô ăn quan, Bắn tàu… Chơi với máy, với bạn bè qua mã phòng, hoặc ghép trận xếp hạng.",
-      "cta": "Vào khu Board game"
+    "badge": "Cờ vua cho mọi người",
+    "title": "Học và chơi cờ vua, ngay trên trình duyệt",
+    "tagline": "Làm quen từng quân cờ, học những khai cuộc nổi tiếng từng bước một, rồi chơi với máy hoặc với bạn bè. Không cần cài đặt.",
+    "ctaLearn": "Bắt đầu học",
+    "ctaPlay": "Chơi với máy",
+    "what": {
+      "title": "Cờ vua là gì?",
+      "text": "Cờ vua là trò chơi chiến thuật cho hai người, hơn một nghìn năm tuổi. Mỗi bên điều khiển một đội quân trên bàn cờ và cố gắng bắt vua của đối phương.",
+      "goal": {
+        "title": "Mục tiêu",
+        "text": "Chiếu hết: vua đối phương bị tấn công và không còn cách nào thoát."
+      },
+      "board": {
+        "title": "Bàn cờ",
+        "text": "64 ô vuông (8 × 8). Mỗi bên có 16 quân: 1 vua, 1 hậu, 2 xe, 2 tượng, 2 mã và 8 tốt."
+      },
+      "first": {
+        "title": "Cách chơi",
+        "text": "Hai bên thay phiên đi một nước. Bên Trắng đi trước, mỗi lượt chỉ đi một quân."
+      }
     },
-    "office": {
-      "badge": "Mới",
-      "title": "Văn phòng",
-      "text": "Mỗi người một con vật tự trang trí. Bốc thăm công bằng ai đi mua trà sữa, ai thuyết trình trước, chia đội…",
-      "cta": "Vào khu Văn phòng"
+    "path": {
+      "title": "Lộ trình học",
+      "text": "Học theo thứ tự này sẽ dễ nhất. Mỗi bài ngắn, có hình minh hoạ, giọng đọc và để con tự thử.",
+      "pieces": {
+        "title": "Làm quen các quân cờ",
+        "text": "Mỗi quân đi như thế nào, xem và tự thử.",
+        "cta": "Học quân cờ"
+      },
+      "special": {
+        "title": "Nước đi đặc biệt",
+        "text": "Nhập thành, bắt tốt qua đường và phong cấp.",
+        "cta": "Học nước đặc biệt"
+      },
+      "openings": {
+        "title": "Học khai cuộc",
+        "text": "Những cách mở màn nổi tiếng, giải thích từng nước.",
+        "cta": "Học khai cuộc"
+      },
+      "play": {
+        "title": "Chơi thật",
+        "text": "Chơi với máy ở nhiều mức khó, hoặc với bạn bè.",
+        "cta": "Vào chơi"
+      }
     },
-    "party": {
-      "badge": "Mới · Tết",
-      "title": "Tiệc nhóm",
-      "text": "Trò chơi cho cả nhà, cả hội: lì xì đầu năm trên màn hình lớn, mọi người vào bằng điện thoại.",
-      "cta": "Vào khu Tiệc nhóm"
+    "pieces": {
+      "title": "Làm quen từng quân cờ",
+      "tag": {
+        "pawn": "Đi thẳng, ăn chéo",
+        "rook": "Đi thẳng như đường ray",
+        "bishop": "Đi chéo",
+        "knight": "Nhảy hình chữ L",
+        "queen": "Mạnh nhất bàn cờ",
+        "king": "Quan trọng nhất"
+      }
+    },
+    "more": {
+      "badge": "{n} game khác",
+      "title": "Thích game khác?",
+      "text": "Cờ tướng, Caro, Ô ăn quan, Bắn tàu… Chơi với máy, với bạn bè qua mã phòng, hoặc ghép trận xếp hạng.",
+      "cta": "Xem các board game"
+    },
+    "join": {
+      "title": "Có mã phòng?",
+      "text": "Nhập mã 6 ký tự bạn bè gửi để vào thẳng phòng."
     }
   },
   "office": {

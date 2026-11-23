@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-import { NAV_GROUPS } from './nav-links';
+import { linkOf, NAV_GROUPS, NAV_LINKS } from './nav-links';
 
 /** Menu button for small screens, where the header has no room for the nav links. */
 export function MobileNav() {
@@ -54,6 +54,14 @@ export function MobileNav() {
           className="absolute right-0 mt-2 w-60 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] py-1 shadow-xl"
         >
           <MenuLink href="/" label={t('home')} current={pathname === '/'} />
+          {NAV_LINKS.map((link) => (
+            <MenuLink
+              key={link.href}
+              href={link.href}
+              label={t(link.key)}
+              current={linkOf(pathname) === link.key}
+            />
+          ))}
           {NAV_GROUPS.map((group) => (
             <div
               key={group.key}

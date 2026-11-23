@@ -1,6 +1,6 @@
 # ADR-0007: Hai khu "Board game" và "Văn phòng"; danh mục board game sang `/board-games`
 
-- Trạng thái: Accepted · Ngày: 2026-11-05
+- Trạng thái: Accepted · Ngày: 2026-11-05 · Điều hướng được thay đổi bởi [ADR-0010](0010-chess-first-home-and-menus.md)
 
 ## Bối cảnh
 

@@ -1270,3 +1270,46 @@ body {
   flex: 1;
   border-top: 1px solid var(--border);
 }
+
+/* Trang chủ cờ vua (ADR-0010) */
+.home-piece {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.875rem;
+  background: color-mix(in srgb, var(--fg) 7%, transparent);
+}
+.home-step {
+  @apply flex flex-col transition-all duration-200;
+  text-decoration: none;
+}
+.home-step:hover,
+.home-step:focus-visible {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+.home-step-number {
+  @apply grid size-9 place-items-center rounded-full text-sm font-bold;
+  background: var(--accent);
+  color: #fff;
+}
+.home-piece-card {
+  @apply flex h-full flex-col items-center gap-1 text-center transition-all duration-200;
+  text-decoration: none;
+}
+.home-piece-card:hover,
+.home-piece-card:focus-visible {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-step,
+  .home-piece-card {
+    transition: none;
+  }
+  .home-step:hover,
+  .home-piece-card:hover {
+    transform: none;
+  }
+}

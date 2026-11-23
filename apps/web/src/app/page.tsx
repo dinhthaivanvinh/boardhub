@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { PieceGlyph, PIECE_LESSONS } from '@bg/game-chess';
 import { JoinRoomForm } from '@/features/home/JoinRoomForm';
-import { OfficeArt } from '@/features/home/OfficeArt';
-import { PartyArt } from '@/features/home/PartyArt';
 import { GAME_IDS } from '@/games/catalog';
 import { COVERS } from '@/games/covers';
 import { toLocale } from '@/i18n/messages';
@@ -16,12 +15,22 @@ export async function generateMetadata(): Promise<Metadata> {
   return publicPage({ description: t('tagline'), path: '/', locale: toLocale(await getLocale()) });
 }
 
-/** The portal: the areas side by side (ADR-0007, ADR-0008). */
-export default async function PortalPage() {
+const STEPS = [
+  { key: 'pieces', href: '/learn/chess/pawn' },
+  { key: 'special', href: '/learn/chess/castling' },
+  { key: 'openings', href: '/learn/chess/italian' },
+  { key: 'play', href: '/games/chess' },
+] as const;
+
+const FACTS = ['goal', 'board', 'first'] as const;
+
+/** The home page: an introduction to chess, with the way to learn it and to play it (ADR-0010). */
+export default async function HomePage() {
   const t = await getTranslations('portal');
+  const tp = await getTranslations('games.chess');
   const locale = toLocale(await getLocale());
   return (
-    <div className="hero">
+    <>
       <JsonLd
         data={{
           '@context': 'https://schema.org',
@@ -32,66 +41,113 @@ export default async function PortalPage() {
           description: t('tagline'),
         }}
       />
-      <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
-        <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl">
-          {t('title')}
-        </h1>
-        <p className="mt-3 max-w-2xl text-lg text-[var(--muted)]">{t('tagline')}</p>
 
-        <ul className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          <li>
-            <Link href="/board-games" className="area-card group" data-testid="area-board-games">
-              <div className="area-card-art area-card-collage" aria-hidden="true">
-                {GAME_IDS.slice(0, 6).map((id) => (
-                  <Image key={id} src={COVERS[id]} alt="" unoptimized className="area-card-tile" />
-                ))}
-              </div>
-              <div className="flex flex-1 flex-col gap-2 p-6">
-                <p className="chip self-start">{t('boardGames.badge', { n: GAME_IDS.length })}</p>
-                <h2 className="text-2xl font-bold">{t('boardGames.title')}</h2>
-                <p className="text-[var(--muted)]">{t('boardGames.text')}</p>
-                <span className="game-card-cta mt-2">
-                  {t('boardGames.cta')} <span aria-hidden="true">→</span>
-                </span>
-              </div>
+      <section className="hero">
+        <div className="mx-auto max-w-6xl px-4 py-12 md:py-20">
+          <p className="chip chip-accent">{t('badge')}</p>
+          <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl">
+            {t('title')}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-[var(--muted)]">{t('tagline')}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/learn/chess" className="btn btn-primary btn-lg" data-testid="cta-learn">
+              {t('ctaLearn')}
             </Link>
-          </li>
-          <li>
-            <Link href="/office" className="area-card group" data-testid="area-office">
-              <div className="area-card-art" aria-hidden="true">
-                <OfficeArt className="h-full w-full" />
-              </div>
-              <div className="flex flex-1 flex-col gap-2 p-6">
-                <p className="chip chip-accent self-start">{t('office.badge')}</p>
-                <h2 className="text-2xl font-bold">{t('office.title')}</h2>
-                <p className="text-[var(--muted)]">{t('office.text')}</p>
-                <span className="game-card-cta mt-2">
-                  {t('office.cta')} <span aria-hidden="true">→</span>
-                </span>
-              </div>
+            <Link href="/games/chess" className="btn btn-lg" data-testid="cta-play">
+              {t('ctaPlay')}
             </Link>
-          </li>
-          <li>
-            <Link href="/party" className="area-card group" data-testid="area-party">
-              <div className="area-card-art area-card-art-party" aria-hidden="true">
-                <PartyArt className="h-full w-full" />
-              </div>
-              <div className="flex flex-1 flex-col gap-2 p-6">
-                <p className="chip chip-accent self-start">{t('party.badge')}</p>
-                <h2 className="text-2xl font-bold">{t('party.title')}</h2>
-                <p className="text-[var(--muted)]">{t('party.text')}</p>
-                <span className="game-card-cta mt-2">
-                  {t('party.cta')} <span aria-hidden="true">→</span>
-                </span>
-              </div>
-            </Link>
-          </li>
-        </ul>
-
-        <div className="mt-10 max-w-xl">
-          <JoinRoomForm />
+          </div>
+          <ul className="mt-10 flex flex-wrap gap-3" aria-hidden="true" data-game="chess">
+            {(['wK', 'wQ', 'wR', 'wB', 'wN', 'wP'] as const).map((piece) => (
+              <li key={piece} className="home-piece">
+                <PieceGlyph piece={piece} size={44} />
+              </li>
+            ))}
+          </ul>
         </div>
+      </section>
+
+      <div className="mx-auto grid max-w-6xl gap-14 px-4 py-12">
+        <section aria-labelledby="home-what">
+          <h2 id="home-what" className="text-2xl font-bold">
+            {t('what.title')}
+          </h2>
+          <p className="mt-2 max-w-3xl text-[var(--muted)]">{t('what.text')}</p>
+          <ul className="mt-6 grid gap-4 md:grid-cols-3">
+            {FACTS.map((k) => (
+              <li key={k} className="card">
+                <h3 className="font-semibold">{t(`what.${k}.title`)}</h3>
+                <p className="mt-1 text-sm text-[var(--muted)]">{t(`what.${k}.text`)}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="home-path">
+          <h2 id="home-path" className="text-2xl font-bold">
+            {t('path.title')}
+          </h2>
+          <p className="mt-2 max-w-3xl text-[var(--muted)]">{t('path.text')}</p>
+          <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((step, i) => (
+              <li key={step.key}>
+                <Link href={step.href} className="card home-step group h-full">
+                  <span className="home-step-number" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <h3 className="mt-3 font-semibold">{t(`path.${step.key}.title`)}</h3>
+                  <p className="mt-1 text-sm text-[var(--muted)]">{t(`path.${step.key}.text`)}</p>
+                  <span className="game-card-cta mt-3">
+                    {t(`path.${step.key}.cta`)} <span aria-hidden="true">→</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section aria-labelledby="home-pieces">
+          <h2 id="home-pieces" className="text-2xl font-bold">
+            {t('pieces.title')}
+          </h2>
+          <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" data-game="chess">
+            {PIECE_LESSONS.map((l) => (
+              <li key={l.id}>
+                <Link href={`/learn/chess/${l.id}`} className="card home-piece-card">
+                  <PieceGlyph piece={`w${l.piece}`} size={56} />
+                  <strong>{tp(`pieceNames.${l.piece}`)}</strong>
+                  <span className="text-sm text-[var(--muted)]">{t(`pieces.tag.${l.id}`)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="home-more" className="grid gap-6 md:grid-cols-2">
+          <Link href="/board-games" className="area-card group" data-testid="area-board-games">
+            <div className="area-card-art area-card-collage" aria-hidden="true">
+              {GAME_IDS.slice(0, 6).map((id) => (
+                <Image key={id} src={COVERS[id]} alt="" unoptimized className="area-card-tile" />
+              ))}
+            </div>
+            <div className="flex flex-1 flex-col gap-2 p-6">
+              <p className="chip self-start">{t('more.badge', { n: GAME_IDS.length })}</p>
+              <h2 id="home-more" className="text-2xl font-bold">
+                {t('more.title')}
+              </h2>
+              <p className="text-[var(--muted)]">{t('more.text')}</p>
+              <span className="game-card-cta mt-2">
+                {t('more.cta')} <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </Link>
+          <div className="flex flex-col justify-center gap-3">
+            <h2 className="text-xl font-bold">{t('join.title')}</h2>
+            <p className="text-[var(--muted)]">{t('join.text')}</p>
+            <JoinRoomForm />
+          </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 }

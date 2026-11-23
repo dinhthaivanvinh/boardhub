@@ -14,7 +14,7 @@ import {
   positionsOf,
   targetsFrom,
 } from '../src/learn/logic';
-import { spellSquares } from '../src/learn/speech';
+import { speak, spellSquares } from '../src/learn/speech';
 import { markDone, PROGRESS_KEY, readProgress } from '../src/learn/progress';
 import { OpeningLesson } from '../src/learn/OpeningLesson';
 import { PieceLesson } from '../src/learn/PieceLesson';
@@ -265,5 +265,47 @@ describe('special lessons', () => {
     expect(screen.getByRole('status').textContent).toBe(tr('games.chess.learn.challengeWon'));
     next();
     expect(done).toEqual(['promotion']);
+  });
+});
+
+describe('speak', () => {
+  const install = (voices: { lang: string; name: string }[]) => {
+    const spoken: { text: string; voice?: unknown; lang: string }[] = [];
+    class Utterance {
+      voice: unknown;
+      lang = '';
+      rate = 1;
+      constructor(public text: string) {}
+    }
+    Object.assign(globalThis, { SpeechSynthesisUtterance: Utterance });
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        getVoices: () => voices,
+        cancel: () => {},
+        speak: (u: Utterance) => spoken.push({ text: u.text, voice: u.voice, lang: u.lang }),
+      },
+    });
+    return spoken;
+  };
+  afterEach(() => Reflect.deleteProperty(window, 'speechSynthesis'));
+
+  it('never reads Vietnamese with an English voice', () => {
+    const spoken = install([{ lang: 'en-US', name: 'English' }]);
+    expect(speak('đi d3', 'vi')).toBe(false);
+    expect(spoken).toEqual([]);
+  });
+
+  it('picks the Vietnamese voice when the device has one', () => {
+    const vn = { lang: 'vi-VN', name: 'Vietnamese' };
+    const spoken = install([{ lang: 'en-US', name: 'English' }, vn]);
+    expect(speak('đi d3', 'vi')).toBe(true);
+    expect(spoken[0]).toMatchObject({ text: 'đi đê 3', voice: vn, lang: 'vi-VN' });
+  });
+
+  it('still tries when the browser has not listed its voices yet', () => {
+    const spoken = install([]);
+    expect(speak('hello', 'en')).toBe(true);
+    expect(spoken[0]!.lang).toBe('en-US');
   });
 });

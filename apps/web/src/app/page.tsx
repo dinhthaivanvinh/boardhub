@@ -43,37 +43,65 @@ export default async function HomePage() {
       />
 
       <section className="hero">
-        <div className="mx-auto max-w-6xl px-4 py-12 md:py-20">
-          <p className="chip chip-accent">{t('badge')}</p>
-          <h1 className="mt-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl">
-            {t('title')}
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-[var(--muted)]">{t('tagline')}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/learn/chess" className="btn btn-primary btn-lg" data-testid="cta-learn">
-              {t('ctaLearn')}
-            </Link>
-            <Link href="/games/chess" className="btn btn-lg" data-testid="cta-play">
-              {t('ctaPlay')}
-            </Link>
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-6 md:grid-cols-[1fr_auto] md:py-8">
+          <div>
+            <p className="chip chip-accent">{t('badge')}</p>
+            <h1 className="mt-3 max-w-2xl text-3xl leading-tight font-extrabold tracking-tight text-balance md:text-4xl">
+              {t('title')}
+            </h1>
+            <p className="mt-2 max-w-xl text-base leading-snug text-[var(--muted)]">{t('tagline')}</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link href="/learn/chess" className="btn btn-primary btn-lg" data-testid="cta-learn">
+                {t('ctaLearn')}
+              </Link>
+              <Link href="/games/chess" className="btn btn-lg" data-testid="cta-play">
+                {t('ctaPlay')}
+              </Link>
+            </div>
           </div>
-          <ul className="mt-10 flex flex-wrap gap-3" aria-hidden="true" data-game="chess">
+          <ul className="hidden grid-cols-3 gap-2 md:grid" aria-hidden="true" data-game="chess">
             {(['wK', 'wQ', 'wR', 'wB', 'wN', 'wP'] as const).map((piece) => (
               <li key={piece} className="home-piece">
-                <PieceGlyph piece={piece} size={44} />
+                <PieceGlyph piece={piece} size={40} />
               </li>
             ))}
           </ul>
         </div>
       </section>
 
-      <div className="mx-auto grid max-w-6xl gap-14 px-4 py-12">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-6 md:py-8">
+        <section aria-labelledby="home-path">
+          <h2 id="home-path" className="text-xl font-bold">
+            {t('path.title')}
+          </h2>
+          <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('path.text')}</p>
+          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((step, i) => (
+              <li key={step.key}>
+                <Link href={step.href} className="card home-step group h-full">
+                  <span className="flex items-center gap-2">
+                    <span className="home-step-number" aria-hidden="true">
+                      {i + 1}
+                    </span>
+                    <h3 className="font-semibold">{t(`path.${step.key}.title`)}</h3>
+                  </span>
+                  <p className="mt-2 text-sm leading-snug text-[var(--muted)]">
+                    {t(`path.${step.key}.text`)}
+                  </p>
+                  <span className="game-card-cta mt-2">
+                    {t(`path.${step.key}.cta`)} <span aria-hidden="true">→</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </section>
         <section aria-labelledby="home-what">
-          <h2 id="home-what" className="text-2xl font-bold">
+          <h2 id="home-what" className="text-xl font-bold">
             {t('what.title')}
           </h2>
-          <p className="mt-2 max-w-3xl text-[var(--muted)]">{t('what.text')}</p>
-          <ul className="mt-6 grid gap-4 md:grid-cols-3">
+          <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('what.text')}</p>
+          <ul className="mt-4 grid gap-3 md:grid-cols-3">
             {FACTS.map((k) => (
               <li key={k} className="card">
                 <h3 className="font-semibold">{t(`what.${k}.title`)}</h3>
@@ -83,34 +111,11 @@ export default async function HomePage() {
           </ul>
         </section>
 
-        <section aria-labelledby="home-path">
-          <h2 id="home-path" className="text-2xl font-bold">
-            {t('path.title')}
-          </h2>
-          <p className="mt-2 max-w-3xl text-[var(--muted)]">{t('path.text')}</p>
-          <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((step, i) => (
-              <li key={step.key}>
-                <Link href={step.href} className="card home-step group h-full">
-                  <span className="home-step-number" aria-hidden="true">
-                    {i + 1}
-                  </span>
-                  <h3 className="mt-3 font-semibold">{t(`path.${step.key}.title`)}</h3>
-                  <p className="mt-1 text-sm text-[var(--muted)]">{t(`path.${step.key}.text`)}</p>
-                  <span className="game-card-cta mt-3">
-                    {t(`path.${step.key}.cta`)} <span aria-hidden="true">→</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </section>
-
         <section aria-labelledby="home-pieces">
-          <h2 id="home-pieces" className="text-2xl font-bold">
+          <h2 id="home-pieces" className="text-xl font-bold">
             {t('pieces.title')}
           </h2>
-          <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" data-game="chess">
+          <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6" data-game="chess">
             {PIECE_LESSONS.map((l) => (
               <li key={l.id}>
                 <Link href={`/learn/chess/${l.id}`} className="card home-piece-card">

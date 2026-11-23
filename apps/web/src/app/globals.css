@@ -1275,9 +1275,9 @@ body {
 .home-piece {
   display: grid;
   place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 0.875rem;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.75rem;
   background: color-mix(in srgb, var(--fg) 7%, transparent);
 }
 .home-step {
@@ -1312,4 +1312,17 @@ body {
   .home-piece-card:hover {
     transform: none;
   }
+}
+
+/* Trang chủ gọn để thấy lộ trình học ngay trên màn hình laptop. */
+.home-step {
+  padding: 0.875rem 1rem;
+}
+.home-step-number {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.8125rem;
+}
+.home-piece-card {
+  padding: 0.75rem;
 }

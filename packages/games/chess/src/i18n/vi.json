@@ -302,6 +302,68 @@
       "done": "Con đã biết đọc tên các ô trên bàn cờ!",
       "fun": "Từ giờ con có thể đọc nước đi, ví dụ \"Mã đi tới f3\". Hãy thử tìm ô f3 trên bàn cờ nhé."
     },
-    "coordinatesHeading": "Làm quen bàn cờ"
+    "coordinatesHeading": "Làm quen bàn cờ",
+    "checkmate": {
+      "name": "Bắt vua: chiếu và chiếu hết",
+      "stage": {
+        "meet": "Gặp vua",
+        "check": "Chiếu",
+        "escape": "Cứu vua",
+        "judge": "Chiếu hết?",
+        "mate": "Bắt vua",
+        "done": "Xong"
+      },
+      "meet": "Vua rất nhát! Khi có quân dọa bắt vua, ta nói \"Chiếu!\" và vua phải cứu mình ngay. Nếu vua không còn cách nào để cứu, đó là \"Chiếu hết!\" và ván cờ kết thúc. Vua không bao giờ bị ăn, nhưng bị chiếu hết là thua.",
+      "intro": {
+        "check": "Vua trắng đang bị dọa, có vòng đỏ quanh vua. Hãy tìm quân đen đang dọa vua.",
+        "escape": "Vua bị chiếu thì có ba cách cứu: chạy (vua đi chỗ khác), che (đặt quân chắn ở giữa) hoặc ăn (ăn quân đang dọa).",
+        "judge": "Vua đang bị chiếu. Hãy nhìn xem vua còn cách cứu không. Hết cách cứu thì đó là chiếu hết.",
+        "mate": "Bây giờ con cầm quân trắng. Hãy tìm nước đi làm vua đen hết đường thoát: chiếu hết!"
+      },
+      "prompt": {
+        "check": "Quân nào đang dọa vua? Bấm vào quân đó.",
+        "escape": {
+          "run": "Cứu vua bằng cách CHẠY: bấm vào vua, rồi bấm ô an toàn.",
+          "block": "Cứu vua bằng cách CHE: đặt một quân vào giữa quân đang dọa và vua.",
+          "capture": "Cứu vua bằng cách ĂN: ăn quân đang dọa vua."
+        },
+        "judge": "Vua trắng còn cách cứu không?",
+        "mate": "Tìm nước chiếu hết. Vua đen không còn chỗ nào để thoát."
+      },
+      "kind": {
+        "run": "chạy",
+        "block": "che",
+        "capture": "ăn"
+      },
+      "right": "Đúng rồi!",
+      "allDone": "Giỏi quá! Con đã xong phần này.",
+      "wrong": {
+        "check": "Quân đó không dọa vua. Tìm quân nào đang nhắm thẳng vào vua."
+      },
+      "escape": {
+        "illegal": "Nước đó không cứu được vua. Bấm quân của con, rồi chọn ô có chấm.",
+        "other": "Con vừa cứu vua bằng cách {did}, nhưng câu này cần cách {asked}. Thử lại nhé."
+      },
+      "judge": {
+        "save": "Cứu được",
+        "mate": "Hết cách (chiếu hết)",
+        "rightSave": "Đúng! Vua còn cách cứu: chạy, che hoặc ăn.",
+        "rightMate": "Đúng! Hết cách cứu vua. Đó là chiếu hết!",
+        "wrong": "Chưa đúng. Thử xem vua có chạy, che hoặc ăn được không."
+      },
+      "mate": {
+        "right": "Chiếu hết! Vua đen hết đường thoát. Con thắng rồi!",
+        "escaped": "Vua đen chạy thoát rồi! Thử nước khác nhé.",
+        "stalemate": "Ôi, vua đen không đi được nhưng không bị chiếu: ván hoà! Thử nước khác nhé.",
+        "illegal": "Quân đó không đi được tới ô đó.",
+        "hint1": "Gợi ý: hãy bấm vào quân ở ô {from}.",
+        "hint2": "Gợi ý: bấm vào quân ở ô {from}, rồi đi tới ô {to}.",
+        "noCheck": "Nước này chưa chiếu vua đen. Thử nước khác nhé.",
+        "defended": "Đen đã tìm được cách cứu vua (che hoặc ăn)! Thử nước khác nhé."
+      },
+      "done": "Con đã biết cứu vua và bắt vua!",
+      "fun": "Khi chiếu hết, hãy nói thật to: \"Chiếu hết!\". Con thắng ván cờ rồi."
+    },
+    "checkmateHeading": "Bắt vua"
   }
 }

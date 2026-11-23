@@ -22,3 +22,5 @@ export { PieceGlyph } from './ui/PieceGlyph';
 export { COORDINATES_LESSON_ID } from './learn/data';
 export { CoordinatesLesson } from './learn/CoordinatesLesson';
 export { coordRounds, fileOf, rankOf } from './learn/coordinates';
+export { CheckmateLesson } from './learn/CheckmateLesson';
+export { CHECKMATE_LESSON_ID } from './learn/checkmate';

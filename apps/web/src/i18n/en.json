@@ -408,22 +408,25 @@
         "text": "Read the names of the squares: number rows, letter columns.",
         "cta": "Learn coordinates"
       },
-      "title": "Your learning path",
-      "text": "This order is the easiest. Every lesson is short, with pictures, a voice and a chance to try it yourself.",
       "pieces": {
         "title": "Meet the pieces",
         "text": "How each piece moves: watch, then try.",
         "cta": "Learn the pieces"
       },
-      "special": {
-        "title": "Special moves",
-        "text": "Castling, en passant and promotion.",
-        "cta": "Learn special moves"
+      "checkmate": {
+        "title": "Check and checkmate",
+        "text": "Save your king in check, then catch the enemy king.",
+        "cta": "Learn checkmate"
       },
       "openings": {
         "title": "Learn openings",
         "text": "Famous ways to start a game, explained move by move.",
         "cta": "Learn openings"
+      },
+      "special": {
+        "title": "Special moves",
+        "text": "Castling, en passant and promotion.",
+        "cta": "Learn special moves"
       },
       "play": {
         "title": "Play for real",

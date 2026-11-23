@@ -25,6 +25,8 @@ export type LearnBoardProps = {
   /** Rank number 1–8 to colour across the board (orange), and file index 0–7 (blue): the two lines of a coordinate. */
   rankLine?: number | null;
   fileLine?: number | null;
+  /** A king in check: a red glow under the piece. */
+  danger?: number | null;
   /** Increment on every wrong try: replays the shake. */
   shake?: number;
   /** A piece gliding from `from` to `to`; it is drawn at `to`, so leave `to` empty on `board`. */
@@ -45,6 +47,7 @@ export function LearnBoard({
   goal = null,
   rankLine = null,
   fileLine = null,
+  danger = null,
   shake = 0,
   slide = null,
   onSquare,
@@ -127,6 +130,7 @@ export function LearnBoard({
                 {s === selected && (
                   <rect className="ch-selected-sq" x={geom.x} y={geom.y} width={CELL} height={CELL} />
                 )}
+                {s === danger && <circle className="ch-check-glow" cx={cx} cy={cy} r={CELL * 0.48} />}
                 {s === goal && <circle className="ch-goal" cx={cx} cy={cy} r={CELL * 0.4} />}
                 {p && <PieceShape piece={p} cx={cx} cy={cy + 1} />}
                 {captures?.has(s) && <circle className="ch-capture" cx={cx} cy={cy} r={CELL * 0.44} />}

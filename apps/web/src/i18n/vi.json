@@ -408,22 +408,25 @@
         "text": "Đọc tên các ô: hàng số, cột chữ.",
         "cta": "Học toạ độ"
       },
-      "title": "Lộ trình học",
-      "text": "Học theo thứ tự này sẽ dễ nhất. Mỗi bài ngắn, có hình minh hoạ, giọng đọc và để con tự thử.",
       "pieces": {
         "title": "Làm quen các quân cờ",
         "text": "Mỗi quân đi như thế nào, xem và tự thử.",
         "cta": "Học quân cờ"
       },
-      "special": {
-        "title": "Nước đi đặc biệt",
-        "text": "Nhập thành, bắt tốt qua đường và phong cấp.",
-        "cta": "Học nước đặc biệt"
+      "checkmate": {
+        "title": "Chiếu và chiếu hết",
+        "text": "Cứu vua khi bị chiếu, rồi tự bắt vua đối phương.",
+        "cta": "Học chiếu hết"
       },
       "openings": {
         "title": "Học khai cuộc",
         "text": "Những cách mở màn nổi tiếng, giải thích từng nước.",
         "cta": "Học khai cuộc"
+      },
+      "special": {
+        "title": "Nước đi đặc biệt",
+        "text": "Nhập thành, bắt tốt qua đường và phong cấp.",
+        "cta": "Học nước đặc biệt"
       },
       "play": {
         "title": "Chơi thật",

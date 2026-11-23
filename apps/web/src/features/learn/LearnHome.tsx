@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { COORDINATES_LESSON_ID, OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from '@bg/game-chess';
+import {
+  CHECKMATE_LESSON_ID,
+  COORDINATES_LESSON_ID,
+  OPENING_LESSONS,
+  PIECE_LESSONS,
+  SPECIAL_LESSONS,
+} from '@bg/game-chess';
 import { useDoneLessons } from './use-progress';
 
 export function LearnHome() {
@@ -42,6 +48,16 @@ export function LearnHome() {
         <ul className="grid gap-3">
           {PIECE_LESSONS.map((l) =>
             item(l.id, t(`games.chess.pieceNames.${l.piece}`), t(`games.chess.learn.pieces.${l.id}.meet`)),
+          )}
+        </ul>
+      </section>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.checkmateHeading')}</h2>
+        <ul className="grid gap-3">
+          {item(
+            CHECKMATE_LESSON_ID,
+            t('games.chess.learn.checkmate.name'),
+            t('games.chess.learn.checkmate.meet'),
           )}
         </ul>
       </section>

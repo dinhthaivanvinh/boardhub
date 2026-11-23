@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import {
+  CHECKMATE_LESSON_ID,
+  CheckmateLesson,
   COORDINATES_LESSON_ID,
   CoordinatesLesson,
   OPENING_LESSONS,
@@ -127,9 +129,14 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
       {lessonId === COORDINATES_LESSON_ID && (
         <CoordinatesLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
       )}
-      {!piece && !opening && !special && lessonId !== COORDINATES_LESSON_ID && (
-        <p>{t('games.chess.learn.notFound')}</p>
+      {lessonId === CHECKMATE_LESSON_ID && (
+        <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
       )}
+      {!piece &&
+        !opening &&
+        !special &&
+        lessonId !== COORDINATES_LESSON_ID &&
+        lessonId !== CHECKMATE_LESSON_ID && <p>{t('games.chess.learn.notFound')}</p>}
     </div>
   );
 }

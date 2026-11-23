@@ -41,5 +41,150 @@
     "fifty_moves": "50 nước không đi Tốt, không ăn quân",
     "insufficient": "không đủ quân để chiếu bí"
   },
-  "config": {}
+  "config": {},
+  "learn": {
+    "cta": "Học cờ vua",
+    "title": "Học cờ vua",
+    "subtitle": "Làm quen từng quân cờ và những khai cuộc nổi tiếng, từng bước một.",
+    "piecesHeading": "Làm quen các quân cờ",
+    "openingsHeading": "Học khai cuộc",
+    "completed": "Đã xong",
+    "start": "Bắt đầu",
+    "backToList": "Về danh sách bài học",
+    "playChess": "Chơi cờ vua",
+    "notFound": "Không có bài học này.",
+    "steps": "Các bước của bài",
+    "stage": {
+      "meet": "Gặp quân cờ",
+      "watch": "Xem",
+      "try": "Thử",
+      "challenge": "Thử thách",
+      "done": "Xong"
+    },
+    "next": "Tiếp tục",
+    "again": "Học lại",
+    "play": "Chạy tiếp",
+    "pause": "Dừng",
+    "found": "Tìm được {n} / {total} ô quân này đi tới được. Bấm vào các ô đó nhé!",
+    "tryDone": "Giỏi quá! Con đã hiểu cách đi rồi.",
+    "tryWrong": "Chưa đúng, quân này không đi được tới ô đó. Xem lại các chấm vừa rồi nhé.",
+    "challengeStart": "Bấm vào quân trắng, rồi bấm vào ô {square} (ô có vòng vàng).",
+    "challengeWon": "Tuyệt vời! Con làm được rồi!",
+    "challengeNotGoal": "Nước đó đi được, nhưng chưa phải ô vòng vàng. Thử lại nhé!",
+    "challengeIllegal": "Quân này không đi được tới ô đó. Bấm quân trắng để xem các ô đi được.",
+    "pieceDone": "Con đã biết cách đi của quân {piece}!",
+    "youPlay": "Con cầm quân {color}",
+    "progress": "Nước {n}/{total}",
+    "idea": "Ý của nước này:",
+    "opponentPlayed": "Đối thủ vừa đi:",
+    "yourTurn": "Đến lượt con. Hãy tìm nước đi phù hợp với ý trên.",
+    "rightMove": "Đúng rồi!",
+    "wrongMove": "Chưa phải nước trong bài. Thử lại hoặc bấm Gợi ý nhé.",
+    "hint": "Gợi ý",
+    "openingDone": "Hoàn thành!",
+    "remember": "Ba điều cần nhớ",
+    "pieces": {
+      "pawn": {
+        "meet": "Tốt là quân nhỏ nhất, có tới 8 quân mỗi bên. Tốt chỉ đi về phía trước, chưa bao giờ đi lùi.",
+        "move": "Tốt đi thẳng lên một ô. Ở lần đi đầu tiên, tốt được phép nhảy hai ô.",
+        "try": "Bấm vào các ô tốt có thể đi tới.",
+        "challenge": "Tốt ăn quân chéo về phía trước, không ăn thẳng. Hãy ăn quân đen bằng tốt trắng.",
+        "fun": "Tốt đi đến cuối bàn cờ sẽ biến thành quân mạnh hơn, thường là Hậu!"
+      },
+      "rook": {
+        "meet": "Xe giống một toà tháp. Xe rất mạnh khi đường thoáng.",
+        "move": "Xe đi thẳng theo hàng ngang hoặc cột dọc, bao nhiêu ô cũng được, nhưng không nhảy qua quân khác.",
+        "try": "Bấm vào các ô xe có thể đi tới.",
+        "challenge": "Xe ăn quân bằng cách đi tới ô có quân đối phương. Hãy ăn quân tốt đen.",
+        "fun": "Hai xe phối hợp với nhau là một đội rất đáng gờm."
+      },
+      "bishop": {
+        "meet": "Tượng đội chiếc mũ nhọn và luôn đi chéo.",
+        "move": "Tượng đi theo đường chéo, bao nhiêu ô cũng được. Tượng luôn ở trên một màu ô, không bao giờ đổi màu.",
+        "try": "Bấm vào các ô tượng có thể đi tới.",
+        "challenge": "Dùng đường chéo để ăn quân tốt đen ở xa.",
+        "fun": "Mỗi bên có hai tượng: một tượng đi ô sáng, một tượng đi ô tối."
+      },
+      "knight": {
+        "meet": "Mã có đầu ngựa. Mã là quân duy nhất biết nhảy qua đầu các quân khác.",
+        "move": "Mã đi hình chữ L: hai ô thẳng rồi một ô ngang (hoặc ngược lại). Mã nhảy qua được quân khác.",
+        "try": "Bấm vào các ô mã có thể nhảy tới.",
+        "challenge": "Nhảy chữ L để ăn quân tốt đen.",
+        "fun": "Mã rất giỏi khi bàn cờ đông quân."
+      },
+      "queen": {
+        "meet": "Hậu là quân mạnh nhất bàn cờ.",
+        "move": "Hậu đi như xe cộng tượng: thẳng hoặc chéo, bao nhiêu ô cũng được.",
+        "try": "Bấm vào các ô hậu có thể đi tới.",
+        "challenge": "Dùng đường đi của hậu để ăn quân tốt đen.",
+        "fun": "Hậu mạnh nên con hãy cẩn thận, đừng để mất hậu quá sớm."
+      },
+      "king": {
+        "meet": "Vua là quân quan trọng nhất. Mất vua là thua ván cờ!",
+        "move": "Vua đi một ô theo mọi hướng: thẳng, ngang hoặc chéo. Vua không được đi vào ô đang bị đối phương tấn công.",
+        "try": "Bấm vào các ô vua có thể đi tới.",
+        "challenge": "Vua cũng ăn được quân, nếu quân đó không có ai bảo vệ. Hãy ăn quân tốt đen.",
+        "fun": "Cần bảo vệ vua thật cẩn thận. Chiếu bí vua đối phương là cách để thắng."
+      }
+    },
+    "openings": {
+      "italian": {
+        "name": "Khai cuộc Ý",
+        "intro": "Một khai cuộc rất cổ điển và dễ hiểu: chiếm trung tâm và đưa tượng ra nhắm vào quân tốt yếu của đối phương.",
+        "s0": "Tốt vua đi lên hai ô (e4). Nước này chiếm trung tâm và mở đường cho tượng và hậu.",
+        "s1": "Đen cũng đi tốt vua lên hai ô để tranh trung tâm.",
+        "s2": "Mã trắng ra f3: tấn công tốt e5 và giúp phát triển quân.",
+        "s3": "Mã đen ra c6 để bảo vệ tốt e5.",
+        "s4": "Tượng trắng ra c4 (đây là nước đặt tên cho khai cuộc Ý): tượng nhắm vào ô f7, điểm yếu của Đen.",
+        "s5": "Đen cũng đưa tượng ra c5 để phát triển quân.",
+        "s6": "Tốt c3 chuẩn bị cho nước đi d4 để chiếm thêm trung tâm.",
+        "s7": "Mã đen ra f6 phát triển quân và tấn công tốt e4.",
+        "s8": "Tốt d4 tấn công tượng đen và chiếm trung tâm.",
+        "s9": "Đen ăn tốt d4.",
+        "s10": "Trắng ăn lại bằng tốt c3. Trắng có trung tâm rộng và quân phát triển tốt.",
+        "sum0": "Chiếm trung tâm bằng tốt.",
+        "sum1": "Đưa mã và tượng ra sớm.",
+        "sum2": "Tượng ở c4 nhắm vào điểm yếu f7."
+      },
+      "queens-gambit": {
+        "name": "Gambit Hậu",
+        "intro": "Trắng mở màn bằng tốt hậu. Trắng đưa một tốt ra đổi, nhưng thường lấy lại được ngay.",
+        "s0": "Tốt hậu đi hai ô (d4): chiếm trung tâm theo cách chắc chắn.",
+        "s1": "Đen đáp bằng tốt hậu để chặn trung tâm.",
+        "s2": "Tốt c4 tấn công tốt d5. Đây là nước \"gambit\": Trắng sẵn sàng đổi tốt lấy trung tâm.",
+        "s3": "Đen bảo vệ tốt d5 bằng tốt e6.",
+        "s4": "Mã c3 phát triển quân và đè lên tốt d5.",
+        "s5": "Mã đen ra f6 phát triển và bảo vệ d5.",
+        "s6": "Tượng ra g5 ghim mã f6, làm Đen khó chịu.",
+        "s7": "Tượng đen ra e7 để thoát ghim và chuẩn bị nhập thành.",
+        "s8": "Tốt e3 mở đường cho tượng và bảo vệ trung tâm.",
+        "s9": "Đen nhập thành để đưa vua vào nơi an toàn.",
+        "s10": "Mã g1 ra f3. Mọi quân của Trắng đang tham gia trận đấu.",
+        "sum0": "Chiếm trung tâm bằng tốt hậu.",
+        "sum1": "Phát triển mã và tượng ra ngoài.",
+        "sum2": "Chuẩn bị nhập thành để vua an toàn."
+      },
+      "sicilian": {
+        "name": "Phòng thủ Sicilia",
+        "intro": "Con cầm quân Đen. Khai cuộc này giúp Đen phản công mạnh bằng cách đổi tốt cạnh lấy tốt trung tâm của Trắng.",
+        "s0": "Trắng mở đầu bằng tốt vua e4.",
+        "s1": "Tốt c5 là nước đặc trưng của Phòng thủ Sicilia: Đen kiểm soát ô d4 mà không bắt chước Trắng.",
+        "s2": "Trắng ra mã f3 chuẩn bị đi d4.",
+        "s3": "Tốt d6 mở đường cho tượng đen và bảo vệ trung tâm.",
+        "s4": "Trắng đẩy tốt d4 để mở trung tâm.",
+        "s5": "Đen ăn tốt d4: Đen đổi tốt cạnh để lấy tốt trung tâm của Trắng.",
+        "s6": "Trắng ăn lại bằng mã.",
+        "s7": "Mã f6 tấn công tốt e4 và phát triển quân.",
+        "s8": "Trắng ra mã c3 bảo vệ tốt e4.",
+        "s9": "Tốt a6 chuẩn bị cho Đen mở rộng cánh hậu.",
+        "sum0": "Đen đổi tốt cạnh (c) lấy tốt trung tâm (d) của Trắng.",
+        "sum1": "Phát triển mã sớm để tấn công tốt e4.",
+        "sum2": "Cánh hậu là nơi Đen tìm cơ hội phản công."
+      }
+    },
+    "hintFrom": "Gợi ý: hãy bấm vào quân ở ô {square}.",
+    "hintTo": "Gợi ý: bấm vào quân ở ô {from}, rồi đi tới ô {square}.",
+    "readAloud": "Đọc to",
+    "autoRead": "Tự động đọc"
+  }
 }

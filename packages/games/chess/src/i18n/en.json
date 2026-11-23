@@ -236,6 +236,31 @@
     "hintFrom": "Hint: tap the piece on square {square}.",
     "hintTo": "Hint: tap the piece on {from}, then move it to {square}.",
     "readAloud": "Read aloud",
-    "autoRead": "Read automatically"
+    "autoRead": "Read automatically",
+    "specialsHeading": "Special moves",
+    "specialDone": "You know a special move: {name}!",
+    "specials": {
+      "castling": {
+        "name": "Castling",
+        "meet": "Castling is the only move that moves two pieces at once: the king and a rook. It puts the king in safety.",
+        "move": "The king goes two squares towards the rook, and the rook jumps to the other side of the king. Watch White castle to the right.",
+        "try": "Now try castling to the left: tap the white king, then tap c1 (the square with the gold ring).",
+        "fun": "You can only castle if that king and rook have never moved, nothing is between them, and the king is not in check or crossing a square the enemy attacks."
+      },
+      "en-passant": {
+        "name": "En passant",
+        "meet": "A special way to capture that many beginners do not know yet. It only happens with pawns.",
+        "move": "The black pawn jumps two squares and lands next to the white pawn. The white pawn may capture it as if it had moved just one square, and lands behind it.",
+        "try": "The black pawn just jumped two squares to d5, next to the white pawn. Tap the white pawn, then tap d6 to capture en passant.",
+        "fun": "You can only do it right away, on the very next move. If you play something else, the chance is gone."
+      },
+      "promotion": {
+        "name": "Promotion",
+        "meet": "A pawn that walks all the way to the far end of the board gets promoted. That is why even a small pawn matters.",
+        "move": "When a pawn reaches the last row, it turns into a queen, rook, bishop or knight, as you choose. Watch the white pawn become a queen.",
+        "try": "Tap the white pawn, then tap e8. Then choose the piece you want the pawn to become.",
+        "fun": "Most players choose the queen because she is the strongest. You can have several queens at once!"
+      }
+    }
   }
 }

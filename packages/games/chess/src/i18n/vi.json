@@ -236,6 +236,31 @@
     "hintFrom": "Gợi ý: hãy bấm vào quân ở ô {square}.",
     "hintTo": "Gợi ý: bấm vào quân ở ô {from}, rồi đi tới ô {square}.",
     "readAloud": "Đọc to",
-    "autoRead": "Tự động đọc"
+    "autoRead": "Tự động đọc",
+    "specialsHeading": "Nước đi đặc biệt",
+    "specialDone": "Con đã biết nước đi đặc biệt: {name}!",
+    "specials": {
+      "castling": {
+        "name": "Nhập thành",
+        "meet": "Nhập thành là nước đi đặc biệt duy nhất đi hai quân cùng một lúc: vua và xe. Nó giúp vua chạy vào nơi an toàn.",
+        "move": "Vua đi hai ô về phía xe, rồi xe nhảy sang ô bên kia vua. Hãy nhìn vua trắng nhập thành về phía bên phải.",
+        "try": "Giờ thử nhập thành về phía bên trái: bấm vào vua trắng, rồi bấm ô c1 (ô có vòng vàng).",
+        "fun": "Chỉ nhập thành được khi vua và xe đó chưa đi lần nào, giữa hai quân không có quân khác, và vua không bị chiếu hay đi qua ô bị tấn công."
+      },
+      "en-passant": {
+        "name": "Bắt tốt qua đường",
+        "meet": "Đây là cách ăn tốt đặc biệt mà nhiều người mới chưa biết. Nó chỉ xảy ra với tốt.",
+        "move": "Tốt đen nhảy hai ô và đứng cạnh tốt trắng. Tốt trắng được ăn nó như thể nó chỉ đi một ô, rồi đứng vào ô phía sau nó.",
+        "try": "Tốt đen vừa nhảy hai ô tới d5, đứng cạnh tốt trắng. Bấm tốt trắng, rồi bấm ô d6 để bắt qua đường.",
+        "fun": "Chỉ được bắt ngay ở nước kế tiếp. Nếu con đi nước khác thì cơ hội này mất."
+      },
+      "promotion": {
+        "name": "Phong cấp",
+        "meet": "Tốt đi mãi tới cuối bàn cờ sẽ được lên cấp. Đây là lý do tốt nhỏ bé cũng rất quan trọng.",
+        "move": "Khi tốt tới hàng cuối, nó biến thành Hậu, Xe, Tượng hoặc Mã tuỳ con chọn. Nhìn tốt trắng biến thành hậu.",
+        "try": "Bấm tốt trắng, rồi bấm ô e8. Sau đó chọn quân mà con muốn tốt biến thành.",
+        "fun": "Phần lớn người chọn Hậu vì hậu mạnh nhất. Con có thể có nhiều hậu cùng lúc!"
+      }
+    }
   }
 }

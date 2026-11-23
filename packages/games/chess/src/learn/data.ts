@@ -97,8 +97,43 @@ export const OPENING_LESSONS: OpeningLessonData[] = [
   },
 ];
 
-export const LESSON_IDS = [...PIECE_LESSONS.map((l) => l.id), ...OPENING_LESSONS.map((l) => l.id)] as const;
+/** Special moves: a demo played from `fen`, then the child plays `challenge` themselves. */
+export type SpecialLessonData = {
+  id: 'castling' | 'en-passant' | 'promotion';
+  fen: string;
+  /** Plies of the demo, "e1g1" style (a fifth letter is the promotion piece). */
+  demo: string[];
+  challenge: { fen: string; from: string; to: string };
+};
+
+export const SPECIAL_LESSONS: SpecialLessonData[] = [
+  {
+    id: 'castling',
+    fen: '4k3/8/8/8/8/8/8/R3K2R w KQ -',
+    demo: ['e1g1'],
+    challenge: { fen: '4k3/8/8/8/8/8/8/R3K2R w KQ -', from: 'e1', to: 'c1' },
+  },
+  {
+    id: 'en-passant',
+    fen: '4k3/3p4/8/4P3/8/8/8/4K3 b - -',
+    demo: ['d7d5', 'e5d6'],
+    challenge: { fen: '4k3/8/8/3pP3/8/8/8/4K3 w - d6', from: 'e5', to: 'd6' },
+  },
+  {
+    id: 'promotion',
+    fen: '8/P6k/8/8/8/8/8/7K w - -',
+    demo: ['a7a8q'],
+    challenge: { fen: '8/4P2k/8/8/8/8/8/7K w - -', from: 'e7', to: 'e8' },
+  },
+];
+
+export const LESSON_IDS = [
+  ...PIECE_LESSONS.map((l) => l.id),
+  ...OPENING_LESSONS.map((l) => l.id),
+  ...SPECIAL_LESSONS.map((l) => l.id),
+] as const;
 export type LessonId = (typeof LESSON_IDS)[number];
 
 export const pieceLesson = (id: string) => PIECE_LESSONS.find((l) => l.id === id);
 export const openingLesson = (id: string) => OPENING_LESSONS.find((l) => l.id === id);
+export const specialLesson = (id: string) => SPECIAL_LESSONS.find((l) => l.id === id);

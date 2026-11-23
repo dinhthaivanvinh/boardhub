@@ -4,12 +4,21 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { squareOf } from '../src/rules/board';
 import en from '../src/i18n/en.json';
 import vi from '../src/i18n/vi.json';
-import { OPENING_LESSONS, PIECE_LESSONS } from '../src/learn/data';
-import { challengePosition, demoPosition, movesFrom, positionsOf, targetsFrom } from '../src/learn/logic';
+import { OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from '../src/learn/data';
+import { fromFen } from '../src/rules/board';
+import {
+  challengePosition,
+  specialFrames,
+  demoPosition,
+  movesFrom,
+  positionsOf,
+  targetsFrom,
+} from '../src/learn/logic';
 import { spellSquares } from '../src/learn/speech';
 import { markDone, PROGRESS_KEY, readProgress } from '../src/learn/progress';
 import { OpeningLesson } from '../src/learn/OpeningLesson';
 import { PieceLesson } from '../src/learn/PieceLesson';
+import { SpecialLesson } from '../src/learn/SpecialLesson';
 
 afterEach(cleanup);
 
@@ -191,5 +200,70 @@ describe('speech', () => {
     expect(spellSquares('đi g3', 'vi')).toBe('đi giê 3');
     expect(spellSquares('tốt (e4), ô c5.', 'vi')).toBe('tốt (e 4), ô xê 5.');
     expect(spellSquares('go to g3', 'en')).toBe('go to g 3');
+  });
+});
+
+describe('special lessons', () => {
+  for (const lesson of SPECIAL_LESSONS) {
+    it(`${lesson.id}: the demo is legal and the challenge move exists`, () => {
+      expect(specialFrames(lesson)).toHaveLength(lesson.demo.length + 1);
+      const pos = fromFen(lesson.challenge.fen);
+      const from = squareOf(lesson.challenge.from);
+      const to = squareOf(lesson.challenge.to);
+      expect(movesFrom(pos, from).some((m) => m.to === to)).toBe(true);
+    });
+    it(`${lesson.id}: has text in both languages`, () => {
+      for (const lang of [vi, en]) {
+        for (const k of ['name', 'meet', 'move', 'try', 'fun']) {
+          expect(get(lang.learn.specials, `${lesson.id}.${k}`), `${lesson.id}.${k}`).toBeTypeOf('string');
+        }
+      }
+    });
+  }
+
+  const walk = (id: string) => {
+    const done: string[] = [];
+    const lesson = SPECIAL_LESSONS.find((l) => l.id === id)!;
+    render(<SpecialLesson lesson={lesson} t={tr} animate={false} onComplete={(x) => done.push(x)} />);
+    const next = () => fireEvent.click(screen.getByRole('button', { name: tr('games.chess.learn.next') }));
+    next(); // meet -> watch
+    next(); // watch -> try
+    return { done, next };
+  };
+
+  it('castling: the king goes two squares and the rook jumps over', () => {
+    const { done, next } = walk('castling');
+    click('e1');
+    click('g1'); // legal, but the lesson asks for the other side
+    expect(screen.getByRole('status').textContent).toBe(tr('games.chess.learn.challengeNotGoal'));
+    click('c1');
+    expect(screen.getByRole('status').textContent).toBe(tr('games.chess.learn.challengeWon'));
+    expect(document.querySelector('[data-square="d1"]')!.getAttribute('data-piece')).toBe('wR');
+    expect(document.querySelector('[data-square="a1"]')!.getAttribute('data-piece')).toBeNull();
+    next();
+    expect(done).toEqual(['castling']);
+  });
+
+  it('en passant: the passed pawn is removed', () => {
+    const { done, next } = walk('en-passant');
+    click('e5');
+    click('e6'); // an ordinary pawn move, not the lesson
+    expect(screen.getByRole('status').textContent).toBe(tr('games.chess.learn.challengeNotGoal'));
+    click('d6');
+    expect(screen.getByRole('status').textContent).toBe(tr('games.chess.learn.challengeWon'));
+    expect(document.querySelector('[data-square="d5"]')!.getAttribute('data-piece')).toBeNull();
+    next();
+    expect(done).toEqual(['en-passant']);
+  });
+
+  it('promotion: the child chooses the new piece', () => {
+    const { done, next } = walk('promotion');
+    click('e7');
+    click('e8');
+    expect(screen.getByRole('group')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: tr('games.chess.pieceNames.N') }));
+    expect(screen.getByRole('status').textContent).toBe(tr('games.chess.learn.challengeWon'));
+    next();
+    expect(done).toEqual(['promotion']);
   });
 });

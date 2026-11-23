@@ -9,6 +9,9 @@ import {
   PIECE_LESSONS,
   PieceLesson,
   pieceLesson,
+  SPECIAL_LESSONS,
+  SpecialLesson,
+  specialLesson,
 } from '@bg/game-chess';
 import { useDoneLessons, useMarkDone } from './use-progress';
 import { useReducedMotion } from './use-reduced-motion';
@@ -52,11 +55,12 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const markDone = useMarkDone();
   const piece = pieceLesson(lessonId);
   const opening = openingLesson(lessonId);
+  const special = specialLesson(lessonId);
   return (
     <div
       className="mx-auto grid max-w-6xl gap-3 px-4 py-4"
       data-game="chess"
-      style={piece || opening ? ({ '--ch-nav': '15rem' } as React.CSSProperties) : undefined}
+      style={piece || opening || special ? ({ '--ch-nav': '15rem' } as React.CSSProperties) : undefined}
     >
       <Link href="/learn/chess" className="text-sm underline-offset-4 hover:underline">
         ← {t('games.chess.learn.backToList')}
@@ -98,7 +102,27 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
           />
         </div>
       )}
-      {!piece && !opening && <p>{t('games.chess.learn.notFound')}</p>}
+      {special && (
+        <div className="grid gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
+          <LessonNav
+            heading={t('games.chess.learn.specialsHeading')}
+            items={SPECIAL_LESSONS.map((l) => ({
+              id: l.id,
+              label: t(`games.chess.learn.specials.${l.id}.name`),
+            }))}
+            currentId={special.id}
+          />
+          <SpecialLesson
+            key={special.id}
+            lesson={special}
+            t={t}
+            animate={!reduced}
+            onComplete={markDone}
+            lang={locale}
+          />
+        </div>
+      )}
+      {!piece && !opening && !special && <p>{t('games.chess.learn.notFound')}</p>}
     </div>
   );
 }

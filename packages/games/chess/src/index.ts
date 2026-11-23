@@ -15,3 +15,6 @@ export { PieceLesson } from './learn/PieceLesson';
 export { OpeningLesson } from './learn/OpeningLesson';
 export { readProgress, markDone } from './learn/progress';
 export { ReadAloud } from './learn/ReadAloud';
+export { SPECIAL_LESSONS, specialLesson } from './learn/data';
+export type { SpecialLessonData } from './learn/data';
+export { SpecialLesson } from './learn/SpecialLesson';

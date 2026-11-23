@@ -10,6 +10,13 @@ Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài
 - Dùng lại `Board`/`PieceIcon`; ô đi được lấy từ `legalPositionMoves`.
 - Hỗ trợ bàn phím, đọc màn hình và `prefers-reduced-motion` (thay animation bằng ảnh tĩnh kèm mũi tên).
 
+### Giọng đọc
+
+- Bé 5 tuổi chưa biết chữ, nên **kết quả sau mỗi lần bé bấm được đọc to** (đúng, sai và lý do), mặc định bật. Công tắc "Đọc kết quả" nhớ lựa chọn trong trình duyệt (`learn.chess.voice.v1`). Câu hỏi chỉ đọc khi bé bấm "Đọc to" hoặc bật "Tự động đọc".
+- Cùng một lời sai bấm hai lần thì đọc hai lần. Bộ đếm "tìm được 2/4" và dòng chờ không đọc.
+- Các bài tự sang câu sau (toạ độ, ăn quân, chiếu hết) chờ giọng đọc xong mới chuyển.
+- Dùng giọng có sẵn của trình duyệt đúng ngôn ngữ; máy không có giọng tiếng Việt thì không đọc và hiện lời nhắc cài giọng.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

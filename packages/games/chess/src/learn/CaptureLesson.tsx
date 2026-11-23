@@ -24,7 +24,9 @@ import {
 } from './capture';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { movesFrom, targetsFrom } from './logic';
-import { ReadAloud, type VoiceState } from './ReadAloud';
+import { ReadAloud } from './ReadAloud';
+import { Status } from './Status';
+import { useVoice } from './voice';
 import { Panel, type RoundProps, Stage, type Tx, useMoveBoard } from './rounds';
 
 type StageName = 'meet' | 'take' | 'attacked' | 'safe' | 'value' | 'done';
@@ -43,8 +45,7 @@ type Props = {
 /** Taking pieces, which piece is in danger, whether a capture is safe, and what the pieces are worth. */
 export function CaptureLesson({ t, animate, onComplete, lang = 'vi', advanceDelay = 1400 }: Props) {
   const [stage, setStage] = useState<StageName>('meet');
-  const [auto, setAuto] = useState(false);
-  const voice: VoiceState = { lang, auto, onAuto: setAuto };
+  const voice = useVoice(lang);
   const c: Tx = (key, values) => t(`games.chess.learn.capture.${key}`, values);
   const common = (key: string) => t(`games.chess.learn.${key}`);
   const start = useMemo(() => fromFen(TAKE_ROUNDS[0]!.fen), []);
@@ -110,9 +111,7 @@ export function CaptureLesson({ t, animate, onComplete, lang = 'vi', advanceDela
       )}
       {stage === 'done' && (
         <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
-          <p className="ch-learn-text" role="status">
-            {c('done')}
-          </p>
+          <Status voice={voice} className="ch-learn-text" text={c('done')} />
           <p className="ch-learn-text">{c('fun')}</p>
           <ReadAloud text={c('fun')} voice={voice} t={t} />
           <button type="button" className="btn" onClick={() => setStage('meet')}>
@@ -180,6 +179,7 @@ function TakeRoundView(props: RoundProps<TakeRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="take"
         prompt={c('prompt.take')}
         progress={progress}
@@ -235,6 +235,7 @@ function AttackedRoundView(props: RoundProps<AttackedRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="attacked"
         prompt={c('prompt.attacked')}
         progress={progress}
@@ -291,6 +292,7 @@ function SafeRoundView(props: RoundProps<SafeRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="safe"
         prompt={c('prompt.safe')}
         progress={progress}
@@ -355,6 +357,7 @@ function ValueRoundView(props: RoundProps<ValueRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="value"
         prompt={c('prompt.value')}
         progress={progress}

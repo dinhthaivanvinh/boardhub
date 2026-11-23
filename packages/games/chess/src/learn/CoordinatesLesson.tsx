@@ -7,6 +7,9 @@ import { COORDINATES_LESSON_ID } from './data';
 import { type CoordKind, type CoordRound, coordRounds, fileOf, rankOf } from './coordinates';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { ReadAloud, type VoiceState } from './ReadAloud';
+import { waitUntilSilent } from './speech';
+import { Status } from './Status';
+import { useVoice } from './voice';
 
 type Stage = 'meet' | CoordKind | 'done';
 const STAGES: Stage[] = ['meet', 'rank', 'file', 'cross', 'find', 'treasure', 'done'];
@@ -26,8 +29,7 @@ type Props = {
 /** Reading square names: rows are numbers, columns are letters, a square is where they cross ("ghế rạp chiếu phim"). */
 export function CoordinatesLesson({ t, animate, onComplete, lang = 'vi', advanceDelay = 1200 }: Props) {
   const [stage, setStage] = useState<Stage>('meet');
-  const [auto, setAuto] = useState(false);
-  const voice: VoiceState = { lang, auto, onAuto: setAuto };
+  const voice = useVoice(lang);
   const c = (key: string, values?: Record<string, string | number>) =>
     t(`games.chess.learn.coordinates.${key}`, values);
   const common = (key: string) => t(`games.chess.learn.${key}`);
@@ -83,9 +85,7 @@ export function CoordinatesLesson({ t, animate, onComplete, lang = 'vi', advance
 
       {stage === 'done' && (
         <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
-          <p className="ch-learn-text" role="status">
-            {c('done')}
-          </p>
+          <Status voice={voice} className="ch-learn-text" text={c('done')} />
           <p className="ch-learn-text">{c('fun')}</p>
           <ReadAloud text={c('fun')} voice={voice} t={t} />
           <button type="button" className="btn" onClick={() => setStage('meet')}>
@@ -126,13 +126,21 @@ function Practice({ kind, t, animate, voice, advanceDelay, onNext }: PracticePro
 
   useEffect(() => {
     if (!solved) return;
+    // After the pause, wait until the spoken result has been heard: a child cannot read it instead.
+    let cancelled = false;
     const id = setTimeout(() => {
-      setIndex((i) => i + 1);
-      setSolved(false);
-      setRoundWrong(0);
-      setHint(false);
+      void waitUntilSilent().then(() => {
+        if (cancelled) return;
+        setIndex((i) => i + 1);
+        setSolved(false);
+        setRoundWrong(0);
+        setHint(false);
+      });
     }, advanceDelay);
-    return () => clearTimeout(id);
+    return () => {
+      cancelled = true;
+      clearTimeout(id);
+    };
   }, [solved, advanceDelay]);
 
   const answer = (ok: boolean) => {
@@ -220,9 +228,7 @@ function Practice({ kind, t, animate, voice, advanceDelay, onNext }: PracticePro
           </button>
         </div>
       )}
-      <p className="ch-learn-status" role="status" aria-live="polite">
-        {message}
-      </p>
+      <Status voice={voice} text={message} nonce={wrong} />
       {finished && (
         <button type="button" className="btn btn-primary" onClick={onNext}>
           {t('games.chess.learn.next')}

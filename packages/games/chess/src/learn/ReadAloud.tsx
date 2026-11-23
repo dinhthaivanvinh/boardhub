@@ -4,7 +4,15 @@ import { useEffect, useState } from 'react';
 import type { Translator } from '@bg/ui';
 import { canSpeak, speak, stopSpeaking, voiceStatus } from './speech';
 
-export type VoiceState = { lang: string; auto: boolean; onAuto(auto: boolean): void };
+export type VoiceState = {
+  lang: string;
+  /** Read each question by itself. */
+  auto: boolean;
+  onAuto(auto: boolean): void;
+  /** Read the result after each answer. */
+  results: boolean;
+  onResults(results: boolean): void;
+};
 
 /** "Read aloud" button and the "read automatically" switch. Renders nothing when the browser has no voice. */
 /** Whether the device has a voice for the language; updates when the browser finishes listing its voices. */
@@ -55,6 +63,10 @@ export function ReadAloud({ text, voice, t }: { text: string; voice: VoiceState;
           }}
         />{' '}
         {t('games.chess.learn.autoRead')}
+      </label>
+      <label className="ch-learn-toggle">
+        <input type="checkbox" checked={voice.results} onChange={(e) => voice.onResults(e.target.checked)} />{' '}
+        {t('games.chess.learn.speakResults')}
       </label>
     </div>
   );

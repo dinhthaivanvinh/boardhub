@@ -22,7 +22,9 @@ import {
 } from './checkmate';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { movesFrom, targetsFrom } from './logic';
-import { ReadAloud, type VoiceState } from './ReadAloud';
+import { ReadAloud } from './ReadAloud';
+import { Status } from './Status';
+import { useVoice } from './voice';
 import { Panel, type RoundProps, Stage, type Tx, useMoveBoard, useTimers } from './rounds';
 
 type Stage = 'meet' | 'check' | 'escape' | 'judge' | 'mate' | 'done';
@@ -41,8 +43,7 @@ type Props = {
 /** Check, how to save the king, mate or not, and finding mate in one: "Bắt vua". */
 export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDelay = 1400 }: Props) {
   const [stage, setStage] = useState<Stage>('meet');
-  const [auto, setAuto] = useState(false);
-  const voice: VoiceState = { lang, auto, onAuto: setAuto };
+  const voice = useVoice(lang);
   const c: Tx = (key, values) => t(`games.chess.learn.checkmate.${key}`, values);
   const common = (key: string) => t(`games.chess.learn.${key}`);
   const start = useMemo(() => fromFen(CHECK_ROUNDS[0]!.fen), []);
@@ -125,9 +126,7 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
       )}
       {stage === 'done' && (
         <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
-          <p className="ch-learn-text" role="status">
-            {c('done')}
-          </p>
+          <Status voice={voice} className="ch-learn-text" text={c('done')} />
           <p className="ch-learn-text">{c('fun')}</p>
           <ReadAloud text={c('fun')} voice={voice} t={t} />
           <button type="button" className="btn" onClick={() => setStage('meet')}>
@@ -171,6 +170,7 @@ function CheckRoundView(props: RoundProps<CheckRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="check"
         prompt={c('prompt.check')}
         progress={progress}
@@ -236,6 +236,7 @@ function EscapeRoundView(props: RoundProps<EscapeRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="escape"
         prompt={c(`prompt.escape.${round.kind}`)}
         progress={progress}
@@ -275,6 +276,7 @@ function JudgeRoundView(props: RoundProps<JudgeRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="judge"
         prompt={c('prompt.judge')}
         progress={progress}
@@ -381,6 +383,7 @@ function MateRoundView(props: RoundProps<MateRound>) {
       }
     >
       <Panel
+        nonce={wrong}
         kind="mate"
         prompt={c('prompt.mate')}
         progress={progress}

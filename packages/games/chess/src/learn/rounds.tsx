@@ -5,6 +5,8 @@ import type { Translator } from '@bg/ui';
 import type { ChessMove, Piece, Position } from '../rules/types';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { ReadAloud, type VoiceState } from './ReadAloud';
+import { Status } from './Status';
+import { waitUntilSilent } from './speech';
 
 /** Text lookup inside one lesson's own namespace (games.chess.learn.<lesson>.*). */
 export type Tx = (key: string, values?: Record<string, string | number>) => string;
@@ -52,20 +54,26 @@ export function Stage<R>({
 
   useEffect(() => {
     if (!solved) return;
+    // After the pause, wait until the spoken result has been heard: a child cannot read it instead.
+    let cancelled = false;
     const id = setTimeout(() => {
-      setIndex((i) => i + 1);
-      setSolved(false);
+      void waitUntilSilent().then(() => {
+        if (cancelled) return;
+        setIndex((i) => i + 1);
+        setSolved(false);
+      });
     }, delay);
-    return () => clearTimeout(id);
+    return () => {
+      cancelled = true;
+      clearTimeout(id);
+    };
   }, [solved, delay]);
 
   if (finished) {
     return (
       <LessonLayout board={<LearnBoard board={finishedBoard} t={t} animate={animate} />}>
         <p className="ch-learn-text">{c(`intro.${kind}`)}</p>
-        <p className="ch-learn-status" role="status" aria-live="polite">
-          {c('allDone')}
-        </p>
+        <Status voice={voice} text={c('allDone')} />
         <button type="button" className="btn btn-primary" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
@@ -95,6 +103,7 @@ export function Panel({
   progress,
   message,
   extra,
+  nonce = 0,
   props,
 }: {
   kind: string;
@@ -102,6 +111,8 @@ export function Panel({
   progress: string;
   message: string;
   extra?: ReactNode;
+  /** Changes with every wrong answer, so the same message is read again. */
+  nonce?: number;
   props: Pick<RoundProps<unknown>, 'c' | 't' | 'voice'>;
 }) {
   return (
@@ -112,9 +123,7 @@ export function Panel({
       </p>
       <ReadAloud text={prompt} voice={props.voice} t={props.t} />
       {extra}
-      <p className="ch-learn-status" role="status" aria-live="polite">
-        {message}
-      </p>
+      <Status voice={props.voice} text={message} nonce={nonce} />
     </>
   );
 }

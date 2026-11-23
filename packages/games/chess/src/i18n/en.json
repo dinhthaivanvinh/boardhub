@@ -415,6 +415,7 @@
       "done": "You can capture pieces and you know which pieces need protecting!",
       "fun": "From now on, before you capture, ask: does anything protect that piece?"
     },
-    "captureHeading": "Capturing and protecting"
+    "captureHeading": "Capturing and protecting",
+    "speakResults": "Read results"
   }
 }

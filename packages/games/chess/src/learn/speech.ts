@@ -60,3 +60,16 @@ export function speak(text: string, lang: string): boolean {
 export function stopSpeaking(): void {
   if (canSpeak()) window.speechSynthesis.cancel();
 }
+
+/** Resolves when nothing is being spoken (or after `maxMs`): lets a lesson wait for the result before the next question. */
+export function waitUntilSilent(maxMs = 9000): Promise<void> {
+  if (!canSpeak()) return Promise.resolve();
+  return new Promise((resolve) => {
+    const started = Date.now();
+    const check = () => {
+      if (!window.speechSynthesis.speaking || Date.now() - started > maxMs) resolve();
+      else setTimeout(check, 200);
+    };
+    check();
+  });
+}

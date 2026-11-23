@@ -364,6 +364,58 @@
       "done": "Con đã biết cứu vua và bắt vua!",
       "fun": "Khi chiếu hết, hãy nói thật to: \"Chiếu hết!\". Con thắng ván cờ rồi."
     },
-    "checkmateHeading": "Bắt vua"
+    "checkmateHeading": "Bắt vua",
+    "capture": {
+      "name": "Ăn quân và bảo vệ",
+      "stage": {
+        "meet": "Ăn quân",
+        "take": "Thử ăn",
+        "attacked": "Bị đe doạ",
+        "safe": "Nên ăn không?",
+        "value": "Quân nào quý?",
+        "done": "Xong"
+      },
+      "meet": "Khi quân của con đi tới ô có quân đối phương, con \"ăn\" quân đó và quân đó rời khỏi bàn cờ. Nhưng đối phương cũng ăn được quân của con! Con cần biết quân nào đang bị đe doạ và quân nào có người bảo vệ.",
+      "intro": {
+        "take": "Hãy ăn một quân đen. Bấm quân trắng, rồi bấm quân đen mà nó ăn được. Vòng tròn quanh quân đen nghĩa là ăn được.",
+        "attacked": "Lần này quân đen đi. Hãy tìm quân trắng đang bị đe doạ: có quân đen nào đó ăn được nó.",
+        "safe": "Quân trắng có thể ăn một quân đen. Nhưng hãy xem: quân đen đó có ai bảo vệ không? Nếu có, ăn xong con sẽ bị ăn lại.",
+        "value": "Mỗi quân có giá trị khác nhau: tốt 1 điểm, mã và tượng 3 điểm, xe 5 điểm, hậu 9 điểm. Đổi quân quý lấy quân rẻ là thiệt."
+      },
+      "prompt": {
+        "take": "Ăn một quân đen.",
+        "attacked": "Quân trắng nào đang bị đe doạ?",
+        "safe": "Quân trắng có thể ăn quân đen này. Có nên ăn không?",
+        "value": "Quân nào quý hơn?"
+      },
+      "take": {
+        "illegal": "Quân đó không đi được tới ô đó.",
+        "notCapture": "Nước đó chỉ là đi, chưa ăn quân. Hãy chọn nước ăn một quân đen.",
+        "right": "Con đã ăn một quân đen!",
+        "hint": "Gợi ý: những quân đen được tô sáng là quân ăn được."
+      },
+      "attacked": {
+        "wrong": "Quân đó đang an toàn. Tìm quân trắng mà một quân đen có thể ăn.",
+        "right": "Đúng rồi! Quân đen được tô sáng ăn được quân trắng đó.",
+        "hint": "Gợi ý: quân đen được tô sáng đang nhắm vào một quân trắng."
+      },
+      "safe": {
+        "eat": "Ăn đi!",
+        "skip": "Đừng ăn",
+        "rightFree": "Đúng! Quân đen đó không có ai bảo vệ, ăn miễn phí.",
+        "rightGuarded": "Đúng! Quân đen đó có người bảo vệ (quân được tô sáng sẽ ăn lại). Ăn xong con sẽ mất quân.",
+        "wrongFree": "Chưa đúng. Quân đen đó không có ai bảo vệ, ăn rất an toàn.",
+        "wrongGuarded": "Chưa đúng. Có quân đen bảo vệ nó: ăn xong con sẽ bị ăn lại."
+      },
+      "value": {
+        "right": "Đúng! {big} đáng {bigPoints} điểm, nhiều hơn {small} ({smallPoints} điểm).",
+        "wrong": "Chưa đúng. Nhớ nhé: tốt 1, mã và tượng 3, xe 5, hậu 9."
+      },
+      "allDone": "Giỏi quá! Con đã xong phần này.",
+      "done": "Con đã biết ăn quân và biết quân nào cần bảo vệ!",
+      "fun": "Từ nay, trước khi ăn quân, hãy hỏi: quân đó có ai bảo vệ không?"
+    },
+    "captureHeading": "Ăn quân và bảo vệ",
+    "speakResults": "Đọc kết quả"
   }
 }

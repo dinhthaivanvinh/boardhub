@@ -9,6 +9,8 @@ import type { SpecialLessonData } from './data';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { movesFrom, parseMove, specialFrames, targetsFrom } from './logic';
 import { ReadAloud, type VoiceState } from './ReadAloud';
+import { Status } from './Status';
+import { useVoice } from './voice';
 
 type Stage = 'meet' | 'watch' | 'try' | 'done';
 const STAGES: Stage[] = ['meet', 'watch', 'try', 'done'];
@@ -27,8 +29,7 @@ type Props = {
 /** A special move: what it is, a demo, then the child plays it. */
 export function SpecialLesson({ lesson, t, animate, onComplete, lang = 'vi' }: Props) {
   const [stage, setStage] = useState<Stage>('meet');
-  const [auto, setAuto] = useState(false);
-  const voice: VoiceState = { lang, auto, onAuto: setAuto };
+  const voice = useVoice(lang);
   const text = (key: string) => t(`games.chess.learn.specials.${lesson.id}.${key}`);
   const common = (key: string, values?: Record<string, string | number>) =>
     t(`games.chess.learn.${key}`, values);
@@ -86,9 +87,7 @@ export function SpecialLesson({ lesson, t, animate, onComplete, lang = 'vi' }: P
       )}
       {stage === 'done' && (
         <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
-          <p className="ch-learn-text" role="status">
-            {common('specialDone', { name })}
-          </p>
+          <Status voice={voice} className="ch-learn-text" text={common('specialDone', { name })} />
           <p className="ch-learn-text">{text('fun')}</p>
           <ReadAloud text={text('fun')} voice={voice} t={t} />
           <button type="button" className="btn" onClick={() => setStage('meet')}>
@@ -240,17 +239,22 @@ function Try({ lesson, t, animate, text, voice, onNext }: StageProps) {
           ))}
         </div>
       )}
-      <p className="ch-learn-status" role="status" aria-live="polite">
-        {won
-          ? t('games.chess.learn.challengeWon')
-          : message === 'notGoal'
-            ? t('games.chess.learn.challengeNotGoal')
-            : message === 'illegal'
-              ? t('games.chess.learn.challengeIllegal')
-              : choosing
-                ? t('games.chess.promoteTo')
-                : t('games.chess.learn.challengeStart', { square: lesson.challenge.to })}
-      </p>
+      <Status
+        voice={voice}
+        text={
+          won
+            ? t('games.chess.learn.challengeWon')
+            : message === 'notGoal'
+              ? t('games.chess.learn.challengeNotGoal')
+              : message === 'illegal'
+                ? t('games.chess.learn.challengeIllegal')
+                : choosing
+                  ? t('games.chess.promoteTo')
+                  : t('games.chess.learn.challengeStart', { square: lesson.challenge.to })
+        }
+        nonce={wrong}
+        speakIt={message !== 'idle'}
+      />
       {won && (
         <button type="button" className="btn" onClick={onNext}>
           {t('games.chess.learn.next')}

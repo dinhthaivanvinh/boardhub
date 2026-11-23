@@ -18,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const STEPS = [
   { key: 'coordinates', href: '/learn/chess/coordinates' },
   { key: 'pieces', href: '/learn/chess/pawn' },
+  { key: 'capture', href: '/learn/chess/capture' },
   { key: 'checkmate', href: '/learn/chess/checkmate' },
   { key: 'openings', href: '/learn/chess/italian' },
   { key: 'special', href: '/learn/chess/castling' },
@@ -106,7 +107,7 @@ export default async function HomePage() {
             {t('path.title')}
           </h2>
           <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('path.text')}</p>
-          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
               <li key={step.key}>
                 <Link href={step.href} className="card home-step group h-full">

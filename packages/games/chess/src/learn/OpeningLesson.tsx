@@ -5,7 +5,9 @@ import type { Translator } from '@bg/ui';
 import { squareName } from '../rules/board';
 import type { OpeningLessonData } from './data';
 import { LearnBoard, LessonLayout } from './LearnBoard';
-import { ReadAloud, type VoiceState } from './ReadAloud';
+import { ReadAloud } from './ReadAloud';
+import { Status } from './Status';
+import { useVoice } from './voice';
 import { speak } from './speech';
 import { movesFrom, parseMove, positionsOf, targetsFrom } from './logic';
 
@@ -33,8 +35,7 @@ export function OpeningLesson({ lesson, t, animate, onComplete, opponentDelay = 
   const [selected, setSelected] = useState<number | null>(null);
   const [hint, setHint] = useState(0);
   const [wrong, setWrong] = useState(0);
-  const [autoRead, setAutoRead] = useState(false);
-  const voice: VoiceState = { lang, auto: autoRead, onAuto: setAutoRead };
+  const voice = useVoice(lang);
   const [feedback, setFeedback] = useState<'idle' | 'wrong' | 'right'>('idle');
 
   const pos = positions[ply]!;
@@ -128,13 +129,18 @@ export function OpeningLesson({ lesson, t, animate, onComplete, opponentDelay = 
           </p>
         )}
         {!finished && mine && (
-          <p className="ch-learn-status" role="status" aria-live="polite">
-            {feedback === 'wrong'
-              ? common('wrongMove')
-              : feedback === 'right'
-                ? common('rightMove')
-                : common('yourTurn')}
-          </p>
+          <Status
+            voice={voice}
+            text={
+              feedback === 'wrong'
+                ? common('wrongMove')
+                : feedback === 'right'
+                  ? common('rightMove')
+                  : common('yourTurn')
+            }
+            nonce={wrong}
+            speakIt={feedback !== 'idle'}
+          />
         )}
         {!finished && mine && (
           <div className="ch-learn-actions">
@@ -162,20 +168,18 @@ export function OpeningLesson({ lesson, t, animate, onComplete, opponentDelay = 
             </button>
           </div>
         )}
-        {hintText && (
-          <p className="ch-learn-status" role="status" aria-live="polite">
-            {hintText}
-          </p>
-        )}
+        {hintText && <Status voice={voice} text={hintText} speakIt={false} />}
         {!finished && idea && (
           <ReadAloud text={hintText ? `${idea} ${hintText}` : idea} voice={voice} t={t} />
         )}
 
         {finished && (
           <div className="ch-learn-summary" role="status">
-            <p className="ch-learn-idea">
-              <strong>{common('openingDone')}</strong> {t(key(`s${total - 1}`))}
-            </p>
+            <Status
+              voice={voice}
+              className="ch-learn-idea"
+              text={`${common('openingDone')} ${t(key(`s${total - 1}`))}`}
+            />
             <h3>{common('remember')}</h3>
             <ul>
               {SUMMARY_POINTS.map((i) => (

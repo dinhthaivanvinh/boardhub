@@ -1,6 +1,6 @@
 # Cờ vua: chế độ Học (spec)
 
-Trạng thái: Đã làm bản đầu (6 bài quân cờ, 3 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
+Trạng thái: Đã làm bản đầu (6 bài quân cờ, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
 
 ## 1. Nguyên tắc
 
@@ -35,7 +35,7 @@ type PieceLesson = {
 
 ## 3. Tính năng 2: Bài học khai cuộc
 
-Lượt đầu 3 khai cuộc: **Ý (Italian)**, **Gambit Hậu**, **Phòng thủ Sicilia**. Về sau thêm Ruy Lopez, Phòng thủ Pháp.
+Hiện có 6 khai cuộc: **Ý (Italian)**, **Gambit Hậu**, **Phòng thủ Sicilia**, **Hệ thống London**, **Ruy Lopez**, **Phòng thủ Pháp**. Thêm khai cuộc = thêm một mục trong `learn/data.ts` và các khóa `s0…sN`, `sum0…2` trong i18n.
 
 Mỗi khai cuộc là một chuỗi nước, mỗi nước kèm lời giải thích:
 

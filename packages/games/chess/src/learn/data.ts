@@ -12,7 +12,7 @@ export type PieceLessonData = {
 };
 
 export type OpeningLessonData = {
-  id: 'italian' | 'queens-gambit' | 'sicilian';
+  id: 'italian' | 'queens-gambit' | 'london' | 'ruy-lopez' | 'sicilian' | 'french';
   /** The side the child plays. */
   side: Color;
   /** Whole line from the start position, "e2e4" style. Ply `i` has the text `s<i>`. */
@@ -79,6 +79,21 @@ export const OPENING_LESSONS: OpeningLessonData[] = [
     id: 'sicilian',
     side: 'b',
     moves: ['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4', 'f3d4', 'g8f6', 'b1c3', 'a7a6'],
+  },
+  {
+    id: 'london',
+    side: 'w',
+    moves: ['d2d4', 'd7d5', 'c1f4', 'g8f6', 'e2e3', 'e7e6', 'g1f3', 'c7c5', 'c2c3', 'b8c6'],
+  },
+  {
+    id: 'ruy-lopez',
+    side: 'w',
+    moves: ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1b5', 'a7a6', 'b5a4', 'g8f6', 'e1g1', 'f8e7'],
+  },
+  {
+    id: 'french',
+    side: 'b',
+    moves: ['e2e4', 'e7e6', 'd2d4', 'd7d5', 'b1c3', 'g8f6', 'c1g5', 'f8e7', 'e4e5', 'f6d7'],
   },
 ];
 

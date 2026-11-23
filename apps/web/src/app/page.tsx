@@ -43,14 +43,11 @@ export default async function HomePage() {
       />
 
       <section className="hero">
-        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-6 md:grid-cols-[1fr_auto] md:py-8">
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-5 md:grid-cols-[1fr_auto] md:py-6">
           <div>
-            <p className="chip chip-accent">{t('badge')}</p>
-            <h1 className="mt-3 max-w-2xl text-3xl leading-tight font-extrabold tracking-tight text-balance md:text-4xl">
-              {t('title')}
-            </h1>
-            <p className="mt-2 max-w-xl text-base leading-snug text-[var(--muted)]">{t('tagline')}</p>
-            <div className="mt-4 flex flex-wrap gap-3">
+            {/* Not shown, but every page needs its h1 for screen readers and search engines. */}
+            <h1 className="sr-only">{t('title')}</h1>
+            <div className="flex flex-wrap gap-3">
               <Link href="/learn/chess" className="btn btn-primary btn-lg" data-testid="cta-learn">
                 {t('ctaLearn')}
               </Link>

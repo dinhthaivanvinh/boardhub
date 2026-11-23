@@ -382,7 +382,6 @@
     }
   },
   "portal": {
-    "badge": "Chess for everyone",
     "title": "Learn and play chess, right in your browser",
     "tagline": "Meet each piece, learn famous openings one step at a time, then play the computer or your friends. Nothing to install.",
     "ctaLearn": "Start learning",

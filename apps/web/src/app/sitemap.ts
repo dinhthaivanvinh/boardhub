@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page('/', 1, 'weekly'),
     page('/board-games', 0.9, 'weekly'),
     ...GAME_IDS.map((id) => page(`/games/${id}`, 0.8, 'monthly')),
+    page('/learn/chess', 0.7, 'monthly'),
     page('/office', 0.8, 'monthly'),
     page('/party', 0.8, 'monthly'),
     ...GAME_IDS.map((id) => page(`/leaderboard?game=${id}`, 0.5, 'daily')),

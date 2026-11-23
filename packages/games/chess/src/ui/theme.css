@@ -89,3 +89,160 @@
 .ch-promotion-btn:focus-visible {
   transform: translateY(-3px);
 }
+
+/* Học cờ */
+.ch-learn {
+  display: grid;
+  gap: 0.75rem;
+}
+.ch-learn-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.ch-learn-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.ch-learn-text {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+.ch-learn-meta,
+.ch-learn-status {
+  color: var(--muted, #64748b);
+}
+.ch-learn-idea {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: rgb(250 204 21 / 0.18);
+  line-height: 1.6;
+}
+.ch-learn-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+.ch-learn-steps li {
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  border: 1px solid rgb(100 116 139 / 0.4);
+}
+.ch-learn-steps li[aria-current='step'] {
+  background: rgb(2 132 199 / 0.2);
+  font-weight: 700;
+}
+.ch-learn-steps li[data-done='true'] {
+  opacity: 0.6;
+}
+.ch-learn-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.ch-learn-summary {
+  display: grid;
+  gap: 0.5rem;
+}
+.ch-learn-summary ul {
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+.ch-goal {
+  fill: none;
+  stroke: #f59e0b;
+  stroke-width: 3;
+  stroke-dasharray: 5 4;
+}
+@keyframes ch-shake {
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ch-learn-board[data-shake='a'],
+  .ch-learn-board[data-shake='b'] {
+    animation: ch-shake 0.25s;
+  }
+  .ch-learn-board[data-shake='b'] {
+    animation-name: ch-shake-b;
+  }
+  @keyframes ch-shake-b {
+    25% {
+      transform: translateX(-4px);
+    }
+    75% {
+      transform: translateX(4px);
+    }
+  }
+}
+
+/* Học cờ: toạ độ ngoài bàn cờ; quân đi chậm để trẻ theo kịp. */
+.ch-learn-board .bg-slide {
+  animation-duration: 1.8s;
+}
+.ch-learn-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Bàn cờ + toạ độ bên ngoài. */
+.ch-learn-frame {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  width: 100%;
+}
+.ch-learn-ranks,
+.ch-learn-files {
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--muted, #64748b);
+}
+.ch-learn-ranks {
+  flex-direction: column;
+}
+.ch-learn-ranks span,
+.ch-learn-files span {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  text-transform: uppercase;
+}
+.ch-learn-files {
+  grid-column: 2;
+  height: 1.25rem;
+}
+
+/* Bàn cờ vừa màn hình: bên trái là bàn, bên phải là chữ và nút. */
+.ch-learn-layout {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+.ch-learn-boardcol {
+  width: clamp(16rem, min(100%, calc(100dvh - 12rem)), 42rem);
+  margin-inline: auto;
+}
+.ch-learn-side {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+@media (min-width: 40rem) {
+  .ch-learn-layout {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .ch-learn-boardcol {
+    width: clamp(16rem, min(calc((100vw - var(--ch-nav, 0rem)) * 0.55), calc(100dvh - 12rem)), 42rem);
+    margin-inline: 0;
+  }
+}

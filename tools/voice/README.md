@@ -29,6 +29,6 @@ pnpm --filter @bg/server exec tsx ../../tools/voice/build.mts
 ```
 
 Script xoá file của những câu không còn được đọc và ghi lại `index.json`. Tốc độ đọc đặt chậm hơn bình thường
-(`SPEED = 0.9` trong `build.mts`) vì người nghe là trẻ 5 tuổi. Muốn đổi giọng hoặc tốc độ thì chạy với `--force`.
+(`SPEED = 0.6` trong `build.mts`) vì người nghe là trẻ 5 tuổi. Muốn đổi giọng hoặc tốc độ thì chạy với `--force`.
 
 Tiếng Anh chưa có file thu sẵn: dùng giọng của trình duyệt.

@@ -29,7 +29,7 @@ describe('going back in a lesson', () => {
 
   it('the Back button steps to the previous step, and is off on the first one', () => {
     render(<PieceLesson lesson={knight} t={tr} animate={false} />);
-    expect((screen.getByRole('button', { name: backName }) as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.queryByRole('button', { name: backName })).toBeNull();
     expect(current()).toBe(stage('meet'));
 
     next();
@@ -39,7 +39,7 @@ describe('going back in a lesson', () => {
     expect(current()).toBe(stage('watch'));
     back();
     expect(current()).toBe(stage('meet'));
-    expect((screen.getByRole('button', { name: backName }) as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.queryByRole('button', { name: backName })).toBeNull();
   });
 
   it('a step already done can be tapped to jump back to it', () => {
@@ -87,26 +87,26 @@ describe('opening lessons: back a move', () => {
     const lesson = OPENING_LESSONS.find((l) => l.id === 'italian')!;
     render(<OpeningLesson lesson={lesson} t={tr} animate={false} opponentDelay={0} />);
     const backMove = () =>
-      screen.getByRole('button', { name: tr('games.chess.learn.backMove') }) as HTMLButtonElement;
-    expect(backMove().disabled).toBe(true);
+      screen.queryByRole('button', { name: tr('games.chess.learn.backMove') }) as HTMLButtonElement;
+    expect(backMove()).toBeNull();
 
     click('e2');
     click('e4');
     await waitFor(() => expect(pieceAt('e5')).toBe('bP')); // the opponent answered
-    expect(backMove().disabled).toBe(false);
+    expect(backMove()).not.toBeNull();
 
     fireEvent.click(backMove());
     expect(pieceAt('e2')).toBe('wP'); // the pawn is home again
     expect(pieceAt('e5')).toBeNull();
-    expect(backMove().disabled).toBe(true);
+    expect(backMove()).toBeNull();
   });
 
   it('playing Black: the first move of White is not undone', async () => {
     const lesson = OPENING_LESSONS.find((l) => l.id === 'sicilian')!;
     render(<OpeningLesson lesson={lesson} t={tr} animate={false} opponentDelay={0} />);
     const backMove = () =>
-      screen.getByRole('button', { name: tr('games.chess.learn.backMove') }) as HTMLButtonElement;
+      screen.queryByRole('button', { name: tr('games.chess.learn.backMove') }) as HTMLButtonElement;
     await waitFor(() => expect(pieceAt('e4')).toBe('wP')); // White opened by itself
-    expect(backMove().disabled).toBe(true); // nothing before the child's first move
+    expect(backMove()).toBeNull(); // nothing before the child's first move
   });
 });

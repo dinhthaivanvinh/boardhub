@@ -28,3 +28,34 @@ export { CaptureLesson } from './learn/CaptureLesson';
 export { CAPTURE_LESSON_ID } from './learn/capture';
 export { TacticsLesson } from './learn/TacticsLesson';
 export { TACTICS_LESSON_ID } from './learn/tactics';
+export { MateRoundView } from './learn/CheckmateLesson';
+export { LearnBoard, LessonLayout } from './learn/LearnBoard';
+export { useVoice } from './learn/voice';
+export {
+  PUZZLES,
+  PUZZLE_TIERS,
+  dailyPuzzle,
+  nextPuzzle,
+  puzzleById,
+  puzzlesOfTier,
+} from './learn/puzzles';
+export type { Puzzle, PuzzleTier } from './learn/puzzles';
+export {
+  EMPTY_PUZZLE_PROGRESS,
+  dateKey,
+  markPuzzleSolved,
+  readPuzzleProgress,
+  streak,
+} from './learn/puzzle-progress';
+export type { PuzzleProgress } from './learn/puzzle-progress';
+export {
+  BADGES,
+  JOURNEY,
+  JOURNEY_LESSONS,
+  RANKS,
+  earnedBadges,
+  nextLessonId,
+  learnerRank,
+  totalStars,
+} from './learn/journey';
+export type { Badge, JourneyStage } from './learn/journey';

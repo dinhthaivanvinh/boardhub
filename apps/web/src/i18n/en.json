@@ -21,7 +21,9 @@
     "party": "Party",
     "partyGames": "Games",
     "learnChess": "Learn chess",
-    "playChess": "Play chess"
+    "playChess": "Play chess",
+    "puzzles": "Puzzles",
+    "journey": "Journey"
   },
   "catalog": {
     "title": "Pick a game",

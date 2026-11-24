@@ -296,7 +296,8 @@ function JudgeRoundView(props: RoundProps<JudgeRound>) {
 }
 
 /** Find the move that gives checkmate. A move that does not is played out, so the child sees the king escape. */
-export function MateRoundView(props: RoundProps<MateRound>) {
+/** `after` is shown in place of the hint button once the round is solved (e.g. a button to the next puzzle). */
+export function MateRoundView(props: RoundProps<MateRound> & { after?: ReactNode }) {
   const { round, progress, t, c, animate, delay, onSolved } = props;
   const start = useMemo(() => fromFen(round.fen), [round]);
   const mates = useMemo(() => matingMoves(start), [start]);
@@ -385,7 +386,9 @@ export function MateRoundView(props: RoundProps<MateRound>) {
         progress={progress}
         message={message || (hint >= 1 && target ? hintText(c, hint, target) : '')}
         extra={
-          !solved && (
+          solved ? (
+            props.after
+          ) : (
             <div className="ch-learn-actions">
               <button
                 type="button"

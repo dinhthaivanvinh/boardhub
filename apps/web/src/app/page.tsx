@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { PieceGlyph, PIECE_LESSONS } from '@bg/game-chess';
 import { toLocale } from '@/i18n/messages';
+import { HomeProgress } from '@/features/learn/HomeProgress';
 import { JsonLd } from '@/seo/JsonLd';
 import { absolute, publicPage, SITE_NAME } from '@/seo/site';
 
@@ -93,6 +94,8 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-6 md:py-8">
+        <HomeProgress />
+
         <section aria-labelledby="home-what">
           <h2 id="home-what" className="text-xl font-bold">
             {t('what.title')}

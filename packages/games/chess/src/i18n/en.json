@@ -481,6 +481,153 @@
     "groupStart": "Start",
     "groupRules": "Basic rules",
     "groupTactics": "Tactics",
-    "allLessons": "All lessons"
+    "allLessons": "All lessons",
+    "puzzles": {
+      "name": "Checkmate puzzles",
+      "title": "Chess puzzles",
+      "subtitle": "Find the move that checkmates the black king in just 1 move. Every puzzle you solve is 1 ⭐!",
+      "daily": {
+        "title": "Today's puzzle",
+        "text": "A new one every day. Solve one each day to keep your streak going!",
+        "play": "Solve it",
+        "done": "You solved today's puzzle. Come back tomorrow!",
+        "again": "Play again",
+        "badge": "Today"
+      },
+      "tiersHeading": "Choose a level",
+      "tier": {
+        "1": {
+          "name": "Rookie",
+          "text": "Few pieces, easy to see. Good to start with."
+        },
+        "2": {
+          "name": "Fighter",
+          "text": "More pieces, so look more carefully."
+        },
+        "3": {
+          "name": "Master",
+          "text": "Many checks, but only one wins."
+        }
+      },
+      "solved": "Solved {n}/{total}",
+      "start": "Start",
+      "continue": "Keep going",
+      "replay": "Play again from the start",
+      "next": "Next puzzle",
+      "reward": "Well done! You earned 1 ⭐",
+      "back": "Back to the puzzles",
+      "tierDone": "You solved every puzzle of this level! Try another one.",
+      "streak": "{n} days in a row",
+      "noStreak": "Solve a puzzle to start a streak",
+      "stars": "{n} ⭐",
+      "levelLabel": "Level {name}",
+      "todayLabel": "Today's puzzle"
+    },
+    "journey": {
+      "name": "Your journey",
+      "title": "Your journey",
+      "subtitle": "Learn step by step, collect stars and badges. How far have you come?",
+      "stageLabel": "Stage {n}",
+      "stage": {
+        "start": "Meet the board",
+        "pieces": "Meet the pieces",
+        "rules": "The basic rules",
+        "openings": "Famous openings",
+        "specials": "Special moves",
+        "tactics": "Little tricks and endgames"
+      },
+      "next": "Keep learning",
+      "nextHere": "Next lesson",
+      "done": "Done",
+      "allDone": "You finished every lesson. Great job!",
+      "puzzlesTitle": "Solve puzzles",
+      "puzzlesText": "Train your eye to find checkmate. Each puzzle is 1 ⭐.",
+      "playTitle": "Play a real game",
+      "playText": "Try the computer and use what you learned.",
+      "go": "Let's go",
+      "starsTotal": "{n} ⭐",
+      "rank": "Rank",
+      "toNext": "{n} more ⭐ to reach {rank}",
+      "topRank": "You reached the top rank!",
+      "badges": "Badges",
+      "badgesCount": "{n}/{total} badges earned",
+      "locked": "Locked",
+      "streak": "{n} days in a row",
+      "ranks": {
+        "chick": "Chess chick",
+        "pawn": "Little pawn",
+        "knight": "Brave knight",
+        "bishop": "Clever bishop",
+        "rook": "Steady rook",
+        "queen": "Mighty queen",
+        "king": "Chess king"
+      },
+      "badge": {
+        "first": {
+          "name": "First step",
+          "text": "Finish your first lesson."
+        },
+        "coordinates": {
+          "name": "Board reader",
+          "text": "Know the name of every square."
+        },
+        "pieces": {
+          "name": "Friend of the pieces",
+          "text": "Finish all 6 piece lessons."
+        },
+        "rules": {
+          "name": "Rule keeper",
+          "text": "Know how to capture and checkmate."
+        },
+        "openings": {
+          "name": "Opening explorer",
+          "text": "Finish the 6 famous openings."
+        },
+        "specials": {
+          "name": "Special-move master",
+          "text": "Know castling, en passant and promotion."
+        },
+        "tactics": {
+          "name": "Trick hunter",
+          "text": "Finish the tricks and endgames lesson."
+        },
+        "puzzles5": {
+          "name": "Little detective",
+          "text": "Solve 5 puzzles."
+        },
+        "puzzles25": {
+          "name": "Eagle eye",
+          "text": "Solve 25 puzzles."
+        },
+        "puzzles100": {
+          "name": "Puzzle champion",
+          "text": "Solve 100 puzzles."
+        },
+        "streak3": {
+          "name": "Little flame",
+          "text": "Solve puzzles 3 days in a row."
+        },
+        "streak7": {
+          "name": "Comet",
+          "text": "Solve puzzles 7 days in a row."
+        },
+        "master": {
+          "name": "Young chess master",
+          "text": "Finish every lesson."
+        }
+      },
+      "home": {
+        "title": "Knight says",
+        "newcomer": "Hello! I'm Knight. Shall we learn chess together?",
+        "next": "Today let us learn \"{lesson}\"!",
+        "dailyPending": "Today's puzzle is waiting for you!",
+        "dailyDone": "You solved today's puzzle. Great job!",
+        "allDone": "You finished every lesson! Now let us solve puzzles.",
+        "continue": "Keep learning",
+        "start": "Start learning",
+        "puzzle": "Today's puzzle",
+        "map": "See the journey"
+      }
+    }
   }
 }

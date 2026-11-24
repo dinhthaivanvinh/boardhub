@@ -15,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page('/board-games', 0.9, 'weekly'),
     ...GAME_IDS.map((id) => page(`/games/${id}`, 0.8, 'monthly')),
     ...LESSON_IDS.map((id) => page(`/learn/chess/${id}`, 0.6, 'monthly')),
+    page('/puzzles', 0.7, 'weekly'),
+    page('/journey', 0.5, 'monthly'),
     page('/office', 0.8, 'monthly'),
     page('/party', 0.8, 'monthly'),
     ...GAME_IDS.map((id) => page(`/leaderboard?game=${id}`, 0.5, 'daily')),

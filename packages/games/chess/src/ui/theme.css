@@ -496,3 +496,11 @@
     display: none;
   }
 }
+
+/* Bàn cờ đứng yên khi cuộn trang: chữ và nút ở bên phải cuộn, bàn cờ vẫn nằm trong màn hình. */
+@media (min-width: 40rem) {
+  .ch-learn-boardcol {
+    position: sticky;
+    top: 4.5rem;
+  }
+}

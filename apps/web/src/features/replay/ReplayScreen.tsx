@@ -207,7 +207,7 @@ function ReplayView(
         </p>
       </div>
 
-      <section className="mx-auto w-full max-w-[min(100%,calc(100dvh-12rem))] lg:col-start-1 lg:row-span-3 lg:row-start-1">
+      <section className="mx-auto w-full max-w-[min(100%,calc(100dvh-12rem))] lg:sticky lg:top-[4.5rem] lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:self-start">
         <Board
           view={shownView ?? definition.playerView(state, mySeat ?? 'spectator')}
           playSound={sound}

@@ -174,3 +174,33 @@ test('the side menu lists every lesson and switches between them', async ({ page
   await expect(page).toHaveURL(/\/learn\/chess\/london$/);
   await expect(menu.getByRole('link', { name: 'Hệ thống London' })).toHaveAttribute('aria-current', 'page');
 });
+
+test.describe('the board stays on screen while the page scrolls', () => {
+  test.skip(({ isMobile }) => isMobile, 'a desktop layout');
+  test.use({ viewport: { width: 1366, height: 600 } });
+
+  const stays = async (page: Page, grid = page.getByRole('grid').first()) => {
+    await page.mouse.wheel(0, 3000);
+    await page.waitForTimeout(400);
+    const scrolled = await page.evaluate(() => window.scrollY);
+    expect(scrolled, 'the page itself scrolls').toBeGreaterThan(50);
+    const box = (await grid.boundingBox())!;
+    expect(box.y, 'board top is on screen').toBeGreaterThanOrEqual(0);
+    expect(box.y + box.height, 'board bottom is on screen').toBeLessThanOrEqual(600);
+  };
+
+  test('a lesson', async ({ page }) => {
+    await page.goto('/learn/chess/italian');
+    await stays(page);
+  });
+
+  test('a game of chess', async ({ page }) => {
+    await page.goto('/games/chess');
+    await page
+      .getByRole('button', { name: /Chơi|Bắt đầu/ })
+      .first()
+      .click();
+    await expect(page.getByRole('grid').first()).toBeVisible();
+    await stays(page);
+  });
+});

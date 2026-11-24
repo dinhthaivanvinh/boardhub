@@ -102,7 +102,7 @@ export function OnlineMatchView({ api }: { api: RoomApi }) {
 
       <section
         ref={boardRef}
-        className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-10rem))] lg:col-start-1 lg:row-span-2 lg:row-start-1"
+        className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-10rem))] lg:sticky lg:top-[4.5rem] lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-start"
       >
         <Board
           view={m.view}

@@ -1,5 +1,6 @@
 'use client';
 
+import { BoardStage } from '@/components/BoardStage';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -192,8 +193,9 @@ function ReplayView(
   return (
     <div
       data-game={gameId}
-      className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-x-6 lg:py-6"
+      className="stage-screen mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-6 lg:py-6"
     >
+      <BoardStage />
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-xl font-bold tracking-tight lg:text-2xl">
@@ -221,7 +223,7 @@ function ReplayView(
         />
       </section>
 
-      <aside className="flex flex-col gap-3 lg:col-start-2 lg:row-start-2">
+      <aside className="stage-aside flex flex-col gap-3 lg:col-start-2 lg:row-start-2">
         <ul className="flex flex-col gap-2">
           {match.players.map((p) => (
             <li key={p.seat} className="card flex items-center gap-2 py-2.5">

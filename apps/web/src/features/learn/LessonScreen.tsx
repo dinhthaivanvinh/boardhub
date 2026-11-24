@@ -1,5 +1,6 @@
 'use client';
 
+import { BoardStage } from '@/components/BoardStage';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import {
@@ -61,7 +62,7 @@ function LessonNav({ currentId }: { currentId: string }) {
   return (
     <nav
       aria-label={t(`${L}.allLessons`)}
-      className="md:sticky md:top-20 md:max-h-[calc(100dvh-6rem)] md:self-start md:overflow-y-auto"
+      className="md:sticky md:top-20 md:max-h-full md:self-start md:overflow-y-auto"
     >
       <div className="flex gap-4 overflow-x-auto pb-1 md:flex-col md:gap-3 md:overflow-visible">
         {groups.map((group) => (
@@ -121,16 +122,17 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const footer = <NextLessonLink lessonId={lessonId} />;
   return (
     <div
-      className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-4"
+      className="stage-screen mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-4 lg:grid-rows-[auto_minmax(0,1fr)_auto]"
       data-game="chess"
       style={{ '--ch-nav': '15rem' } as React.CSSProperties}
     >
+      <BoardStage />
       <Link href="/" className="text-sm underline-offset-4 hover:underline">
         ← {t('games.chess.learn.backToHome')}
       </Link>
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
+      <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
         <LessonNav currentId={lessonId} />
-        <div className="min-w-0">
+        <div className="stage-aside min-w-0">
           {piece && (
             <PieceLesson
               key={piece.id}

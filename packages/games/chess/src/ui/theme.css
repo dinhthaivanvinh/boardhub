@@ -504,3 +504,10 @@
     top: 4.5rem;
   }
 }
+
+/* Bàn cờ cố định (trang không cuộn): trừ thêm chỗ cho đầu trang, tiêu đề, các bước và dòng ghi nguồn. */
+@media (min-width: 64rem) and (min-height: 34rem) {
+  html.board-stage .ch-learn-boardcol {
+    width: clamp(16rem, min(calc((100vw - var(--ch-nav, 0rem)) * 0.55), calc(100dvh - 18.5rem)), 42rem);
+  }
+}

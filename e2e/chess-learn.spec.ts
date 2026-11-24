@@ -180,13 +180,17 @@ test.describe('the board stays on screen while the page scrolls', () => {
   test.use({ viewport: { width: 1366, height: 600 } });
 
   const stays = async (page: Page, grid = page.getByRole('grid').first()) => {
+    await page.waitForSelector('html.board-stage');
+    const before = (await grid.boundingBox())!;
+    const header = (await page.locator('.site-header').boundingBox())!;
+    expect(before.y, 'board is below the header').toBeGreaterThanOrEqual(header.y + header.height - 1);
+    expect(before.y + before.height, 'board is inside the window').toBeLessThanOrEqual(600);
+    await page.mouse.move(before.x + 5, before.y + 5);
     await page.mouse.wheel(0, 3000);
     await page.waitForTimeout(400);
-    const scrolled = await page.evaluate(() => window.scrollY);
-    expect(scrolled, 'the page itself scrolls').toBeGreaterThan(50);
-    const box = (await grid.boundingBox())!;
-    expect(box.y, 'board top is on screen').toBeGreaterThanOrEqual(0);
-    expect(box.y + box.height, 'board bottom is on screen').toBeLessThanOrEqual(600);
+    const after = (await grid.boundingBox())!;
+    expect(after.y, 'board did not move').toBeCloseTo(before.y, 0);
+    expect(await page.evaluate(() => window.scrollY), 'the page did not scroll').toBe(0);
   };
 
   test('a lesson', async ({ page }) => {

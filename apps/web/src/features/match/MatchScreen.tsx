@@ -1,5 +1,6 @@
 'use client';
 
+import { BoardStage } from '@/components/BoardStage';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef } from 'react';
@@ -91,8 +92,9 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
     // Mobile: title + status above the board, everything else below. Desktop: board left, panel right.
     <div
       data-game={gameId}
-      className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:py-6"
+      className="stage-screen mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-6 lg:py-6"
     >
+      <BoardStage />
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-xl font-bold tracking-tight lg:text-2xl">{t(`games.${gameId}.name`)}</h1>
@@ -144,7 +146,7 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
         />
       </section>
 
-      <aside className="flex flex-col gap-4 lg:col-start-2 lg:row-start-2">
+      <aside className="stage-aside flex flex-col gap-4 lg:col-start-2 lg:row-start-2">
         <ul className="flex flex-col gap-2">
           {controllers.map((_, seat) => {
             const isActive = snapshot.activeSeats.includes(seat);

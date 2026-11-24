@@ -1,11 +1,7 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { PieceGlyph, PIECE_LESSONS } from '@bg/game-chess';
-import { JoinRoomForm } from '@/features/home/JoinRoomForm';
-import { GAME_IDS } from '@/games/catalog';
-import { COVERS } from '@/games/covers';
 import { toLocale } from '@/i18n/messages';
 import { JsonLd } from '@/seo/JsonLd';
 import { absolute, publicPage, SITE_NAME } from '@/seo/site';
@@ -16,17 +12,37 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const STEPS = [
-  { key: 'coordinates', href: '/learn/chess/coordinates' },
-  { key: 'pieces', href: '/learn/chess/pawn' },
-  { key: 'capture', href: '/learn/chess/capture' },
-  { key: 'checkmate', href: '/learn/chess/checkmate' },
-  { key: 'openings', href: '/learn/chess/italian' },
-  { key: 'special', href: '/learn/chess/castling' },
-  { key: 'tactics', href: '/learn/chess/tactics' },
-  { key: 'play', href: '/games/chess' },
+  { key: 'coordinates', href: '/learn/chess/coordinates', icon: 'board' },
+  { key: 'pieces', href: '/learn/chess/pawn', icon: '♟️' },
+  { key: 'capture', href: '/learn/chess/capture', icon: '🍎' },
+  { key: 'checkmate', href: '/learn/chess/checkmate', icon: '👑' },
+  { key: 'openings', href: '/learn/chess/italian', icon: '🚀' },
+  { key: 'special', href: '/learn/chess/castling', icon: '✨' },
+  { key: 'tactics', href: '/learn/chess/tactics', icon: '🧠' },
+  { key: 'play', href: '/games/chess', icon: '🎮' },
 ] as const;
 
-const FACTS = ['goal', 'board', 'first'] as const;
+/** A small chessboard, since there is no emoji for one. */
+function BoardIcon() {
+  return (
+    <svg viewBox="0 0 32 32" width="1.6rem" height="1.6rem" className="home-board-icon">
+      <rect width="32" height="32" rx="5" fill="#b58863" />
+      {[0, 1, 2, 3].flatMap((r) =>
+        [0, 1, 2, 3].map((c) =>
+          (r + c) % 2 === 0 ? (
+            <rect key={`${r}${c}`} x={c * 8} y={r * 8} width="8" height="8" fill="#f0d9b5" />
+          ) : null,
+        ),
+      )}
+    </svg>
+  );
+}
+
+const FACTS = [
+  { key: 'goal', icon: '🎯' },
+  { key: 'board', icon: 'board' },
+  { key: 'first', icon: '🤝' },
+] as const;
 
 /** The home page: an introduction to chess, with the way to learn it and to play it (ADR-0010). */
 export default async function HomePage() {
@@ -46,28 +62,30 @@ export default async function HomePage() {
         }}
       />
 
-      <section className="hero">
-        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-5 md:grid-cols-[1fr_auto] md:py-6">
-          <div>
-            {/* Not shown, but every page needs its h1 for screen readers and search engines. */}
-            <h1 className="sr-only">{t('title')}</h1>
-            <div className="flex flex-wrap gap-3">
+      <section className="hero home-hero">
+        <span className="home-blob home-blob-a" aria-hidden="true" />
+        <span className="home-blob home-blob-b" aria-hidden="true" />
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-6 md:grid-cols-[1.1fr_1fr] md:py-8">
+          <div className="relative">
+            <h1 className="home-title">{t('title')}</h1>
+            <p className="home-tagline">{t('tagline')}</p>
+            <div className="mt-5 flex flex-wrap gap-3">
               <Link
                 href="/learn/chess/coordinates"
-                className="btn btn-primary btn-lg"
+                className="btn btn-primary btn-lg home-cta"
                 data-testid="cta-learn"
               >
-                {t('ctaLearn')}
+                <span aria-hidden="true">🎓</span> {t('ctaLearn')}
               </Link>
-              <Link href="/games/chess" className="btn btn-lg" data-testid="cta-play">
-                {t('ctaPlay')}
+              <Link href="/games/chess" className="btn btn-lg home-cta" data-testid="cta-play">
+                <span aria-hidden="true">🎮</span> {t('ctaPlay')}
               </Link>
             </div>
           </div>
-          <ul className="hidden grid-cols-3 gap-2 md:grid" aria-hidden="true" data-game="chess">
-            {(['wK', 'wQ', 'wR', 'wB', 'wN', 'wP'] as const).map((piece) => (
-              <li key={piece} className="home-piece">
-                <PieceGlyph piece={piece} size={40} />
+          <ul className="home-parade" aria-hidden="true" data-game="chess">
+            {(['wK', 'wQ', 'wR', 'wB', 'wN', 'wP'] as const).map((piece, i) => (
+              <li key={piece} className="home-piece" data-i={i}>
+                <PieceGlyph piece={piece} size={52} />
               </li>
             ))}
           </ul>
@@ -81,10 +99,13 @@ export default async function HomePage() {
           </h2>
           <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('what.text')}</p>
           <ul className="mt-4 grid gap-3 md:grid-cols-3">
-            {FACTS.map((k) => (
-              <li key={k} className="card">
-                <h3 className="font-semibold">{t(`what.${k}.title`)}</h3>
-                <p className="mt-1 text-sm text-[var(--muted)]">{t(`what.${k}.text`)}</p>
+            {FACTS.map((k, i) => (
+              <li key={k.key} className="card home-fact" data-i={i}>
+                <span className="home-fact-icon" aria-hidden="true">
+                  {k.icon === 'board' ? <BoardIcon /> : k.icon}
+                </span>
+                <h3 className="font-semibold">{t(`what.${k.key}.title`)}</h3>
+                <p className="mt-1 text-sm text-[var(--muted)]">{t(`what.${k.key}.text`)}</p>
               </li>
             ))}
           </ul>
@@ -95,10 +116,12 @@ export default async function HomePage() {
             {t('pieces.title')}
           </h2>
           <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6" data-game="chess">
-            {PIECE_LESSONS.map((l) => (
+            {PIECE_LESSONS.map((l, i) => (
               <li key={l.id}>
-                <Link href={`/learn/chess/${l.id}`} className="card home-piece-card">
-                  <PieceGlyph piece={`w${l.piece}`} size={56} />
+                <Link href={`/learn/chess/${l.id}`} className="card home-piece-card" data-i={i}>
+                  <span className="home-piece-bubble">
+                    <PieceGlyph piece={`w${l.piece}`} size={56} />
+                  </span>
                   <strong>{tp(`pieceNames.${l.piece}`)}</strong>
                   <span className="text-sm text-[var(--muted)]">{t(`pieces.tag.${l.id}`)}</span>
                 </Link>
@@ -115,48 +138,39 @@ export default async function HomePage() {
           <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
               <li key={step.key}>
-                <Link href={step.href} className="card home-step group h-full">
+                <div className="card home-step h-full" data-i={i}>
                   <span className="flex items-center gap-2">
                     <span className="home-step-number" aria-hidden="true">
                       {i + 1}
                     </span>
                     <h3 className="font-semibold">{t(`path.${step.key}.title`)}</h3>
+                    <span className="home-step-icon" aria-hidden="true">
+                      {step.icon === 'board' ? <BoardIcon /> : step.icon}
+                    </span>
                   </span>
-                  <p className="mt-2 text-sm leading-snug text-[var(--muted)]">
+                  <p className="mt-2 mb-3 text-sm leading-snug text-[var(--muted)]">
                     {t(`path.${step.key}.text`)}
                   </p>
-                  <span className="game-card-cta mt-2">
-                    {t(`path.${step.key}.cta`)} <span aria-hidden="true">→</span>
-                  </span>
-                </Link>
+                  <Link href={step.href} className="btn home-step-btn mt-auto">
+                    {t(`path.${step.key}.cta`)}
+                  </Link>
+                </div>
               </li>
             ))}
           </ol>
         </section>
 
-        <section aria-labelledby="home-more" className="grid gap-6 md:grid-cols-2">
-          <Link href="/board-games" className="area-card group" data-testid="area-board-games">
-            <div className="area-card-art area-card-collage" aria-hidden="true">
-              {GAME_IDS.slice(0, 6).map((id) => (
-                <Image key={id} src={COVERS[id]} alt="" unoptimized className="area-card-tile" />
-              ))}
-            </div>
-            <div className="flex flex-1 flex-col gap-2 p-6">
-              <p className="chip self-start">{t('more.badge', { n: GAME_IDS.length })}</p>
-              <h2 id="home-more" className="text-2xl font-bold">
-                {t('more.title')}
-              </h2>
-              <p className="text-[var(--muted)]">{t('more.text')}</p>
-              <span className="game-card-cta mt-2">
-                {t('more.cta')} <span aria-hidden="true">→</span>
-              </span>
-            </div>
+        <section className="home-final" aria-labelledby="home-final">
+          <span className="home-final-emoji" aria-hidden="true">
+            🌟
+          </span>
+          <h2 id="home-final" className="text-2xl font-extrabold">
+            {t('final.title')}
+          </h2>
+          <p>{t('final.text')}</p>
+          <Link href="/learn/chess/coordinates" className="btn btn-lg home-final-btn">
+            <span aria-hidden="true">🎓</span> {t('ctaLearn')}
           </Link>
-          <div className="flex flex-col justify-center gap-3">
-            <h2 className="text-xl font-bold">{t('join.title')}</h2>
-            <p className="text-[var(--muted)]">{t('join.text')}</p>
-            <JoinRoomForm />
-          </div>
         </section>
       </div>
     </>

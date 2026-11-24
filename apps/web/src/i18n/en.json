@@ -385,6 +385,10 @@
     "title": "Learn and play chess, right in your browser",
     "tagline": "Meet each piece, learn famous openings one step at a time, then play the computer or your friends. Nothing to install.",
     "ctaLearn": "Start learning",
+    "final": {
+      "title": "Are you ready to explore chess with us?",
+      "text": "Each lesson takes a few minutes, with a voice and pictures. Every step you finish earns a star!"
+    },
     "ctaPlay": "Play the computer",
     "what": {
       "title": "What is chess?",

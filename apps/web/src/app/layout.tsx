@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
+import { Nunito } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
@@ -14,6 +15,9 @@ import { MobileNav } from '@/features/settings/MobileNav';
 import { NavMenus } from '@/features/settings/NavMenus';
 import { TIME_ZONE } from '@/i18n/messages';
 import './globals.css';
+
+/** A round, friendly face for a young audience; the system fonts stay as the fallback. */
+const rounded = Nunito({ subsets: ['latin', 'vietnamese'], display: 'swap', variable: '--font-rounded' });
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('app');
@@ -43,7 +47,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const messages = await getMessages();
   const t = await getTranslations('app');
   return (
-    <html lang={locale}>
+    <html lang={locale} className={rounded.variable}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={TIME_ZONE}>
           <header className="site-header">

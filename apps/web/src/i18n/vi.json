@@ -385,6 +385,10 @@
     "title": "Học và chơi cờ vua, ngay trên trình duyệt",
     "tagline": "Làm quen từng quân cờ, học những khai cuộc nổi tiếng từng bước một, rồi chơi với máy hoặc với bạn bè. Không cần cài đặt.",
     "ctaLearn": "Bắt đầu học",
+    "final": {
+      "title": "Bạn đã sẵn sàng khám phá cờ vua cùng chúng mình chưa?",
+      "text": "Mỗi bài chỉ vài phút, có giọng đọc và hình vẽ. Mỗi bước xong là được một ngôi sao!"
+    },
     "ctaPlay": "Chơi với máy",
     "what": {
       "title": "Cờ vua là gì?",

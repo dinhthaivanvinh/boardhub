@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { BADGES, earnedBadges, JOURNEY, nextLessonId, practiceId, PUZZLES } from '@bg/game-chess';
+import { buildPlayUrl } from '@/game-runtime/match-setup';
 import { lessonName } from './lesson-name';
 import { LearnStats, useLearnStats } from './LearnStats';
 import { SaveProgress } from './SaveProgress';
@@ -102,7 +103,11 @@ export function JourneyScreen() {
               {t(`${L}.playTitle`)}
             </h2>
             <p className="text-sm text-[var(--muted)]">{t(`${L}.playText`)}</p>
-            <Link href="/games/chess" className="btn mt-2">
+            <Link
+              href={buildPlayUrl('chess', { mode: 'bot', level: 'easy', humanSeat: 0, config: {} })}
+              className="btn mt-2"
+              data-testid="journey-play-easy"
+            >
               {t(`${L}.go`)}
             </Link>
           </li>

@@ -28,7 +28,7 @@ export function Status({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, nonce]);
   return (
-    <p className={className} role="status" aria-live="polite">
+    <p key={`${nonce}:${text}`} className={className} role="status" aria-live="polite">
       {text}
     </p>
   );

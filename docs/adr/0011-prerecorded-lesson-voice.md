@@ -35,4 +35,4 @@ Anh; chất lượng và tốc độ cũng khác nhau giữa trình duyệt. C�
 - ✅ Tải nhẹ: ~4,6 MB cho 276 câu, mỗi file 2–3 giây, cache trình duyệt 1 ngày.
 - ⚠️ Đổi chữ bài học thì phải tạo lại file (xem tools/voice/README.md); test sẽ báo.
 - ⚠️ Chất lượng giọng Piper tiếng Việt chưa được kiểm chứng bằng tai; đổi giọng chỉ cần chạy lại công cụ với `--force`.
-- ⚠️ Chưa có file tiếng Anh; chỉ có giọng một người (VAIS-1000), tốc độ 0,9.
+- ⚠️ Chưa có file tiếng Anh; chỉ có giọng một người (VAIS-1000), tốc độ 0,6 (chậm cho trẻ nhỏ).

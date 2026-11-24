@@ -359,3 +359,140 @@
 .ch-done-actions {
   margin-top: 0.5rem;
 }
+
+/* Công tắc đọc to: một nút bấm lớn thay cho ô tick nhỏ, trẻ chạm là bật/tắt. */
+.ch-learn .ch-learn-toggle {
+  min-height: 2.75rem;
+  padding: 0.25rem 0.875rem;
+  border-radius: 999px;
+  border: 2px solid rgb(100 116 139 / 0.4);
+  background: rgb(255 255 255 / 0.6);
+  font-size: 1rem;
+  cursor: pointer;
+  gap: 0.5rem;
+}
+.ch-learn .ch-learn-toggle:has(input:checked) {
+  background: rgb(2 132 199 / 0.18);
+  border-color: rgb(2 132 199 / 0.7);
+  font-weight: 700;
+}
+.ch-learn .ch-learn-toggle input {
+  width: 1.375rem;
+  height: 1.375rem;
+  accent-color: #0284c7;
+}
+.ch-learn .ch-learn-toggle:has(input:focus-visible) {
+  outline: 3px solid #0284c7;
+  outline-offset: 2px;
+}
+
+/* Mỗi bước một màu, bước đã xong có ngôi sao; bước hiện tại to và đậm hơn. */
+.ch-learn-steps li {
+  --step: #0284c7;
+  font-size: 1rem;
+  padding: 0.25rem 0.875rem;
+  border-width: 2px;
+  border-color: color-mix(in srgb, var(--step) 45%, transparent);
+}
+.ch-learn-steps li[data-i='0'] {
+  --step: #0284c7;
+}
+.ch-learn-steps li[data-i='1'] {
+  --step: #16a34a;
+}
+.ch-learn-steps li[data-i='2'] {
+  --step: #ea580c;
+}
+.ch-learn-steps li[data-i='3'] {
+  --step: #9333ea;
+}
+.ch-learn-steps li[data-i='4'] {
+  --step: #db2777;
+}
+.ch-learn-steps li[data-i='5'] {
+  --step: #ca8a04;
+}
+.ch-learn-steps li[data-done='true'] {
+  opacity: 1;
+  background: color-mix(in srgb, var(--step) 14%, transparent);
+}
+.ch-learn-steps li[aria-current='step'] {
+  background: var(--step);
+  border-color: var(--step);
+  color: #fff;
+  font-size: 1.125rem;
+  font-weight: 800;
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--step) 60%, #000);
+}
+
+/* Lời phản hồi nảy lên mỗi khi đổi; ngôi sao xoay nhẹ, giấy hoa rơi ở màn Xong. */
+.ch-celebrate {
+  position: relative;
+  overflow: hidden;
+}
+.ch-confetti {
+  position: absolute;
+  top: -2rem;
+  left: calc(8% + var(--n, 0) * 15%);
+  font-size: 1.75rem;
+}
+.ch-confetti[data-i='1'] {
+  --n: 1;
+}
+.ch-confetti[data-i='2'] {
+  --n: 2;
+}
+.ch-confetti[data-i='3'] {
+  --n: 3;
+}
+.ch-confetti[data-i='4'] {
+  --n: 4;
+}
+.ch-confetti[data-i='5'] {
+  --n: 5;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ch-learn-status,
+  .ch-learn-text[role='status'] {
+    animation: ch-pop 0.35s ease-out;
+  }
+  .ch-celebrate-star {
+    animation: ch-wiggle 1.6s ease-in-out infinite;
+  }
+  .ch-confetti {
+    animation: ch-fall 3s linear infinite;
+    animation-delay: calc(var(--n, 0) * 0.45s);
+  }
+  @keyframes ch-pop {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.4;
+    }
+    60% {
+      transform: scale(1.04);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes ch-wiggle {
+    0%,
+    100% {
+      transform: rotate(-6deg) scale(1);
+    }
+    50% {
+      transform: rotate(6deg) scale(1.08);
+    }
+  }
+  @keyframes ch-fall {
+    to {
+      transform: translateY(calc(100% * 6)) rotate(40deg);
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ch-confetti {
+    display: none;
+  }
+}

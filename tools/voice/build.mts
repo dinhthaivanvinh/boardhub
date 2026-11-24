@@ -19,7 +19,7 @@ const MODEL_DIR = process.env.VOICE_MODEL_DIR ?? join(here, 'model', 'vits-piper
 const OUT_DIR = join(here, '..', '..', 'apps', 'web', 'public', 'audio', 'vi');
 const FORCE = process.argv.includes('--force');
 /** A little slower than the voice's natural speed: the listeners are five years old. */
-const SPEED = 0.9;
+const SPEED = 0.6;
 const KBPS = 48;
 
 const tts = new sherpa.OfflineTts({

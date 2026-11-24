@@ -31,9 +31,10 @@ export function LessonHeader({
       <h2 className="ch-learn-title">{title}</h2>
       <ol className="ch-learn-steps" aria-label={t('games.chess.learn.steps')}>
         {stages.map((s, i) => (
-          <li key={s} aria-current={s === stage ? 'step' : undefined} data-done={i < index}>
+          <li key={s} aria-current={s === stage ? 'step' : undefined} data-done={i < index} data-i={i % 6}>
             {i < index ? (
               <button type="button" className="ch-step-btn" onClick={() => onStage(s)}>
+                <span aria-hidden="true">⭐ </span>
                 {label(s)}
               </button>
             ) : (
@@ -42,14 +43,11 @@ export function LessonHeader({
           </li>
         ))}
       </ol>
-      <button
-        type="button"
-        className="btn ch-back"
-        disabled={index <= 0}
-        onClick={() => onStage(stages[index - 1]!)}
-      >
-        <span aria-hidden="true">←</span> {t('games.chess.learn.back')}
-      </button>
+      {index > 0 && (
+        <button type="button" className="btn ch-back" onClick={() => onStage(stages[index - 1]!)}>
+          <span aria-hidden="true">←</span> {t('games.chess.learn.back')}
+        </button>
+      )}
     </header>
   );
 }
@@ -80,6 +78,11 @@ export function DoneCard({
         <div className="ch-celebrate" aria-hidden="true">
           <span className="ch-celebrate-star">🌟</span>
           {glyph}
+          {['✨', '🎉', '⭐', '🎈', '✨', '🎉'].map((c, i) => (
+            <span key={i} className="ch-confetti" data-i={i}>
+              {c}
+            </span>
+          ))}
         </div>
       }
     >

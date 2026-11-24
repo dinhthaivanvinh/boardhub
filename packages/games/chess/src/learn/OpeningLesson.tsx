@@ -165,9 +165,11 @@ export function OpeningLesson({
         )}
         {!finished && (
           <div className="ch-learn-actions">
-            <button type="button" className="btn ch-back" disabled={ply <= firstPly} onClick={goBack}>
-              <span aria-hidden="true">←</span> {common('backMove')}
-            </button>
+            {ply > firstPly && (
+              <button type="button" className="btn ch-back" onClick={goBack}>
+                <span aria-hidden="true">←</span> {common('backMove')}
+              </button>
+            )}
             {mine && (
               <button
                 type="button"

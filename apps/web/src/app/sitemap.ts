@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { LESSON_IDS } from '@bg/game-chess';
+import { LESSON_IDS, PRACTICE_LESSON_IDS } from '@bg/game-chess';
 import { GAME_IDS } from '@/games/catalog';
 import { absolute } from '@/seo/site';
 
@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page('/board-games', 0.9, 'weekly'),
     ...GAME_IDS.map((id) => page(`/games/${id}`, 0.8, 'monthly')),
     ...LESSON_IDS.map((id) => page(`/learn/chess/${id}`, 0.6, 'monthly')),
+    ...PRACTICE_LESSON_IDS.map((id) => page(`/learn/chess/${id}/practice`, 0.4, 'monthly')),
     page('/puzzles', 0.7, 'weekly'),
     page('/journey', 0.5, 'monthly'),
     page('/office', 0.8, 'monthly'),

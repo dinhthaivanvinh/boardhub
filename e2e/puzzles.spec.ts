@@ -93,7 +93,7 @@ test('the journey shows the next lesson, the stages and the badges earned', asyn
   await page.goto('/journey');
   await expect(page.getByRole('heading', { level: 1, name: /Hành trình/ })).toBeVisible();
   await expect(page.getByTestId('journey-continue')).toHaveAttribute('href', '/learn/chess/coordinates');
-  await expect(page.getByTestId('journey-badge-count')).toHaveText('Đã được 0/13 huy hiệu');
+  await expect(page.getByTestId('journey-badge-count')).toHaveText('Đã được 0/14 huy hiệu');
 
   const all = [
     'coordinates',
@@ -119,7 +119,7 @@ test('the journey shows the next lesson, the stages and the badges earned', asyn
   await page.evaluate((ids) => window.localStorage.setItem('learn.chess.v1', JSON.stringify(ids)), all);
   await page.reload();
   await expect(page.getByTestId('journey-continue')).toHaveCount(0);
-  await expect(page.getByTestId('journey-badge-count')).toHaveText('Đã được 8/13 huy hiệu');
+  await expect(page.getByTestId('journey-badge-count')).toHaveText('Đã được 8/14 huy hiệu');
   await expect(page.getByTestId('stat-stars')).toHaveText('57 ⭐');
 });
 

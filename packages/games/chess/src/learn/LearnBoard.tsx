@@ -22,6 +22,8 @@ export type LearnBoardProps = {
   /** Squares to light up (last move, hint). */
   marks?: ReadonlySet<number>;
   goal?: number | null;
+  /** Draw a star in the goal square ("find the piece that reaches the star"). */
+  goalStar?: boolean;
   /** Rank number 1–8 to colour across the board (orange), and file index 0–7 (blue): the two lines of a coordinate. */
   rankLine?: number | null;
   fileLine?: number | null;
@@ -45,6 +47,7 @@ export function LearnBoard({
   captures,
   marks,
   goal = null,
+  goalStar = false,
   rankLine = null,
   fileLine = null,
   danger = null,
@@ -132,6 +135,19 @@ export function LearnBoard({
                 )}
                 {s === danger && <circle className="ch-check-glow" cx={cx} cy={cy} r={CELL * 0.48} />}
                 {s === goal && <circle className="ch-goal" cx={cx} cy={cy} r={CELL * 0.4} />}
+                {s === goal && goalStar && (
+                  <text
+                    x={cx}
+                    y={cy}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={CELL * 0.5}
+                    aria-hidden="true"
+                    pointerEvents="none"
+                  >
+                    ⭐
+                  </text>
+                )}
                 {p && <PieceShape piece={p} cx={cx} cy={cy + 1} />}
                 {captures?.has(s) && <circle className="ch-capture" cx={cx} cy={cy} r={CELL * 0.44} />}
                 {dots?.has(s) && !p && <circle className="ch-target" cx={cx} cy={cy} r={CELL * 0.14} />}

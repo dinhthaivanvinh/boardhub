@@ -614,6 +614,10 @@
         "master": {
           "name": "Young chess master",
           "text": "Finish every lesson."
+        },
+        "practice5": {
+          "name": "Hard worker",
+          "text": "Finish 5 practices."
         }
       },
       "home": {
@@ -637,7 +641,50 @@
         "parent": "Parents, please sign up with your own email to help your child.",
         "button": "Save my journey",
         "register": "Create an account"
-      }
+      },
+      "practiceDone": "Practice done"
+    },
+    "practice": {
+      "cta": "Practice",
+      "ctaDone": "Practice again",
+      "toLesson": "Back to the lesson",
+      "morePuzzles": "Practice more with puzzles",
+      "title": "Practice: {lesson}",
+      "stage": {
+        "practice": "Practice",
+        "done": "Done"
+      },
+      "intro": {
+        "star": "There is a star on the board. Only one of your pieces can go to it.",
+        "capture": "Find the black piece your piece can take, then take it.",
+        "opening": "You are playing the opening you just learned. The two lit squares show the last move of your opponent.",
+        "castling": "Castling is a special move: the king goes two squares and the rook jumps over to the other side.",
+        "enPassant": "En passant: your white pawn takes the black pawn that just moved two squares, as if it had moved one.",
+        "promotion": "A pawn that reaches the far end of the board becomes a stronger piece. Here it becomes a queen.",
+        "done": "You did all the practice questions."
+      },
+      "prompt": {
+        "star": "Tap the piece that can go to the star.",
+        "capture": "Use your {piece} to take a black piece.",
+        "opening": "Play the next move of the opening.",
+        "castling": "Castle: move the king to {to}.",
+        "enPassant": "En passant: move the white pawn to {to}.",
+        "promotion": "Move the pawn to {to} to promote it."
+      },
+      "star": {
+        "right": "Right! This piece can reach the star.",
+        "wrong": "This piece cannot reach the star. Try another one.",
+        "hint": "Hint: the piece you need is on {from}."
+      },
+      "move": {
+        "right": "Right! Well done!",
+        "illegal": "That piece cannot go there.",
+        "notGoal": "That move is legal but it is not the one to find. Try again.",
+        "hint1": "Hint: tap the piece on {from}.",
+        "hint2": "Hint: tap the piece on {from}, then go to {to}."
+      },
+      "allDone": "Great! You finished the practice.",
+      "done": "You finished the practice! You earned {stars} ⭐."
     }
   }
 }

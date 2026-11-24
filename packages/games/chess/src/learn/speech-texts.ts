@@ -6,6 +6,7 @@ import { MATE_ROUNDS, matingMoves } from './checkmate';
 import { coordRounds, COORD_KINDS, fileOf, rankOf } from './coordinates';
 import { OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from './data';
 import { parseMove, positionsOf } from './logic';
+import { PRACTICE_LESSON_IDS, practiceRounds, STARS_PER_PRACTICE } from './practice';
 import { spellSquares } from './speech';
 import { LADDER_ROUNDS } from './tactics';
 import { voiceKey } from './voice-hash';
@@ -181,6 +182,34 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
   // ---- the "start the challenge" line of a piece or special lesson names the square to reach
   for (const l of PIECE_LESSONS) say('challengeStart', { square: l.challenge.goal });
   for (const l of SPECIAL_LESSONS) say('challengeStart', { square: l.challenge.to });
+
+  // ---- practice: the questions, the answers, and the hints that name the squares of each round
+  for (const k of [
+    'prompt.star',
+    'prompt.opening',
+    'star.right',
+    'star.wrong',
+    'move.right',
+    'move.illegal',
+    'move.notGoal',
+    'allDone',
+  ]) {
+    say(`practice.${k}`);
+  }
+  say('practice.done', { stars: STARS_PER_PRACTICE });
+  for (const id of PRACTICE_LESSON_IDS) {
+    for (const round of practiceRounds(id)!) {
+      if (round.kind === 'star') {
+        say('practice.star.hint', { from: round.answer });
+        continue;
+      }
+      say('practice.move.hint1', { from: round.from });
+      say('practice.move.hint2', { from: round.from, to: round.to });
+      const p = round.prompt;
+      if (p.key === 'capture') say('practice.prompt.capture', { piece: pieceName(p.piece) });
+      else if (p.key !== 'opening') say(`practice.prompt.${p.key}`, { to: p.to });
+    }
+  }
 
   return [...out];
 }

@@ -1,5 +1,7 @@
 import {
   LESSON_IDS,
+  PRACTICE_LESSON_IDS,
+  practiceId,
   PUZZLES,
   readProgress,
   readPuzzleProgress,
@@ -33,7 +35,8 @@ export function readLocalProgress(): LearnProgress {
 /** Writes the merged progress to this device. Ids this version does not know are left out. */
 function writeLocalProgress(p: LearnProgress): void {
   const store = storage();
-  const lessons = new Set<string>(LESSON_IDS);
+  // Lessons, and the practices finished (stored next to them).
+  const lessons = new Set<string>([...LESSON_IDS, ...PRACTICE_LESSON_IDS.map(practiceId)]);
   const puzzles = new Set(PUZZLES.map((x) => x.id));
   writeProgress(
     store,

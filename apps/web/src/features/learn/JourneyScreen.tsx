@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { BADGES, earnedBadges, JOURNEY, nextLessonId, PUZZLES } from '@bg/game-chess';
+import { BADGES, earnedBadges, JOURNEY, nextLessonId, practiceId, PUZZLES } from '@bg/game-chess';
 import { lessonName } from './lesson-name';
 import { LearnStats, useLearnStats } from './LearnStats';
 import { SaveProgress } from './SaveProgress';
@@ -66,6 +66,12 @@ export function JourneyScreen() {
                         </span>
                         <span className="journey-node-name">{lessonName(id, t)}</span>
                         {state === 'done' && <span className="sr-only">{t(`${L}.done`)}</span>}
+                        {done.has(practiceId(id)) && (
+                          <span className="journey-node-practice" title={t(`${L}.practiceDone`)}>
+                            <span aria-hidden="true">💪</span>
+                            <span className="sr-only">{t(`${L}.practiceDone`)}</span>
+                          </span>
+                        )}
                       </Link>
                     </li>
                   );

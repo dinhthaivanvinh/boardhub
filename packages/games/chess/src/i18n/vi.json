@@ -614,6 +614,10 @@
         "master": {
           "name": "Bậc thầy cờ vua nhí",
           "text": "Học xong tất cả bài học."
+        },
+        "practice5": {
+          "name": "Chăm luyện tập",
+          "text": "Làm xong 5 bài luyện tập."
         }
       },
       "home": {
@@ -637,7 +641,50 @@
         "parent": "Bố mẹ hãy dùng email của mình để đăng ký giúp bé nhé.",
         "button": "Lưu hành trình",
         "register": "Đăng ký tài khoản"
-      }
+      },
+      "practiceDone": "Đã luyện tập"
+    },
+    "practice": {
+      "cta": "Luyện tập",
+      "ctaDone": "Luyện tập lại",
+      "toLesson": "Về bài học",
+      "morePuzzles": "Luyện thêm bằng câu đố",
+      "title": "Luyện tập: {lesson}",
+      "stage": {
+        "practice": "Luyện tập",
+        "done": "Xong"
+      },
+      "intro": {
+        "star": "Trên bàn cờ có một ngôi sao. Chỉ có một quân của bạn đi tới được ngôi sao đó.",
+        "capture": "Hãy tìm quân đen mà quân của bạn ăn được, rồi đi quân đó đến ăn nó.",
+        "opening": "Bạn đang chơi theo khai cuộc vừa học. Hai ô được tô sáng là nước đi vừa rồi của đối thủ.",
+        "castling": "Nhập thành là nước đi đặc biệt: vua đi hai ô và xe nhảy sang bên kia vua.",
+        "enPassant": "Bắt tốt qua đường: tốt trắng ăn tốt đen vừa đi hai ô, như thể nó chỉ đi một ô.",
+        "promotion": "Tốt đi đến cuối bàn cờ thì được đổi thành một quân mạnh hơn. Ở đây, tốt sẽ thành Hậu.",
+        "done": "Bạn đã làm hết các câu luyện tập."
+      },
+      "prompt": {
+        "star": "Bấm vào quân đi tới được ngôi sao.",
+        "capture": "Dùng quân {piece} ăn một quân đen.",
+        "opening": "Đi nước tiếp theo của khai cuộc.",
+        "castling": "Nhập thành: đi vua tới ô {to}.",
+        "enPassant": "Bắt tốt qua đường: đi tốt trắng tới ô {to}.",
+        "promotion": "Đưa tốt tới ô {to} để phong cấp."
+      },
+      "star": {
+        "right": "Đúng rồi! Quân này đi tới được ngôi sao.",
+        "wrong": "Quân này không đi tới được ngôi sao. Thử quân khác nhé.",
+        "hint": "Gợi ý: quân cần tìm đang ở ô {from}."
+      },
+      "move": {
+        "right": "Đúng rồi! Giỏi quá!",
+        "illegal": "Quân đó không đi được tới ô đó.",
+        "notGoal": "Nước đi này đúng luật nhưng chưa phải nước cần tìm. Thử lại nhé.",
+        "hint1": "Gợi ý: hãy bấm vào quân ở ô {from}.",
+        "hint2": "Gợi ý: bấm vào quân ở ô {from}, rồi đi tới ô {to}."
+      },
+      "allDone": "Giỏi quá! Bạn đã làm xong các câu luyện tập.",
+      "done": "Bạn đã luyện tập xong! Được thêm {stars} ⭐."
     }
   }
 }

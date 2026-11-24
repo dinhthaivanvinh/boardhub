@@ -92,7 +92,7 @@ export default async function GamePage({ params }: Props) {
       <aside className="lg:sticky lg:top-20 lg:self-start">
         <SetupForm gameId={gameId} />
         {gameId === 'chess' && (
-          <Link href="/learn/chess" className="btn mt-4 w-full text-center">
+          <Link href="/learn/chess/coordinates" className="btn mt-4 w-full text-center">
             {t('games.chess.learn.cta')}
           </Link>
         )}

@@ -28,6 +28,10 @@ const config: NextConfig = {
   allowedDevOrigins: ['192.168.*.*', '10.*.*.*'],
   // The pre-recorded lesson voice (public/audio): a sentence's file is named after its text, so it can be kept for
   // a day; the list of files is checked more often.
+  // There is no list of lessons any more: the home page has the path.
+  async redirects() {
+    return [{ source: '/learn/chess', destination: '/', permanent: false }];
+  },
   async headers() {
     return [
       {

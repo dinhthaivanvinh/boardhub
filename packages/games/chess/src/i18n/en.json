@@ -49,8 +49,6 @@
     "piecesHeading": "Meet the pieces",
     "openingsHeading": "Learn openings",
     "completed": "Done",
-    "start": "Start",
-    "backToList": "Back to lessons",
     "playChess": "Play chess",
     "notFound": "This lesson does not exist.",
     "steps": "Lesson steps",
@@ -302,7 +300,6 @@
       "done": "You can read the names of the squares on the board!",
       "fun": "Now you can read moves like \"Knight to f3\". Try finding f3 on the board."
     },
-    "coordinatesHeading": "Meet the board",
     "checkmate": {
       "name": "Catch the king: check and checkmate",
       "stage": {
@@ -364,7 +361,6 @@
       "done": "You know how to save the king and catch the king!",
       "fun": "When you give checkmate, say it out loud: \"Checkmate!\". You won the game."
     },
-    "checkmateHeading": "Catch the king",
     "capture": {
       "name": "Capturing and protecting",
       "stage": {
@@ -415,7 +411,6 @@
       "done": "You can capture pieces and you know which pieces need protecting!",
       "fun": "From now on, before you capture, ask: does anything protect that piece?"
     },
-    "captureHeading": "Capturing and protecting",
     "speakResults": "Read results",
     "tactics": {
       "name": "Little tricks and endgames",
@@ -476,12 +471,12 @@
       "done": "You know forks, pinned pieces, two-rook mates and draws!",
       "fun": "Remember: before you move, look for a fork. And do not trap the enemy king without giving check."
     },
-    "tacticsHeading": "Little tricks and endgames",
     "back": "Back",
     "backMove": "Previous move",
     "great": "Great job!",
     "nextLesson": "Next lesson: {name}",
     "voiceCredit": "Vietnamese voice: Piper, trained on the",
-    "voiceCreditLink": "VAIS-1000 corpus (CC BY 4.0)"
+    "voiceCreditLink": "VAIS-1000 corpus (CC BY 4.0)",
+    "backToHome": "Back to home"
   }
 }

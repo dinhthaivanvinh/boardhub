@@ -15,7 +15,7 @@ Anh; chất lượng và tốc độ cũng khác nhau giữa trình duyệt. C�
 - Danh sách câu (`speechTexts`) sinh từ i18n và dữ liệu bài, không viết tay. Công cụ `tools/voice` đọc danh sách đó và tạo
   file bằng Piper `vi_VN-vais1000-medium` qua `sherpa-onnx` (offline, không gửi chữ ra ngoài). Tools nằm ngoài workspace
   pnpm nên CI không phải cài thư viện native.
-- Giấy phép dữ liệu giọng VAIS-1000 là **CC BY 4.0**: ghi nguồn ở `/learn/chess` và `index.json`.
+- Giấy phép dữ liệu giọng VAIS-1000 là **CC BY 4.0**: ghi nguồn ở cuối mỗi bài học và trong `index.json`.
 - Câu không có file (hoặc ngôn ngữ chưa thu, hiện là tiếng Anh) vẫn dùng giọng của trình duyệt; không bao giờ đọc chữ Việt
   bằng giọng ngôn ngữ khác.
 - Hai test giữ cho file và bài không lệch nhau: `voice-pack.test.ts` (file đúng bằng danh sách câu) và `setup-speech.ts`

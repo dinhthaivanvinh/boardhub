@@ -52,7 +52,11 @@ export default async function HomePage() {
             {/* Not shown, but every page needs its h1 for screen readers and search engines. */}
             <h1 className="sr-only">{t('title')}</h1>
             <div className="flex flex-wrap gap-3">
-              <Link href="/learn/chess" className="btn btn-primary btn-lg" data-testid="cta-learn">
+              <Link
+                href="/learn/chess/coordinates"
+                className="btn btn-primary btn-lg"
+                data-testid="cta-learn"
+              >
                 {t('ctaLearn')}
               </Link>
               <Link href="/games/chess" className="btn btn-lg" data-testid="cta-play">

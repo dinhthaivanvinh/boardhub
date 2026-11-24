@@ -1,6 +1,6 @@
 # Cờ vua: chế độ Học (spec)
 
-Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài ăn quân, bài chiếu hết, bài mẹo nhỏ, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
+Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài ăn quân, bài chiếu hết, bài mẹo nhỏ, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, các bài ở `/learn/chess/<id>`; không có trang danh sách, trang chủ có lộ trình. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
 
 ## 1. Nguyên tắc
 

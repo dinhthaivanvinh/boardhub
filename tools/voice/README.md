@@ -5,7 +5,7 @@ và thiết bị; câu nào không có file thì dùng giọng của trình duy�
 
 - Giọng: Piper `vi_VN-vais1000-medium` chạy bằng `sherpa-onnx`, tạo offline, không gửi chữ ra ngoài.
 - Giấy phép: bộ dữ liệu **VAIS-1000** theo **CC BY 4.0** (được dùng thương mại, phải ghi nguồn). Nguồn đã ghi ở trang
-  `/learn/chess` và trong `index.json`. Mô hình: https://huggingface.co/rhasspy/piper-voices (vi/vi_VN/vais1000).
+  cuối mỗi bài học và trong `index.json`. Mô hình: https://huggingface.co/rhasspy/piper-voices (vi/vi_VN/vais1000).
 - Tên file là `voiceKey(câu)` (`voice-hash.ts`): đổi hàm băm sẽ làm mất mọi file.
 
 ## Khi nào phải tạo lại

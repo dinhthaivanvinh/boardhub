@@ -10,7 +10,7 @@ animation; (2) bài học khai cuộc tương tác, giải thích từng nước
 
 ## Quyết định
 
-- Đặt tại `/learn/chess` (trang con của game, có nút "Học cờ" ở trang game). Không thêm khu thứ tư vào điều hướng.
+- Đặt tại `/learn/chess/<bài>` (trang con của game, có nút "Học cờ" ở trang game). Không có trang danh sách: trang chủ có lộ trình (ADR-0010) và `/learn/chess` chuyển về trang chủ. Không thêm khu thứ tư vào điều hướng.
 - Bài học là **dữ liệu JSON thuần** (`packages/games/chess/src/learn/`), không chứa logic luật. Mọi nước đi và ô đi được
   lấy từ `legalPositionMoves`, không viết lại luật (quy tắc 1, 5).
 - Văn bản bài học qua i18n `vi` và `en` (quy tắc 6). Khóa i18n nằm trong `chess/src/i18n`.

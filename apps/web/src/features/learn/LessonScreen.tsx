@@ -105,8 +105,8 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
       data-game="chess"
       style={piece || opening || special ? ({ '--ch-nav': '15rem' } as React.CSSProperties) : undefined}
     >
-      <Link href="/learn/chess" className="text-sm underline-offset-4 hover:underline">
-        ← {t('games.chess.learn.backToList')}
+      <Link href="/" className="text-sm underline-offset-4 hover:underline">
+        ← {t('games.chess.learn.backToHome')}
       </Link>
       {piece && (
         <div className="grid gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
@@ -180,6 +180,18 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
       {lessonId === CHECKMATE_LESSON_ID && (
         <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
       )}
+      <p className="mt-2 text-xs text-[var(--muted)]">
+        {t('games.chess.learn.voiceCredit')}{' '}
+        <a
+          className="underline underline-offset-2"
+          href="https://ieee-dataport.org/documents/vais-1000-vietnamese-speech-synthesis-corpus"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t('games.chess.learn.voiceCreditLink')}
+        </a>
+        .
+      </p>
       {!piece &&
         !opening &&
         !special &&

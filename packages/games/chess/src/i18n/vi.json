@@ -49,8 +49,6 @@
     "piecesHeading": "Làm quen các quân cờ",
     "openingsHeading": "Học khai cuộc",
     "completed": "Đã xong",
-    "start": "Bắt đầu",
-    "backToList": "Về danh sách bài học",
     "playChess": "Chơi cờ vua",
     "notFound": "Không có bài học này.",
     "steps": "Các bước của bài",
@@ -302,7 +300,6 @@
       "done": "Con đã biết đọc tên các ô trên bàn cờ!",
       "fun": "Từ giờ con có thể đọc nước đi, ví dụ \"Mã đi tới f3\". Hãy thử tìm ô f3 trên bàn cờ nhé."
     },
-    "coordinatesHeading": "Làm quen bàn cờ",
     "checkmate": {
       "name": "Bắt vua: chiếu và chiếu hết",
       "stage": {
@@ -364,7 +361,6 @@
       "done": "Con đã biết cứu vua và bắt vua!",
       "fun": "Khi chiếu hết, hãy nói thật to: \"Chiếu hết!\". Con thắng ván cờ rồi."
     },
-    "checkmateHeading": "Bắt vua",
     "capture": {
       "name": "Ăn quân và bảo vệ",
       "stage": {
@@ -415,7 +411,6 @@
       "done": "Con đã biết ăn quân và biết quân nào cần bảo vệ!",
       "fun": "Từ nay, trước khi ăn quân, hãy hỏi: quân đó có ai bảo vệ không?"
     },
-    "captureHeading": "Ăn quân và bảo vệ",
     "speakResults": "Đọc kết quả",
     "tactics": {
       "name": "Mẹo nhỏ và tàn cuộc",
@@ -476,12 +471,12 @@
       "done": "Con đã biết chĩa hai mũi, quân bị ghim, hai xe và ván hoà!",
       "fun": "Nhớ nhé: trước khi đi, hãy tìm xem có chĩa hai mũi được không. Và đừng nhốt vua đối phương kín mà quên chiếu."
     },
-    "tacticsHeading": "Mẹo nhỏ và tàn cuộc",
     "back": "Quay lại",
     "backMove": "Nước trước",
     "great": "Giỏi quá!",
     "nextLesson": "Bài tiếp theo: {name}",
     "voiceCredit": "Giọng đọc tiếng Việt: Piper, huấn luyện từ bộ dữ liệu",
-    "voiceCreditLink": "VAIS-1000 (CC BY 4.0)"
+    "voiceCreditLink": "VAIS-1000 (CC BY 4.0)",
+    "backToHome": "Về trang chủ"
   }
 }

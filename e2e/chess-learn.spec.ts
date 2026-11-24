@@ -161,3 +161,16 @@ test('voice files are served for the sentences of a lesson', async ({ page, requ
   const first = await page.evaluate(() => document.querySelector('.ch-learn-text')?.textContent ?? '');
   expect(first.length).toBeGreaterThan(5);
 });
+
+test('the side menu lists every lesson and switches between them', async ({ page }) => {
+  await page.goto('/learn/chess/coordinates');
+  const menu = page.getByRole('navigation', { name: 'Tất cả bài học' });
+  await expect(menu.getByRole('link')).toHaveCount(LESSONS.length);
+  await expect(menu.getByRole('link', { name: 'Làm quen bàn cờ: toạ độ' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await menu.getByRole('link', { name: 'Hệ thống London' }).click();
+  await expect(page).toHaveURL(/\/learn\/chess\/london$/);
+  await expect(menu.getByRole('link', { name: 'Hệ thống London' })).toHaveAttribute('aria-current', 'page');
+});

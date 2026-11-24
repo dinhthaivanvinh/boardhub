@@ -24,38 +24,6 @@ import {
 import { useDoneLessons, useMarkDone } from './use-progress';
 import { useReducedMotion } from './use-reduced-motion';
 
-type NavItem = { id: string; label: string };
-
-/** The other lessons of the same kind, to jump between them without going back to the list. */
-function LessonNav({ heading, items, currentId }: { heading: string; items: NavItem[]; currentId: string }) {
-  const t = useTranslations();
-  const done = useDoneLessons();
-  return (
-    <nav aria-label={heading} className="md:sticky md:top-20 md:self-start">
-      <h2 className="mb-2 hidden text-sm font-semibold text-[var(--muted)] md:block">{heading}</h2>
-      <ul className="flex gap-2 overflow-x-auto pb-1 md:flex-col md:overflow-visible">
-        {items.map((item) => {
-          const current = item.id === currentId;
-          return (
-            <li key={item.id} className="shrink-0">
-              <Link
-                href={`/learn/chess/${item.id}`}
-                aria-current={current ? 'page' : undefined}
-                className={`card flex items-center justify-between gap-2 px-3 py-2 text-sm whitespace-nowrap md:whitespace-normal ${
-                  current ? 'font-bold ring-2 ring-sky-500' : ''
-                }`}
-              >
-                <span>{item.label}</span>
-                {done.has(item.id) && <span aria-label={t('games.chess.learn.completed')}>✓</span>}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
-  );
-}
-
 /** The order the lessons are meant to be taken in (the home page path). */
 const ORDER: string[] = [
   COORDINATES_LESSON_ID,
@@ -73,6 +41,58 @@ function lessonName(id: string, t: ReturnType<typeof useTranslations>): string {
   if (openingLesson(id)) return t(`games.chess.learn.openings.${id}.name`);
   if (specialLesson(id)) return t(`games.chess.learn.specials.${id}.name`);
   return t(`games.chess.learn.${id}.name`);
+}
+
+type NavGroup = { heading: string; ids: string[] };
+
+/** Every lesson, grouped in the order they are meant to be taken: one menu to jump to any of them. */
+function LessonNav({ currentId }: { currentId: string }) {
+  const t = useTranslations();
+  const done = useDoneLessons();
+  const L = 'games.chess.learn';
+  const groups: NavGroup[] = [
+    { heading: t(`${L}.groupStart`), ids: [COORDINATES_LESSON_ID] },
+    { heading: t(`${L}.piecesHeading`), ids: PIECE_LESSONS.map((l) => l.id) },
+    { heading: t(`${L}.groupRules`), ids: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID] },
+    { heading: t(`${L}.openingsHeading`), ids: OPENING_LESSONS.map((l) => l.id) },
+    { heading: t(`${L}.specialsHeading`), ids: SPECIAL_LESSONS.map((l) => l.id) },
+    { heading: t(`${L}.groupTactics`), ids: [TACTICS_LESSON_ID] },
+  ];
+  return (
+    <nav
+      aria-label={t(`${L}.allLessons`)}
+      className="md:sticky md:top-20 md:max-h-[calc(100dvh-6rem)] md:self-start md:overflow-y-auto"
+    >
+      <div className="flex gap-4 overflow-x-auto pb-1 md:flex-col md:gap-3 md:overflow-visible">
+        {groups.map((group) => (
+          <section key={group.heading} aria-label={group.heading} className="flex shrink-0 gap-2 md:block">
+            <h2 className="mb-1 hidden text-xs font-semibold tracking-wide text-[var(--muted)] uppercase md:block">
+              {group.heading}
+            </h2>
+            <ul className="flex gap-2 md:flex-col md:gap-1.5">
+              {group.ids.map((id) => {
+                const current = id === currentId;
+                return (
+                  <li key={id} className="shrink-0">
+                    <Link
+                      href={`/learn/chess/${id}`}
+                      aria-current={current ? 'page' : undefined}
+                      className={`card flex items-center justify-between gap-2 px-3 py-1.5 text-sm whitespace-nowrap md:whitespace-normal ${
+                        current ? 'font-bold ring-2 ring-sky-500' : ''
+                      }`}
+                    >
+                      <span>{lessonName(id, t)}</span>
+                      {done.has(id) && <span aria-label={t(`${L}.completed`)}>✓</span>}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </nav>
+  );
 }
 
 /** The big button at the end of a lesson: on to the next one, or on to playing after the last. */
@@ -101,85 +121,63 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const footer = <NextLessonLink lessonId={lessonId} />;
   return (
     <div
-      className="mx-auto grid max-w-6xl gap-3 px-4 py-4"
+      className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-4"
       data-game="chess"
-      style={piece || opening || special ? ({ '--ch-nav': '15rem' } as React.CSSProperties) : undefined}
+      style={{ '--ch-nav': '15rem' } as React.CSSProperties}
     >
       <Link href="/" className="text-sm underline-offset-4 hover:underline">
         ← {t('games.chess.learn.backToHome')}
       </Link>
-      {piece && (
-        <div className="grid gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
-          <LessonNav
-            heading={t('games.chess.learn.piecesHeading')}
-            items={PIECE_LESSONS.map((l) => ({ id: l.id, label: t(`games.chess.pieceNames.${l.piece}`) }))}
-            currentId={piece.id}
-          />
-          <PieceLesson
-            key={piece.id}
-            lesson={piece}
-            t={t}
-            animate={!reduced}
-            onComplete={markDone}
-            lang={locale}
-            footer={footer}
-          />
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
+        <LessonNav currentId={lessonId} />
+        <div className="min-w-0">
+          {piece && (
+            <PieceLesson
+              key={piece.id}
+              lesson={piece}
+              t={t}
+              animate={!reduced}
+              onComplete={markDone}
+              lang={locale}
+              footer={footer}
+            />
+          )}
+          {opening && (
+            <OpeningLesson
+              key={opening.id}
+              lesson={opening}
+              t={t}
+              animate={!reduced}
+              onComplete={markDone}
+              lang={locale}
+              footer={footer}
+            />
+          )}
+          {special && (
+            <SpecialLesson
+              key={special.id}
+              lesson={special}
+              t={t}
+              animate={!reduced}
+              onComplete={markDone}
+              lang={locale}
+              footer={footer}
+            />
+          )}
+          {lessonId === COORDINATES_LESSON_ID && (
+            <CoordinatesLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
+          {lessonId === TACTICS_LESSON_ID && (
+            <TacticsLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
+          {lessonId === CAPTURE_LESSON_ID && (
+            <CaptureLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
+          {lessonId === CHECKMATE_LESSON_ID && (
+            <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
         </div>
-      )}
-      {opening && (
-        <div className="grid gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
-          <LessonNav
-            heading={t('games.chess.learn.openingsHeading')}
-            items={OPENING_LESSONS.map((l) => ({
-              id: l.id,
-              label: t(`games.chess.learn.openings.${l.id}.name`),
-            }))}
-            currentId={opening.id}
-          />
-          <OpeningLesson
-            key={opening.id}
-            lesson={opening}
-            t={t}
-            animate={!reduced}
-            onComplete={markDone}
-            lang={locale}
-            footer={footer}
-          />
-        </div>
-      )}
-      {special && (
-        <div className="grid gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
-          <LessonNav
-            heading={t('games.chess.learn.specialsHeading')}
-            items={SPECIAL_LESSONS.map((l) => ({
-              id: l.id,
-              label: t(`games.chess.learn.specials.${l.id}.name`),
-            }))}
-            currentId={special.id}
-          />
-          <SpecialLesson
-            key={special.id}
-            lesson={special}
-            t={t}
-            animate={!reduced}
-            onComplete={markDone}
-            lang={locale}
-            footer={footer}
-          />
-        </div>
-      )}
-      {lessonId === COORDINATES_LESSON_ID && (
-        <CoordinatesLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
-      )}
-      {lessonId === TACTICS_LESSON_ID && (
-        <TacticsLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
-      )}
-      {lessonId === CAPTURE_LESSON_ID && (
-        <CaptureLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
-      )}
-      {lessonId === CHECKMATE_LESSON_ID && (
-        <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
-      )}
+      </div>
       <p className="mt-2 text-xs text-[var(--muted)]">
         {t('games.chess.learn.voiceCredit')}{' '}
         <a

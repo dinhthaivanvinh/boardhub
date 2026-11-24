@@ -60,7 +60,7 @@ export function ReadAloud({ text, voice, t }: { text: string; voice: VoiceState;
     );
   }
   return (
-    <div className="ch-learn-actions">
+    <div className="ch-learn-actions ch-voice-row">
       <button type="button" className="btn" onClick={() => speak(text, voice.lang)}>
         🔊 {t('games.chess.learn.readAloud')}
       </button>

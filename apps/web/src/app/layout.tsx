@@ -4,7 +4,7 @@ import { Nunito } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
-import { toLocale } from '@/i18n/messages';
+import { LANGUAGE_CHOICE, toLocale } from '@/i18n/messages';
 import { OG_LOCALE, SITE_NAME, SITE_URL } from '@/seo/site';
 import { AccountLink } from '@/features/account/AccountLink';
 import { AuthPrompt } from '@/features/account/AuthPrompt';
@@ -61,7 +61,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 <NavMenus />
                 <AdminLink />
                 <AccountLink />
-                <LanguageSwitcher />
+                {LANGUAGE_CHOICE && <LanguageSwitcher />}
                 <MobileNav />
               </div>
             </div>

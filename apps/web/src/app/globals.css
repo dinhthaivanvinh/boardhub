@@ -63,6 +63,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family:
+    var(--font-rounded),
     system-ui,
     -apple-system,
     'Segoe UI',
@@ -1360,4 +1361,423 @@ body {
     max-height: 100%;
     overflow-y: auto;
   }
+}
+
+/* ---- Trang chủ vui nhộn cho trẻ em: màu tươi, quân cờ nhảy, icon ---- */
+:root {
+  --k0: #ef4444;
+  --k1: #f59e0b;
+  --k2: #22c55e;
+  --k3: #3b82f6;
+  --k4: #8b5cf6;
+  --k5: #ec4899;
+}
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(60rem 22rem at 90% -20%, color-mix(in srgb, var(--k3) 28%, transparent), transparent),
+    radial-gradient(40rem 20rem at -10% 120%, color-mix(in srgb, var(--k1) 30%, transparent), transparent),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--k4) 14%, var(--bg)),
+      color-mix(in srgb, var(--k5) 10%, var(--bg))
+    );
+}
+.home-blob {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.35;
+  filter: blur(2px);
+  animation: home-float 7s ease-in-out infinite;
+}
+.home-blob-a {
+  width: 9rem;
+  height: 9rem;
+  left: 42%;
+  top: -3rem;
+  background: var(--k1);
+}
+.home-blob-b {
+  width: 6rem;
+  height: 6rem;
+  right: 4%;
+  bottom: -2rem;
+  background: var(--k2);
+  animation-delay: -3s;
+}
+.home-title {
+  font-size: clamp(1.75rem, 4.4vw, 2.9rem);
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+.home-tagline {
+  margin-top: 0.75rem;
+  max-width: 34rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.home-cta {
+  border-radius: 9999px;
+  font-weight: 800;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--fg) 18%, transparent);
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.home-cta:hover {
+  transform: translateY(-2px) rotate(-1deg);
+}
+.home-cta:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--fg) 18%, transparent);
+}
+/* Hàng quân cờ: mỗi quân một màu, nhún nhảy lần lượt. */
+.home-parade {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  background: color-mix(in srgb, var(--card) 70%, transparent);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--k4) 25%, transparent);
+  transform: rotate(2deg);
+}
+.home-hero .home-piece {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--c) 30%, var(--card));
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--c) 55%, transparent);
+  animation: home-bounce 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.25s);
+}
+.home-piece[data-i='0'] {
+  --c: var(--k0);
+  --i: 0;
+}
+.home-piece[data-i='1'] {
+  --c: var(--k1);
+  --i: 1;
+}
+.home-piece[data-i='2'] {
+  --c: var(--k2);
+  --i: 2;
+}
+.home-piece[data-i='3'] {
+  --c: var(--k3);
+  --i: 3;
+}
+.home-piece[data-i='4'] {
+  --c: var(--k4);
+  --i: 4;
+}
+.home-piece[data-i='5'] {
+  --c: var(--k5);
+  --i: 5;
+}
+
+/* Mỗi thẻ một màu riêng theo data-i. */
+.home-fact[data-i='0'],
+.home-piece-card[data-i='0'],
+.home-step[data-i='0'],
+.home-step[data-i='6'] {
+  --c: var(--k0);
+}
+.home-fact[data-i='1'],
+.home-piece-card[data-i='1'],
+.home-step[data-i='1'],
+.home-step[data-i='7'] {
+  --c: var(--k1);
+}
+.home-fact[data-i='2'],
+.home-piece-card[data-i='2'],
+.home-step[data-i='2'] {
+  --c: var(--k2);
+}
+.home-piece-card[data-i='3'],
+.home-step[data-i='3'] {
+  --c: var(--k3);
+}
+.home-piece-card[data-i='4'],
+.home-step[data-i='4'] {
+  --c: var(--k4);
+}
+.home-piece-card[data-i='5'],
+.home-step[data-i='5'] {
+  --c: var(--k5);
+}
+
+.home-fact,
+.home-piece-card,
+.home-step {
+  border: 2px solid color-mix(in srgb, var(--c) 35%, var(--border));
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--c) 9%, var(--card));
+}
+.home-fact-icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--c) 28%, var(--card));
+}
+.home-piece-bubble {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--c) 25%, var(--card));
+  transition: transform 0.2s;
+}
+.home-piece-card:hover .home-piece-bubble {
+  animation: home-wiggle 0.5s ease-in-out;
+}
+.home-piece-card:hover,
+.home-piece-card:focus-visible,
+.home-step:hover,
+.home-step:focus-visible {
+  border-color: var(--c);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--c) 30%, transparent);
+}
+.home-step-number {
+  background: var(--c);
+}
+.home-step-icon {
+  margin-left: auto;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.home-step .game-card-cta {
+  color: color-mix(in srgb, var(--c) 70%, var(--fg));
+}
+.home-final {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  border-radius: 1.75rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--k1) 28%, var(--card)),
+    color-mix(in srgb, var(--k5) 22%, var(--card))
+  );
+}
+.home-final-emoji {
+  font-size: 2.5rem;
+  animation: home-bounce 2s ease-in-out infinite;
+}
+.home-final p {
+  max-width: 32rem;
+  color: var(--muted);
+}
+.home-final-btn {
+  border-radius: 9999px;
+  font-weight: 800;
+  background: var(--k3);
+  border-color: var(--k3);
+  color: #fff;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--k3) 55%, #000);
+}
+@keyframes home-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.6rem);
+  }
+}
+@keyframes home-wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-10deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(10deg) scale(1.1);
+  }
+}
+@keyframes home-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0.75rem, 1rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-blob,
+  .home-hero .home-piece,
+  .home-final-emoji,
+  .home-piece-card:hover .home-piece-bubble {
+    animation: none;
+  }
+  .home-cta,
+  .home-cta:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ---- Giao diện vui nhộn dùng chung cho cả site (trang chủ, bài học, ván cờ) ---- */
+body {
+  background:
+    radial-gradient(60rem 24rem at 100% -10%, color-mix(in srgb, var(--k3) 16%, transparent), transparent),
+    radial-gradient(50rem 22rem at -10% 8%, color-mix(in srgb, var(--k1) 16%, transparent), transparent),
+    var(--bg);
+  background-attachment: fixed;
+}
+.btn {
+  border-radius: 9999px;
+  border-width: 2px;
+  font-weight: 800;
+  border-color: color-mix(in srgb, var(--k4) 25%, var(--border));
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--fg) 14%, transparent);
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    background-color 0.15s;
+}
+.btn:not(:disabled):hover {
+  border-color: var(--k4);
+  transform: translateY(-1px);
+}
+.btn:not(:disabled):active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--fg) 14%, transparent);
+}
+.btn-primary {
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--accent) 55%, #000);
+}
+.btn-primary:not(:disabled):hover {
+  border-color: var(--accent);
+}
+.card {
+  border-width: 2px;
+  border-radius: 1.25rem;
+  border-color: color-mix(in srgb, var(--k4) 16%, var(--border));
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--k4) 10%, transparent);
+}
+.site-header {
+  border-bottom: 4px solid transparent;
+  border-image: linear-gradient(90deg, var(--k0), var(--k1), var(--k2), var(--k3), var(--k4), var(--k5)) 1;
+}
+.nav-link {
+  border-radius: 9999px;
+  font-weight: 700;
+}
+.nav-link:hover,
+.nav-link[data-current='true'] {
+  background: color-mix(in srgb, var(--k3) 14%, transparent);
+  color: var(--fg);
+}
+.chip {
+  font-weight: 700;
+}
+
+/* Menu bài học: mỗi nhóm một màu, bài đang học tô đậm. */
+nav section[data-g='0'] {
+  --c: var(--k0);
+}
+nav section[data-g='1'] {
+  --c: var(--k1);
+}
+nav section[data-g='2'] {
+  --c: var(--k2);
+}
+nav section[data-g='3'] {
+  --c: var(--k3);
+}
+nav section[data-g='4'] {
+  --c: var(--k4);
+}
+nav section[data-g='5'] {
+  --c: var(--k5);
+}
+.lesson-link {
+  min-height: 2.5rem;
+  padding: 0.35rem 0.9rem;
+  border: 2px solid color-mix(in srgb, var(--c, var(--k3)) 35%, var(--border));
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--c, var(--k3)) 9%, var(--card));
+  font-weight: 700;
+  transition:
+    transform 0.15s,
+    background-color 0.15s;
+}
+.lesson-link:hover {
+  background: color-mix(in srgb, var(--c, var(--k3)) 20%, var(--card));
+  transform: translateX(2px);
+}
+.lesson-link[aria-current='page'] {
+  border-color: var(--c, var(--k3));
+  background: var(--c, var(--k3));
+  color: #fff;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--c, var(--k3)) 55%, #000);
+}
+
+/* Ô chọn khi tạo ván mới. */
+.setup-option {
+  padding: 0.55rem 0.9rem;
+  border: 2px solid color-mix(in srgb, var(--k4) 20%, var(--border));
+  border-radius: 1rem;
+  background: var(--card);
+  font-weight: 600;
+  transition: background-color 0.15s;
+}
+.setup-option:hover {
+  background: color-mix(in srgb, var(--k3) 8%, var(--card));
+}
+.setup-option.is-checked {
+  border-color: var(--k3);
+  background: color-mix(in srgb, var(--k3) 14%, var(--card));
+}
+
+/* Nút vào từng bài trên trang chủ. */
+.home-step-btn {
+  align-self: flex-start;
+  background: var(--c);
+  border-color: var(--c);
+  color: #fff;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--c) 55%, #000);
+}
+.home-step-btn:not(:disabled):hover {
+  border-color: var(--c);
+  filter: brightness(1.08);
+}
+.home-step {
+  transform: none;
+  box-shadow: none;
+}
+.home-step:hover {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .lesson-link {
+    transition: none;
+  }
+  .lesson-link:hover,
+  .btn:not(:disabled):hover {
+    transform: none;
+  }
+}
+.home-board-icon {
+  display: block;
+  border-radius: 0.3rem;
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--fg) 20%, transparent);
 }

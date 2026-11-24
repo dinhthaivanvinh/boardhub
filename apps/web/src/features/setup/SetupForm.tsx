@@ -35,9 +35,7 @@ function Choice({
 }) {
   return (
     <label
-      className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
-        checked ? 'border-[var(--accent)] ring-1 ring-[var(--accent)]' : 'border-[var(--border)]'
-      }`}
+      className={`setup-option flex cursor-pointer items-center gap-2 text-sm ${checked ? 'is-checked' : ''}`}
     >
       <input
         type="radio"

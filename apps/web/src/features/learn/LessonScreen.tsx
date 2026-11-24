@@ -68,8 +68,13 @@ function LessonNav({ currentId }: { currentId: string }) {
         ← {t(`${L}.backToHome`)}
       </Link>
       <div className="flex gap-4 overflow-x-auto pb-1 md:flex-col md:gap-3 md:overflow-visible">
-        {groups.map((group) => (
-          <section key={group.heading} aria-label={group.heading} className="flex shrink-0 gap-2 md:block">
+        {groups.map((group, g) => (
+          <section
+            key={group.heading}
+            aria-label={group.heading}
+            data-g={g}
+            className="flex shrink-0 gap-2 md:block"
+          >
             <h2 className="mb-1 hidden text-xs font-semibold tracking-wide text-[var(--muted)] uppercase md:block">
               {group.heading}
             </h2>
@@ -81,9 +86,7 @@ function LessonNav({ currentId }: { currentId: string }) {
                     <Link
                       href={`/learn/chess/${id}`}
                       aria-current={current ? 'page' : undefined}
-                      className={`card flex items-center justify-between gap-2 px-3 py-1.5 text-sm whitespace-nowrap md:whitespace-normal ${
-                        current ? 'font-bold ring-2 ring-sky-500' : ''
-                      }`}
+                      className="lesson-link flex items-center justify-between gap-2 text-sm whitespace-nowrap md:whitespace-normal"
                     >
                       <span>{lessonName(id, t)}</span>
                       {done.has(id) && <span aria-label={t(`${L}.completed`)}>✓</span>}

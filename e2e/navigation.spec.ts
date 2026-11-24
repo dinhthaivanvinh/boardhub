@@ -14,9 +14,12 @@ test('the home page introduces chess and leads to learning, playing and the othe
   await page.getByTestId('cta-play').click();
   await expect(page).toHaveURL(/\/games\/chess$/);
 
+  // The home page no longer shows the other games or the join-room form.
   await page.goto('/');
-  await page.getByTestId('area-board-games').click();
-  await expect(page).toHaveURL(/\/board-games$/);
+  await expect(page.getByTestId('area-board-games')).toHaveCount(0);
+  await expect(page.getByPlaceholder('Mã 6 ký tự')).toHaveCount(0);
+
+  await page.goto('/board-games');
   await expect(page.getByRole('link', { name: /Cờ vua/ })).toBeVisible();
 });
 

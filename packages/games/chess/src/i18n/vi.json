@@ -416,6 +416,66 @@
       "fun": "Từ nay, trước khi ăn quân, hãy hỏi: quân đó có ai bảo vệ không?"
     },
     "captureHeading": "Ăn quân và bảo vệ",
-    "speakResults": "Đọc kết quả"
+    "speakResults": "Đọc kết quả",
+    "tactics": {
+      "name": "Mẹo nhỏ và tàn cuộc",
+      "stage": {
+        "meet": "Mẹo nhỏ",
+        "fork": "Chĩa hai mũi",
+        "pin": "Quân bị ghim",
+        "mate": "Hai xe",
+        "draw": "Hoà hay thắng?",
+        "done": "Xong"
+      },
+      "meet": "Cờ vua có những mẹo nhỏ rất hay. Chĩa hai mũi: một quân tấn công hai quân cùng lúc, đối phương chỉ cứu được một. Ghim: quân đứng trước vua không được đi, vì đi thì vua bị tấn công. Hai xe phối hợp có thể chiếu hết vua. Và con cần biết khi nào ván cờ hoà.",
+      "intro": {
+        "fork": "Hãy tìm nước làm một quân của con tấn công hai quân lớn của đối phương cùng lúc. Đối phương chỉ cứu được một quân, con ăn quân còn lại!",
+        "pin": "Quân bị ghim đứng ngay trước vua: nếu nó đi chỗ khác thì vua bị tấn công. Hãy tìm quân trắng bị ghim.",
+        "mate": "Hai xe phối hợp như cầu thang: một xe chặn các hàng, xe kia chiếu. Hãy tìm nước chiếu hết.",
+        "draw": "Đến lượt đen. Hãy nhìn: vua đen có bị chiếu không? Đen còn nước đi nào không? Từ đó biết là chiếu hết, hoà hay ván chưa xong."
+      },
+      "prompt": {
+        "fork": "Tìm nước chĩa hai mũi.",
+        "pin": "Quân trắng nào đang bị ghim?",
+        "mate": "Tìm nước chiếu hết bằng hai xe.",
+        "draw": "Ván cờ đang như thế nào?"
+      },
+      "fork": {
+        "illegal": "Quân đó không đi được tới ô đó.",
+        "notFork": "Nước đó chưa chĩa hai mũi. Hãy tìm nước để một quân tấn công hai quân lớn cùng lúc.",
+        "right": "Chĩa hai mũi! Đối phương chỉ cứu được một quân.",
+        "hint": "Gợi ý: hãy bấm vào quân được tô sáng, rồi tìm ô mà nó chĩa hai mũi."
+      },
+      "pin": {
+        "right": "Đúng! Quân này bị ghim: nếu nó đi chỗ khác, vua trắng sẽ bị tấn công. Quân đen được tô sáng đang ghim nó.",
+        "wrong": "Chưa đúng. Tìm quân trắng đứng giữa vua và một quân đen đang nhắm vào vua.",
+        "hint": "Gợi ý: quân đen được tô sáng đang nhắm thẳng vào vua trắng."
+      },
+      "mate": {
+        "right": "Chiếu hết! Vua đen hết đường thoát. Con thắng rồi!",
+        "escaped": "Vua đen chạy thoát rồi! Thử nước khác nhé.",
+        "stalemate": "Ôi, vua đen không đi được nhưng không bị chiếu: ván hoà! Thử nước khác nhé.",
+        "noCheck": "Nước này chưa chiếu vua đen. Thử nước khác nhé.",
+        "defended": "Đen đã tìm được cách cứu vua (che hoặc ăn)! Thử nước khác nhé.",
+        "illegal": "Quân đó không đi được tới ô đó.",
+        "hint1": "Gợi ý: hãy bấm vào quân ở ô {from}.",
+        "hint2": "Gợi ý: bấm vào quân ở ô {from}, rồi đi tới ô {to}."
+      },
+      "draw": {
+        "mate": "Chiếu hết",
+        "stalemate": "Hoà",
+        "ongoing": "Chưa xong",
+        "right": {
+          "mate": "Đúng! Vua đen bị chiếu và hết đường thoát: chiếu hết.",
+          "stalemate": "Đúng! Vua đen không bị chiếu nhưng không còn nước đi nào: ván hoà. Khi đang thắng, đừng nhốt vua kín như vậy!",
+          "ongoing": "Đúng! Đen vẫn còn nước đi, ván chưa kết thúc."
+        },
+        "wrong": "Chưa đúng. Hỏi hai câu: vua đen có bị chiếu không? Đen còn nước đi nào không?"
+      },
+      "allDone": "Giỏi quá! Con đã xong phần này.",
+      "done": "Con đã biết chĩa hai mũi, quân bị ghim, hai xe và ván hoà!",
+      "fun": "Nhớ nhé: trước khi đi, hãy tìm xem có chĩa hai mũi được không. Và đừng nhốt vua đối phương kín mà quên chiếu."
+    },
+    "tacticsHeading": "Mẹo nhỏ và tàn cuộc"
   }
 }

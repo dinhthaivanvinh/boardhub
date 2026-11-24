@@ -300,7 +300,7 @@ function JudgeRoundView(props: RoundProps<JudgeRound>) {
 }
 
 /** Find the move that gives checkmate. A move that does not is played out, so the child sees the king escape. */
-function MateRoundView(props: RoundProps<MateRound>) {
+export function MateRoundView(props: RoundProps<MateRound>) {
   const { round, progress, t, c, animate, delay, onSolved } = props;
   const start = useMemo(() => fromFen(round.fen), [round]);
   const mates = useMemo(() => matingMoves(start), [start]);

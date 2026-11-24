@@ -22,6 +22,7 @@ const STEPS = [
   { key: 'checkmate', href: '/learn/chess/checkmate' },
   { key: 'openings', href: '/learn/chess/italian' },
   { key: 'special', href: '/learn/chess/castling' },
+  { key: 'tactics', href: '/learn/chess/tactics' },
   { key: 'play', href: '/games/chess' },
 ] as const;
 

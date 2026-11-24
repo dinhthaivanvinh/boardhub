@@ -26,3 +26,5 @@ export { CheckmateLesson } from './learn/CheckmateLesson';
 export { CHECKMATE_LESSON_ID } from './learn/checkmate';
 export { CaptureLesson } from './learn/CaptureLesson';
 export { CAPTURE_LESSON_ID } from './learn/capture';
+export { TacticsLesson } from './learn/TacticsLesson';
+export { TACTICS_LESSON_ID } from './learn/tactics';

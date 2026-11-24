@@ -18,6 +18,8 @@ import {
   SPECIAL_LESSONS,
   SpecialLesson,
   specialLesson,
+  TACTICS_LESSON_ID,
+  TacticsLesson,
 } from '@bg/game-chess';
 import { useDoneLessons, useMarkDone } from './use-progress';
 import { useReducedMotion } from './use-reduced-motion';
@@ -131,6 +133,9 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
       {lessonId === COORDINATES_LESSON_ID && (
         <CoordinatesLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
       )}
+      {lessonId === TACTICS_LESSON_ID && (
+        <TacticsLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
+      )}
       {lessonId === CAPTURE_LESSON_ID && (
         <CaptureLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
       )}
@@ -142,7 +147,8 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
         !special &&
         lessonId !== COORDINATES_LESSON_ID &&
         lessonId !== CHECKMATE_LESSON_ID &&
-        lessonId !== CAPTURE_LESSON_ID && <p>{t('games.chess.learn.notFound')}</p>}
+        lessonId !== CAPTURE_LESSON_ID &&
+        lessonId !== TACTICS_LESSON_ID && <p>{t('games.chess.learn.notFound')}</p>}
     </div>
   );
 }

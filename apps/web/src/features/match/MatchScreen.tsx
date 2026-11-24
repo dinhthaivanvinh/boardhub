@@ -1,5 +1,6 @@
 'use client';
 
+import { BoardStage } from '@/components/BoardStage';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef } from 'react';
@@ -91,8 +92,9 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
     // Mobile: title + status above the board, everything else below. Desktop: board left, panel right.
     <div
       data-game={gameId}
-      className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:py-6"
+      className="stage-screen mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-6 lg:py-6"
     >
+      <BoardStage />
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-xl font-bold tracking-tight lg:text-2xl">{t(`games.${gameId}.name`)}</h1>
@@ -100,7 +102,7 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
         </div>
         <p
           role="status"
-          className={`card py-2.5 text-base font-medium lg:py-3 ${snapshot.result ? 'border-[var(--accent)]' : ''}`}
+          className={`card py-2 text-base font-medium ${snapshot.result ? 'border-[var(--accent)]' : ''}`}
         >
           {status}
         </p>
@@ -113,7 +115,7 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
 
       <section
         ref={boardRef}
-        className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-8rem))] lg:col-start-1 lg:row-span-2 lg:row-start-1"
+        className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-8rem))] lg:sticky lg:top-[4.5rem] lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-start"
       >
         <Board
           view={view}
@@ -144,14 +146,14 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
         />
       </section>
 
-      <aside className="flex flex-col gap-4 lg:col-start-2 lg:row-start-2">
-        <ul className="flex flex-col gap-2">
+      <aside className="stage-aside flex flex-col gap-3 lg:col-start-2 lg:row-start-2">
+        <ul className="grid grid-cols-2 gap-2">
           {controllers.map((_, seat) => {
             const isActive = snapshot.activeSeats.includes(seat);
             return (
               <li
                 key={seat}
-                className={`card flex items-center justify-between py-3 ${isActive ? 'ring-2 ring-[var(--accent)]' : ''}`}
+                className={`card flex items-center justify-between py-2 ${isActive ? 'ring-2 ring-[var(--accent)]' : ''}`}
                 aria-current={isActive ? 'true' : undefined}
               >
                 <span className="flex items-center gap-3">
@@ -174,7 +176,7 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           })}
         </ul>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <button type="button" className="btn" onClick={match.undo} disabled={!match.canUndo}>
             ↶ {t('match.actions.undo')}
           </button>
@@ -183,7 +185,7 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           </button>
           <button
             type="button"
-            className="btn col-span-2"
+            className="btn"
             onClick={match.resign}
             disabled={snapshot.result !== null || !isMyTurn}
           >
@@ -191,29 +193,33 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           </button>
         </div>
 
-        <SoundControls />
+        <details className="card py-2 text-sm">
+          <summary className="cursor-pointer font-medium">{t('match.settings.title')}</summary>
+          <div className="mt-2 flex flex-col gap-2">
+            <SoundControls />
 
-        <fieldset className="card flex flex-col gap-2 py-3 text-sm">
-          <legend className="px-1 font-medium">{t('match.settings.title')}</legend>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              className="size-4 accent-[var(--accent)]"
-              checked={settings.confirmMove}
-              onChange={(e) => settings.update({ confirmMove: e.target.checked })}
-            />
-            {t('match.settings.confirmMove')}
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              className="size-4 accent-[var(--accent)]"
-              checked={settings.animations}
-              onChange={(e) => settings.update({ animations: e.target.checked })}
-            />
-            {t('match.settings.animations')}
-          </label>
-        </fieldset>
+            <div className="flex flex-col gap-2">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="size-4 accent-[var(--accent)]"
+                  checked={settings.confirmMove}
+                  onChange={(e) => settings.update({ confirmMove: e.target.checked })}
+                />
+                {t('match.settings.confirmMove')}
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="size-4 accent-[var(--accent)]"
+                  checked={settings.animations}
+                  onChange={(e) => settings.update({ animations: e.target.checked })}
+                />
+                {t('match.settings.animations')}
+              </label>
+            </div>
+          </div>
+        </details>
 
         {match.replayHref && (
           <Link href={match.replayHref} className="btn" data-testid="local-replay">

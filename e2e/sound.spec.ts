@@ -11,6 +11,7 @@ const played = (page: Page) => page.evaluate(() => window.__bgSounds ?? []);
 
 test('moves and the win have their sounds; effects can be switched off and stay off', async ({ page }) => {
   await page.goto('/play/caro?mode=local');
+  await page.locator('details > summary').click();
   await expect(page.getByRole('group', { name: 'Âm thanh' })).toBeVisible();
 
   const xs = [4, 5, 6, 7, 8];
@@ -28,6 +29,7 @@ test('moves and the win have their sounds; effects can be switched off and stay 
   expect(await played(page)).toHaveLength(10);
 
   await page.reload();
+  await page.locator('details > summary').click();
   await expect(page.getByTestId('sound-effects')).not.toBeChecked();
   await expect(page.getByTestId('sound-music')).toBeChecked();
 });

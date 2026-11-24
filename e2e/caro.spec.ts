@@ -65,12 +65,16 @@ test('the board works with the keyboard', async ({ page }) => {
   await expect(cell(page, 7, 7)).toHaveAttribute('data-piece', 'x');
 });
 
-test('the language switcher changes the UI to English', async ({ page }) => {
+test('the site is Vietnamese for everyone: no language switcher, and an old English cookie is ignored', async ({
+  page,
+  context,
+  baseURL,
+}) => {
+  await context.addCookies([{ name: 'NEXT_LOCALE', value: 'en', url: baseURL! }]);
   await page.goto('/board-games');
-  await page.getByRole('combobox', { name: 'Ngôn ngữ' }).selectOption('en');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your game board, anywhere');
-  await page.getByRole('combobox', { name: 'Language' }).selectOption('vi');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Bàn cờ của bạn, ở bất cứ đâu');
+  await expect(page.getByRole('combobox', { name: /Ngôn ngữ|Language/ })).toHaveCount(0);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
 });
 
 test('resigning against the computer: the result says you resigned', async ({ page }) => {

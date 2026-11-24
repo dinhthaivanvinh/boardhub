@@ -112,6 +112,7 @@ Desktop                                   Mobile
 - **Crawl:** `app/robots.ts` chặn phòng, ván, xem lại, hồ sơ, tài khoản, admin, phiên văn phòng; `app/sitemap.ts` liệt kê trang công khai
   và bảng xếp hạng từng game (mỗi game là một link thật `/leaderboard?game=…`). Trang riêng tư có thêm `robots: { index: false }`.
 - **Khác:** `app/icon.svg`, `app/manifest.ts`; một `<h1>` mỗi trang; trang game có breadcrumb.
+- **Tạm chỉ tiếng Việt:** `LANGUAGE_CHOICE = false` trong `apps/web/src/i18n/messages.ts` ẩn ô chọn ngôn ngữ và bỏ qua cookie, vì giọng đọc thu sẵn của các bài học mới có tiếng Việt. Bản tiếng Anh vẫn giữ nguyên; đặt `true` để bật lại.
 - **Giới hạn:** ngôn ngữ chọn bằng cookie, URL không có `/vi` `/en` nên công cụ tìm kiếm chỉ thấy bản tiếng Việt (không có hreflang).
 
 ## 10. Âm thanh

@@ -15,6 +15,8 @@ import {
   openingLesson,
   PIECE_LESSONS,
   PieceLesson,
+  PRACTICE_LESSON_IDS,
+  practiceId,
   pieceLesson,
   SPECIAL_LESSONS,
   SpecialLesson,
@@ -115,17 +117,48 @@ function VoiceCredit({ className }: { className: string }) {
 }
 
 /** The big button at the end of a lesson: on to the next one, or on to playing after the last. */
-function NextLessonLink({ lessonId }: { lessonId: string }) {
+function NextLessonLink({ lessonId, secondary = false }: { lessonId: string; secondary?: boolean }) {
   const t = useTranslations();
   const next = ORDER[ORDER.indexOf(lessonId) + 1];
+  const look = secondary ? 'btn ch-next' : 'btn btn-primary ch-next';
   return next ? (
-    <Link href={`/learn/chess/${next}`} className="btn btn-primary ch-next">
+    <Link href={`/learn/chess/${next}`} className={look}>
       {t('games.chess.learn.nextLesson', { name: lessonName(next, t) })}
     </Link>
   ) : (
-    <Link href="/games/chess" className="btn btn-primary ch-next">
+    <Link href="/games/chess" className={look}>
       {t('games.chess.learn.playChess')}
     </Link>
+  );
+}
+
+/** Lessons whose practice is the puzzles: mating is what they teach. */
+const PUZZLE_PRACTICE = [CHECKMATE_LESSON_ID, TACTICS_LESSON_ID];
+
+/** What follows a finished lesson: its practice (the main button), then on to the next lesson. */
+function LessonFooter({ lessonId }: { lessonId: string }) {
+  const t = useTranslations('games.chess.learn.practice');
+  const done = useDoneLessons();
+  const hasPractice = PRACTICE_LESSON_IDS.includes(lessonId);
+  const toPuzzles = PUZZLE_PRACTICE.includes(lessonId);
+  return (
+    <>
+      {hasPractice && (
+        <Link
+          href={`/learn/chess/${lessonId}/practice`}
+          className="btn btn-primary ch-next"
+          data-testid="practice-link"
+        >
+          <span aria-hidden="true">💪</span> {done.has(practiceId(lessonId)) ? t('ctaDone') : t('cta')}
+        </Link>
+      )}
+      {toPuzzles && (
+        <Link href="/puzzles" className="btn btn-primary ch-next" data-testid="practice-puzzles-link">
+          <span aria-hidden="true">🧩</span> {t('morePuzzles')}
+        </Link>
+      )}
+      <NextLessonLink lessonId={lessonId} secondary={hasPractice || toPuzzles} />
+    </>
   );
 }
 
@@ -137,7 +170,7 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const piece = pieceLesson(lessonId);
   const opening = openingLesson(lessonId);
   const special = specialLesson(lessonId);
-  const footer = <NextLessonLink lessonId={lessonId} />;
+  const footer = <LessonFooter lessonId={lessonId} />;
   return (
     <div
       className="stage-screen mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"

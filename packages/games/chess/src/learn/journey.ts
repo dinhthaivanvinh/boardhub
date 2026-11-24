@@ -2,6 +2,7 @@ import { CAPTURE_LESSON_ID } from './capture';
 import { CHECKMATE_LESSON_ID } from './checkmate';
 import { COORDINATES_LESSON_ID, LESSON_IDS, OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from './data';
 import { TACTICS_LESSON_ID } from './tactics';
+import { PRACTICE_LESSON_IDS, practiceId, STARS_PER_PRACTICE } from './practice';
 import { PUZZLES } from './puzzles';
 import { streak, type PuzzleProgress } from './puzzle-progress';
 
@@ -27,11 +28,15 @@ export const nextLessonId = (done: ReadonlySet<string>): string | null =>
 export const STARS_PER_LESSON = 3;
 export const STARS_PER_PUZZLE = 1;
 
-/** Stars earned: 3 for every finished lesson, 1 for every solved puzzle. */
+/** The practices finished: each lesson with a practice has one, remembered next to the lessons. */
+export const practicesDone = (done: ReadonlySet<string>): number =>
+  PRACTICE_LESSON_IDS.filter((id) => done.has(practiceId(id))).length;
+
+/** Stars earned: 3 for every finished lesson, 2 for every practice, 1 for every solved puzzle. */
 export function totalStars(done: ReadonlySet<string>, puzzles: PuzzleProgress): number {
   const lessons = JOURNEY_LESSONS.filter((id) => done.has(id)).length;
   const solved = new Set(puzzles.solved.filter((id) => PUZZLES.some((p) => p.id === id))).size;
-  return lessons * STARS_PER_LESSON + solved * STARS_PER_PUZZLE;
+  return lessons * STARS_PER_LESSON + practicesDone(done) * STARS_PER_PRACTICE + solved * STARS_PER_PUZZLE;
 }
 
 /** Ranks, from the first stars to the top. The piece shown with a rank is its glyph. */
@@ -105,6 +110,7 @@ export const BADGES: readonly Badge[] = [
       ),
   },
   { id: 'tactics', icon: '🧠', earned: (d) => d.has(TACTICS_LESSON_ID) },
+  { id: 'practice5', icon: '💪', earned: (d) => practicesDone(d) >= 5 },
   { id: 'puzzles5', icon: '🧩', earned: (_d, p) => solvedCount(p) >= 5 },
   { id: 'puzzles25', icon: '🎯', earned: (_d, p) => solvedCount(p) >= 25 },
   { id: 'puzzles100', icon: '🏆', earned: (_d, p) => solvedCount(p) >= 100 },

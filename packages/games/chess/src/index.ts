@@ -53,3 +53,12 @@ export {
   totalStars,
 } from './learn/journey';
 export type { Badge, JourneyStage } from './learn/journey';
+export {
+  PRACTICE_LESSON_IDS,
+  STARS_PER_PRACTICE,
+  practiceId,
+  practicePosition,
+  practiceRounds,
+} from './learn/practice';
+export type { MoveRound, PracticePrompt, PracticeRound, StarRound } from './learn/practice';
+export { PracticeLesson } from './learn/PracticeLesson';

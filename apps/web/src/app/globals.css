@@ -2166,3 +2166,9 @@ nav section[data-g='5'] {
 .home-helper-save {
   grid-column: 1 / -1;
 }
+
+/* Dấu "đã luyện tập" trên một bài của hành trình. */
+.journey-node-practice {
+  font-size: 0.95rem;
+  line-height: 1;
+}

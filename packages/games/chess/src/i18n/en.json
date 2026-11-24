@@ -476,6 +476,10 @@
       "done": "You know forks, pinned pieces, two-rook mates and draws!",
       "fun": "Remember: before you move, look for a fork. And do not trap the enemy king without giving check."
     },
-    "tacticsHeading": "Little tricks and endgames"
+    "tacticsHeading": "Little tricks and endgames",
+    "back": "Back",
+    "backMove": "Previous move",
+    "great": "Great job!",
+    "nextLesson": "Next lesson: {name}"
   }
 }

@@ -56,6 +56,40 @@ function LessonNav({ heading, items, currentId }: { heading: string; items: NavI
   );
 }
 
+/** The order the lessons are meant to be taken in (the home page path). */
+const ORDER: string[] = [
+  COORDINATES_LESSON_ID,
+  ...PIECE_LESSONS.map((l) => l.id),
+  CAPTURE_LESSON_ID,
+  CHECKMATE_LESSON_ID,
+  ...OPENING_LESSONS.map((l) => l.id),
+  ...SPECIAL_LESSONS.map((l) => l.id),
+  TACTICS_LESSON_ID,
+];
+
+function lessonName(id: string, t: ReturnType<typeof useTranslations>): string {
+  const piece = pieceLesson(id);
+  if (piece) return t(`games.chess.pieceNames.${piece.piece}`);
+  if (openingLesson(id)) return t(`games.chess.learn.openings.${id}.name`);
+  if (specialLesson(id)) return t(`games.chess.learn.specials.${id}.name`);
+  return t(`games.chess.learn.${id}.name`);
+}
+
+/** The big button at the end of a lesson: on to the next one, or on to playing after the last. */
+function NextLessonLink({ lessonId }: { lessonId: string }) {
+  const t = useTranslations();
+  const next = ORDER[ORDER.indexOf(lessonId) + 1];
+  return next ? (
+    <Link href={`/learn/chess/${next}`} className="btn btn-primary ch-next">
+      {t('games.chess.learn.nextLesson', { name: lessonName(next, t) })}
+    </Link>
+  ) : (
+    <Link href="/games/chess" className="btn btn-primary ch-next">
+      {t('games.chess.learn.playChess')}
+    </Link>
+  );
+}
+
 export function LessonScreen({ lessonId }: { lessonId: string }) {
   const t = useTranslations();
   const locale = useLocale();
@@ -64,6 +98,7 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const piece = pieceLesson(lessonId);
   const opening = openingLesson(lessonId);
   const special = specialLesson(lessonId);
+  const footer = <NextLessonLink lessonId={lessonId} />;
   return (
     <div
       className="mx-auto grid max-w-6xl gap-3 px-4 py-4"
@@ -87,6 +122,7 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
             animate={!reduced}
             onComplete={markDone}
             lang={locale}
+            footer={footer}
           />
         </div>
       )}
@@ -107,6 +143,7 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
             animate={!reduced}
             onComplete={markDone}
             lang={locale}
+            footer={footer}
           />
         </div>
       )}
@@ -127,20 +164,21 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
             animate={!reduced}
             onComplete={markDone}
             lang={locale}
+            footer={footer}
           />
         </div>
       )}
       {lessonId === COORDINATES_LESSON_ID && (
-        <CoordinatesLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
+        <CoordinatesLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
       )}
       {lessonId === TACTICS_LESSON_ID && (
-        <TacticsLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
+        <TacticsLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
       )}
       {lessonId === CAPTURE_LESSON_ID && (
-        <CaptureLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
+        <CaptureLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
       )}
       {lessonId === CHECKMATE_LESSON_ID && (
-        <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} />
+        <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
       )}
       {!piece &&
         !opening &&

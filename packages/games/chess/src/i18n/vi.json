@@ -476,6 +476,10 @@
       "done": "Con đã biết chĩa hai mũi, quân bị ghim, hai xe và ván hoà!",
       "fun": "Nhớ nhé: trước khi đi, hãy tìm xem có chĩa hai mũi được không. Và đừng nhốt vua đối phương kín mà quên chiếu."
     },
-    "tacticsHeading": "Mẹo nhỏ và tàn cuộc"
+    "tacticsHeading": "Mẹo nhỏ và tàn cuộc",
+    "back": "Quay lại",
+    "backMove": "Nước trước",
+    "great": "Giỏi quá!",
+    "nextLesson": "Bài tiếp theo: {name}"
   }
 }

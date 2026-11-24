@@ -26,6 +26,20 @@ const config: NextConfig = {
   // Let phones and other machines on the home network use `pnpm dev` through the LAN IP
   // (Next.js blocks dev assets for hosts other than localhost). Dev only; `*` is one label of the hostname.
   allowedDevOrigins: ['192.168.*.*', '10.*.*.*'],
+  // The pre-recorded lesson voice (public/audio): a sentence's file is named after its text, so it can be kept for
+  // a day; the list of files is checked more often.
+  async headers() {
+    return [
+      {
+        source: '/audio/:lang/:file*.mp3',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }],
+      },
+      {
+        source: '/audio/:lang/index.json',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=300, stale-while-revalidate=86400' }],
+      },
+    ];
+  },
 };
 
 export default withNextIntl(config);

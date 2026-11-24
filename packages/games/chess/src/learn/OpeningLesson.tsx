@@ -195,9 +195,7 @@ export function OpeningLesson({
           </div>
         )}
         {hintText && <Status voice={voice} text={hintText} speakIt={false} />}
-        {!finished && idea && (
-          <ReadAloud text={hintText ? `${idea} ${hintText}` : idea} voice={voice} t={t} />
-        )}
+        {!finished && idea && <ReadAloud text={idea} voice={voice} t={t} />}
 
         {finished && (
           <div className="ch-learn-summary" role="status">

@@ -15,7 +15,9 @@ Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài
 - Bé 5 tuổi chưa biết chữ, nên **kết quả sau mỗi lần bé bấm được đọc to** (đúng, sai và lý do), mặc định bật. Công tắc "Đọc kết quả" nhớ lựa chọn trong trình duyệt (`learn.chess.voice.v1`). Câu hỏi chỉ đọc khi bé bấm "Đọc to" hoặc bật "Tự động đọc".
 - Cùng một lời sai bấm hai lần thì đọc hai lần. Bộ đếm "tìm được 2/4" và dòng chờ không đọc.
 - Các bài tự sang câu sau (toạ độ, ăn quân, chiếu hết) chờ giọng đọc xong mới chuyển.
-- Dùng giọng có sẵn của trình duyệt đúng ngôn ngữ; máy không có giọng tiếng Việt thì không đọc và hiện lời nhắc cài giọng.
+- Giọng là **file mp3 thu sẵn** (ADR-0011, `tools/voice`), nghe giống nhau trên mọi trình duyệt. Câu nào không có file thì dùng giọng
+  của trình duyệt đúng ngôn ngữ; không có giọng nào phù hợp thì không đọc và hiện lời nhắc cài giọng.
+- **Đọc câu hỏi và đọc kết quả đều bật sẵn** (công tắc nhớ trong trình duyệt). Bài nào cũng có nút **Quay lại** (bước trước, hoặc nước trước ở bài khai cuộc).
 
 ## 2. Tính năng 1: Giới thiệu quân cờ
 

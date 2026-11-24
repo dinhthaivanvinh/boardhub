@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { VoiceState } from './ReadAloud';
-import { stopSpeaking } from './speech';
+import { loadVoicePack, stopSpeaking } from './speech';
 
 const KEY = 'learn.chess.voice.v1';
 type Stored = { auto?: unknown; results?: unknown };
@@ -15,6 +15,11 @@ type Stored = { auto?: unknown; results?: unknown };
 export function useVoice(lang: string): VoiceState {
   const [auto, setAuto] = useState(true);
   const [results, setResults] = useState(true);
+
+  // Look for the recordings right away, so the first sentence can already be played from a file.
+  useEffect(() => {
+    void loadVoicePack(lang);
+  }, [lang]);
 
   useEffect(() => {
     try {

@@ -480,6 +480,8 @@
     "back": "Back",
     "backMove": "Previous move",
     "great": "Great job!",
-    "nextLesson": "Next lesson: {name}"
+    "nextLesson": "Next lesson: {name}",
+    "voiceCredit": "Vietnamese voice: Piper, trained on the",
+    "voiceCreditLink": "VAIS-1000 corpus (CC BY 4.0)"
   }
 }

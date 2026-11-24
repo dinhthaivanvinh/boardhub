@@ -99,6 +99,18 @@ export function LearnHome() {
           {item(TACTICS_LESSON_ID, t('games.chess.learn.tactics.name'), t('games.chess.learn.tactics.meet'))}
         </ul>
       </section>
+      <p className="text-xs text-[var(--muted)]">
+        {t('games.chess.learn.voiceCredit')}{' '}
+        <a
+          className="underline underline-offset-2"
+          href="https://ieee-dataport.org/documents/vais-1000-vietnamese-speech-synthesis-corpus"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t('games.chess.learn.voiceCreditLink')}
+        </a>
+        .
+      </p>
       <Link href="/games/chess" className="btn w-fit">
         {t('games.chess.learn.playChess')}
       </Link>

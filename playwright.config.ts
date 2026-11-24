@@ -35,7 +35,13 @@ export default defineConfig({
       // The web app looks for the game server on port 4000 of the same host. In memory, short bot delay.
       command: 'pnpm --filter @bg/server start',
       url: 'http://localhost:4000/health',
-      env: { PORT: '4000', LOG_LEVEL: 'warn', BOT_DELAY_MS: '100', ADMIN_EMAILS: 'admin-e2e@example.com' },
+      env: {
+        PORT: '4000',
+        LOG_LEVEL: 'warn',
+        BOT_DELAY_MS: '100',
+        ADMIN_EMAILS: 'admin-e2e@example.com',
+        AUTH_RATE_LIMIT: '10000',
+      },
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,
     },

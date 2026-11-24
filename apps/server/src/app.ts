@@ -1,4 +1,5 @@
 import cors from '@fastify/cors';
+import rateLimit from '@fastify/rate-limit';
 import { createAdapter } from '@socket.io/redis-adapter';
 import Fastify from 'fastify';
 import { Redis } from 'ioredis';
@@ -56,7 +57,11 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   const app = Fastify({
     logger: config.LOG_LEVEL === 'silent' ? false : { level: config.LOG_LEVEL },
     bodyLimit: 16 * 1024,
+    // Behind Render's proxy the client address is in X-Forwarded-For; without this everyone shares one address.
+    trustProxy: config.NODE_ENV === 'production',
   });
+  // Only the routes that opt in are limited (sign-in, sign-up, guest).
+  await app.register(rateLimit, { global: false });
   await app.register(cors, {
     origin: config.corsOrigins,
     credentials: true,
@@ -163,7 +168,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     isBanned: (id) => admin.isBanned(id),
     isAdmin: (u) => admin.isAdmin(u),
   });
-  registerRoutes(app, auth, new HistoryService(history, users), users);
+  registerRoutes(app, auth, new HistoryService(history, users), users, config.AUTH_RATE_LIMIT);
   registerCompetitiveRoutes(app, { auth, ratings: ratingRepo, users, store, games: GAME_DEFS });
   registerAdminRoutes(app, auth, admin);
   const matchmaker = new Matchmaker({

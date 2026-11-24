@@ -50,7 +50,10 @@ export function registerRoutes(
   auth: AuthService,
   history: HistoryService,
   users: UserRepo,
+  authLimitPerMinute = 20,
 ) {
+  /** Signing in costs the server a password hash, and guests cost memory: slow down anyone who hammers them. */
+  const authLimit = { config: { rateLimit: { max: authLimitPerMinute, timeWindow: '1 minute' } } };
   app.setErrorHandler((err, _req, reply: FastifyReply) => {
     if (err instanceof HubError) return reply.status(STATUS[err.code] ?? 400).send({ code: err.code });
     if ((err as { statusCode?: number }).statusCode === 429)
@@ -67,14 +70,16 @@ export function registerRoutes(
 
   app.get('/health', async () => ({ ok: true }));
 
-  app.post('/api/auth/guest', async (req) => auth.guest(parse(GuestRequest, req.body).displayName));
+  app.post('/api/auth/guest', authLimit, async (req) =>
+    auth.guest(parse(GuestRequest, req.body).displayName),
+  );
 
-  app.post('/api/auth/register', async (req) => {
+  app.post('/api/auth/register', authLimit, async (req) => {
     const current = await auth.authenticate(bearer(req));
     return auth.register(parse(RegisterRequest, req.body), current?.id ?? null);
   });
 
-  app.post('/api/auth/login', async (req) => auth.login(parse(LoginRequest, req.body)));
+  app.post('/api/auth/login', authLimit, async (req) => auth.login(parse(LoginRequest, req.body)));
 
   app.get('/api/me', async (req) => auth.me((await requireUser(req)).id));
 

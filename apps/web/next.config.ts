@@ -35,6 +35,16 @@ const config: NextConfig = {
   async headers() {
     return [
       {
+        // Every page: no framing by other sites (clickjacking), no guessing of file types, little referrer.
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Content-Security-Policy', value: "frame-ancestors 'none'" },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+      {
         source: '/audio/:lang/:file*.mp3',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }],
       },

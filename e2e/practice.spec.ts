@@ -54,6 +54,7 @@ test('the practice of a piece lesson can be played to the end and earns stars', 
 });
 
 test('an opening and a special move have a practice too', async ({ page }) => {
+  test.setTimeout(90_000); // two practices of five rounds each, with a pause after every right answer
   await page.goto('/learn/chess/london/practice');
   await solveAll(page, 5);
   await expect(page.getByRole('button', { name: 'Tiếp tục' })).toBeVisible();

@@ -9,8 +9,10 @@ import { expect, test, type Page } from '@playwright/test';
 
 const LESSONS = [
   'coordinates',
+  'setup',
   'capture',
   'checkmate',
+  'draws',
   'pawn',
   'rook',
   'bishop',
@@ -81,7 +83,17 @@ test.describe('laptop 14 inch', () => {
   test.skip(({ isMobile }) => isMobile, 'a laptop screen only');
   test.use({ viewport: { width: 1366, height: 680 } });
 
-  for (const id of ['coordinates', 'capture', 'checkmate', 'knight', 'italian', 'castling', 'tactics']) {
+  for (const id of [
+    'coordinates',
+    'setup',
+    'capture',
+    'checkmate',
+    'draws',
+    'knight',
+    'italian',
+    'castling',
+    'tactics',
+  ]) {
     test(`lesson ${id}: board and its buttons fit the first screen`, async ({ page }) => {
       await page.goto(`/learn/chess/${id}`);
       const board = page.getByRole('grid').first();

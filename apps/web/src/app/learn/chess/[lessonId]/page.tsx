@@ -5,9 +5,11 @@ import {
   CAPTURE_LESSON_ID,
   CHECKMATE_LESSON_ID,
   COORDINATES_LESSON_ID,
+  DRAWS_LESSON_ID,
   LESSON_IDS,
   openingLesson,
   pieceLesson,
+  SETUP_LESSON_ID,
   specialLesson,
   TACTICS_LESSON_ID,
 } from '@bg/game-chess';
@@ -25,8 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations();
   const piece = pieceLesson(lessonId);
   const title =
-    lessonId === COORDINATES_LESSON_ID
-      ? t('games.chess.learn.coordinates.name')
+    lessonId === COORDINATES_LESSON_ID || lessonId === SETUP_LESSON_ID || lessonId === DRAWS_LESSON_ID
+      ? t(`games.chess.learn.${lessonId}.name`)
       : lessonId === TACTICS_LESSON_ID
         ? t('games.chess.learn.tactics.name')
         : lessonId === CAPTURE_LESSON_ID

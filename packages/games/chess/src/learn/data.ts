@@ -1,4 +1,5 @@
 import type { Color, PieceType } from '../rules/types';
+import { DRAWS_LESSON_ID, SETUP_LESSON_ID } from './basics';
 import { CAPTURE_LESSON_ID } from './capture';
 import { CHECKMATE_LESSON_ID } from './checkmate';
 import { TACTICS_LESSON_ID } from './tactics';
@@ -135,8 +136,10 @@ export const COORDINATES_LESSON_ID = 'coordinates';
 
 export const LESSON_IDS = [
   COORDINATES_LESSON_ID,
+  SETUP_LESSON_ID,
   CAPTURE_LESSON_ID,
   CHECKMATE_LESSON_ID,
+  DRAWS_LESSON_ID,
   ...PIECE_LESSONS.map((l) => l.id),
   ...OPENING_LESSONS.map((l) => l.id),
   ...SPECIAL_LESSONS.map((l) => l.id),

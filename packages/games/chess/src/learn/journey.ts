@@ -1,3 +1,4 @@
+import { DRAWS_LESSON_ID, SETUP_LESSON_ID } from './basics';
 import { CAPTURE_LESSON_ID } from './capture';
 import { CHECKMATE_LESSON_ID } from './checkmate';
 import { COORDINATES_LESSON_ID, LESSON_IDS, OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from './data';
@@ -10,9 +11,9 @@ import { streak, type PuzzleProgress } from './puzzle-progress';
 export type JourneyStage = { id: string; lessons: string[] };
 
 export const JOURNEY: readonly JourneyStage[] = [
-  { id: 'start', lessons: [COORDINATES_LESSON_ID] },
+  { id: 'start', lessons: [COORDINATES_LESSON_ID, SETUP_LESSON_ID] },
   { id: 'pieces', lessons: PIECE_LESSONS.map((l) => l.id) },
-  { id: 'rules', lessons: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID] },
+  { id: 'rules', lessons: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID, DRAWS_LESSON_ID] },
   { id: 'openings', lessons: OPENING_LESSONS.map((l) => l.id) },
   { id: 'specials', lessons: SPECIAL_LESSONS.map((l) => l.id) },
   { id: 'tactics', lessons: [TACTICS_LESSON_ID] },

@@ -29,8 +29,9 @@ describe('the journey', () => {
 
   it('points at the first lesson not done, and at nothing when all are', () => {
     expect(nextLessonId(new Set())).toBe('coordinates');
-    expect(nextLessonId(new Set(['coordinates']))).toBe('pawn');
-    expect(nextLessonId(new Set(['coordinates', 'rook']))).toBe('pawn');
+    expect(nextLessonId(new Set(['coordinates']))).toBe('setup');
+    expect(nextLessonId(new Set(['coordinates', 'setup']))).toBe('pawn');
+    expect(nextLessonId(new Set(['coordinates', 'setup', 'rook']))).toBe('pawn');
     expect(nextLessonId(new Set(JOURNEY_LESSONS))).toBeNull();
   });
 });

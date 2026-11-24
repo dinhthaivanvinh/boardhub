@@ -10,6 +10,10 @@ import {
   CheckmateLesson,
   COORDINATES_LESSON_ID,
   CoordinatesLesson,
+  DRAWS_LESSON_ID,
+  DrawsLesson,
+  SETUP_LESSON_ID,
+  SetupLesson,
   OPENING_LESSONS,
   OpeningLesson,
   openingLesson,
@@ -31,9 +35,11 @@ import { useReducedMotion } from './use-reduced-motion';
 /** The order the lessons are meant to be taken in (the home page path). */
 const ORDER: string[] = [
   COORDINATES_LESSON_ID,
+  SETUP_LESSON_ID,
   ...PIECE_LESSONS.map((l) => l.id),
   CAPTURE_LESSON_ID,
   CHECKMATE_LESSON_ID,
+  DRAWS_LESSON_ID,
   ...OPENING_LESSONS.map((l) => l.id),
   ...SPECIAL_LESSONS.map((l) => l.id),
   TACTICS_LESSON_ID,
@@ -47,9 +53,9 @@ function LessonNav({ currentId }: { currentId: string }) {
   const done = useDoneLessons();
   const L = 'games.chess.learn';
   const groups: NavGroup[] = [
-    { heading: t(`${L}.groupStart`), ids: [COORDINATES_LESSON_ID] },
+    { heading: t(`${L}.groupStart`), ids: [COORDINATES_LESSON_ID, SETUP_LESSON_ID] },
     { heading: t(`${L}.piecesHeading`), ids: PIECE_LESSONS.map((l) => l.id) },
-    { heading: t(`${L}.groupRules`), ids: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID] },
+    { heading: t(`${L}.groupRules`), ids: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID, DRAWS_LESSON_ID] },
     { heading: t(`${L}.openingsHeading`), ids: OPENING_LESSONS.map((l) => l.id) },
     { heading: t(`${L}.specialsHeading`), ids: SPECIAL_LESSONS.map((l) => l.id) },
     { heading: t(`${L}.groupTactics`), ids: [TACTICS_LESSON_ID] },
@@ -226,6 +232,12 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
           {lessonId === CAPTURE_LESSON_ID && (
             <CaptureLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
           )}
+          {lessonId === SETUP_LESSON_ID && (
+            <SetupLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
+          {lessonId === DRAWS_LESSON_ID && (
+            <DrawsLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
           {lessonId === CHECKMATE_LESSON_ID && (
             <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
           )}
@@ -236,6 +248,8 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
         !opening &&
         !special &&
         lessonId !== COORDINATES_LESSON_ID &&
+        lessonId !== SETUP_LESSON_ID &&
+        lessonId !== DRAWS_LESSON_ID &&
         lessonId !== CHECKMATE_LESSON_ID &&
         lessonId !== CAPTURE_LESSON_ID &&
         lessonId !== TACTICS_LESSON_ID && <p>{t('games.chess.learn.notFound')}</p>}

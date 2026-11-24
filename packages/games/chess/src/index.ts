@@ -24,6 +24,8 @@ export { CoordinatesLesson } from './learn/CoordinatesLesson';
 export { coordRounds, fileOf, rankOf } from './learn/coordinates';
 export { CheckmateLesson } from './learn/CheckmateLesson';
 export { CHECKMATE_LESSON_ID } from './learn/checkmate';
+export { DRAWS_LESSON_ID, SETUP_LESSON_ID } from './learn/basics';
+export { DrawsLesson, SetupLesson } from './learn/BasicsLessons';
 export { CaptureLesson } from './learn/CaptureLesson';
 export { CAPTURE_LESSON_ID } from './learn/capture';
 export { TacticsLesson } from './learn/TacticsLesson';

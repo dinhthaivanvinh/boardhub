@@ -1,6 +1,7 @@
 import en from '../i18n/en.json';
 import vi from '../i18n/vi.json';
 import { fromFen, squareName } from '../rules/board';
+import { DRAW_QUIZ, JUDGE_ROUNDS, PLACE_ROUNDS, SETUP_QUIZ } from './basics';
 import { PIECE_VALUE, VALUE_ROUNDS } from './capture';
 import { MATE_ROUNDS, matingMoves } from './checkmate';
 import { coordRounds, COORD_KINDS, fileOf, rankOf } from './coordinates';
@@ -178,6 +179,27 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
     say(`tactics.${k}`);
   }
   for (const { fen } of LADDER_ROUNDS) mateHints(fen, (k, v) => say(`tactics.${k}`, v));
+
+  // ---- setup and draws: the idea, every question with its answers, and the results
+  for (const lesson of ['setup', 'draws']) {
+    say(`${lesson}.meet`);
+    for (const k of ['allDone', 'done', 'fun']) say(`${lesson}.${k}`);
+  }
+  for (const r of PLACE_ROUNDS) {
+    say('setup.prompt.place', { square: r.square });
+    say('setup.place.right', {
+      square: r.square,
+      piece: pieceName(r.piece).toLowerCase(),
+      color: String(get(m.learn, `setup.color.${r.color}`)),
+    });
+  }
+  say('setup.place.wrong');
+  for (const q of SETUP_QUIZ) for (const k of ['q', 'right', 'wrong']) say(`setup.quiz.${q.id}.${k}`);
+  for (const side of ['w', 'b'])
+    say('draws.prompt.judge', { side: String(get(m.learn, `draws.side.${side}`)) });
+  say('draws.judge.wrong');
+  for (const r of JUDGE_ROUNDS) say(`draws.judge.${r.id}.right`);
+  for (const q of DRAW_QUIZ) for (const k of ['q', 'right', 'wrong']) say(`draws.quiz.${q.id}.${k}`);
 
   // ---- the "start the challenge" line of a piece or special lesson names the square to reach
   for (const l of PIECE_LESSONS) say('challengeStart', { square: l.challenge.goal });

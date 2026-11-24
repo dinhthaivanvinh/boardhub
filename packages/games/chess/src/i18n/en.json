@@ -300,6 +300,143 @@
       "done": "You can read the names of the squares on the board!",
       "fun": "Now you can read moves like \"Knight to f3\". Try finding f3 on the board."
     },
+    "setup": {
+      "name": "Setting up and who goes first",
+      "stage": {
+        "meet": "Set up",
+        "place": "Find the piece",
+        "ask": "Questions",
+        "done": "Done"
+      },
+      "meet": "Each side has 16 pieces. White is at the bottom and Black at the top. The back row goes from left to right: rook, knight, bishop, queen, king, bishop, knight, rook. The front row is eight pawns. The queen always stands on her own colour: the white queen on a light square, the black queen on a dark square. The corner square on your right is always a light square. White moves first, then the two sides take turns, one move each. The goal of the game is to checkmate the other king.",
+      "intro": {
+        "place": "One piece is missing from the board. Choose the piece that stands on the circled square.",
+        "ask": "Answer a few questions about how a game begins."
+      },
+      "prompt": {
+        "place": "Which piece stands on {square}?"
+      },
+      "color": {
+        "w": "white",
+        "b": "black"
+      },
+      "place": {
+        "right": "Right! On {square} stands the {color} {piece}.",
+        "wrong": "Not quite. The back row goes from left to right: rook, knight, bishop, queen, king, bishop, knight, rook. Try again."
+      },
+      "quiz": {
+        "first": {
+          "q": "Who moves first?",
+          "o0": "White",
+          "o1": "Black",
+          "right": "Right! White always moves first.",
+          "wrong": "Not quite. White always moves first."
+        },
+        "corner": {
+          "q": "What colour is the corner square on the right, on White's side?",
+          "o0": "A light square",
+          "o1": "A dark square",
+          "right": "Right! The corner square on your right is always a light square.",
+          "wrong": "Not quite. Look at the corner on the right, on White's side."
+        },
+        "queenColor": {
+          "q": "What colour is the square of the black queen?",
+          "o0": "A light square",
+          "o1": "A dark square",
+          "right": "Right! The queen stands on her own colour, so the black queen is on a dark square.",
+          "wrong": "Not quite. The white queen stands on a light square, and the black queen stands on her own colour."
+        },
+        "turns": {
+          "q": "White has just made a move. Whose turn is it now?",
+          "o0": "White",
+          "o1": "Black",
+          "right": "Right! The sides take turns, so now it is Black's turn.",
+          "wrong": "Not quite. The two sides take turns, one move each."
+        },
+        "goal": {
+          "q": "What is the goal of the game?",
+          "o0": "To take all of the other pieces",
+          "o1": "To get a pawn to the end of the board",
+          "o2": "To checkmate the other king",
+          "right": "Right! Whoever checkmates the other king first wins.",
+          "wrong": "Not quite. Remember the lesson on catching the king: a king in checkmate loses."
+        }
+      },
+      "allDone": "Well done! You finished this part.",
+      "done": "You know how to set up the pieces, who moves first, and what the game is for!",
+      "fun": "Next time a friend sets up the board wrong, you can show them."
+    },
+    "draws": {
+      "name": "When is it a draw?",
+      "stage": {
+        "meet": "A draw",
+        "judge": "Who wins?",
+        "facts": "Other draws",
+        "done": "Done"
+      },
+      "meet": "Some games have no winner and no loser: that is a draw. It is a draw when the side to move is not in check but has no move. It is a draw when there are not enough pieces left to checkmate, like a king against a king, or a king and one knight or one bishop against a king. It is a draw when the same position happens three times. It is a draw when fifty moves in a row by each side have no pawn move and no capture. When you are about to win, remember to leave the other king a square to go to.",
+      "intro": {
+        "judge": "Look at the board and at the side to move: has someone won, is it a draw, or does the game go on?",
+        "facts": "Some draws cannot be seen on one board, because they happen over many moves."
+      },
+      "prompt": {
+        "judge": "It is {side}'s turn. What is the game like now?"
+      },
+      "side": {
+        "w": "White",
+        "b": "Black"
+      },
+      "judge": {
+        "win": "Someone has won (checkmate)",
+        "draw": "A draw",
+        "ongoing": "The game goes on",
+        "wrong": "Not quite. Ask three questions: is the king of the side to move in check? Does that side have a move? Are there enough pieces left to checkmate?",
+        "stalemate": {
+          "right": "Right! The black king is not in check, but Black has no move at all: a draw."
+        },
+        "mate": {
+          "right": "Right! The black king is in check and cannot escape: checkmate, White wins."
+        },
+        "kingsOnly": {
+          "right": "Right! Only the two kings are left, and neither side can checkmate: a draw."
+        },
+        "rook": {
+          "right": "Right! White still has a rook, which can checkmate, so the game goes on."
+        },
+        "bishop": {
+          "right": "Right! A king and one bishop are not enough to checkmate: a draw."
+        },
+        "queen": {
+          "right": "Right! White still has a queen, which can checkmate, so the game goes on."
+        }
+      },
+      "quiz": {
+        "repeat": {
+          "q": "The two sides keep going back and forth, and the same position happens three times. What is the game like?",
+          "o0": "A draw",
+          "o1": "The game goes on",
+          "right": "Right! When the same position happens three times, it is a draw.",
+          "wrong": "Not quite. If the position keeps coming back, nobody is getting anywhere: the rules call that a draw."
+        },
+        "fifty": {
+          "q": "Fifty moves in a row, and neither side moves a pawn or takes a piece. What is the game like?",
+          "o0": "A draw",
+          "o1": "The game goes on",
+          "right": "Right! Fifty moves in a row with no pawn move and no capture is a draw.",
+          "wrong": "Not quite. If neither side moves a pawn or takes a piece for fifty moves, it is a draw."
+        },
+        "chase": {
+          "q": "White has a queen and a king, and Black has only a king, which still has a move. What is the game like?",
+          "o0": "A draw",
+          "o1": "The game goes on",
+          "right": "Right! A queen can still checkmate, so the game goes on.",
+          "wrong": "Not quite. A queen and a king are enough to checkmate, and the black king still has a move."
+        }
+      },
+      "allDone": "Well done! You finished this part.",
+      "done": "You know when a game is a draw!",
+      "fun": "When you are about to win, leave the other king a move, or the game will be a draw."
+    },
     "checkmate": {
       "name": "Catch the king: check and checkmate",
       "stage": {

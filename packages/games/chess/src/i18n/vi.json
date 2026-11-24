@@ -300,6 +300,143 @@
       "done": "Con đã biết đọc tên các ô trên bàn cờ!",
       "fun": "Từ giờ con có thể đọc nước đi, ví dụ \"Mã đi tới f3\". Hãy thử tìm ô f3 trên bàn cờ nhé."
     },
+    "setup": {
+      "name": "Xếp quân và đi trước",
+      "stage": {
+        "meet": "Xếp quân",
+        "place": "Tìm quân",
+        "ask": "Trả lời",
+        "done": "Xong"
+      },
+      "meet": "Mỗi bên có 16 quân. Quân trắng ở phía dưới, quân đen ở phía trên. Hàng sau xếp từ trái sang phải: xe, mã, tượng, hậu, vua, tượng, mã, xe. Hàng trước là tám chú tốt. Hậu luôn đứng đúng màu của mình: hậu trắng đứng ô sáng, hậu đen đứng ô tối. Ô góc bên phải phía mình luôn là ô sáng. Quân trắng đi trước, rồi hai bên thay phiên nhau, mỗi lần đi một nước. Mục tiêu của ván cờ là chiếu hết vua đối phương.",
+      "intro": {
+        "place": "Trên bàn cờ đang thiếu một quân. Hãy chọn quân đứng ở ô có vòng tròn.",
+        "ask": "Trả lời vài câu hỏi về cách bắt đầu một ván cờ."
+      },
+      "prompt": {
+        "place": "Quân nào đứng ở ô {square}?"
+      },
+      "color": {
+        "w": "trắng",
+        "b": "đen"
+      },
+      "place": {
+        "right": "Đúng rồi! Ở ô {square} là {piece} {color}.",
+        "wrong": "Chưa đúng. Hàng sau xếp từ trái sang phải: xe, mã, tượng, hậu, vua, tượng, mã, xe. Hãy thử lại nhé."
+      },
+      "quiz": {
+        "first": {
+          "q": "Bên nào đi trước?",
+          "o0": "Trắng",
+          "o1": "Đen",
+          "right": "Đúng rồi! Quân trắng luôn đi trước.",
+          "wrong": "Chưa đúng. Quân trắng luôn đi trước."
+        },
+        "corner": {
+          "q": "Ô góc bên phải, phía quân trắng, có màu gì?",
+          "o0": "Ô sáng",
+          "o1": "Ô tối",
+          "right": "Đúng rồi! Ô góc bên phải phía mình luôn là ô sáng.",
+          "wrong": "Chưa đúng. Hãy nhìn vào góc bên phải, phía quân trắng."
+        },
+        "queenColor": {
+          "q": "Hậu đen đứng trên ô màu gì?",
+          "o0": "Ô sáng",
+          "o1": "Ô tối",
+          "right": "Đúng rồi! Hậu luôn đứng đúng màu của mình, nên hậu đen đứng ô tối.",
+          "wrong": "Chưa đúng. Hậu trắng đứng ô sáng, còn hậu đen đứng đúng màu của mình."
+        },
+        "turns": {
+          "q": "Quân trắng vừa đi một nước. Bây giờ đến lượt ai?",
+          "o0": "Trắng",
+          "o1": "Đen",
+          "right": "Đúng rồi! Hai bên thay phiên nhau, nên bây giờ đến lượt quân đen.",
+          "wrong": "Chưa đúng. Hai bên thay phiên nhau, mỗi lần đi một nước."
+        },
+        "goal": {
+          "q": "Mục tiêu của ván cờ là gì?",
+          "o0": "Ăn hết quân của đối phương",
+          "o1": "Đưa một quân tốt đến cuối bàn cờ",
+          "o2": "Chiếu hết vua đối phương",
+          "right": "Đúng rồi! Ai chiếu hết vua đối phương trước thì thắng.",
+          "wrong": "Chưa đúng. Hãy nhớ lại bài Bắt vua: vua bị chiếu hết thì thua."
+        }
+      },
+      "allDone": "Giỏi quá! Con đã xong phần này.",
+      "done": "Con đã biết cách xếp quân, ai đi trước và mục tiêu của ván cờ!",
+      "fun": "Lần sau bạn bè xếp quân sai, con có thể chỉ cho họ nhé."
+    },
+    "draws": {
+      "name": "Khi nào hoà?",
+      "stage": {
+        "meet": "Ván hoà",
+        "judge": "Ai thắng?",
+        "facts": "Hoà thế nào?",
+        "done": "Xong"
+      },
+      "meet": "Có những ván cờ không ai thắng, không ai thua: đó là ván hoà. Hoà khi bên đến lượt không bị chiếu mà hết nước đi. Hoà khi không còn đủ quân để chiếu hết, như vua đấu vua, hay vua cùng một mã hoặc một tượng đấu vua. Hoà khi cùng một thế cờ lặp lại ba lần. Hoà khi năm mươi nước liền mỗi bên không đi tốt và không ăn quân. Khi sắp thắng, con nhớ để vua đối phương còn một đường đi nhé.",
+      "intro": {
+        "judge": "Hãy nhìn bàn cờ và xem bên đang đến lượt: có ai thắng, ván hoà, hay còn phải chơi tiếp?",
+        "facts": "Có những cách hoà không nhìn được trên một bàn cờ, vì chúng xảy ra sau nhiều nước đi."
+      },
+      "prompt": {
+        "judge": "Đến lượt {side}. Ván cờ đang thế nào?"
+      },
+      "side": {
+        "w": "quân trắng",
+        "b": "quân đen"
+      },
+      "judge": {
+        "win": "Có người thắng (chiếu hết)",
+        "draw": "Hoà",
+        "ongoing": "Còn chơi tiếp",
+        "wrong": "Chưa đúng. Hỏi ba câu: vua của bên đến lượt có bị chiếu không? Bên đó còn nước đi nào không? Hai bên còn đủ quân để chiếu hết không?",
+        "stalemate": {
+          "right": "Đúng! Vua đen không bị chiếu nhưng không còn nước đi nào: ván hoà."
+        },
+        "mate": {
+          "right": "Đúng! Vua đen bị chiếu và hết đường thoát: chiếu hết, quân trắng thắng."
+        },
+        "kingsOnly": {
+          "right": "Đúng! Chỉ còn hai vua, không bên nào chiếu hết được: ván hoà."
+        },
+        "rook": {
+          "right": "Đúng! Quân trắng còn xe, vẫn có thể chiếu hết, nên ván còn chơi tiếp."
+        },
+        "bishop": {
+          "right": "Đúng! Một vua cùng một tượng không đủ để chiếu hết: ván hoà."
+        },
+        "queen": {
+          "right": "Đúng! Quân trắng còn hậu, vẫn có thể chiếu hết, nên ván còn chơi tiếp."
+        }
+      },
+      "quiz": {
+        "repeat": {
+          "q": "Hai bên cứ đi qua đi lại, và cùng một thế cờ lặp lại ba lần. Ván cờ thế nào?",
+          "o0": "Hoà",
+          "o1": "Còn chơi tiếp",
+          "right": "Đúng! Cùng một thế cờ lặp lại ba lần thì ván hoà.",
+          "wrong": "Chưa đúng. Thế cờ cứ quay lại mãi thì chẳng ai tiến lên được: luật nói đó là ván hoà."
+        },
+        "fifty": {
+          "q": "Năm mươi nước liền, mỗi bên không đi tốt và không ăn quân nào. Ván cờ thế nào?",
+          "o0": "Hoà",
+          "o1": "Còn chơi tiếp",
+          "right": "Đúng! Năm mươi nước liền không đi tốt, không ăn quân thì ván hoà.",
+          "wrong": "Chưa đúng. Nếu cả hai bên đều không đi tốt và không ăn quân suốt năm mươi nước thì ván hoà."
+        },
+        "chase": {
+          "q": "Quân trắng còn hậu và vua, quân đen chỉ còn vua nhưng vẫn có nước đi. Ván cờ thế nào?",
+          "o0": "Hoà",
+          "o1": "Còn chơi tiếp",
+          "right": "Đúng! Còn hậu thì vẫn có thể chiếu hết, nên ván còn chơi tiếp.",
+          "wrong": "Chưa đúng. Hậu và vua đủ sức chiếu hết vua đối phương, và vua đen vẫn còn nước đi."
+        }
+      },
+      "allDone": "Giỏi quá! Con đã xong phần này.",
+      "done": "Con đã biết khi nào ván cờ hoà!",
+      "fun": "Khi sắp thắng, con nhớ để vua đối phương còn một nước đi, kẻo ván lại hoà nhé."
+    },
     "checkmate": {
       "name": "Bắt vua: chiếu và chiếu hết",
       "stage": {

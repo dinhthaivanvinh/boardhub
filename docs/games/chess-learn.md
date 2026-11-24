@@ -105,6 +105,16 @@ Các bước: gặp vua → **Chiếu** (5 thế: bấm quân đang dọa vua; x
 
 Chưa có: chơi trọn ván Hậu + Vua bắt Vua với máy, hoàn tác, bài xe + vua.
 
+## 3f. Bài Xếp quân và đi trước (chặng 0, sau Toạ độ)
+
+Bài `/learn/chess/setup` (`learn/basics.ts`, `BasicsLessons.tsx`): cách một ván bắt đầu. Các bước: **Xếp quân** (hàng sau từ trái sang phải xe, mã, tượng, hậu, vua, tượng, mã, xe; hậu đứng đúng màu của mình; ô góc bên phải phía mình luôn sáng; Trắng đi trước, hai bên thay phiên; mục tiêu là chiếu hết vua) → **Tìm quân** (6 câu: bàn cờ thiếu một quân ở ô có vòng, bé chọn quân trong 6 nút) → **Trả lời** (5 câu chọn đáp án: ai đi trước, màu ô góc, màu ô của hậu đen, đến lượt ai, mục tiêu của ván). Test đối chiếu từng sự thật với engine (Trắng đi trước, h1 là ô sáng, hậu trắng d1 sáng, hậu đen d8 tối, quân ở từng ô của thế xuất phát).
+
+## 3g. Bài Khi nào hoà? (chặng 2, sau Bắt vua)
+
+Bài `/learn/chess/draws`: các cách ván cờ kết thúc không có người thắng. Các bước: **Ván hoà** (hết nước đi mà không bị chiếu; không đủ quân chiếu hết: vua với vua, vua với một mã hoặc một tượng; lặp thế 3 lần; 50 nước mỗi bên không đi tốt, không ăn quân; dặn để vua đối phương còn đường đi khi sắp thắng) → **Ai thắng?** (6 thế: chiếu hết, hoà do hết nước đi, vua với vua, vua với tượng, và hai thế còn chơi tiếp là xe và hậu; bé chọn "có người thắng", "hoà" hay "còn chơi tiếp") → **Hoà thế nào?** (3 câu chữ cho điều không thấy được trên một thế cờ: lặp thế, 50 nước, và một câu "còn chơi tiếp"). Test dùng engine kiểm tra đáp án từng thế (`outcomeOf`: bí nước, không đủ quân hay chiếu hết).
+
+Cả hai bài đều có lời đọc: câu tiếng Việt thu sẵn thành mp3 (`speech-texts.ts` liệt kê câu cho cả `vi` và `en`; tiếng Anh dùng giọng của trình duyệt), có trong hành trình (`journey.ts`) và tính 3 sao mỗi bài như các bài khác. Hai bài chưa có phần Luyện tập riêng.
+
 ## 4. Tiến độ
 
 - Mỗi bài chỉ có hai trạng thái: chưa xong / đã xong (✓), lưu `localStorage` khóa `learn.chess.v1` (danh sách id bài đã xong).

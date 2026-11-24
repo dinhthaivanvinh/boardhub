@@ -84,7 +84,7 @@ test('the home helper tells a newcomer to start, then points at the next lesson'
 
   await page.evaluate(() => window.localStorage.setItem('learn.chess.v1', JSON.stringify(['coordinates'])));
   await page.reload();
-  await expect(page.getByTestId('helper-learn')).toHaveAttribute('href', '/learn/chess/pawn');
+  await expect(page.getByTestId('helper-learn')).toHaveAttribute('href', '/learn/chess/setup');
   await expect(page.getByTestId('home-helper-line')).toContainText('học bài');
   await expect(page.getByTestId('stat-stars')).toHaveText('3 ⭐');
 });
@@ -97,6 +97,7 @@ test('the journey shows the next lesson, the stages and the badges earned', asyn
 
   const all = [
     'coordinates',
+    'setup',
     'pawn',
     'rook',
     'bishop',
@@ -105,6 +106,7 @@ test('the journey shows the next lesson, the stages and the badges earned', asyn
     'king',
     'capture',
     'checkmate',
+    'draws',
     'italian',
     'queens-gambit',
     'london',
@@ -120,7 +122,7 @@ test('the journey shows the next lesson, the stages and the badges earned', asyn
   await page.reload();
   await expect(page.getByTestId('journey-continue')).toHaveCount(0);
   await expect(page.getByTestId('journey-badge-count')).toHaveText('Đã được 8/14 huy hiệu');
-  await expect(page.getByTestId('stat-stars')).toHaveText('57 ⭐');
+  await expect(page.getByTestId('stat-stars')).toHaveText('63 ⭐');
 });
 
 test('the header links to the puzzles and the journey', async ({ page, isMobile }) => {

@@ -45,6 +45,44 @@ describe('chess bot', () => {
     30_000,
   );
 
+  it('easy is gentle: it often misses a free queen and a mate in one, but not never', () => {
+    const queen = fen('4k3/8/8/3q4/8/2N5/8/4K3 w - -');
+    const mate = fen('6k1/5ppp/8/8/8/8/8/R5K1 w - -');
+    const rate = (st: ChessState, goal: { from: number; to: number }) => {
+      let hits = 0;
+      const games = 200;
+      for (let i = 0; i < games; i++) {
+        const m = bot.chooseMove({
+          state: st,
+          seat: st.turn,
+          level: 'easy',
+          rng: createRng(`easy${i}`, 0),
+          deadlineMs: Date.now() + 200,
+        });
+        if (m.from === goal.from && m.to === goal.to) hits++;
+      }
+      return hits / games;
+    };
+    const takeQueen = rate(queen, { from: s('c3'), to: s('d5') });
+    expect(takeQueen).toBeGreaterThan(0.05);
+    expect(takeQueen).toBeLessThan(0.5);
+    expect(rate(mate, { from: s('a1'), to: s('a8') })).toBeLessThan(0.25);
+  });
+
+  it('medium beats easy', () => {
+    const play = (level: BotLevel) => (st: ChessState, seat: Seat, game: number, ply: number) =>
+      bot.chooseMove({
+        state: st,
+        seat,
+        level,
+        rng: createRng(`${level}${game}`, ply),
+        deadlineMs: Date.now() + 60,
+      });
+    const { wins } = playArena(definition, {}, [play('medium'), play('easy')], 2);
+    expect(wins[0]).toBeGreaterThanOrEqual(1);
+    expect(wins[1]).toBe(0);
+  }, 180_000);
+
   it('orders big captures first and counts material for the right side', () => {
     const st = fen('4k3/8/8/3q4/8/2N5/8/4K3 w - -');
     expect(orderMoves(st, definition.legalMoves!(st, 0))[0]).toEqual({ from: s('c3'), to: s('d5') });

@@ -107,14 +107,35 @@ export function orderMoves(s: ChessState, moves: ChessMove[]): ChessMove[] {
     .map((x) => x.m);
 }
 
-export const bot = createBot({
+const searchBot = createBot({
   id: 'chess.default',
   def: definition,
   evaluate,
   orderMoves,
   levels: {
-    easy: { algo: 'greedy', timeMs: 300, noise: 0.3 },
+    easy: { algo: 'random', timeMs: 100 },
     medium: { algo: 'minimax', timeMs: 1000, maxDepth: 3 },
     hard: { algo: 'minimax', timeMs: 2500, maxDepth: 5, maxBranching: 24 },
   },
 });
+
+/** Chance that the gentle level takes a piece when it can. Low on purpose: a new player should win pieces too. */
+export const GENTLE_CAPTURE_CHANCE = 0.2;
+
+/**
+ * `easy` is for children who have just learnt the moves: it plays any legal move, and only now and then
+ * (`GENTLE_CAPTURE_CHANCE`) takes a piece. It does not look ahead, so it leaves pieces hanging and a child
+ * can win by taking them. The other levels search as usual.
+ */
+export const bot: typeof searchBot = {
+  ...searchBot,
+  chooseMove(input) {
+    if (input.level === 'easy') {
+      const legal = definition.legalMoves?.(input.state, input.seat) ?? [];
+      const captures = legal.filter((m) => input.state.board[m.to] !== null);
+      if (captures.length > 0 && input.rng.next() < GENTLE_CAPTURE_CHANCE)
+        return captures[input.rng.int(0, captures.length)]!;
+    }
+    return searchBot.chooseMove(input);
+  },
+};

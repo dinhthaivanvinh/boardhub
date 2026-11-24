@@ -88,7 +88,7 @@ Perfect information: trả về toàn bộ state.
 
 - Hàm đánh giá: vật chất + bảng vị trí theo ô (simplified evaluation), cộng điểm nhỏ khi đối thủ bị chiếu.
 - Sắp nước: ăn quân giá trị cao bằng quân rẻ trước (MVV-LVA), phong cấp, rồi nước thường.
-- `easy`: greedy có nhiễu; `medium`: minimax độ sâu 3; `hard`: minimax độ sâu 5 (giới hạn thời gian 2,5 giây).
+- `easy` (dành cho bé mới học): đi một nước hợp lệ bất kỳ, chỉ 20% số lần có quân để ăn thì mới ăn; không nhìn trước nên hay để hớ quân và bé có thể thắng bằng cách ăn lại; `medium`: minimax độ sâu 3; `hard`: minimax độ sâu 5 (giới hạn thời gian 2,5 giây).
 
 ## 11. UI
 

@@ -435,6 +435,11 @@
         "text": "Castling, en passant and promotion.",
         "cta": "Learn special moves"
       },
+      "tactics": {
+        "title": "Little tricks and endgames",
+        "text": "Forks, pins, two rooks and draws.",
+        "cta": "Learn the tricks"
+      },
       "play": {
         "title": "Play for real",
         "text": "Play the computer at several levels, or a friend.",

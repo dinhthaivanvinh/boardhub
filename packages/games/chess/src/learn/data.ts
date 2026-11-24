@@ -1,6 +1,7 @@
 import type { Color, PieceType } from '../rules/types';
 import { CAPTURE_LESSON_ID } from './capture';
 import { CHECKMATE_LESSON_ID } from './checkmate';
+import { TACTICS_LESSON_ID } from './tactics';
 
 /** Lesson data only: no rules live here, moves and targets come from the engine. Text is in i18n (`games.chess.learn.*`). */
 export type PieceLessonData = {
@@ -139,6 +140,7 @@ export const LESSON_IDS = [
   ...PIECE_LESSONS.map((l) => l.id),
   ...OPENING_LESSONS.map((l) => l.id),
   ...SPECIAL_LESSONS.map((l) => l.id),
+  TACTICS_LESSON_ID,
 ] as const;
 export type LessonId = (typeof LESSON_IDS)[number];
 

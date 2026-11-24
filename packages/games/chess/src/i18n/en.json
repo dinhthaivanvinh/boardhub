@@ -416,6 +416,66 @@
       "fun": "From now on, before you capture, ask: does anything protect that piece?"
     },
     "captureHeading": "Capturing and protecting",
-    "speakResults": "Read results"
+    "speakResults": "Read results",
+    "tactics": {
+      "name": "Little tricks and endgames",
+      "stage": {
+        "meet": "Little tricks",
+        "fork": "Forks",
+        "pin": "Pinned pieces",
+        "mate": "Two rooks",
+        "draw": "Draw or win?",
+        "done": "Done"
+      },
+      "meet": "Chess has some great little tricks. A fork: one piece attacks two pieces at once, and the enemy can save only one. A pin: a piece in front of the king cannot move, or the king would be attacked. Two rooks working together can checkmate the king. And you need to know when a game is a draw.",
+      "intro": {
+        "fork": "Find the move that makes one of your pieces attack two big enemy pieces at once. The enemy can save only one, and you take the other!",
+        "pin": "A pinned piece stands right in front of the king: if it moves away, the king is attacked. Find the pinned white piece.",
+        "mate": "Two rooks work like a staircase: one rook cuts off the rows, the other gives check. Find the checkmate.",
+        "draw": "It is Black to move. Look: is the black king in check? Does Black have any move? That tells you if it is checkmate, a draw, or not over yet."
+      },
+      "prompt": {
+        "fork": "Find the fork.",
+        "pin": "Which white piece is pinned?",
+        "mate": "Find the checkmate with two rooks.",
+        "draw": "What is the state of the game?"
+      },
+      "fork": {
+        "illegal": "That piece cannot go there.",
+        "notFork": "That move is not a fork. Find a move where one piece attacks two big pieces at once.",
+        "right": "A fork! The enemy can save only one piece.",
+        "hint": "Hint: tap the highlighted piece, then look for the square where it forks."
+      },
+      "pin": {
+        "right": "Correct! This piece is pinned: if it moves away, the white king is attacked. The highlighted black piece is pinning it.",
+        "wrong": "Not quite. Find the white piece standing between the king and a black piece aiming at the king.",
+        "hint": "Hint: the highlighted black piece is aiming straight at the white king."
+      },
+      "mate": {
+        "right": "Checkmate! The black king has no escape. You win!",
+        "escaped": "The black king escaped! Try another move.",
+        "stalemate": "Oh, the black king cannot move but is not in check: a draw! Try another move.",
+        "noCheck": "That move does not check the black king. Try another move.",
+        "defended": "Black found a way to save the king (block or capture)! Try another move.",
+        "illegal": "That piece cannot go there.",
+        "hint1": "Hint: tap the piece on square {from}.",
+        "hint2": "Hint: tap the piece on {from}, then move it to {to}."
+      },
+      "draw": {
+        "mate": "Checkmate",
+        "stalemate": "Draw",
+        "ongoing": "Not over",
+        "right": {
+          "mate": "Correct! The black king is in check and has no escape: checkmate.",
+          "stalemate": "Correct! The black king is not in check but has no move at all: a draw. When you are winning, do not trap the king like that!",
+          "ongoing": "Correct! Black still has moves, the game is not over."
+        },
+        "wrong": "Not quite. Ask two questions: is the black king in check? Does Black have any move?"
+      },
+      "allDone": "Great job! You finished this part.",
+      "done": "You know forks, pinned pieces, two-rook mates and draws!",
+      "fun": "Remember: before you move, look for a fork. And do not trap the enemy king without giving check."
+    },
+    "tacticsHeading": "Little tricks and endgames"
   }
 }

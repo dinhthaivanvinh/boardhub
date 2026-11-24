@@ -1,6 +1,6 @@
 # Cờ vua: chế độ Học (spec)
 
-Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài ăn quân, bài chiếu hết, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
+Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài ăn quân, bài chiếu hết, bài mẹo nhỏ, 3 nước đặc biệt, 6 khai cuộc). Mã: `packages/games/chess/src/learn`, route `/learn/chess`. Quyết định kiến trúc: [ADR-0009](../adr/0009-chess-learn-area.md). Đối tượng: trẻ mới biết cờ.
 
 ## 1. Nguyên tắc
 
@@ -74,6 +74,14 @@ Các bước: gặp bàn cờ → **Hàng số** (bấm cả hàng) → **Cột 
 đáp án sai là ô cùng cột và ô cùng hàng, đúng thứ bé hay nhầm). Mỗi bước 5 câu; đúng thì tự sang câu sau, sai thì thử lại
 không giới hạn kèm nhắc luật. Câu hỏi sinh bằng hàm thuần có seed cố định (`coordRounds`), nên lặp lại được và test được.
 Chưa có bài "Đặt quân" (đặt vua vào ô e1).
+
+## 3e. Bài Mẹo nhỏ và tàn cuộc (chặng 6)
+
+Bài `/learn/chess/tactics`, bài cuối của lộ trình trước khi chơi thật. Các bước: gặp mẹo nhỏ → **Chĩa hai mũi** (4 thế: mã, mã chiếu vua, tốt, tượng; nước đi thường không được tính, mọi nước chĩa hai mũi an toàn đều đúng; có Gợi ý) → **Quân bị ghim** (3 thế: bấm quân trắng đang bị ghim; đáp án đúng thì quân đen đang ghim được tô sáng) → **Hai xe** (3 thế chiếu hết 1 nước, dùng lại khung "Bắt vua" của bài chiếu hết) → **Hoà hay thắng?** (5 thế, lượt đen: chiếu hết, hoà do hết nước đi, hay chưa xong).
+
+Đáp án do engine tính (`forkMoves`, `pinnedSquares`, `pinners`, `drawKind`), test kiểm tra từng FEN. Một "chĩa hai mũi" là nước sau đó quân vừa đi tấn công hai quân lớn (từ mã trở lên, hoặc vua) và đen không ăn được nó.
+
+Chưa có: ghim tương đối (quân sau là hậu), xiên (skewer), tàn cuộc xe + vua, chơi trọn ván Hậu + Vua với máy.
 
 ## 3d. Bài Ăn quân và bảo vệ (chặng 2)
 

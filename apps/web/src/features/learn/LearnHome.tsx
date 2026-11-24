@@ -9,6 +9,7 @@ import {
   OPENING_LESSONS,
   PIECE_LESSONS,
   SPECIAL_LESSONS,
+  TACTICS_LESSON_ID,
 } from '@bg/game-chess';
 import { useDoneLessons } from './use-progress';
 
@@ -90,6 +91,12 @@ export function LearnHome() {
               t(`games.chess.learn.specials.${l.id}.meet`),
             ),
           )}
+        </ul>
+      </section>
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">{t('games.chess.learn.tacticsHeading')}</h2>
+        <ul className="grid gap-3">
+          {item(TACTICS_LESSON_ID, t('games.chess.learn.tactics.name'), t('games.chess.learn.tactics.meet'))}
         </ul>
       </section>
       <Link href="/games/chess" className="btn w-fit">

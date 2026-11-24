@@ -36,6 +36,7 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 | `GET /health`                  | —                                  | `{ ok: true }`                                                                                                                         |
 
 Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
+Giới hạn: `POST /api/auth/guest`, `/register`, `/login` tối đa `AUTH_RATE_LIMIT` (mặc định 20) yêu cầu/phút/địa chỉ, quá thì HTTP 429 `rate.limited`. Ở production server tin `X-Forwarded-For` (`trustProxy`) để tính địa chỉ thật sau proxy của Render.
 CORS cho phép `GET, HEAD, POST, PATCH, PUT`.
 
 ### 2.1 Quản trị và báo cáo (M4b)

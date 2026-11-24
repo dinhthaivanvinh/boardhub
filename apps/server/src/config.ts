@@ -13,6 +13,8 @@ const EnvSchema = z.object({
   REDIS_URL: z.string().url().optional(),
   /** Unset = keep users and history in memory (dev only). */
   DATABASE_URL: z.string().url().optional(),
+  /** Sign-in, sign-up and guest requests allowed per minute from one address. */
+  AUTH_RATE_LIMIT: z.coerce.number().int().min(1).default(20),
   GRACE_MS: z.coerce.number().int().min(1_000).default(60_000),
   BOT_DELAY_MS: z.coerce.number().int().min(0).default(400),
   /** 0 = run bots on the main thread. */

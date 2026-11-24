@@ -137,6 +137,7 @@ The server reads environment variables. Every one is optional in development. Se
 | `CORS_ORIGIN`                  | any origin         | **required in production**: the web app's origin(s), comma-separated          |
 | `ADMIN_EMAILS`                 | none               | comma-separated emails of registered accounts allowed to open `/admin`        |
 | `GRACE_MS`                     | `60000`            | how long a disconnected player keeps their seat                               |
+| `AUTH_RATE_LIMIT`              | `20`               | sign-in, sign-up and guest requests per minute from one address (HTTP 429)    |
 | `BOT_DELAY_MS` / `BOT_WORKERS` | `400` / `2`        | bot pause before moving / bot worker threads (`0` = main thread)              |
 | `LOG_LEVEL`                    | `info`             | `fatal` … `trace`, or `silent`                                                |
 

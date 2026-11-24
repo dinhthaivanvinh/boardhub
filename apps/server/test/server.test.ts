@@ -24,7 +24,13 @@ const sockets: Client[] = [];
 
 beforeAll(async () => {
   server = await buildServer(
-    loadConfig({ LOG_LEVEL: 'silent', BOT_WORKERS: '0', BOT_DELAY_MS: '0', GRACE_MS: '1000' }),
+    loadConfig({
+      LOG_LEVEL: 'silent',
+      BOT_WORKERS: '0',
+      BOT_DELAY_MS: '0',
+      GRACE_MS: '1000',
+      AUTH_RATE_LIMIT: '1000',
+    }),
   );
   await server.app.listen({ port: 0, host: '127.0.0.1' });
   const address = server.app.server.address();

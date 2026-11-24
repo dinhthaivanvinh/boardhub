@@ -27,6 +27,7 @@
     "@bg/office-lucky-animal": "workspace:*",
     "@bg/protocol": "workspace:*",
     "@fastify/cors": "catalog:",
+    "@fastify/rate-limit": "catalog:",
     "@socket.io/redis-adapter": "catalog:",
     "fastify": "catalog:",
     "ioredis": "catalog:",

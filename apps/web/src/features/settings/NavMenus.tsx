@@ -31,7 +31,7 @@ export function NavMenus() {
   }, [open]);
 
   return (
-    <nav ref={root} className="hidden items-center gap-1 text-sm sm:flex" aria-label={t('label')}>
+    <nav ref={root} className="hidden items-center gap-1 text-sm md:flex" aria-label={t('label')}>
       {NAV_LINKS.map((link) => (
         <Link
           key={link.href}

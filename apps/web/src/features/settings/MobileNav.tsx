@@ -30,7 +30,7 @@ export function MobileNav() {
   }, [open]);
 
   return (
-    <div ref={root} className="relative sm:hidden">
+    <div ref={root} className="relative md:hidden">
       <button
         type="button"
         className="grid size-9 place-items-center rounded-lg border border-[var(--border)]"

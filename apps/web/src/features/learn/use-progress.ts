@@ -1,5 +1,14 @@
 import { useCallback, useSyncExternalStore } from 'react';
-import { markDone, readProgress, type LessonId } from '@bg/game-chess';
+import {
+  dateKey,
+  EMPTY_PUZZLE_PROGRESS,
+  markDone,
+  markPuzzleSolved,
+  readProgress,
+  readPuzzleProgress,
+  type LessonId,
+  type PuzzleProgress,
+} from '@bg/game-chess';
 
 const listeners = new Set<() => void>();
 let cache: { raw: string; set: ReadonlySet<string> } | null = null;
@@ -37,4 +46,44 @@ export function useMarkDone() {
     markDone(storage(), id as LessonId);
     listeners.forEach((l) => l());
   }, []);
+}
+
+// ---------------------------------------------------------------------------------------------------------
+// Puzzles: solved ones, the days played (for the streak) and "today"
+
+const puzzleListeners = new Set<() => void>();
+let puzzleCache: { raw: string; value: PuzzleProgress } | null = null;
+
+function puzzleSnapshot(): PuzzleProgress {
+  const value = readPuzzleProgress(storage());
+  const raw = JSON.stringify(value);
+  if (!puzzleCache || puzzleCache.raw !== raw) puzzleCache = { raw, value };
+  return puzzleCache.value;
+}
+
+export function usePuzzleProgress(): PuzzleProgress {
+  return useSyncExternalStore(
+    (notify) => {
+      puzzleListeners.add(notify);
+      return () => void puzzleListeners.delete(notify);
+    },
+    puzzleSnapshot,
+    () => EMPTY_PUZZLE_PROGRESS,
+  );
+}
+
+export function useMarkPuzzle() {
+  return useCallback((id: string, today: string, daily: boolean) => {
+    markPuzzleSolved(storage(), id, today, daily);
+    puzzleListeners.forEach((l) => l());
+  }, []);
+}
+
+/** Today's date as the child sees it ("YYYY-MM-DD"); empty on the server and until the page is on the screen. */
+export function useToday(): string {
+  return useSyncExternalStore(
+    () => () => {},
+    () => dateKey(new Date()),
+    () => '',
+  );
 }

@@ -1679,6 +1679,7 @@ body {
 .nav-link {
   border-radius: 9999px;
   font-weight: 700;
+  white-space: nowrap;
 }
 .nav-link:hover,
 .nav-link[data-current='true'] {
@@ -1780,4 +1781,362 @@ nav section[data-g='5'] {
   display: block;
   border-radius: 0.3rem;
   box-shadow: 0 2px 0 color-mix(in srgb, var(--fg) 20%, transparent);
+}
+
+/* ---------------------------------------------------------------------------------------------------------
+   Câu đố, hành trình, huy hiệu và chú Mã trên trang chủ. */
+.puzzle-title {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 900;
+  line-height: 1.15;
+}
+.puzzle-wait {
+  min-height: 60vh;
+}
+
+/* Ba chip: cấp bậc, sao, chuỗi ngày. */
+.learn-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.learn-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.9rem;
+  border: 2px solid color-mix(in srgb, var(--c) 45%, var(--border));
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--c) 14%, var(--card));
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.learn-stat[data-i='0'] {
+  --c: var(--k4);
+}
+.learn-stat[data-i='1'] {
+  --c: var(--k1);
+}
+.learn-stat[data-i='2'] {
+  --c: var(--k0);
+}
+.learn-stat-icon {
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Câu đố hôm nay. */
+.puzzle-daily {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  border: 2px solid color-mix(in srgb, var(--k1) 55%, var(--border));
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--k1) 22%, var(--card)),
+    color-mix(in srgb, var(--k0) 12%, var(--card))
+  );
+}
+.puzzle-daily-icon {
+  font-size: 2.6rem;
+  line-height: 1;
+}
+.puzzle-daily-body {
+  flex: 1 1 14rem;
+}
+
+/* Ba mức chơi. */
+.puzzle-tier {
+  --c: var(--k2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 2px solid color-mix(in srgb, var(--c) 40%, var(--border));
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--c) 9%, var(--card));
+}
+.puzzle-tier[data-i='1'] {
+  --c: var(--k3);
+}
+.puzzle-tier[data-i='2'] {
+  --c: var(--k4);
+}
+.puzzle-tier-name {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--c) 80%, var(--fg));
+}
+.puzzle-tier .btn-primary {
+  background: var(--c);
+  border-color: var(--c);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--c) 55%, #000);
+}
+.puzzle-bar {
+  height: 0.75rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--c) 18%, var(--card));
+}
+.puzzle-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--c);
+  transition: width 0.4s;
+}
+
+/* Sau khi giải đúng. */
+.puzzle-after {
+  display: grid;
+  gap: 0.5rem;
+}
+.puzzle-reward {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--k1) 70%, var(--fg));
+  animation: home-bounce 0.8s ease-out;
+}
+
+/* Hành trình. */
+.journey-path {
+  display: grid;
+  gap: 1rem;
+}
+.journey-go {
+  justify-self: start;
+}
+.journey-all-done {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.journey-stages {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  padding-left: 1.5rem;
+}
+/* Một đường nét đứt nối các chặng. */
+.journey-stages::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  bottom: 1rem;
+  left: 0.35rem;
+  border-left: 4px dotted color-mix(in srgb, var(--k3) 45%, var(--border));
+}
+.journey-stage {
+  --c: var(--k0);
+  position: relative;
+  border: 2px solid color-mix(in srgb, var(--c) 40%, var(--border));
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--c) 8%, var(--card));
+}
+.journey-stage[data-g='1'] {
+  --c: var(--k1);
+}
+.journey-stage[data-g='2'] {
+  --c: var(--k2);
+}
+.journey-stage[data-g='3'] {
+  --c: var(--k3);
+}
+.journey-stage[data-g='4'] {
+  --c: var(--k4);
+}
+.journey-stage[data-g='5'] {
+  --c: var(--k5);
+}
+.journey-stage[data-g='6'] {
+  --c: var(--k2);
+}
+.journey-stage[data-g='7'] {
+  --c: var(--k3);
+}
+.journey-stage-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+.journey-stage-number {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: var(--c);
+  color: #fff;
+  font-size: 0.95rem;
+}
+.journey-stage .btn {
+  background: var(--c);
+  border-color: var(--c);
+  color: #fff;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--c) 55%, #000);
+}
+.journey-nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.journey-stage .journey-node {
+  box-shadow: none;
+  background: var(--card);
+  color: inherit;
+}
+.journey-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.3rem 0.9rem 0.3rem 0.4rem;
+  border: 2px solid color-mix(in srgb, var(--c) 35%, var(--border));
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: transform 0.15s;
+}
+.journey-node:hover {
+  transform: translateY(-2px);
+  border-color: var(--c);
+}
+.journey-node-dot {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--c) 18%, var(--card));
+  font-size: 1rem;
+}
+.journey-stage .journey-node[data-state='done'] {
+  background: color-mix(in srgb, var(--k1) 18%, var(--card));
+  border-color: var(--k1);
+}
+.journey-node[data-state='done'] .journey-node-dot {
+  background: color-mix(in srgb, var(--k1) 35%, var(--card));
+}
+.journey-stage .journey-node[data-state='next'] {
+  border-color: var(--c);
+  background: var(--c);
+  color: #fff;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--c) 55%, #000);
+  animation: home-float 2.4s ease-in-out infinite;
+}
+.journey-node[data-state='next'] .journey-node-dot {
+  background: #fff;
+  color: var(--c);
+}
+
+/* Huy hiệu. */
+.journey-badge {
+  --c: var(--k0);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border: 2px solid color-mix(in srgb, var(--c) 40%, var(--border));
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--c) 10%, var(--card));
+}
+.journey-badge[data-i='1'] {
+  --c: var(--k1);
+}
+.journey-badge[data-i='2'] {
+  --c: var(--k2);
+}
+.journey-badge[data-i='3'] {
+  --c: var(--k3);
+}
+.journey-badge[data-i='4'] {
+  --c: var(--k4);
+}
+.journey-badge[data-i='5'] {
+  --c: var(--k5);
+}
+.journey-badge-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--c) 28%, var(--card));
+  font-size: 1.7rem;
+}
+.journey-badge[data-earned='false'] {
+  border-color: var(--border);
+  background: var(--card);
+  opacity: 0.7;
+}
+.journey-badge[data-earned='false'] .journey-badge-icon {
+  background: color-mix(in srgb, var(--fg) 8%, var(--card));
+  filter: grayscale(1);
+}
+
+/* Chú Mã trên trang chủ. */
+.home-helper {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 1rem;
+  border: 2px solid color-mix(in srgb, var(--k3) 45%, var(--border));
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--k3) 12%, var(--card)),
+    color-mix(in srgb, var(--k4) 10%, var(--card))
+  );
+}
+.home-helper-mascot {
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--k3) 22%, var(--card));
+  animation: home-float 3s ease-in-out infinite;
+}
+.home-helper-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--k3) 80%, var(--fg));
+}
+.home-helper-bubble {
+  display: inline-block;
+  margin: 0.35rem 0 0.5rem;
+  padding: 0.6rem 1rem;
+  border: 2px solid color-mix(in srgb, var(--k3) 40%, var(--border));
+  border-radius: 1.25rem;
+  background: var(--card);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.home-helper-stats {
+  grid-column: 1 / -1;
+}
+@media (max-width: 30rem) {
+  .home-helper {
+    grid-template-columns: 1fr;
+  }
+  .home-helper-mascot {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-helper-mascot,
+  .journey-stage .journey-node[data-state='next'],
+  .puzzle-reward {
+    animation: none;
+  }
+  .journey-node,
+  .puzzle-bar > span {
+    transition: none;
+  }
 }

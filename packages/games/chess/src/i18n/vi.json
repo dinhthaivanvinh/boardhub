@@ -481,6 +481,153 @@
     "groupStart": "Bắt đầu",
     "groupRules": "Luật cơ bản",
     "groupTactics": "Chiến thuật",
-    "allLessons": "Tất cả bài học"
+    "allLessons": "Tất cả bài học",
+    "puzzles": {
+      "name": "Câu đố chiếu hết",
+      "title": "Câu đố cờ vua",
+      "subtitle": "Tìm nước đi để chiếu hết vua đen chỉ trong 1 nước. Mỗi câu giải được là 1 ⭐!",
+      "daily": {
+        "title": "Câu đố hôm nay",
+        "text": "Mỗi ngày có một câu mới. Giải mỗi ngày để giữ chuỗi ngày liên tiếp nhé!",
+        "play": "Giải ngay",
+        "done": "Bạn đã giải câu đố hôm nay rồi. Mai quay lại nhé!",
+        "again": "Chơi lại",
+        "badge": "Hôm nay"
+      },
+      "tiersHeading": "Chọn mức chơi",
+      "tier": {
+        "1": {
+          "name": "Tập sự",
+          "text": "Ít quân, dễ nhìn. Hợp để làm quen."
+        },
+        "2": {
+          "name": "Chiến binh",
+          "text": "Nhiều quân hơn, phải nhìn kỹ hơn."
+        },
+        "3": {
+          "name": "Cao thủ",
+          "text": "Nhiều nước chiếu, chỉ một nước thắng."
+        }
+      },
+      "solved": "Đã giải {n}/{total} câu",
+      "start": "Bắt đầu",
+      "continue": "Chơi tiếp",
+      "replay": "Chơi lại từ đầu",
+      "next": "Câu tiếp theo",
+      "reward": "Giỏi quá! Bạn được thêm 1 ⭐",
+      "back": "Về danh sách câu đố",
+      "tierDone": "Bạn đã giải hết các câu ở mức này! Thử mức khác nhé.",
+      "streak": "{n} ngày liên tiếp",
+      "noStreak": "Giải một câu để bắt đầu chuỗi ngày",
+      "stars": "{n} ⭐",
+      "levelLabel": "Mức {name}",
+      "todayLabel": "Câu đố hôm nay"
+    },
+    "journey": {
+      "name": "Hành trình của bạn",
+      "title": "Hành trình của bạn",
+      "subtitle": "Học từng bước, nhận sao và huy hiệu. Bạn đi được đến đâu rồi?",
+      "stageLabel": "Chặng {n}",
+      "stage": {
+        "start": "Làm quen bàn cờ",
+        "pieces": "Gặp các quân cờ",
+        "rules": "Luật chơi cơ bản",
+        "openings": "Khai cuộc nổi tiếng",
+        "specials": "Nước đi đặc biệt",
+        "tactics": "Mẹo nhỏ và tàn cuộc"
+      },
+      "next": "Học tiếp",
+      "nextHere": "Bài tiếp theo",
+      "done": "Đã xong",
+      "allDone": "Bạn đã học hết mọi bài rồi. Giỏi lắm!",
+      "puzzlesTitle": "Giải câu đố",
+      "puzzlesText": "Luyện mắt tìm nước chiếu hết, mỗi câu được 1 ⭐.",
+      "playTitle": "Chơi một ván thật",
+      "playText": "Thử sức với máy và dùng những gì bạn đã học.",
+      "go": "Đi thôi",
+      "starsTotal": "{n} ⭐",
+      "rank": "Cấp bậc",
+      "toNext": "Còn {n} ⭐ nữa để lên {rank}",
+      "topRank": "Bạn đã đạt cấp cao nhất!",
+      "badges": "Huy hiệu",
+      "badgesCount": "Đã được {n}/{total} huy hiệu",
+      "locked": "Chưa mở",
+      "streak": "{n} ngày liên tiếp",
+      "ranks": {
+        "chick": "Gà con cờ vua",
+        "pawn": "Tốt nhỏ",
+        "knight": "Mã dũng cảm",
+        "bishop": "Tượng thông minh",
+        "rook": "Xe vững vàng",
+        "queen": "Hậu quyền lực",
+        "king": "Vua cờ vua"
+      },
+      "badge": {
+        "first": {
+          "name": "Bước đầu tiên",
+          "text": "Hoàn thành bài học đầu tiên."
+        },
+        "coordinates": {
+          "name": "Người đọc bàn cờ",
+          "text": "Biết tên từng ô trên bàn cờ."
+        },
+        "pieces": {
+          "name": "Bạn của các quân cờ",
+          "text": "Học xong cả 6 quân cờ."
+        },
+        "rules": {
+          "name": "Hiểu luật chơi",
+          "text": "Biết ăn quân và chiếu hết."
+        },
+        "openings": {
+          "name": "Nhà khai cuộc",
+          "text": "Học xong 6 khai cuộc nổi tiếng."
+        },
+        "specials": {
+          "name": "Bậc thầy nước đặc biệt",
+          "text": "Biết nhập thành, bắt tốt qua đường và phong cấp."
+        },
+        "tactics": {
+          "name": "Thợ săn mẹo",
+          "text": "Học xong bài mẹo nhỏ và tàn cuộc."
+        },
+        "puzzles5": {
+          "name": "Thám tử nhí",
+          "text": "Giải 5 câu đố."
+        },
+        "puzzles25": {
+          "name": "Mắt tinh như diều hâu",
+          "text": "Giải 25 câu đố."
+        },
+        "puzzles100": {
+          "name": "Nhà vô địch câu đố",
+          "text": "Giải 100 câu đố."
+        },
+        "streak3": {
+          "name": "Ngọn lửa nhỏ",
+          "text": "Giải câu đố 3 ngày liên tiếp."
+        },
+        "streak7": {
+          "name": "Sao chổi",
+          "text": "Giải câu đố 7 ngày liên tiếp."
+        },
+        "master": {
+          "name": "Bậc thầy cờ vua nhí",
+          "text": "Học xong tất cả bài học."
+        }
+      },
+      "home": {
+        "title": "Chú Mã nói",
+        "newcomer": "Xin chào! Mình là chú Mã. Cùng học cờ vua nhé?",
+        "next": "Hôm nay mình học bài \"{lesson}\" nhé!",
+        "dailyPending": "Còn câu đố hôm nay đang chờ bạn nè!",
+        "dailyDone": "Hôm nay bạn đã giải câu đố rồi. Giỏi quá!",
+        "allDone": "Bạn học hết mọi bài rồi! Giờ mình đi giải câu đố nhé.",
+        "continue": "Học tiếp",
+        "start": "Bắt đầu học",
+        "puzzle": "Câu đố hôm nay",
+        "map": "Xem hành trình"
+      }
+    }
   }
 }

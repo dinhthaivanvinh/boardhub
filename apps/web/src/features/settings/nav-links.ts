@@ -17,12 +17,14 @@ export interface NavGroup {
 export interface NavLink {
   href: string;
   /** i18n key under nav.*. */
-  key: 'learnChess' | 'playChess';
+  key: 'learnChess' | 'puzzles' | 'journey' | 'playChess';
   prefixes: string[];
 }
 
 export const NAV_LINKS: readonly NavLink[] = [
   { href: '/learn/chess/coordinates', key: 'learnChess', prefixes: ['/learn'] },
+  { href: '/puzzles', key: 'puzzles', prefixes: ['/puzzles'] },
+  { href: '/journey', key: 'journey', prefixes: ['/journey'] },
   { href: '/games/chess', key: 'playChess', prefixes: ['/games/chess', '/play/chess'] },
 ];
 

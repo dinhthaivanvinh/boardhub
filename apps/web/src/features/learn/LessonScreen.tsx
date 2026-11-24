@@ -22,6 +22,7 @@ import {
   TACTICS_LESSON_ID,
   TacticsLesson,
 } from '@bg/game-chess';
+import { lessonName } from './lesson-name';
 import { useDoneLessons, useMarkDone } from './use-progress';
 import { useReducedMotion } from './use-reduced-motion';
 
@@ -35,14 +36,6 @@ const ORDER: string[] = [
   ...SPECIAL_LESSONS.map((l) => l.id),
   TACTICS_LESSON_ID,
 ];
-
-function lessonName(id: string, t: ReturnType<typeof useTranslations>): string {
-  const piece = pieceLesson(id);
-  if (piece) return t(`games.chess.pieceNames.${piece.piece}`);
-  if (openingLesson(id)) return t(`games.chess.learn.openings.${id}.name`);
-  if (specialLesson(id)) return t(`games.chess.learn.specials.${id}.name`);
-  return t(`games.chess.learn.${id}.name`);
-}
 
 type NavGroup = { heading: string; ids: string[] };
 

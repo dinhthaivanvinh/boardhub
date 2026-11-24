@@ -13,7 +13,7 @@ export { PIECE_LESSONS, OPENING_LESSONS, LESSON_IDS, pieceLesson, openingLesson 
 export type { LessonId, PieceLessonData, OpeningLessonData } from './learn/data';
 export { PieceLesson } from './learn/PieceLesson';
 export { OpeningLesson } from './learn/OpeningLesson';
-export { readProgress, markDone } from './learn/progress';
+export { readProgress, markDone, writeProgress } from './learn/progress';
 export { ReadAloud } from './learn/ReadAloud';
 export { SPECIAL_LESSONS, specialLesson } from './learn/data';
 export type { SpecialLessonData } from './learn/data';
@@ -31,14 +31,7 @@ export { TACTICS_LESSON_ID } from './learn/tactics';
 export { MateRoundView } from './learn/CheckmateLesson';
 export { LearnBoard, LessonLayout } from './learn/LearnBoard';
 export { useVoice } from './learn/voice';
-export {
-  PUZZLES,
-  PUZZLE_TIERS,
-  dailyPuzzle,
-  nextPuzzle,
-  puzzleById,
-  puzzlesOfTier,
-} from './learn/puzzles';
+export { PUZZLES, PUZZLE_TIERS, dailyPuzzle, nextPuzzle, puzzleById, puzzlesOfTier } from './learn/puzzles';
 export type { Puzzle, PuzzleTier } from './learn/puzzles';
 export {
   EMPTY_PUZZLE_PROGRESS,
@@ -46,6 +39,7 @@ export {
   markPuzzleSolved,
   readPuzzleProgress,
   streak,
+  writePuzzleProgress,
 } from './learn/puzzle-progress';
 export type { PuzzleProgress } from './learn/puzzle-progress';
 export {

@@ -58,6 +58,24 @@ export class PgUserRepo implements UserRepo {
     return Number(res.numUpdatedRows) > 0;
   }
 
+  async getLearnProgress(id: string) {
+    const row = await this.db
+      .selectFrom('users')
+      .select('learn_progress')
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return row?.learn_progress ?? null;
+  }
+
+  async setLearnProgress(id: string, progress: unknown) {
+    const res = await this.db
+      .updateTable('users')
+      .set({ learn_progress: JSON.stringify(progress) })
+      .where('id', '=', id)
+      .executeTakeFirst();
+    return Number(res.numUpdatedRows) > 0;
+  }
+
   async findById(id: string) {
     const row = await this.db.selectFrom('users').selectAll().where('id', '=', id).executeTakeFirst();
     return row ? toUser(row) : null;

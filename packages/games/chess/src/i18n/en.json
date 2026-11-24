@@ -627,6 +627,16 @@
         "start": "Start learning",
         "puzzle": "Today's puzzle",
         "map": "See the journey"
+      },
+      "save": {
+        "title": "Keep the journey safe",
+        "titleSaved": "Your journey is saved",
+        "ask": "Create an account so your stars, badges and streak follow you to another device and survive clearing the browser.",
+        "guest": "You are using a guest account. Your journey is being saved, but on another device you need to register to get back in.",
+        "saved": "Stars, badges and streak are saved to {name}'s account. Sign in on any device to see them.",
+        "parent": "Parents, please sign up with your own email to help your child.",
+        "button": "Save my journey",
+        "register": "Create an account"
       }
     }
   }

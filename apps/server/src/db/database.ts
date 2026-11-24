@@ -11,6 +11,8 @@ export interface UsersTable {
   created_at: Generated<Date>;
   /** Office avatar (docs/office/05), validated by @bg/avatars before it is written. Written as JSON text. */
   avatar: ColumnType<unknown, never, string | null>;
+  /** Learning progress (lessons done, puzzles solved, days played), validated by @bg/protocol. Written as JSON text. */
+  learn_progress: ColumnType<unknown, never, string | null>;
 }
 
 export interface MatchesTable {
@@ -330,6 +332,14 @@ const MIGRATIONS: Record<string, Migration> = {
     async down(db) {
       await db.schema.alterTable('office_draws').dropColumn('awarded').execute();
       await db.schema.alterTable('office_draws').dropColumn('prizes').execute();
+    },
+  },
+  '2026_11_24_001_learn_progress': {
+    async up(db) {
+      await db.schema.alterTable('users').addColumn('learn_progress', 'jsonb').execute();
+    },
+    async down(db) {
+      await db.schema.alterTable('users').dropColumn('learn_progress').execute();
     },
   },
   '2026_11_07_001_avatars': {

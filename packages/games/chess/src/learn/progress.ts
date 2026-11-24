@@ -14,6 +14,15 @@ export function readProgress(store: Store | null): Set<string> {
   }
 }
 
+/** Replaces the remembered lessons (e.g. after merging with the account's). Storage may be missing. */
+export function writeProgress(store: Store | null, ids: Iterable<string>): void {
+  try {
+    store?.setItem(PROGRESS_KEY, JSON.stringify([...new Set(ids)]));
+  } catch {
+    /* not remembered */
+  }
+}
+
 export function markDone(store: Store | null, id: LessonId): Set<string> {
   const done = readProgress(store);
   done.add(id);

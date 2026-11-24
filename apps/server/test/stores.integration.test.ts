@@ -140,6 +140,22 @@ describe('Postgres repos', () => {
     expect(await users.setAvatar(randomUUID(), avatar)).toBe(false);
   });
 
+  it('stores the learning progress as JSON on the user', async () => {
+    const users = new PgUserRepo(db);
+    const u = await users.create({
+      id: randomUUID(),
+      kind: 'guest',
+      displayName: 'Bé học cờ',
+      email: null,
+      passwordHash: null,
+    });
+    expect(await users.getLearnProgress(u.id)).toBeNull();
+    const progress = { lessons: ['pawn'], puzzles: ['t1-01'], days: ['2026-03-01'], daily: [] };
+    expect(await users.setLearnProgress(u.id, progress)).toBe(true);
+    expect(await users.getLearnProgress(u.id)).toEqual(progress);
+    expect(await users.setLearnProgress(randomUUID(), progress)).toBe(false);
+  });
+
   it('a full match through the hub lands in Redis and Postgres', async () => {
     const history = new PgHistoryRepo(db);
     const a = { userId: uuidFor(alice.userId), name: 'Alice' };

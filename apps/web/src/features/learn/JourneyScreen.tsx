@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { BADGES, earnedBadges, JOURNEY, nextLessonId, PUZZLES } from '@bg/game-chess';
 import { lessonName } from './lesson-name';
 import { LearnStats, useLearnStats } from './LearnStats';
+import { SaveProgress } from './SaveProgress';
 
 /** The way of learning as a map: stages with their lessons, then puzzles and a real game, then the badges. */
 export function JourneyScreen() {
@@ -29,6 +30,8 @@ export function JourneyScreen() {
             : t(`${L}.topRank`)}
         </p>
       </header>
+
+      <SaveProgress />
 
       <div className="journey-path">
         {next ? (

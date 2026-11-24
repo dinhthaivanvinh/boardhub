@@ -24,6 +24,15 @@ export function readPuzzleProgress(store: Store | null): PuzzleProgress {
   }
 }
 
+/** Replaces the remembered puzzle progress (e.g. after merging with the account's). Storage may be missing. */
+export function writePuzzleProgress(store: Store | null, progress: PuzzleProgress): void {
+  try {
+    store?.setItem(PUZZLE_PROGRESS_KEY, JSON.stringify(progress));
+  } catch {
+    /* not remembered */
+  }
+}
+
 /** Remembers a solved puzzle on `today`; `daily` when it was the puzzle of the day. Storage may be missing. */
 export function markPuzzleSolved(
   store: Store | null,

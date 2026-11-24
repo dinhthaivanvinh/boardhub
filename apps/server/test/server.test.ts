@@ -199,6 +199,61 @@ describe('office avatar', () => {
   });
 });
 
+describe('learning progress', () => {
+  const empty = { lessons: [], puzzles: [], days: [], daily: [] };
+
+  it('starts empty, is saved, and comes back', async () => {
+    const { body: guest } = await api<{ token: string }>('POST', '/api/auth/guest', {});
+    expect((await api('GET', '/api/me/progress', undefined, guest.token)).body).toEqual({ progress: empty });
+    const progress = { ...empty, lessons: ['coordinates'], puzzles: ['t1-01'], days: ['2026-03-01'] };
+    expect((await api('PUT', '/api/me/progress', { progress }, guest.token)).body).toEqual({ progress });
+    expect((await api('GET', '/api/me/progress', undefined, guest.token)).body).toEqual({ progress });
+  });
+
+  it('a save is merged with what is stored: another device never erases it', async () => {
+    const { body: guest } = await api<{ token: string }>('POST', '/api/auth/guest', {});
+    await api(
+      'PUT',
+      '/api/me/progress',
+      { progress: { ...empty, lessons: ['pawn'], days: ['2026-03-02'] } },
+      guest.token,
+    );
+    const res = await api<{ progress: typeof empty }>(
+      'PUT',
+      '/api/me/progress',
+      { progress: { ...empty, lessons: ['rook'], puzzles: ['t1-02'], days: ['2026-03-01'] } },
+      guest.token,
+    );
+    expect(res.body.progress.lessons.sort()).toEqual(['pawn', 'rook']);
+    expect(res.body.progress.puzzles).toEqual(['t1-02']);
+    expect(res.body.progress.days).toEqual(['2026-03-01', '2026-03-02']);
+  });
+
+  it('refuses anything that is not plain ids and dates, and anonymous callers', async () => {
+    const { body: guest } = await api<{ token: string }>('POST', '/api/auth/guest', {});
+    for (const bad of [
+      { ...empty, lessons: ['Not An Id'] },
+      { ...empty, days: ['yesterday'] },
+      { ...empty, name: 'Bé An' },
+    ]) {
+      const res = await api<{ code: string }>('PUT', '/api/me/progress', { progress: bad }, guest.token);
+      expect(res.status).toBe(400);
+      expect(res.body.code).toBe('invalid.payload');
+    }
+    expect((await api('PUT', '/api/me/progress', { progress: empty })).status).toBe(401);
+    expect((await api('GET', '/api/me/progress')).status).toBe(401);
+  });
+
+  it('is kept apart for every user', async () => {
+    const [a, b] = [
+      (await api<{ token: string }>('POST', '/api/auth/guest', {})).body,
+      (await api<{ token: string }>('POST', '/api/auth/guest', {})).body,
+    ];
+    await api('PUT', '/api/me/progress', { progress: { ...empty, lessons: ['pawn'] } }, a.token);
+    expect((await api('GET', '/api/me/progress', undefined, b.token)).body).toEqual({ progress: empty });
+  });
+});
+
 describe('socket handshake', () => {
   it('needs a valid token and the right protocol version', async () => {
     await expect(open('not-a-token')).rejects.toThrow('auth.required');

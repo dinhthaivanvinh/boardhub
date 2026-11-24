@@ -74,7 +74,7 @@ export function Stage<R>({
       <LessonLayout board={<LearnBoard board={finishedBoard} t={t} animate={animate} />}>
         <p className="ch-learn-text">{c(`intro.${kind}`)}</p>
         <Status voice={voice} text={c('allDone')} />
-        <button type="button" className="btn btn-primary" onClick={onNext}>
+        <button type="button" className="btn btn-primary ch-next" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
       </LessonLayout>

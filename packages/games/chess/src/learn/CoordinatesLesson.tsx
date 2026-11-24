@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { Translator } from '@bg/ui';
 import { fromFen, squareName, START_FEN } from '../rules/board';
 import { COORDINATES_LESSON_ID } from './data';
 import { type CoordKind, type CoordRound, coordRounds, fileOf, rankOf } from './coordinates';
 import { LearnBoard, LessonLayout } from './LearnBoard';
+import { DoneCard, LessonHeader } from './LessonChrome';
 import { ReadAloud, type VoiceState } from './ReadAloud';
 import { waitUntilSilent } from './speech';
 import { Status } from './Status';
@@ -22,12 +23,21 @@ type Props = {
   onComplete?(id: string): void;
   /** Language of the read-aloud voice: 'vi' or 'en'. */
   lang?: string;
+  /** Shown on the finished screen, e.g. a link to the next lesson. */
+  footer?: ReactNode;
   /** Pause before the next question after a right answer, in ms. */
   advanceDelay?: number;
 };
 
 /** Reading square names: rows are numbers, columns are letters, a square is where they cross ("ghế rạp chiếu phim"). */
-export function CoordinatesLesson({ t, animate, onComplete, lang = 'vi', advanceDelay = 1200 }: Props) {
+export function CoordinatesLesson({
+  t,
+  animate,
+  onComplete,
+  lang = 'vi',
+  footer,
+  advanceDelay = 1200,
+}: Props) {
   const [stage, setStage] = useState<Stage>('meet');
   const voice = useVoice(lang);
   const c = (key: string, values?: Record<string, string | number>) =>
@@ -42,20 +52,14 @@ export function CoordinatesLesson({ t, animate, onComplete, lang = 'vi', advance
 
   return (
     <section className="ch-learn" aria-label={c('name')}>
-      <header className="ch-learn-header">
-        <h2 className="ch-learn-title">{c('name')}</h2>
-        <ol className="ch-learn-steps" aria-label={common('steps')}>
-          {STAGES.map((s) => (
-            <li
-              key={s}
-              aria-current={s === stage ? 'step' : undefined}
-              data-done={STAGES.indexOf(s) < STAGES.indexOf(stage)}
-            >
-              {c(`stage.${s}`)}
-            </li>
-          ))}
-        </ol>
-      </header>
+      <LessonHeader
+        title={c('name')}
+        stages={STAGES}
+        stage={stage}
+        label={(s) => c(`stage.${s}`)}
+        onStage={(s) => setStage(s as typeof stage)}
+        t={t}
+      />
 
       {stage === 'meet' && (
         <LessonLayout
@@ -65,7 +69,7 @@ export function CoordinatesLesson({ t, animate, onComplete, lang = 'vi', advance
         >
           <p className="ch-learn-text">{c('meet')}</p>
           <ReadAloud text={c('meet')} voice={voice} t={t} />
-          <button type="button" className="btn" onClick={next}>
+          <button type="button" className="btn btn-primary ch-next" onClick={next}>
             {common('next')}
           </button>
         </LessonLayout>
@@ -84,14 +88,14 @@ export function CoordinatesLesson({ t, animate, onComplete, lang = 'vi', advance
       )}
 
       {stage === 'done' && (
-        <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
-          <Status voice={voice} className="ch-learn-text" text={c('done')} />
-          <p className="ch-learn-text">{c('fun')}</p>
-          <ReadAloud text={c('fun')} voice={voice} t={t} />
-          <button type="button" className="btn" onClick={() => setStage('meet')}>
-            {common('again')}
-          </button>
-        </LessonLayout>
+        <DoneCard
+          t={t}
+          voice={voice}
+          message={c('done')}
+          fun={c('fun')}
+          onAgain={() => setStage('meet')}
+          footer={footer}
+        />
       )}
     </section>
   );
@@ -224,13 +228,13 @@ function Practice({ kind, t, animate, voice, advanceDelay, onNext }: PracticePro
       {kind === 'find' && !finished && !solved && !hint && (
         <div className="ch-learn-actions">
           <button type="button" className="btn" onClick={() => setHint(true)}>
-            {t('games.chess.learn.hint')}
+            <span aria-hidden="true">💡</span> {t('games.chess.learn.hint')}
           </button>
         </div>
       )}
       <Status voice={voice} text={message} nonce={wrong} />
       {finished && (
-        <button type="button" className="btn btn-primary" onClick={onNext}>
+        <button type="button" className="btn btn-primary ch-next" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
       )}

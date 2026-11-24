@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { CELL, type Translator } from '@bg/ui';
 import { fromFen, makeMove, squareOf } from '../rules/board';
 import type { ChessMove, Piece, Promotion } from '../rules/types';
@@ -8,6 +8,7 @@ import { PieceShape } from '../ui/pieces';
 import type { SpecialLessonData } from './data';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { movesFrom, parseMove, specialFrames, targetsFrom } from './logic';
+import { DoneCard, LessonHeader } from './LessonChrome';
 import { ReadAloud, type VoiceState } from './ReadAloud';
 import { Status } from './Status';
 import { useVoice } from './voice';
@@ -24,10 +25,12 @@ type Props = {
   onComplete?(id: string): void;
   /** Language of the read-aloud voice: 'vi' or 'en'. */
   lang?: string;
+  /** Shown on the finished screen, e.g. a link to the next lesson. */
+  footer?: ReactNode;
 };
 
 /** A special move: what it is, a demo, then the child plays it. */
-export function SpecialLesson({ lesson, t, animate, onComplete, lang = 'vi' }: Props) {
+export function SpecialLesson({ lesson, t, animate, onComplete, lang = 'vi', footer }: Props) {
   const [stage, setStage] = useState<Stage>('meet');
   const voice = useVoice(lang);
   const text = (key: string) => t(`games.chess.learn.specials.${lesson.id}.${key}`);
@@ -38,26 +41,20 @@ export function SpecialLesson({ lesson, t, animate, onComplete, lang = 'vi' }: P
 
   return (
     <section className="ch-learn" aria-label={name}>
-      <header className="ch-learn-header">
-        <h2 className="ch-learn-title">{name}</h2>
-        <ol className="ch-learn-steps" aria-label={common('steps')}>
-          {STAGES.map((s) => (
-            <li
-              key={s}
-              aria-current={s === stage ? 'step' : undefined}
-              data-done={STAGES.indexOf(s) < STAGES.indexOf(stage)}
-            >
-              {common(`stage.${s === 'try' ? 'challenge' : s}`)}
-            </li>
-          ))}
-        </ol>
-      </header>
+      <LessonHeader
+        title={name}
+        stages={STAGES}
+        stage={stage}
+        label={(s) => common(`stage.${s === 'try' ? 'challenge' : s}`)}
+        onStage={(s) => setStage(s as typeof stage)}
+        t={t}
+      />
 
       {stage === 'meet' && (
         <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
           <p className="ch-learn-text">{text('meet')}</p>
           <ReadAloud text={text('meet')} voice={voice} t={t} />
-          <button type="button" className="btn" onClick={() => setStage('watch')}>
+          <button type="button" className="btn btn-primary ch-next" onClick={() => setStage('watch')}>
             {common('next')}
           </button>
         </LessonLayout>
@@ -86,14 +83,14 @@ export function SpecialLesson({ lesson, t, animate, onComplete, lang = 'vi' }: P
         />
       )}
       {stage === 'done' && (
-        <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
-          <Status voice={voice} className="ch-learn-text" text={common('specialDone', { name })} />
-          <p className="ch-learn-text">{text('fun')}</p>
-          <ReadAloud text={text('fun')} voice={voice} t={t} />
-          <button type="button" className="btn" onClick={() => setStage('meet')}>
-            {common('again')}
-          </button>
-        </LessonLayout>
+        <DoneCard
+          t={t}
+          voice={voice}
+          message={common('specialDone', { name })}
+          fun={text('fun')}
+          onAgain={() => setStage('meet')}
+          footer={footer}
+        />
       )}
     </section>
   );
@@ -150,7 +147,7 @@ function Watch({ lesson, t, animate, text, voice, onNext }: StageProps) {
             {t(paused ? 'games.chess.learn.play' : 'games.chess.learn.pause')}
           </button>
         )}
-        <button type="button" className="btn" onClick={onNext}>
+        <button type="button" className="btn btn-primary ch-next" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
       </div>
@@ -256,7 +253,7 @@ function Try({ lesson, t, animate, text, voice, onNext }: StageProps) {
         speakIt={message !== 'idle'}
       />
       {won && (
-        <button type="button" className="btn" onClick={onNext}>
+        <button type="button" className="btn btn-primary ch-next" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
       )}

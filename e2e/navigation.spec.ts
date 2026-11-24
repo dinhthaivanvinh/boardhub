@@ -8,7 +8,7 @@ test('the home page introduces chess and leads to learning, playing and the othe
     'Học và chơi cờ vua, ngay trên trình duyệt',
   );
   await page.getByTestId('cta-learn').click();
-  await expect(page).toHaveURL(/\/learn\/chess$/);
+  await expect(page).toHaveURL(/\/learn\/chess\/coordinates$/);
 
   await page.goto('/');
   await page.getByTestId('cta-play').click();
@@ -18,6 +18,18 @@ test('the home page introduces chess and leads to learning, playing and the othe
   await page.getByTestId('area-board-games').click();
   await expect(page).toHaveURL(/\/board-games$/);
   await expect(page.getByRole('link', { name: /Cờ vua/ })).toBeVisible();
+});
+
+test('the old list of lessons is gone: its address leads to the home page', async ({ page }) => {
+  await page.goto('/learn/chess');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByTestId('cta-learn')).toBeVisible();
+});
+
+test('a lesson goes back to the home page', async ({ page }) => {
+  await page.goto('/learn/chess/coordinates');
+  await page.getByRole('link', { name: 'Về trang chủ' }).click();
+  await expect(page).toHaveURL(/\/$/);
 });
 
 test('the Office and Party areas are out of the menus but their pages still work', async ({ page }) => {
@@ -42,7 +54,7 @@ test.describe('desktop', () => {
     await expect(page.getByRole('button', { name: 'Menu' })).toBeHidden();
 
     await nav.getByRole('link', { name: 'Học cờ' }).click();
-    await expect(page).toHaveURL(/\/learn\/chess$/);
+    await expect(page).toHaveURL(/\/learn\/chess\/coordinates$/);
     await expect(nav.getByRole('link', { name: 'Học cờ' })).toHaveAttribute('data-current', 'true');
 
     const boardGames = nav.getByRole('button', { name: 'Board game' });
@@ -79,7 +91,7 @@ test.describe('phone', () => {
 
     await menu.click();
     await panel.getByRole('link', { name: 'Học cờ' }).click();
-    await expect(page).toHaveURL(/\/learn\/chess$/);
+    await expect(page).toHaveURL(/\/learn\/chess\/coordinates$/);
 
     await menu.click();
     await panel.getByRole('link', { name: 'Danh mục game' }).click();

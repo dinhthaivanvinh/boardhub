@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { Translator } from '@bg/ui';
 import { fromFen, inCheck, kingSquare, makeMove, squareName, squareOf } from '../rules/board';
 import type { ChessMove } from '../rules/types';
@@ -22,8 +22,8 @@ import {
 } from './checkmate';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { movesFrom, targetsFrom } from './logic';
+import { DoneCard, LessonHeader } from './LessonChrome';
 import { ReadAloud } from './ReadAloud';
-import { Status } from './Status';
 import { useVoice } from './voice';
 import { Panel, type RoundProps, Stage, type Tx, useMoveBoard, useTimers } from './rounds';
 
@@ -36,12 +36,14 @@ type Props = {
   onComplete?(id: string): void;
   /** Language of the read-aloud voice: 'vi' or 'en'. */
   lang?: string;
+  /** Shown on the finished screen, e.g. a link to the next lesson. */
+  footer?: ReactNode;
   /** Pause before the next question after a right answer, and before a wrong try is shown undone, in ms. */
   advanceDelay?: number;
 };
 
 /** Check, how to save the king, mate or not, and finding mate in one: "Bắt vua". */
-export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDelay = 1400 }: Props) {
+export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', footer, advanceDelay = 1400 }: Props) {
   const [stage, setStage] = useState<Stage>('meet');
   const voice = useVoice(lang);
   const c: Tx = (key, values) => t(`games.chess.learn.checkmate.${key}`, values);
@@ -56,20 +58,14 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
 
   return (
     <section className="ch-learn" aria-label={c('name')}>
-      <header className="ch-learn-header">
-        <h2 className="ch-learn-title">{c('name')}</h2>
-        <ol className="ch-learn-steps" aria-label={common('steps')}>
-          {STAGES.map((s) => (
-            <li
-              key={s}
-              aria-current={s === stage ? 'step' : undefined}
-              data-done={STAGES.indexOf(s) < STAGES.indexOf(stage)}
-            >
-              {c(`stage.${s}`)}
-            </li>
-          ))}
-        </ol>
-      </header>
+      <LessonHeader
+        title={c('name')}
+        stages={STAGES}
+        stage={stage}
+        label={(s) => c(`stage.${s}`)}
+        onStage={(s) => setStage(s as typeof stage)}
+        t={t}
+      />
 
       {stage === 'meet' && (
         <LessonLayout
@@ -79,7 +75,7 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
         >
           <p className="ch-learn-text">{c('meet')}</p>
           <ReadAloud text={c('meet')} voice={voice} t={t} />
-          <button type="button" className="btn" onClick={next}>
+          <button type="button" className="btn btn-primary ch-next" onClick={next}>
             {common('next')}
           </button>
         </LessonLayout>
@@ -125,14 +121,14 @@ export function CheckmateLesson({ t, animate, onComplete, lang = 'vi', advanceDe
         />
       )}
       {stage === 'done' && (
-        <LessonLayout board={<LearnBoard board={start.board} t={t} animate={animate} />}>
-          <Status voice={voice} className="ch-learn-text" text={c('done')} />
-          <p className="ch-learn-text">{c('fun')}</p>
-          <ReadAloud text={c('fun')} voice={voice} t={t} />
-          <button type="button" className="btn" onClick={() => setStage('meet')}>
-            {common('again')}
-          </button>
-        </LessonLayout>
+        <DoneCard
+          t={t}
+          voice={voice}
+          message={c('done')}
+          fun={c('fun')}
+          onAgain={() => setStage('meet')}
+          footer={footer}
+        />
       )}
     </section>
   );
@@ -397,7 +393,7 @@ export function MateRoundView(props: RoundProps<MateRound>) {
                 disabled={busy || hint >= 2}
                 onClick={() => setHint((h) => h + 1)}
               >
-                {t('games.chess.learn.hint')}
+                <span aria-hidden="true">💡</span> {t('games.chess.learn.hint')}
               </button>
             </div>
           )

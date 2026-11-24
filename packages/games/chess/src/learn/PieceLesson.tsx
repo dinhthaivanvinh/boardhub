@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { Translator } from '@bg/ui';
 import { makeMove, squareOf } from '../rules/board';
 import type { Piece } from '../rules/types';
 import type { PieceLessonData } from './data';
+import { PieceGlyph } from '../ui/PieceGlyph';
 import { LearnBoard, LessonLayout } from './LearnBoard';
+import { DoneCard, LessonHeader } from './LessonChrome';
 import { ReadAloud, type VoiceState } from './ReadAloud';
 import { Status } from './Status';
 import { useVoice } from './voice';
@@ -22,6 +24,8 @@ type Props = {
   animate: boolean;
   onComplete?(id: string): void; /** Language of the read-aloud voice: 'vi' or 'en'. */
   lang?: string;
+  /** Shown on the finished screen, e.g. a link to the next lesson. */
+  footer?: ReactNode;
 };
 type StageProps = {
   lesson: PieceLessonData;
@@ -33,7 +37,7 @@ type StageProps = {
 };
 
 /** Meet the piece, watch how it moves, find its squares, then one small challenge. */
-export function PieceLesson({ lesson, t, animate, onComplete, lang = 'vi' }: Props) {
+export function PieceLesson({ lesson, t, animate, onComplete, lang = 'vi', footer }: Props) {
   const voice = useVoice(lang);
   const [stage, setStage] = useState<Stage>('meet');
   const text = (key: string) => t(`games.chess.learn.pieces.${lesson.id}.${key}`);
@@ -44,20 +48,14 @@ export function PieceLesson({ lesson, t, animate, onComplete, lang = 'vi' }: Pro
 
   return (
     <section className="ch-learn" aria-label={name}>
-      <header className="ch-learn-header">
-        <h2 className="ch-learn-title">{name}</h2>
-        <ol className="ch-learn-steps" aria-label={common('steps')}>
-          {STAGES.map((s) => (
-            <li
-              key={s}
-              aria-current={s === stage ? 'step' : undefined}
-              data-done={STAGES.indexOf(s) < STAGES.indexOf(stage)}
-            >
-              {common(`stage.${s}`)}
-            </li>
-          ))}
-        </ol>
-      </header>
+      <LessonHeader
+        title={name}
+        stages={STAGES}
+        stage={stage}
+        label={(s) => common(`stage.${s}`)}
+        onStage={(s) => setStage(s as typeof stage)}
+        t={t}
+      />
 
       {stage === 'meet' && (
         <LessonLayout
@@ -68,7 +66,7 @@ export function PieceLesson({ lesson, t, animate, onComplete, lang = 'vi' }: Pro
           <p className="ch-learn-text">{text('meet')}</p>
           <ReadAloud text={text('meet')} voice={voice} t={t} />
 
-          <button type="button" className="btn" onClick={() => setStage('watch')}>
+          <button type="button" className="btn btn-primary ch-next" onClick={() => setStage('watch')}>
             {common('next')}
           </button>
         </LessonLayout>
@@ -107,14 +105,15 @@ export function PieceLesson({ lesson, t, animate, onComplete, lang = 'vi' }: Pro
         />
       )}
       {stage === 'done' && (
-        <>
-          <Status voice={voice} className="ch-learn-text" text={common('pieceDone', { piece: name })} />
-          <p className="ch-learn-text">{text('fun')}</p>
-          <ReadAloud text={text('fun')} voice={voice} t={t} />
-          <button type="button" className="btn" onClick={() => setStage('meet')}>
-            {common('again')}
-          </button>
-        </>
+        <DoneCard
+          t={t}
+          voice={voice}
+          message={common('pieceDone', { piece: name })}
+          fun={text('fun')}
+          glyph={<PieceGlyph piece={`w${lesson.piece}`} size={120} />}
+          onAgain={() => setStage('meet')}
+          footer={footer}
+        />
       )}
     </section>
   );
@@ -160,7 +159,7 @@ function Watch({ lesson, t, animate, text, voice, onNext }: StageProps) {
             {t(paused ? 'games.chess.learn.play' : 'games.chess.learn.pause')}
           </button>
         )}
-        <button type="button" className="btn" onClick={onNext}>
+        <button type="button" className="btn btn-primary ch-next" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
       </div>
@@ -212,7 +211,7 @@ function Try({ lesson, t, animate, text, voice, onNext }: StageProps) {
         speakIt={done || (wrong > 0 && found.size === 0)}
       />
       {done && (
-        <button type="button" className="btn" onClick={onNext}>
+        <button type="button" className="btn btn-primary ch-next" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
       )}
@@ -290,7 +289,7 @@ function Challenge({ lesson, t, animate, text, voice, onNext }: StageProps) {
         speakIt={message !== 'idle'}
       />
       {won && (
-        <button type="button" className="btn" onClick={onNext}>
+        <button type="button" className="btn btn-primary ch-next" onClick={onNext}>
           {t('games.chess.learn.next')}
         </button>
       )}

@@ -74,7 +74,10 @@ describe('spoken results', () => {
     const { unmount } = render(<CoordinatesLesson t={tr} animate={false} advanceDelay={0} />);
     next();
     fireEvent.click(screen.getByLabelText(tr('games.chess.learn.speakResults')));
-    expect(JSON.parse(window.localStorage.getItem('learn.chess.voice.v1')!)).toEqual({ results: false });
+    expect(JSON.parse(window.localStorage.getItem('learn.chess.voice.v1')!)).toEqual({
+      auto: true,
+      results: false,
+    });
     speech.spoken.length = 0;
     const round = coordRounds('rank')[0]!;
     click(squareName((round.square + 8) % 64));
@@ -91,6 +94,19 @@ describe('spoken results', () => {
         false,
       ),
     );
+  });
+
+  it('reads each question by itself by default, and stops when the child turns it off', async () => {
+    const speech = installSpeech();
+    render(<CoordinatesLesson t={tr} animate={false} advanceDelay={0} />);
+    next(); // meet -> rows
+    const prompt = c('prompt.rank').replace('{rank}', '');
+    await waitFor(() =>
+      expect(speech.spoken.some((text) => text.startsWith(prompt.slice(0, 12)))).toBe(true),
+    );
+
+    fireEvent.click(screen.getByLabelText(tr('games.chess.learn.autoRead')));
+    expect(JSON.parse(window.localStorage.getItem('learn.chess.voice.v1')!)).toMatchObject({ auto: false });
   });
 
   it('waits until the result has been spoken before the next question', async () => {

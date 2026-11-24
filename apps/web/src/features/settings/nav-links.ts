@@ -22,7 +22,7 @@ export interface NavLink {
 }
 
 export const NAV_LINKS: readonly NavLink[] = [
-  { href: '/learn/chess', key: 'learnChess', prefixes: ['/learn'] },
+  { href: '/learn/chess/coordinates', key: 'learnChess', prefixes: ['/learn'] },
   { href: '/games/chess', key: 'playChess', prefixes: ['/games/chess', '/play/chess'] },
 ];
 

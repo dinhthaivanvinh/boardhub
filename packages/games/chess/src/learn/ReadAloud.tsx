@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import type { Translator } from '@bg/ui';
-import { canSpeak, speak, stopSpeaking, voiceStatus } from './speech';
+import {
+  canSpeak,
+  hasVoicePack,
+  loadVoicePack,
+  onVoicePack,
+  speak,
+  stopSpeaking,
+  voiceStatus,
+} from './speech';
 
 export type VoiceState = {
   lang: string;
@@ -19,12 +27,15 @@ export type VoiceState = {
 function useVoiceStatus(lang: string): 'yes' | 'no' | 'unknown' | 'none' {
   const [status, setStatus] = useState<'yes' | 'no' | 'unknown' | 'none'>('none');
   useEffect(() => {
-    if (!canSpeak()) return setStatus('none');
-    const update = () => setStatus(voiceStatus(lang));
+    // 'none': no way to speak at all (no recordings and no speech synthesis): show no controls.
+    const update = () => setStatus(!canSpeak() && !hasVoicePack(lang) ? 'none' : voiceStatus(lang));
     update();
-    window.speechSynthesis.addEventListener('voiceschanged', update);
+    void loadVoicePack(lang);
+    const stopWatching = onVoicePack(update);
+    if (canSpeak()) window.speechSynthesis.addEventListener('voiceschanged', update);
     return () => {
-      window.speechSynthesis.removeEventListener('voiceschanged', update);
+      stopWatching();
+      if (canSpeak()) window.speechSynthesis.removeEventListener('voiceschanged', update);
       stopSpeaking();
     };
   }, [lang]);

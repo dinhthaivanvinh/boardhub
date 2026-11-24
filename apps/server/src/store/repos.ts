@@ -20,6 +20,10 @@ export interface UserRepo {
   getAvatar(id: string): Promise<unknown>;
   /** Returns false if the user does not exist. */
   setAvatar(id: string, avatar: unknown): Promise<boolean>;
+  /** The user's learning progress as stored (callers validate it), or null. */
+  getLearnProgress(id: string): Promise<unknown>;
+  /** Returns false if the user does not exist. */
+  setLearnProgress(id: string, progress: unknown): Promise<boolean>;
 }
 
 export interface NewMatchRow {
@@ -77,6 +81,17 @@ export interface HistoryRepo {
 export class MemoryUserRepo implements UserRepo {
   readonly users = new Map<string, UserRecord>();
   readonly avatars = new Map<string, unknown>();
+  readonly learnProgress = new Map<string, unknown>();
+
+  async getLearnProgress(id: string) {
+    return this.learnProgress.get(id) ?? null;
+  }
+
+  async setLearnProgress(id: string, progress: unknown) {
+    if (!this.users.has(id)) return false;
+    this.learnProgress.set(id, structuredClone(progress));
+    return true;
+  }
 
   async getAvatar(id: string) {
     return this.avatars.get(id) ?? null;

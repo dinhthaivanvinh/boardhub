@@ -2140,3 +2140,29 @@ nav section[data-g='5'] {
     transition: none;
   }
 }
+
+/* Lưu hành trình vào tài khoản. */
+.save-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.1rem;
+  border: 2px solid color-mix(in srgb, var(--k1) 50%, var(--border));
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--k1) 12%, var(--card));
+}
+.save-progress[data-state='saved'] {
+  border-color: color-mix(in srgb, var(--k2) 50%, var(--border));
+  background: color-mix(in srgb, var(--k2) 12%, var(--card));
+}
+.save-progress-icon {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+.save-progress-body {
+  flex: 1 1 16rem;
+}
+.home-helper-save {
+  grid-column: 1 / -1;
+}

@@ -627,6 +627,16 @@
         "start": "Bắt đầu học",
         "puzzle": "Câu đố hôm nay",
         "map": "Xem hành trình"
+      },
+      "save": {
+        "title": "Giữ hành trình khỏi bị mất",
+        "titleSaved": "Hành trình đã được lưu",
+        "ask": "Tạo tài khoản để sao, huy hiệu và chuỗi ngày đi theo bạn sang máy khác, và không mất khi xoá trình duyệt.",
+        "guest": "Bạn đang dùng tài khoản khách. Hành trình đang được lưu, nhưng nếu đổi máy thì bạn cần đăng ký để vào lại.",
+        "saved": "Sao, huy hiệu và chuỗi ngày được lưu vào tài khoản của {name}. Đăng nhập ở máy nào cũng thấy.",
+        "parent": "Bố mẹ hãy dùng email của mình để đăng ký giúp bé nhé.",
+        "button": "Lưu hành trình",
+        "register": "Đăng ký tài khoản"
       }
     }
   }

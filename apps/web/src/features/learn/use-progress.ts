@@ -11,6 +11,19 @@ import {
 } from '@bg/game-chess';
 
 const listeners = new Set<() => void>();
+/** Called after progress changed on this device (not after the account's progress was merged in). */
+const changeListeners = new Set<() => void>();
+
+export function onProgressChange(fn: () => void): () => void {
+  changeListeners.add(fn);
+  return () => void changeListeners.delete(fn);
+}
+
+/** Tells every screen that the stored progress changed (it was just written). */
+export function notifyProgressWritten(): void {
+  listeners.forEach((l) => l());
+  puzzleListeners.forEach((l) => l());
+}
 let cache: { raw: string; set: ReadonlySet<string> } | null = null;
 const EMPTY: ReadonlySet<string> = new Set();
 
@@ -45,6 +58,7 @@ export function useMarkDone() {
   return useCallback((id: string) => {
     markDone(storage(), id as LessonId);
     listeners.forEach((l) => l());
+    changeListeners.forEach((l) => l());
   }, []);
 }
 
@@ -76,6 +90,7 @@ export function useMarkPuzzle() {
   return useCallback((id: string, today: string, daily: boolean) => {
     markPuzzleSolved(storage(), id, today, daily);
     puzzleListeners.forEach((l) => l());
+    changeListeners.forEach((l) => l());
   }, []);
 }
 

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { nextLessonId, PieceGlyph } from '@bg/game-chess';
 import { lessonName } from './lesson-name';
 import { LearnStats, useLearnStats } from './LearnStats';
+import { SaveProgress } from './SaveProgress';
 
 /** The home page's helper: a little knight says what to do today, with one big button to do it. */
 export function HomeProgress() {
@@ -55,6 +56,11 @@ export function HomeProgress() {
         </div>
       </div>
       <LearnStats className="home-helper-stats" />
+      {started && (
+        <div className="home-helper-save">
+          <SaveProgress compact />
+        </div>
+      )}
     </section>
   );
 }

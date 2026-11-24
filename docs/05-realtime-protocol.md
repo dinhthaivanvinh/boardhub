@@ -17,21 +17,23 @@ Transport: Socket.IO (namespace mặc định), server `apps/server` cổng 4000
 
 ## 2. REST (`/api`)
 
-| Method + path                  | Body                               | Trả về                                                                                                                        |
-| ------------------------------ | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `POST /api/auth/guest`         | `{ displayName? }`                 | `AuthResponse { token, user }`                                                                                                |
-| `POST /api/auth/register`      | `{ email, password, displayName }` | `AuthResponse`. Có token khách trong `Authorization` thì **nâng cấp** tài khoản khách đó (giữ id, FR-AUTH-03)                 |
-| `POST /api/auth/login`         | `{ email, password }`              | `AuthResponse`                                                                                                                |
-| `GET /api/me`                  | —                                  | `PublicUser`                                                                                                                  |
-| `PATCH /api/me`                | `{ displayName }`                  | `PublicUser`                                                                                                                  |
-| `GET /api/me/avatar`           | —                                  | `{ avatar: Avatar                                                                                                             | null }` con vật đại diện (docs/office/05) |
-| `PUT /api/me/avatar`           | `{ avatar }`                       | `{ avatar }`; chỉ nhận avatar thuộc catalog, sai → 400 `office.invalid_avatar`                                                |
-| `GET /api/me/matches?limit=`   | —                                  | `{ matches: MatchSummary[] }` ván của người gọi, mới nhất trước (tối đa 100)                                                  |
-| `GET /api/matches/:id`         | —                                  | `MatchDetail` (gồm `seed` + danh sách nước) **chỉ khi ván đã kết thúc**; đang chơi → 409 `match.not_finished`; không có → 404 |
-| `GET /api/leaderboard/:gameId` | —                                  | `{ gameId, minGames, entries: LeaderboardEntry[] }`: điểm cao nhất, chỉ người có ≥ 5 ván tính điểm                            |
-| `GET /api/me/ratings`          | —                                  | `{ ratings: UserRating[] }` điểm của người gọi theo từng game                                                                 |
-| `GET /api/live`                | —                                  | `{ rooms: LiveRoom[] }` các ván công khai (ghép trận) đang chơi, mới nhất trước                                               |
-| `GET /health`                  | —                                  | `{ ok: true }`                                                                                                                |
+| Method + path                  | Body                               | Trả về                                                                                                                                 |
+| ------------------------------ | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/auth/guest`         | `{ displayName? }`                 | `AuthResponse { token, user }`                                                                                                         |
+| `POST /api/auth/register`      | `{ email, password, displayName }` | `AuthResponse`. Có token khách trong `Authorization` thì **nâng cấp** tài khoản khách đó (giữ id, FR-AUTH-03)                          |
+| `POST /api/auth/login`         | `{ email, password }`              | `AuthResponse`                                                                                                                         |
+| `GET /api/me`                  | —                                  | `PublicUser`                                                                                                                           |
+| `PATCH /api/me`                | `{ displayName }`                  | `PublicUser`                                                                                                                           |
+| `GET /api/me/avatar`           | —                                  | `{ avatar: Avatar                                                                                                                      | null }` con vật đại diện (docs/office/05) |
+| `PUT /api/me/avatar`           | `{ avatar }`                       | `{ avatar }`; chỉ nhận avatar thuộc catalog, sai → 400 `office.invalid_avatar`                                                         |
+| `GET /api/me/progress`         | —                                  | `{ progress: LearnProgress }` bài đã học, câu đố đã giải, các ngày đã chơi (rỗng nếu chưa lưu)                                         |
+| `PUT /api/me/progress`         | `{ progress: LearnProgress }`      | `{ progress }` đã **gộp (hợp)** với bản đang lưu, nên máy offline không xoá được thứ máy khác đã đạt; sai dạng → 400 `invalid.payload` |
+| `GET /api/me/matches?limit=`   | —                                  | `{ matches: MatchSummary[] }` ván của người gọi, mới nhất trước (tối đa 100)                                                           |
+| `GET /api/matches/:id`         | —                                  | `MatchDetail` (gồm `seed` + danh sách nước) **chỉ khi ván đã kết thúc**; đang chơi → 409 `match.not_finished`; không có → 404          |
+| `GET /api/leaderboard/:gameId` | —                                  | `{ gameId, minGames, entries: LeaderboardEntry[] }`: điểm cao nhất, chỉ người có ≥ 5 ván tính điểm                                     |
+| `GET /api/me/ratings`          | —                                  | `{ ratings: UserRating[] }` điểm của người gọi theo từng game                                                                          |
+| `GET /api/live`                | —                                  | `{ rooms: LiveRoom[] }` các ván công khai (ghép trận) đang chơi, mới nhất trước                                                        |
+| `GET /health`                  | —                                  | `{ ok: true }`                                                                                                                         |
 
 Token: JWT HS256, hạn 30 ngày, gửi bằng `Authorization: Bearer …`. Lỗi: `{ code }` với HTTP 400/401/409/429/500.
 CORS cho phép `GET, HEAD, POST, PATCH, PUT`.

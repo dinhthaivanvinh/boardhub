@@ -15,6 +15,7 @@ users
   email          text      UNIQUE, null với khách
   password_hash  text      scrypt$N$r$p$salt$hash, null với khách
   avatar         jsonb     con vật đại diện (khu Văn phòng, Avatar v1 — docs/office/05), null nếu chưa tạo
+  learn_progress jsonb     tiến độ học cờ { lessons, puzzles, days, daily } (`LearnProgress` trong @bg/protocol): id bài đã xong, id câu đố đã giải, ngày (YYYY-MM-DD) đã giải câu đố; null nếu chưa lưu. Chỉ gồm id và ngày, không có dữ liệu cá nhân
   created_at     timestamptz default now()
 
 matches

@@ -1,7 +1,16 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { AvatarSchema } from '@bg/avatars/schema';
-import { GuestRequest, LoginRequest, RegisterRequest, RenameRequest } from '@bg/protocol';
+import {
+  EMPTY_LEARN_PROGRESS,
+  GuestRequest,
+  LearnProgressRequest,
+  LearnProgressSchema,
+  LoginRequest,
+  mergeLearnProgress,
+  RegisterRequest,
+  RenameRequest,
+} from '@bg/protocol';
 import type { AuthService } from '../auth/auth-service';
 import type { HistoryService } from '../history/history-service';
 import { HubError } from '../errors';
@@ -87,6 +96,23 @@ export function registerRoutes(
     if (!body.success) throw new HubError('office.invalid_avatar');
     await users.setAvatar(user.id, body.data.avatar);
     return { avatar: body.data.avatar };
+  });
+
+  // Learning progress: lessons done, puzzles solved, days played. A save is merged with what is stored (the
+  // union), so a device that was offline can never erase what another one earned.
+  app.get('/api/me/progress', async (req) => {
+    const user = await requireUser(req);
+    const stored = LearnProgressSchema.safeParse(await users.getLearnProgress(user.id));
+    return { progress: stored.success ? stored.data : EMPTY_LEARN_PROGRESS };
+  });
+
+  app.put('/api/me/progress', async (req) => {
+    const user = await requireUser(req);
+    const sent = parse(LearnProgressRequest, req.body).progress;
+    const stored = LearnProgressSchema.safeParse(await users.getLearnProgress(user.id));
+    const progress = mergeLearnProgress(stored.success ? stored.data : EMPTY_LEARN_PROGRESS, sent);
+    await users.setLearnProgress(user.id, progress);
+    return { progress };
   });
 
   app.get<{ Querystring: { limit?: string } }>('/api/me/matches', async (req) => {

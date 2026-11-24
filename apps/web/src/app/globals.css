@@ -1329,7 +1329,7 @@ body {
 
 /* Board screens (lessons, local game, replay) on a big screen: the page itself does not scroll, so the board
    never moves or hides behind the header; the side panel (.stage-aside) scrolls inside. */
-@media (min-width: 64rem) and (min-height: 34rem) {
+@media (min-width: 64rem) and (min-height: 26rem) {
   html.board-stage body {
     display: flex;
     flex-direction: column;
@@ -1351,6 +1351,9 @@ body {
     width: 100%;
     min-height: 0;
     overflow: hidden;
+  }
+  html.board-stage .stage-screen .card {
+    padding: 0.5rem 0.75rem;
   }
   html.board-stage .stage-aside {
     min-height: 0;

@@ -165,7 +165,7 @@ test('voice files are served for the sentences of a lesson', async ({ page, requ
 test('the side menu lists every lesson and switches between them', async ({ page }) => {
   await page.goto('/learn/chess/coordinates');
   const menu = page.getByRole('navigation', { name: 'Tất cả bài học' });
-  await expect(menu.getByRole('link')).toHaveCount(LESSONS.length);
+  await expect(menu.locator('a[href^="/learn/chess/"]')).toHaveCount(LESSONS.length);
   await expect(menu.getByRole('link', { name: 'Làm quen bàn cờ: toạ độ' })).toHaveAttribute(
     'aria-current',
     'page',
@@ -177,14 +177,14 @@ test('the side menu lists every lesson and switches between them', async ({ page
 
 test.describe('the board stays on screen while the page scrolls', () => {
   test.skip(({ isMobile }) => isMobile, 'a desktop layout');
-  test.use({ viewport: { width: 1366, height: 600 } });
+  test.use({ viewport: { width: 1100, height: 540 } });
 
   const stays = async (page: Page, grid = page.getByRole('grid').first()) => {
     await page.waitForSelector('html.board-stage');
     const before = (await grid.boundingBox())!;
     const header = (await page.locator('.site-header').boundingBox())!;
     expect(before.y, 'board is below the header').toBeGreaterThanOrEqual(header.y + header.height - 1);
-    expect(before.y + before.height, 'board is inside the window').toBeLessThanOrEqual(600);
+    expect(before.y + before.height, 'board is inside the window').toBeLessThanOrEqual(540);
     await page.mouse.move(before.x + 5, before.y + 5);
     await page.mouse.wheel(0, 3000);
     await page.waitForTimeout(400);

@@ -64,6 +64,9 @@ function LessonNav({ currentId }: { currentId: string }) {
       aria-label={t(`${L}.allLessons`)}
       className="md:sticky md:top-20 md:max-h-full md:self-start md:overflow-y-auto"
     >
+      <Link href="/" className="mb-2 hidden text-sm underline-offset-4 hover:underline md:block">
+        ← {t(`${L}.backToHome`)}
+      </Link>
       <div className="flex gap-4 overflow-x-auto pb-1 md:flex-col md:gap-3 md:overflow-visible">
         {groups.map((group) => (
           <section key={group.heading} aria-label={group.heading} className="flex shrink-0 gap-2 md:block">
@@ -92,7 +95,26 @@ function LessonNav({ currentId }: { currentId: string }) {
           </section>
         ))}
       </div>
+      <VoiceCredit className="mt-3 hidden md:block" />
     </nav>
+  );
+}
+
+function VoiceCredit({ className }: { className: string }) {
+  const t = useTranslations();
+  return (
+    <p className={`text-xs text-[var(--muted)] ${className}`}>
+      {t('games.chess.learn.voiceCredit')}{' '}
+      <a
+        className="underline underline-offset-2"
+        href="https://ieee-dataport.org/documents/vais-1000-vietnamese-speech-synthesis-corpus"
+        target="_blank"
+        rel="noreferrer"
+      >
+        {t('games.chess.learn.voiceCreditLink')}
+      </a>
+      .
+    </p>
   );
 }
 
@@ -122,12 +144,12 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const footer = <NextLessonLink lessonId={lessonId} />;
   return (
     <div
-      className="stage-screen mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-4 lg:grid-rows-[auto_minmax(0,1fr)_auto]"
+      className="stage-screen mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
       data-game="chess"
       style={{ '--ch-nav': '15rem' } as React.CSSProperties}
     >
       <BoardStage />
-      <Link href="/" className="text-sm underline-offset-4 hover:underline">
+      <Link href="/" className="text-sm underline-offset-4 hover:underline md:hidden">
         ← {t('games.chess.learn.backToHome')}
       </Link>
       <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
@@ -180,18 +202,7 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
           )}
         </div>
       </div>
-      <p className="mt-2 text-xs text-[var(--muted)]">
-        {t('games.chess.learn.voiceCredit')}{' '}
-        <a
-          className="underline underline-offset-2"
-          href="https://ieee-dataport.org/documents/vais-1000-vietnamese-speech-synthesis-corpus"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {t('games.chess.learn.voiceCreditLink')}
-        </a>
-        .
-      </p>
+      <VoiceCredit className="mt-2 md:hidden" />
       {!piece &&
         !opening &&
         !special &&

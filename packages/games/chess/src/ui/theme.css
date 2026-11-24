@@ -505,9 +505,62 @@
   }
 }
 
-/* Bàn cờ cố định (trang không cuộn): trừ thêm chỗ cho đầu trang, tiêu đề, các bước và dòng ghi nguồn. */
-@media (min-width: 64rem) and (min-height: 34rem) {
+/* Bàn cờ cố định (trang không cuộn): bàn cờ to hết mức vừa màn hình, nút gọn lại cho cân với bàn cờ. */
+@media (min-width: 64rem) and (min-height: 26rem) {
   html.board-stage .ch-learn-boardcol {
-    width: clamp(16rem, min(calc((100vw - var(--ch-nav, 0rem)) * 0.55), calc(100dvh - 18.5rem)), 42rem);
+    width: clamp(15rem, min(calc((100vw - var(--ch-nav, 0rem)) * 0.6), calc(100dvh - 11.5rem)), 46rem);
+  }
+  html.board-stage .ch-learn {
+    gap: 0.5rem;
+  }
+  html.board-stage .ch-learn-header {
+    gap: 0.25rem 0.75rem;
+  }
+  html.board-stage .ch-learn-title {
+    font-size: 1.25rem;
+  }
+  html.board-stage .ch-learn-steps {
+    gap: 0.375rem;
+    margin: 0;
+  }
+  html.board-stage .ch-learn-steps li {
+    font-size: 0.875rem;
+    padding: 0.125rem 0.625rem;
+  }
+  html.board-stage .ch-learn-steps li[aria-current='step'] {
+    font-size: 0.9375rem;
+  }
+  html.board-stage .ch-step-btn {
+    min-height: 0;
+    padding: 0;
+  }
+  html.board-stage .ch-learn .btn {
+    min-height: 2.75rem;
+    padding: 0.375rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.875rem;
+  }
+  html.board-stage .ch-learn-header .ch-back {
+    min-height: 2.5rem;
+    padding: 0.25rem 0.875rem;
+  }
+  html.board-stage .ch-learn .ch-learn-toggle {
+    min-height: 2.5rem;
+    font-size: 0.9375rem;
+    padding: 0.125rem 0.75rem;
+  }
+  html.board-stage .ch-learn .ch-learn-toggle input {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  html.board-stage .ch-learn-text {
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  html.board-stage .ch-learn-side {
+    gap: 0.5rem;
+  }
+  html.board-stage .ch-learn-actions {
+    gap: 0.5rem;
   }
 }

@@ -100,3 +100,27 @@ export interface GamesStatus {
 
 /** "Until lifted" is stored as this date (year 9999), so every sanction has an end time. */
 export const SANCTION_FOREVER = Date.UTC(9999, 11, 31);
+
+// Visitor statistics: how many people used the site on a day (docs/05 §2.1, docs/06 §1 daily_visits).
+
+/** POST /api/visit: sent once a day per browser. `visitorId` is a random id the browser keeps; it names no one. */
+export const VisitPing = z.strictObject({ visitorId: z.string().regex(/^[A-Za-z0-9-]{16,64}$/) });
+
+/** Who a visitor was that day: nobody in particular, a guest account, or a registered account. */
+export type VisitorKind = 'anonymous' | 'guest' | 'registered';
+export const VISITOR_KINDS: VisitorKind[] = ['anonymous', 'guest', 'registered'];
+
+/** Distinct visitors of one day (Vietnam time, `YYYY-MM-DD`). A visitor counts once, as the highest kind they had. */
+export interface DayVisits {
+  day: string;
+  anonymous: number;
+  guest: number;
+  registered: number;
+  total: number;
+}
+
+/** GET /api/admin/stats: today and the days before it, newest first. */
+export interface AdminStats {
+  today: DayVisits;
+  days: DayVisits[];
+}

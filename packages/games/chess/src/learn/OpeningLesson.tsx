@@ -191,7 +191,7 @@ export function OpeningLesson({
                   }
                 }}
               >
-                <span aria-hidden="true">💡</span> {common('hint')}
+                {common('hint')}
               </button>
             )}
           </div>

@@ -40,7 +40,7 @@ export function HomeProgress() {
         <div className="mt-3 flex flex-wrap gap-2">
           {next ? (
             <Link href={`/learn/chess/${next}`} className="btn btn-primary btn-lg" data-testid="helper-learn">
-              <span aria-hidden="true">🎓</span> {started ? t(`${L}.continue`) : t(`${L}.start`)}
+              {started ? t(`${L}.continue`) : t(`${L}.start`)}
             </Link>
           ) : null}
           <Link
@@ -48,10 +48,10 @@ export function HomeProgress() {
             className={`btn btn-lg ${next ? '' : 'btn-primary'}`}
             data-testid="helper-puzzle"
           >
-            <span aria-hidden="true">🧩</span> {t(`${L}.puzzle`)}
+            {t(`${L}.puzzle`)}
           </Link>
           <Link href="/journey" className="btn btn-lg" data-testid="helper-journey">
-            <span aria-hidden="true">🗺️</span> {t(`${L}.map`)}
+            {t(`${L}.map`)}
           </Link>
         </div>
       </div>

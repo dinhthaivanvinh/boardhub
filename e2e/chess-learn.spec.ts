@@ -167,7 +167,7 @@ test('home: the first screen shows learning and playing chess', async ({ page },
 });
 
 test('voice files are served for the sentences of a lesson', async ({ page, request }) => {
-  const index = await request.get('/audio/vi/index.json');
+  const index = await request.get('/audio/vi-edge/index.json');
   expect(index.ok()).toBeTruthy();
   await page.goto('/learn/chess/pawn');
   const first = await page.evaluate(() => document.querySelector('.ch-learn-text')?.textContent ?? '');

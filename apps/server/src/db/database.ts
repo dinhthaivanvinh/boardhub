@@ -124,7 +124,16 @@ export interface UserSanctionsTable {
   updated_by: string | null;
 }
 
+/** One row per visitor per day (Vietnam time): who used the site, for the admin statistics. */
+export interface DailyVisitsTable {
+  /** `YYYY-MM-DD` as text, so no time zone can move it. */
+  day: string;
+  visitor_id: string;
+  kind: 'anonymous' | 'guest' | 'registered';
+}
+
 export interface Database {
+  daily_visits: DailyVisitsTable;
   game_settings: GameSettingsTable;
   player_reports: PlayerReportsTable;
   user_sanctions: UserSanctionsTable;
@@ -340,6 +349,20 @@ const MIGRATIONS: Record<string, Migration> = {
     },
     async down(db) {
       await db.schema.alterTable('users').dropColumn('learn_progress').execute();
+    },
+  },
+  '2026_11_25_001_daily_visits': {
+    async up(db) {
+      await db.schema
+        .createTable('daily_visits')
+        .addColumn('day', 'text', (c) => c.notNull())
+        .addColumn('visitor_id', 'text', (c) => c.notNull())
+        .addColumn('kind', 'text', (c) => c.notNull())
+        .addPrimaryKeyConstraint('daily_visits_pk', ['day', 'visitor_id'])
+        .execute();
+    },
+    async down(db) {
+      await db.schema.dropTable('daily_visits').execute();
     },
   },
   '2026_11_07_001_avatars': {

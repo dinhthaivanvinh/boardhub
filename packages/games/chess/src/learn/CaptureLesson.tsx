@@ -185,7 +185,7 @@ function TakeRoundView(props: RoundProps<TakeRound>) {
           !hint && (
             <div className="ch-learn-actions">
               <button type="button" className="btn" onClick={() => setHint(true)}>
-                <span aria-hidden="true">💡</span> {t('games.chess.learn.hint')}
+                {t('games.chess.learn.hint')}
               </button>
             </div>
           )
@@ -243,7 +243,7 @@ function AttackedRoundView(props: RoundProps<AttackedRound>) {
           !hint && (
             <div className="ch-learn-actions">
               <button type="button" className="btn" onClick={() => setHint(true)}>
-                <span aria-hidden="true">💡</span> {t('games.chess.learn.hint')}
+                {t('games.chess.learn.hint')}
               </button>
             </div>
           )

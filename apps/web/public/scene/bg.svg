@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6cc4f3"/>
+      <stop offset="0.6" stop-color="#b9e6fa"/>
+      <stop offset="1" stop-color="#e3f6fd"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a6dd6b"/>
+      <stop offset="1" stop-color="#6fc43f"/>
+    </linearGradient>
+    <g id="cloud" fill="#fff">
+      <ellipse cx="60" cy="40" rx="60" ry="26"/>
+      <ellipse cx="120" cy="30" rx="48" ry="30"/>
+      <ellipse cx="170" cy="42" rx="52" ry="24"/>
+    </g>
+    <g id="flower">
+      <circle r="5" cx="0" cy="-8" fill="#fff"/><circle r="5" cx="8" cy="0" fill="#fff"/>
+      <circle r="5" cx="0" cy="8" fill="#fff"/><circle r="5" cx="-8" cy="0" fill="#fff"/>
+      <circle r="4.5" fill="#ffc83d"/>
+    </g>
+    <g id="tree">
+      <rect x="-6" y="0" width="12" height="46" rx="4" fill="#9a6a3a"/>
+      <circle cx="0" cy="-12" r="40" fill="#4bb04a"/>
+      <circle cx="-22" cy="4" r="26" fill="#5cc157"/>
+      <circle cx="22" cy="4" r="26" fill="#5cc157"/>
+    </g>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <use href="#cloud" x="40" y="70"/>
+  <use href="#cloud" x="520" y="30" transform="translate(520 30) scale(0.8) translate(-520 -30)"/>
+  <use href="#cloud" x="1150" y="90"/>
+  <use href="#cloud" x="1420" y="260" transform="translate(1420 260) scale(0.7) translate(-1420 -260)"/>
+  <path d="M0 640 C200 560 380 610 560 590 C760 565 900 520 1100 560 C1300 600 1450 560 1600 590 L1600 900 L0 900Z" fill="#c6e8a1"/>
+  <use href="#tree" x="1500" y="520" transform="translate(1500 520) scale(0.9) translate(-1500 -520)"/>
+  <use href="#tree" x="90" y="560" transform="translate(90 560) scale(0.7) translate(-90 -560)"/>
+  <path d="M0 740 C220 690 420 720 640 705 C880 690 1060 660 1290 690 C1450 710 1540 700 1600 690 L1600 900 L0 900Z" fill="url(#grass)"/>
+  <path d="M0 820 C300 790 600 830 900 810 C1200 790 1400 820 1600 800 L1600 900 L0 900Z" fill="#5fb534"/>
+  <use href="#flower" x="130" y="800"/><use href="#flower" x="330" y="850"/><use href="#flower" x="560" y="790"/>
+  <use href="#flower" x="820" y="860"/><use href="#flower" x="1010" y="810"/><use href="#flower" x="1230" y="855"/>
+  <use href="#flower" x="1450" y="800"/><use href="#flower" x="1560" y="860"/><use href="#flower" x="40" y="860"/>
+  <g fill="#ff8fb1"><circle cx="240" cy="820" r="6"/><circle cx="700" cy="840" r="6"/><circle cx="1130" cy="835" r="6"/><circle cx="1350" cy="880" r="6"/></g>
+</svg>

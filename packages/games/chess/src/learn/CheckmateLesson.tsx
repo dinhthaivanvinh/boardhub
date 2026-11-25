@@ -396,7 +396,7 @@ export function MateRoundView(props: RoundProps<MateRound> & { after?: ReactNode
                 disabled={busy || hint >= 2}
                 onClick={() => setHint((h) => h + 1)}
               >
-                <span aria-hidden="true">💡</span> {t('games.chess.learn.hint')}
+                {t('games.chess.learn.hint')}
               </button>
             </div>
           )

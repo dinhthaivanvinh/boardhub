@@ -17,6 +17,7 @@ import { errorKey } from '@/game-runtime/error-key';
 import { GAME_IDS } from '@/games/catalog';
 import {
   adminGames,
+  adminStats,
   adminReports,
   adminSanctioned,
   resolveReport,
@@ -26,15 +27,15 @@ import {
 import { apiRequest } from '@/online/api';
 import { useSession } from '@/online/session';
 
-type Tab = 'open' | 'resolved' | 'games' | 'sanctions';
-const TABS: Tab[] = ['open', 'resolved', 'games', 'sanctions'];
+type Tab = 'stats' | 'open' | 'resolved' | 'games' | 'sanctions';
+const TABS: Tab[] = ['stats', 'open', 'resolved', 'games', 'sanctions'];
 
 /** /admin (M4b): reports, game switches and current sanctions. The server checks every action. */
 export function AdminScreen() {
   const t = useTranslations('admin');
   const token = useSession((s) => s.token);
   const [me, setMe] = useState<PublicUser | null | 'loading'>('loading');
-  const [tab, setTab] = useState<Tab>('open');
+  const [tab, setTab] = useState<Tab>('stats');
 
   // Re-read the account: the admin flag may be newer than the copy kept in the browser.
   useEffect(() => {
@@ -78,7 +79,9 @@ export function AdminScreen() {
         ))}
       </div>
       <div role="tabpanel">
-        {tab === 'open' || tab === 'resolved' ? (
+        {tab === 'stats' ? (
+          <Stats />
+        ) : tab === 'open' || tab === 'resolved' ? (
           <Reports key={tab} status={tab} />
         ) : tab === 'games' ? (
           <Games />
@@ -86,6 +89,88 @@ export function AdminScreen() {
           <Sanctions />
         )}
       </div>
+    </div>
+  );
+}
+
+/** Visitors of today and of the days before: people not signed in, guests and accounts (docs/05 §2.1). */
+function Stats() {
+  const t = useTranslations('admin.stats');
+  const format = useFormatter();
+  const { data, error, reload } = useLoad(adminStats);
+  if (!data) return <ErrorLine code={error} />;
+  const kinds = ['anonymous', 'guest', 'registered'] as const;
+  const peak = Math.max(1, ...data.days.map((d) => d.total));
+  const day = (value: string) =>
+    format.dateTime(new Date(`${value}T12:00:00+07:00`), { dateStyle: 'medium' });
+  return (
+    <div className="flex flex-col gap-5" data-testid="admin-stats">
+      <section aria-labelledby="stats-today" className="flex flex-col gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 id="stats-today" className="text-lg font-semibold">
+            {t('today')} · {day(data.today.day)}
+          </h2>
+          <button type="button" className="btn" onClick={() => void reload()}>
+            {t('refresh')}
+          </button>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-4">
+          <div className="card py-3" data-testid="stats-total">
+            <div className="text-sm text-[var(--muted)]">{t('total')}</div>
+            <div className="text-3xl font-bold">{data.today.total}</div>
+          </div>
+          {kinds.map((k) => (
+            <div key={k} className="card py-3" data-testid={`stats-today-${k}`}>
+              <div className="text-sm text-[var(--muted)]">{t(k)}</div>
+              <div className="text-3xl font-bold">{data.today[k]}</div>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm text-[var(--muted)]">
+          {t('signedIn', { count: data.today.guest + data.today.registered })}
+        </p>
+      </section>
+      <section aria-labelledby="stats-days" className="flex flex-col gap-2">
+        <h2 id="stats-days" className="text-lg font-semibold">
+          {t('days', { count: data.days.length })}
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm" data-testid="stats-days">
+            <thead className="text-[var(--muted)]">
+              <tr>
+                <th className="py-1 pr-3 font-medium">{t('day')}</th>
+                <th className="px-3 py-1 text-right font-medium">{t('total')}</th>
+                {kinds.map((k) => (
+                  <th key={k} className="px-3 py-1 text-right font-medium">
+                    {t(k)}
+                  </th>
+                ))}
+                <th className="w-1/3 py-1 pl-3" aria-hidden="true" />
+              </tr>
+            </thead>
+            <tbody>
+              {data.days.map((d) => (
+                <tr key={d.day} className="border-t border-[var(--border)]">
+                  <td className="py-1.5 pr-3">{day(d.day)}</td>
+                  <td className="px-3 py-1.5 text-right font-semibold">{d.total}</td>
+                  {kinds.map((k) => (
+                    <td key={k} className="px-3 py-1.5 text-right">
+                      {d[k]}
+                    </td>
+                  ))}
+                  <td className="py-1.5 pl-3" aria-hidden="true">
+                    <div
+                      className="h-2 rounded bg-[var(--accent)]"
+                      style={{ width: `${(d.total / peak) * 100}%` }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <p className="text-sm text-[var(--muted)]">{t('note')}</p>
     </div>
   );
 }

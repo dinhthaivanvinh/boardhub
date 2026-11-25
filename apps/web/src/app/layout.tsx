@@ -9,6 +9,7 @@ import { OG_LOCALE, SITE_NAME, SITE_URL } from '@/seo/site';
 import { AccountLink } from '@/features/account/AccountLink';
 import { AuthPrompt } from '@/features/account/AuthPrompt';
 import { ProgressSync } from '@/features/learn/ProgressSync';
+import { VisitPing } from '@/features/stats/VisitPing';
 import { AdminLink } from '@/features/admin/AdminLink';
 import { BannedBanner } from '@/features/admin/BannedBanner';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
@@ -53,10 +54,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={TIME_ZONE}>
           <header className="site-header">
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-              <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
-                <Logo />
+              <Link href="/" className="site-brand flex items-center gap-2 font-bold tracking-tight">
+                <Logo size={40} />
                 {t('name')}
               </Link>
+              <span className="site-slogan" aria-hidden="true">
+                {t('slogan')}
+              </span>
               <div className="flex items-center gap-2 sm:gap-4">
                 <NavMenus />
                 <AdminLink />
@@ -69,6 +73,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <BannedBanner />
           <AuthPrompt />
           <ProgressSync />
+          <VisitPing />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
           <footer className="border-t border-[var(--border)]">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-[var(--muted)]">

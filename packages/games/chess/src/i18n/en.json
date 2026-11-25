@@ -612,8 +612,6 @@
     "backMove": "Previous move",
     "great": "Great job!",
     "nextLesson": "Next lesson: {name}",
-    "voiceCredit": "Vietnamese voice: Piper, trained on the",
-    "voiceCreditLink": "VAIS-1000 corpus (CC BY 4.0)",
     "backToHome": "Back to home",
     "groupStart": "Start",
     "groupRules": "Basic rules",
@@ -822,6 +820,7 @@
       },
       "allDone": "Great! You finished the practice.",
       "done": "You finished the practice! You earned {stars} ⭐."
-    }
+    },
+    "funSign": "Chess is great fun!"
   }
 }

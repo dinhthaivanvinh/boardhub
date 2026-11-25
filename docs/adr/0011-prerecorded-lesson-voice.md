@@ -1,6 +1,6 @@
 # ADR-0011: Giọng đọc của bài học là file mp3 thu sẵn, giọng trình duyệt chỉ để dự phòng
 
-- Trạng thái: Accepted · Ngày: 2026-11-24
+- Trạng thái: Accepted (phần chọn giọng và nguồn giọng được thay bởi [ADR-0012](0012-edge-neural-voice.md)) · Ngày: 2026-11-24
 
 ## Bối cảnh
 
@@ -10,7 +10,7 @@ Anh; chất lượng và tốc độ cũng khác nhau giữa trình duyệt. C�
 
 ## Quyết định
 
-- Mỗi câu một bài học có thể nói là một **file mp3 thu sẵn** trong `apps/web/public/audio/vi/`, đặt tên theo
+- Mỗi câu một bài học có thể nói là một **file mp3 thu sẵn** trong `apps/web/public/audio/vi-edge/`, đặt tên theo
   `voiceKey(câu)` (hàm băm cố định) cùng `index.json` liệt kê file có sẵn. Trình duyệt chỉ phát file bằng `Audio`.
 - Danh sách câu (`speechTexts`) sinh từ i18n và dữ liệu bài, không viết tay. Công cụ `tools/voice` đọc danh sách đó và tạo
   file bằng Piper `vi_VN-vais1000-medium` qua `sherpa-onnx` (offline, không gửi chữ ra ngoài). Tools nằm ngoài workspace

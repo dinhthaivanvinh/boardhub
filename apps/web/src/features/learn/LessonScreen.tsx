@@ -47,6 +47,16 @@ const ORDER: string[] = [
 
 type NavGroup = { heading: string; ids: string[] };
 
+/** The piece glyph in front of a piece lesson of the menu; other lessons have no picture. */
+const PIECE_GLYPH: Record<string, string> = {
+  pawn: '♙',
+  rook: '♖',
+  bishop: '♗',
+  knight: '♘',
+  queen: '♕',
+  king: '♔',
+};
+
 /** Every lesson, grouped in the order they are meant to be taken: one menu to jump to any of them. */
 function LessonNav({ currentId }: { currentId: string }) {
   const t = useTranslations();
@@ -65,7 +75,7 @@ function LessonNav({ currentId }: { currentId: string }) {
       aria-label={t(`${L}.allLessons`)}
       className="md:sticky md:top-20 md:max-h-full md:self-start md:overflow-y-auto"
     >
-      <Link href="/" className="mb-2 hidden text-sm underline-offset-4 hover:underline md:block">
+      <Link href="/" className="lesson-back mb-2 hidden text-sm underline-offset-4 hover:underline md:block">
         ← {t(`${L}.backToHome`)}
       </Link>
       <div className="flex gap-4 overflow-x-auto pb-1 md:flex-col md:gap-3 md:overflow-visible">
@@ -76,7 +86,7 @@ function LessonNav({ currentId }: { currentId: string }) {
             data-g={g}
             className="flex shrink-0 gap-2 md:block"
           >
-            <h2 className="mb-1 hidden text-xs font-semibold tracking-wide text-[var(--muted)] uppercase md:block">
+            <h2 className="lesson-group-title mb-1 hidden text-xs font-semibold tracking-wide uppercase md:flex">
               {group.heading}
             </h2>
             <ul className="flex gap-2 md:flex-col md:gap-1.5">
@@ -89,8 +99,25 @@ function LessonNav({ currentId }: { currentId: string }) {
                       aria-current={current ? 'page' : undefined}
                       className="lesson-link flex items-center justify-between gap-2 text-sm whitespace-nowrap md:whitespace-normal"
                     >
-                      <span>{lessonName(id, t)}</span>
-                      {done.has(id) && <span aria-label={t(`${L}.completed`)}>✓</span>}
+                      {id === COORDINATES_LESSON_ID ? (
+                        <span className="lesson-icon" aria-hidden="true">
+                          <span className="lesson-face" />
+                        </span>
+                      ) : PIECE_GLYPH[id] ? (
+                        <span className="lesson-icon" aria-hidden="true">
+                          {PIECE_GLYPH[id]}
+                        </span>
+                      ) : null}
+                      <span className="lesson-link-name">{lessonName(id, t)}</span>
+                      {done.has(id) ? (
+                        <span className="lesson-done" aria-label={t(`${L}.completed`)}>
+                          ✓
+                        </span>
+                      ) : (
+                        <span className="lesson-chevron" aria-hidden="true">
+                          ›
+                        </span>
+                      )}
                     </Link>
                   </li>
                 );
@@ -99,26 +126,7 @@ function LessonNav({ currentId }: { currentId: string }) {
           </section>
         ))}
       </div>
-      <VoiceCredit className="mt-3 hidden md:block" />
     </nav>
-  );
-}
-
-function VoiceCredit({ className }: { className: string }) {
-  const t = useTranslations();
-  return (
-    <p className={`text-xs text-[var(--muted)] ${className}`}>
-      {t('games.chess.learn.voiceCredit')}{' '}
-      <a
-        className="underline underline-offset-2"
-        href="https://ieee-dataport.org/documents/vais-1000-vietnamese-speech-synthesis-corpus"
-        target="_blank"
-        rel="noreferrer"
-      >
-        {t('games.chess.learn.voiceCreditLink')}
-      </a>
-      .
-    </p>
   );
 }
 
@@ -155,12 +163,12 @@ function LessonFooter({ lessonId }: { lessonId: string }) {
           className="btn btn-primary ch-next"
           data-testid="practice-link"
         >
-          <span aria-hidden="true">💪</span> {done.has(practiceId(lessonId)) ? t('ctaDone') : t('cta')}
+          {done.has(practiceId(lessonId)) ? t('ctaDone') : t('cta')}
         </Link>
       )}
       {toPuzzles && (
         <Link href="/puzzles" className="btn btn-primary ch-next" data-testid="practice-puzzles-link">
-          <span aria-hidden="true">🧩</span> {t('morePuzzles')}
+          {t('morePuzzles')}
         </Link>
       )}
       <NextLessonLink lessonId={lessonId} secondary={hasPractice || toPuzzles} />
@@ -179,15 +187,19 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const footer = <LessonFooter lessonId={lessonId} />;
   return (
     <div
-      className="stage-screen mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
+      className="stage-screen lesson-scene mx-auto grid max-w-[100rem] grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
       data-game="chess"
       style={{ '--ch-nav': '15rem' } as React.CSSProperties}
     >
       <BoardStage />
+      <div className="scene-decor" aria-hidden="true">
+        <span className="scene-sign">{t('games.chess.learn.funSign')} ♥</span>
+        <span className="scene-pawn" />
+      </div>
       <Link href="/" className="text-sm underline-offset-4 hover:underline md:hidden">
         ← {t('games.chess.learn.backToHome')}
       </Link>
-      <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
+      <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[11rem_minmax(0,1fr)] lg:grid-cols-[14.5rem_minmax(0,1fr)]">
         <LessonNav currentId={lessonId} />
         <div className="stage-aside min-w-0">
           {piece && (
@@ -243,7 +255,6 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
           )}
         </div>
       </div>
-      <VoiceCredit className="mt-2 md:hidden" />
       {!piece &&
         !opening &&
         !special &&

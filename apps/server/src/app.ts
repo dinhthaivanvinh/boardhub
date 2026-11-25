@@ -21,6 +21,10 @@ import { GameHub } from './hub/game-hub';
 import { RedisJobScheduler, TimerJobScheduler, type JobScheduler } from './hub/scheduler';
 import { HistoryService } from './history/history-service';
 import { registerRoutes } from './http/routes';
+import { registerStatsRoutes } from './stats/stats-routes';
+import { MemoryVisitRepo, type VisitRepo } from './stats/visit-repo';
+import { VisitService } from './stats/visit-service';
+import { PgVisitRepo } from './db/pg-visit-repo';
 import { attachGateway, createNotifier, type IoServer } from './realtime/gateway';
 import { GAME_DEFS } from './registry';
 import { attachOfficeGateway, createOfficeNotifier, type OfficeNamespace } from './office/office-gateway';
@@ -48,6 +52,7 @@ export interface ServerOverrides {
   officeStore?: OfficeStore;
   officeRepo?: OfficeRepo;
   adminRepo?: AdminRepo;
+  visitRepo?: VisitRepo;
   /** How often waiting quick-match players are re-checked (widening rating windows). */
   matchSweepMs?: number;
 }
@@ -75,7 +80,8 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   let ratingRepo = overrides.ratings;
   let officeRepo = overrides.officeRepo;
   let adminRepo = overrides.adminRepo;
-  if ((!users || !history || !ratingRepo || !officeRepo || !adminRepo) && config.DATABASE_URL) {
+  let visitRepo = overrides.visitRepo;
+  if ((!users || !history || !ratingRepo || !officeRepo || !adminRepo || !visitRepo) && config.DATABASE_URL) {
     const db = createDb(config.DATABASE_URL);
     await migrateToLatest(db);
     users ??= new PgUserRepo(db);
@@ -83,12 +89,14 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     ratingRepo ??= new PgRatingRepo(db);
     officeRepo ??= new PgOfficeRepo(db);
     adminRepo ??= new PgAdminRepo(db);
+    visitRepo ??= new PgVisitRepo(db);
     cleanups.push(() => db.destroy());
   }
   users ??= new MemoryUserRepo();
   history ??= new MemoryHistoryRepo();
   ratingRepo ??= new MemoryRatingRepo();
   adminRepo ??= new MemoryAdminRepo();
+  visitRepo ??= new MemoryVisitRepo();
   const ratings = new RatingService(ratingRepo);
 
   const io: IoServer = new Server(app.server, {
@@ -171,6 +179,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   registerRoutes(app, auth, new HistoryService(history, users), users, config.AUTH_RATE_LIMIT);
   registerCompetitiveRoutes(app, { auth, ratings: ratingRepo, users, store, games: GAME_DEFS });
   registerAdminRoutes(app, auth, admin);
+  registerStatsRoutes(app, auth, admin, new VisitService(visitRepo), config.AUTH_RATE_LIMIT * 3);
   const matchmaker = new Matchmaker({
     store,
     hub,

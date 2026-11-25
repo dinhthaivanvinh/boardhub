@@ -10,8 +10,9 @@ export function AccountLink() {
   const hydrated = useHydrated();
   const user = useSession((s) => s.user);
   return (
-    <Link href="/profile" className="max-w-40 truncate text-sm underline-offset-4 hover:underline">
-      {hydrated && user ? user.displayName : t('account')}
+    <Link href="/profile" className="account-pill">
+      <span className="account-face" aria-hidden="true" />
+      <span className="max-w-32 truncate">{hydrated && user ? user.displayName : t('account')}</span>
     </Link>
   );
 }

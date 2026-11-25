@@ -193,7 +193,7 @@ function ReplayView(
   return (
     <div
       data-game={gameId}
-      className="stage-screen mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-6 lg:py-6"
+      className="stage-screen mx-auto grid max-w-[90rem] gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-6 lg:py-6"
     >
       <BoardStage />
       <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">

@@ -16,6 +16,8 @@ async function adminPage(browser: Browser): Promise<Page> {
   let res = await page.request.post(`${SERVER}/api/auth/login`, { data: body });
   if (!res.ok())
     res = await page.request.post(`${SERVER}/api/auth/register`, { data: { ...body, displayName: 'Admin' } });
+  // Another test registered the admin at the same moment: sign in to that account.
+  if (!res.ok()) res = await page.request.post(`${SERVER}/api/auth/login`, { data: body });
   const auth = (await res.json()) as Auth;
   expect(auth.user.admin).toBe(true);
   await page.addInitScript((state) => {
@@ -61,6 +63,7 @@ test('a reported player is muted by an admin, then unmuted', async ({ browser })
 
   const admin = await adminPage(browser);
   await admin.goto('/admin');
+  await admin.getByTestId('admin-tab-open').click();
   await expect(admin.getByTestId('admin-link')).toBeVisible();
   const card = reportCard(admin, line);
   await expect(card).toBeVisible();
@@ -96,6 +99,7 @@ test('a banned player is shown why and cannot rejoin', async ({ browser }) => {
 
   const admin = await adminPage(browser);
   await admin.goto('/admin');
+  await admin.getByTestId('admin-tab-open').click();
   const card = reportCard(admin, line);
   await card.getByTestId('admin-duration').selectOption({ label: '24 giờ' });
   await card.getByTestId('admin-ban').click();
@@ -137,4 +141,21 @@ test('a paused game is marked in the catalog and cannot start', async ({ page })
 
   await page.goto('/play/caro?mode=local');
   await expect(page.getByTestId('game-paused')).toBeVisible();
+});
+
+test('the admin sees how many people came today, split by who was signed in', async ({ browser }) => {
+  // A visitor who is not signed in, so every kind has someone.
+  const visitor = await newPlayer(browser);
+  await visitor.goto('/');
+  const admin = await adminPage(browser);
+  await admin.goto('/admin');
+  await expect(admin.getByTestId('admin-stats')).toBeVisible();
+  // The pings come a moment after the pages open: read again until they are in.
+  await expect(async () => {
+    await admin.getByRole('button', { name: 'Làm mới' }).click();
+    await expect(admin.getByTestId('stats-today-anonymous')).toContainText(/[1-9]\d*$/);
+    await expect(admin.getByTestId('stats-today-registered')).toContainText(/[1-9]\d*$/);
+    await expect(admin.getByTestId('stats-total')).toContainText(/[1-9]\d*$/);
+  }).toPass({ timeout: 15_000 });
+  await expect(admin.getByTestId('stats-days').locator('tbody tr')).toHaveCount(14);
 });

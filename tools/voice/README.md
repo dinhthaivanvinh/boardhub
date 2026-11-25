@@ -1,6 +1,6 @@
 # Giọng đọc thu sẵn cho các bài học
 
-Các bài học đọc to bằng **file mp3 thu sẵn** (`apps/web/public/audio/vi/`) nên nghe giống nhau trên mọi trình duyệt
+Các bài học đọc to bằng **file mp3 thu sẵn** (`apps/web/public/audio/vi-edge/`) nên nghe giống nhau trên mọi trình duyệt
 và thiết bị; câu nào không có file thì dùng giọng của trình duyệt (xem `packages/games/chess/src/learn/speech.ts`).
 
 - Giọng: **Edge neural `vi-VN-HoaiMyNeural`**, lấy từ dịch vụ đọc của Microsoft Edge qua gói `node-edge-tts` (xem
@@ -30,3 +30,10 @@ Script gọi dịch vụ từng câu một, nghỉ 0,7 giây giữa các câu v�
 những câu không còn được đọc và ghi lại `index.json`. Muốn đổi giọng hoặc tốc độ thì chạy với `--force`.
 
 Tiếng Anh chưa có file thu sẵn: dùng giọng của trình duyệt.
+
+## Tại sao thư mục tên `vi-edge`
+
+Trình duyệt giữ file mp3 một ngày (và CDN có thể giữ lâu hơn). Tên file chỉ phụ thuộc vào câu chữ, nên nếu tạo lại file
+của **cùng những câu** (đổi giọng, đổi tốc độ) vào cùng một thư mục thì người dùng vẫn nghe giọng cũ cho đến khi cache hết hạn. Vì vậy
+mỗi lần đổi giọng, hãy đặt thư mục mới (ví dụ `vi-edge2`), sửa `VOICE_SET` trong `speech.ts`, `OUT_DIR` trong `build.mts`,
+test `voice-pack.test.ts`, e2e `chess-learn.spec.ts` và `.prettierignore`. Giọng Piper cũ ở thư mục `vi/` đã bị bỏ.

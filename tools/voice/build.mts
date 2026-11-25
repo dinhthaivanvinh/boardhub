@@ -19,7 +19,7 @@ const { EdgeTTS } = require('node-edge-tts') as {
   EdgeTTS: new (o: Record<string, unknown>) => { ttsPromise(text: string, file: string): Promise<void> };
 };
 
-const OUT_DIR = join(here, '..', '..', 'apps', 'web', 'public', 'audio', 'vi');
+const OUT_DIR = join(here, '..', '..', 'apps', 'web', 'public', 'audio', 'vi-edge');
 const FORCE = process.argv.includes('--force');
 const VOICE = process.env.VOICE_NAME ?? 'vi-VN-HoaiMyNeural';
 /** Slower than the voice's natural speed: the listeners are five years old. */

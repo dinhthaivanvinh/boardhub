@@ -96,7 +96,7 @@ describe('the recorded voice', () => {
     expect(await loadVoicePack('vi')).toBe(true);
 
     expect(speak(SENTENCE, 'vi')).toBe(true);
-    expect(played.map((p) => p.url)).toEqual([`/audio/vi/${KEY}.mp3`]);
+    expect(played.map((p) => p.url)).toEqual([`/audio/vi-edge/${KEY}.mp3`]);
     expect(said).toEqual([]);
   });
 
@@ -190,7 +190,7 @@ async function waitFor(condition: () => boolean, ms = 1000) {
 }
 
 describe('the recordings shipped with the app', () => {
-  const dir = join(__dirname, '../../../../apps/web/public/audio/vi');
+  const dir = join(__dirname, '../../../../apps/web/public/audio/vi-edge');
   const index = JSON.parse(readFileSync(join(dir, 'index.json'), 'utf8')) as {
     files: string[];
   };

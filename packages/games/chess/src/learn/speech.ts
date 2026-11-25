@@ -33,8 +33,13 @@ const localeOf = (lang: string) => (lang === 'en' ? 'en-US' : 'vi-VN');
 // ---------------------------------------------------------------------------------------------------------
 // The recorded voice
 
-/** Where the recordings are served from: `/audio/<lang>/index.json` and `/audio/<lang>/<key>.mp3`. */
+/**
+ * Where the recordings are served from: `/audio/<lang>-<VOICE_SET>/index.json` and `.../<key>.mp3`. Browsers keep the
+ * files for a day, so a new recording of the same sentences goes to a new `VOICE_SET` (and tools/voice makes it there).
+ */
 export const VOICE_BASE = '/audio';
+export const VOICE_SET = 'edge';
+const voiceDir = (lang: string) => `${VOICE_BASE}/${lang}-${VOICE_SET}`;
 
 /** Per language: the names of the files that exist; `null` once we know there are none. Missing = not asked yet. */
 const packs = new Map<string, ReadonlySet<string> | null>();
@@ -58,7 +63,7 @@ export function loadVoicePack(lang: string): Promise<boolean> {
   if (pending) return pending;
   const request =
     typeof fetch === 'function' && typeof Audio !== 'undefined'
-      ? fetch(`${VOICE_BASE}/${lang}/index.json`)
+      ? fetch(`${voiceDir(lang)}/index.json`)
           .then((r) =>
             r.ok ? (r.json() as Promise<{ files?: unknown }>) : Promise.reject(new Error(String(r.status))),
           )
@@ -150,7 +155,7 @@ function speakWithBrowser(text: string, lang: string): boolean {
 export function speak(text: string, lang: string): boolean {
   const key = voiceKey(spellSquares(text, lang));
   if (packs.get(lang)?.has(key) && typeof Audio !== 'undefined') {
-    playFile(`${VOICE_BASE}/${lang}/${key}.mp3`, () => void speakWithBrowser(text, lang));
+    playFile(`${voiceDir(lang)}/${key}.mp3`, () => void speakWithBrowser(text, lang));
     return true;
   }
   return speakWithBrowser(text, lang);

@@ -8,4 +8,4 @@ next-env.d.ts
 
 # Made by tools/*/generate.mts and tools/voice/build.mts: do not format by hand
 packages/games/chess/src/learn/practice-data.ts
-apps/web/public/audio/vi/index.json
+apps/web/public/audio/vi-edge/index.json

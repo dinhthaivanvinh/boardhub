@@ -3,7 +3,9 @@
     "name": "BoardHub",
     "tagline": "Học và chơi cờ vua, cùng các board game khác, ngay trên trình duyệt.",
     "footer": "Cờ vua và các board game, miễn phí trên trình duyệt.",
-    "slogan": "Học cờ thật vui!"
+    "slogan": "Học cờ thật vui!",
+    "footerLinks": "Liên kết",
+    "copyright": "© {year} BoardHub. Học cờ thật vui!"
   },
   "nav": {
     "home": "Trang chủ",
@@ -385,30 +387,14 @@
     }
   },
   "portal": {
-    "title": "Học và chơi cờ vua, ngay trên trình duyệt",
-    "tagline": "Làm quen từng quân cờ, học những khai cuộc nổi tiếng từng bước một, rồi chơi với máy hoặc với bạn bè. Không cần cài đặt.",
-    "ctaLearn": "Bắt đầu học",
+    "title": "Bắt đầu hành trình trở thành kiện tướng nhí!",
+    "tagline": "Học cờ vua thật vui, khám phá những bí mật thú vị và chinh phục từng thử thách cùng chúng mình!",
+    "ctaLearn": "Bắt đầu học ngay",
     "final": {
-      "title": "Bạn đã sẵn sàng khám phá cờ vua cùng chúng mình chưa?",
-      "text": "Mỗi bài chỉ vài phút, có giọng đọc và hình vẽ. Mỗi bước xong là được một ngôi sao!"
+      "title": "Mỗi ngày học một chút, giỏi hơn mỗi ngày!",
+      "text": "Cùng khám phá thế giới cờ vua và trở thành một kiện tướng nhí!"
     },
-    "ctaPlay": "Chơi với máy",
-    "what": {
-      "title": "Cờ vua là gì?",
-      "text": "Cờ vua là trò chơi chiến thuật cho hai người, hơn một nghìn năm tuổi. Mỗi bên điều khiển một đội quân trên bàn cờ và cố gắng bắt vua của đối phương.",
-      "goal": {
-        "title": "Mục tiêu",
-        "text": "Chiếu hết: vua đối phương bị tấn công và không còn cách nào thoát."
-      },
-      "board": {
-        "title": "Bàn cờ",
-        "text": "64 ô vuông (8 × 8). Mỗi bên có 16 quân: 1 vua, 1 hậu, 2 xe, 2 tượng, 2 mã và 8 tốt."
-      },
-      "first": {
-        "title": "Cách chơi",
-        "text": "Hai bên thay phiên đi một nước. Bên Trắng đi trước, mỗi lượt chỉ đi một quân."
-      }
-    },
+    "ctaPlay": "Chơi thử cờ vua",
     "path": {
       "title": "Lộ trình học",
       "text": "Học theo thứ tự này sẽ dễ nhất. Mỗi bài ngắn, có hình minh hoạ, giọng đọc và để con tự thử.",
@@ -454,7 +440,7 @@
       }
     },
     "pieces": {
-      "title": "Làm quen từng quân cờ",
+      "title": "Làm quen với đội quân cờ vua",
       "tag": {
         "pawn": "Đi thẳng, ăn chéo",
         "rook": "Đi thẳng như đường ray",
@@ -462,7 +448,8 @@
         "knight": "Nhảy hình chữ L",
         "queen": "Mạnh nhất bàn cờ",
         "king": "Quan trọng nhất"
-      }
+      },
+      "explore": "Khám phá"
     },
     "more": {
       "badge": "{n} game khác",
@@ -473,7 +460,103 @@
     "join": {
       "title": "Có mã phòng?",
       "text": "Nhập mã 6 ký tự bạn bè gửi để vào thẳng phòng."
-    }
+    },
+    "perks": {
+      "age": "Dành cho bé từ 5 tuổi",
+      "steps": "Học từng bước dễ hiểu",
+      "rewards": "Nhận sao và huy hiệu"
+    },
+    "benefits": {
+      "title": "Khám phá thế giới cờ vua",
+      "know": {
+        "title": "Làm quen cờ vua",
+        "text": "Khám phá bàn cờ và những quân cờ thú vị."
+      },
+      "think": {
+        "title": "Rèn luyện tư duy",
+        "text": "Phát triển khả năng quan sát và giải quyết vấn đề."
+      },
+      "challenge": {
+        "title": "Thử thách bản thân",
+        "text": "Giải câu đố và chinh phục những thử thách mới."
+      }
+    },
+    "map": {
+      "title": "Bản đồ hành trình chinh phục cờ vua",
+      "lessons": "{n}/{total} bài",
+      "state": {
+        "new": "Sẵn sàng",
+        "doing": "Đang học",
+        "done": "Hoàn thành",
+        "play": "Vào chơi"
+      },
+      "coordinates": {
+        "place": "Ngôi làng bàn cờ",
+        "text": "Học 64 ô và toạ độ trên bàn cờ."
+      },
+      "pieces": {
+        "place": "Rừng quân cờ",
+        "text": "Học từng quân cờ đi như thế nào."
+      },
+      "capture": {
+        "place": "Thung lũng chiến đấu",
+        "text": "Học ăn quân và bảo vệ quân của mình."
+      },
+      "checkmate": {
+        "place": "Lâu đài nhà vua",
+        "text": "Học chiếu và chiếu hết."
+      },
+      "openings": {
+        "place": "Con đường khai cuộc",
+        "text": "Học những cách mở màn cơ bản."
+      },
+      "special": {
+        "place": "Cánh cổng phép thuật",
+        "text": "Học nhập thành, bắt tốt qua đường và phong cấp."
+      },
+      "tactics": {
+        "place": "Núi chiến thuật",
+        "text": "Học chĩa hai mũi, quân bị ghim, tàn cuộc và ván hoà."
+      },
+      "play": {
+        "place": "Đấu trường kiện tướng",
+        "text": "Chơi với máy hoặc với bạn bè."
+      }
+    },
+    "daily": {
+      "title": "Thử thách hôm nay!",
+      "text": "Mỗi ngày có một câu đố mới: tìm nước đi chiếu hết vua đen chỉ trong 1 nước.",
+      "level": "Mức độ:",
+      "reward": "Phần thưởng:",
+      "stars": "{n} sao",
+      "go": "Giải câu đố",
+      "again": "Chơi lại",
+      "done": "Con đã giải câu đố hôm nay rồi. Mai quay lại nhé!",
+      "boardLabel": "Bàn cờ của câu đố hôm nay"
+    },
+    "play": {
+      "title": "Sẵn sàng đấu trí chưa?",
+      "bot": {
+        "title": "Chơi với máy",
+        "text": "Thử sức với đối thủ máy ở nhiều mức độ.",
+        "cta": "Chơi với máy"
+      },
+      "friend": {
+        "title": "Chơi cùng bạn bè",
+        "text": "Mời bạn bè tham gia một ván cờ thú vị.",
+        "cta": "Mời bạn chơi"
+      }
+    },
+    "achievements": {
+      "title": "Thành tích của con",
+      "stars": "Tổng số sao",
+      "level": "Cấp độ hiện tại",
+      "lessons": "Bài đã học",
+      "streak": "Ngày liên tiếp",
+      "badges": "Huy hiệu ({n}/{total})",
+      "all": "Xem tất cả thành tích"
+    },
+    "ctaContinue": "Học tiếp"
   },
   "office": {
     "title": "Văn phòng",

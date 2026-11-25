@@ -21,12 +21,6 @@
 .ch-dark {
   fill: var(--ch-dark, #b58863);
 }
-.ch-coord text {
-  font-size: 7px;
-  font-weight: 700;
-  fill: rgb(0 0 0 / 0.45);
-  pointer-events: none;
-}
 .ch-piece {
   stroke-width: 0.9;
   stroke-linejoin: round;

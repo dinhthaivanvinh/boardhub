@@ -1,0 +1,1218 @@
+/*
+ * The adventure look of the home page and of the header (docs/08 §6.2): a bright, rounded, game-like style for
+ * children. Rules here use `html ` or `.adv-` prefixes so they win over the older rules in globals.css, which is
+ * imported after this file.
+ */
+:root {
+  --adv-blue: #1976f3;
+  --adv-blue-dark: #1554b8;
+  --adv-blue-light: #eaf5ff;
+  --adv-sky: #bde4ff;
+  --adv-gold: #ffc928;
+  --adv-orange: #ffad45;
+  --adv-bg: #f5f9ff;
+  --adv-text: #243b5a;
+  --adv-muted: #5b6f89;
+  --adv-green: #48bd78;
+  --adv-shadow: 0 8px 24px rgb(25 118 243 / 0.14);
+  --adv-radius: 1.5rem;
+}
+
+/* ---- Header: a floating white bar ---- */
+html .site-header {
+  top: 0.5rem;
+  width: min(100% - 1rem, 80rem);
+  margin: 0.5rem auto 0;
+  border: 0;
+  border-image: none;
+  border-radius: 1.75rem;
+  background: #fff;
+  box-shadow: var(--adv-shadow);
+}
+html .site-header .site-brand {
+  color: var(--adv-blue-dark);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+html .site-header .site-slogan {
+  color: var(--adv-muted);
+}
+html .site-header .nav-link {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--adv-text);
+  font-weight: 700;
+  transition:
+    background-color 0.15s,
+    transform 0.15s;
+}
+html .site-header .nav-link:hover {
+  background: var(--adv-blue-light);
+  transform: translateY(-1px);
+}
+html .site-header .nav-link[data-current='true'] {
+  background: var(--adv-blue);
+  color: #fff;
+}
+html .site-header .account-pill {
+  background: var(--adv-blue-light);
+  color: var(--adv-text);
+}
+
+/* The home page has the light blue background of the design. */
+html:has(.adv-home) body {
+  background: var(--adv-bg);
+  color: var(--adv-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .site-header .nav-link {
+    transition: none;
+  }
+  html .site-header .nav-link:hover {
+    transform: none;
+  }
+}
+
+/* ---- Buttons and layout shared by the home sections ---- */
+.adv-home {
+  display: grid;
+  gap: 4rem;
+  padding-bottom: 3rem;
+}
+.adv-section {
+  width: min(100% - 2rem, 75rem);
+  margin-inline: auto;
+}
+.adv-section-title {
+  color: var(--adv-text);
+  font-size: clamp(1.5rem, 3.4vw, 2.125rem);
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+}
+.adv-section-sub {
+  max-width: 40rem;
+  margin: 0.5rem auto 0;
+  color: var(--adv-muted);
+  text-align: center;
+}
+.adv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+  border: 0;
+  border-radius: 9999px;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.adv-btn:hover,
+.adv-btn:focus-visible {
+  transform: translateY(-2px) scale(1.03);
+}
+.adv-btn-primary {
+  background: var(--adv-blue);
+  color: #fff;
+  box-shadow: 0 5px 0 var(--adv-blue-dark);
+}
+.adv-btn-gold {
+  background: var(--adv-gold);
+  color: #5a3b00;
+  box-shadow: 0 5px 0 #d9a400;
+}
+.adv-btn-light {
+  background: #fff;
+  color: var(--adv-blue-dark);
+  box-shadow: 0 5px 0 #b9d6f6;
+}
+
+/* ---- Hero ---- */
+.adv-hero {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  overflow: hidden;
+  width: min(100% - 1rem, 80rem);
+  margin: 0.75rem auto 0;
+  padding: 2.5rem 1.25rem 0;
+  border-radius: 2rem;
+  background: linear-gradient(180deg, #6fb8ff 0%, var(--adv-sky) 60%, #e6f4ff 100%);
+  text-align: center;
+}
+.adv-hero-text {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+}
+.adv-hero-title {
+  color: var(--adv-blue-dark);
+  font-size: clamp(1.875rem, 4.6vw, 2.875rem);
+  font-weight: 900;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.adv-hero-sub {
+  margin-top: 1rem;
+  color: var(--adv-text);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 600;
+  text-wrap: balance;
+}
+.adv-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.875rem;
+  margin-top: 1.5rem;
+}
+.adv-hero-perks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  margin-top: 1.5rem;
+  color: var(--adv-text);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+.adv-hero-perks li::before {
+  content: '✓';
+  margin-right: 0.375rem;
+  color: var(--adv-green);
+  font-weight: 900;
+}
+/* On a phone the mascot sits under the text, so it never covers it. */
+.adv-hero-mascot {
+  width: min(100%, 17rem);
+  height: auto;
+  margin-top: 1.25rem;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+/* On a wide screen the picture is the background: the boys stay at the two sides and the text in the middle. */
+@media (min-width: 64rem) {
+  .adv-hero {
+    min-height: clamp(30rem, 50vw, 42rem);
+    align-content: start;
+    padding-top: clamp(2.5rem, 6vw, 5rem);
+    background: #bde4ff url('/home/hero-bg.webp') center bottom / cover no-repeat;
+  }
+  .adv-hero-mascot {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-btn {
+    transition: none;
+  }
+  .adv-btn:hover,
+  .adv-btn:focus-visible {
+    transform: none;
+  }
+}
+.adv-home {
+  margin-top: 3rem;
+}
+.adv-home > * {
+  width: min(100% - 2rem, 75rem);
+  margin-inline: auto;
+}
+
+/* ---- Benefits: three large cards ---- */
+.adv-benefits {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+@media (min-width: 48rem) {
+  .adv-benefits {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.adv-benefit {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1.25rem;
+  border-radius: var(--adv-radius);
+  background: var(--tint);
+  box-shadow: var(--adv-shadow);
+  text-align: center;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.adv-benefit[data-i='0'] {
+  --tint: #dff0ff;
+}
+.adv-benefit[data-i='1'] {
+  --tint: #fff1cc;
+}
+.adv-benefit[data-i='2'] {
+  --tint: #dcf6e6;
+}
+.adv-benefit img {
+  width: auto;
+  height: 8.5rem;
+}
+.adv-benefit h3 {
+  font-size: 1.375rem;
+  font-weight: 800;
+}
+.adv-benefit p {
+  color: var(--adv-muted);
+  font-weight: 600;
+}
+.adv-benefit:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgb(25 118 243 / 0.2);
+}
+
+/* ---- The six pieces ---- */
+.adv-pieces {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+@media (min-width: 40rem) {
+  .adv-pieces {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 64rem) {
+  .adv-pieces {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+.adv-piece {
+  display: grid;
+  justify-items: center;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.375rem;
+  padding: 1.25rem 0.75rem;
+  border-radius: var(--adv-radius);
+  background: #fff;
+  box-shadow: var(--adv-shadow);
+  text-align: center;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.adv-piece:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgb(25 118 243 / 0.2);
+}
+.adv-piece-art {
+  display: grid;
+  place-items: center;
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 50% 35%, #fff, var(--adv-blue-light) 70%);
+}
+.adv-piece:hover .adv-piece-art {
+  animation: adv-wiggle 0.6s ease-in-out;
+}
+.adv-piece h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.adv-piece p {
+  color: var(--adv-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.adv-piece-btn {
+  align-self: end;
+  margin-top: 0.5rem;
+  min-height: 2.75rem;
+  padding-inline: 1.25rem;
+  font-size: 0.9375rem;
+}
+@keyframes adv-wiggle {
+  25% {
+    transform: rotate(-8deg) scale(1.08);
+  }
+  75% {
+    transform: rotate(8deg) scale(1.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-benefit,
+  .adv-piece {
+    transition: none;
+  }
+  .adv-benefit:hover,
+  .adv-piece:hover {
+    transform: none;
+  }
+  .adv-piece:hover .adv-piece-art {
+    animation: none;
+  }
+}
+
+/* ---- The adventure map: eight places on a winding path ---- */
+.adv-map-section {
+  padding: 2.5rem 1rem 2rem;
+  border-radius: 2rem;
+  background:
+    radial-gradient(40rem 12rem at 50% 0%, #fff 0%, transparent 70%),
+    linear-gradient(180deg, #d9f0ff 0%, #d8f3dc 100%);
+}
+.adv-map {
+  --gap: 1.25rem;
+  position: relative;
+  display: grid;
+  gap: 2rem var(--gap);
+  margin-top: 2rem;
+  counter-reset: none;
+}
+@media (min-width: 64rem) {
+  .adv-map {
+    --gap: 3rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* The path turns at the right end and comes back: 1-2-3-4 then 8-7-6-5 under them. */
+  .adv-place[data-i='4'] {
+    grid-area: 2 / 4;
+  }
+  .adv-place[data-i='5'] {
+    grid-area: 2 / 3;
+  }
+  .adv-place[data-i='6'] {
+    grid-area: 2 / 2;
+  }
+  .adv-place[data-i='7'] {
+    grid-area: 2 / 1;
+  }
+}
+.adv-place {
+  position: relative;
+}
+.adv-place-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 1.25rem 1rem 1rem;
+  border: 3px solid transparent;
+  border-radius: var(--adv-radius);
+  background: #fff;
+  box-shadow: var(--adv-shadow);
+  color: var(--adv-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.adv-place-card:hover,
+.adv-place-card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgb(25 118 243 / 0.22);
+}
+.adv-place[data-here='true'] .adv-place-card {
+  border-color: var(--adv-gold);
+}
+.adv-place-node {
+  position: relative;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  width: 4.75rem;
+  height: 4.75rem;
+  border-radius: 9999px;
+  background: var(--adv-blue-light);
+  box-shadow: inset 0 0 0 4px #fff;
+  outline: 4px solid var(--adv-sky);
+}
+.adv-place[data-state='done'] .adv-place-node {
+  background: #dcf6e6;
+  outline-color: var(--adv-green);
+}
+.adv-place[data-state='play'] .adv-place-node {
+  background: #fff1cc;
+  outline-color: var(--adv-orange);
+}
+.adv-place-no {
+  position: absolute;
+  top: -0.5rem;
+  left: -0.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background: var(--adv-blue);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 900;
+}
+.adv-place[data-state='done'] .adv-place-no {
+  background: var(--adv-green);
+}
+.adv-place-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+}
+.adv-place-name {
+  font-size: 1.1875rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.adv-place-lesson {
+  color: var(--adv-blue);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+.adv-place-text {
+  color: var(--adv-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.adv-place-progress {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+.adv-bar {
+  display: block;
+  overflow: hidden;
+  height: 0.625rem;
+  border-radius: 9999px;
+  background: #e3edf8;
+}
+.adv-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--adv-green), #7ed99f);
+  transform-origin: left;
+  animation: adv-grow 0.9s ease-out;
+}
+.adv-place-count {
+  color: var(--adv-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.adv-place-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+.adv-stars {
+  display: inline-flex;
+  gap: 0.125rem;
+}
+.adv-star[data-on='true'] {
+  animation: adv-twinkle 3.2s ease-in-out infinite;
+}
+.adv-place-state {
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  background: var(--adv-blue-light);
+  color: var(--adv-blue-dark);
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+.adv-place[data-state='done'] .adv-place-state {
+  background: #dcf6e6;
+  color: #1f7a45;
+}
+.adv-place[data-state='doing'] .adv-place-state,
+.adv-place[data-here='true'] .adv-place-state {
+  background: #fff1cc;
+  color: #8a5a00;
+}
+.adv-place[data-state='play'] .adv-place-state {
+  background: var(--adv-gold);
+  color: #5a3b00;
+}
+
+/* The path behind the cards: a thick, solid road in the blue of the site. */
+@media (min-width: 64rem) {
+  .adv-place::after {
+    content: '';
+    position: absolute;
+    top: 3.5rem;
+    left: 50%;
+    width: calc(100% + var(--gap));
+    height: 0.625rem;
+    border-radius: 9999px;
+    background: var(--adv-blue);
+    box-shadow: 0 0 0 3px #fff;
+  }
+  .adv-place[data-i='3']::after {
+    /* the turn: down from the fourth place to the fifth one under it */
+    width: 0.625rem;
+    height: calc(100% + 2rem);
+  }
+  .adv-place[data-i='4']::after,
+  .adv-place[data-i='5']::after,
+  .adv-place[data-i='6']::after {
+    left: auto;
+    right: 50%;
+  }
+  .adv-place[data-i='7']::after {
+    display: none;
+  }
+}
+/* On a phone: one column, with the road running down between the cards. */
+@media (max-width: 63.999rem) {
+  .adv-map {
+    gap: 1.5rem;
+  }
+  .adv-place:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    bottom: -1.75rem;
+    left: 50%;
+    width: 0.625rem;
+    margin-left: -0.3125rem;
+    border-radius: 9999px;
+    background: var(--adv-blue);
+    box-shadow: 0 0 0 3px #fff;
+  }
+  .adv-place-card {
+    grid-template-columns: 4.75rem 1fr;
+    align-items: center;
+  }
+  .adv-place-body {
+    text-align: left;
+  }
+}
+@keyframes adv-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes adv-twinkle {
+  0%,
+  90%,
+  100% {
+    transform: scale(1) rotate(0);
+  }
+  95% {
+    transform: scale(1.25) rotate(12deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-place-card {
+    transition: none;
+  }
+  .adv-place-card:hover,
+  .adv-place-card:focus-visible {
+    transform: none;
+  }
+  .adv-bar > span,
+  .adv-star[data-on='true'] {
+    animation: none;
+  }
+}
+
+/* ---- Daily challenge ---- */
+.adv-daily {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #fff6d6, #ffe4b8);
+  box-shadow: var(--adv-shadow);
+}
+@media (min-width: 48rem) {
+  .adv-daily {
+    grid-template-columns: minmax(0, 18rem) 1fr auto;
+    gap: 2.5rem;
+    padding: 2rem 2.5rem;
+  }
+}
+.adv-daily-board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  overflow: hidden;
+  width: min(100%, 18rem);
+  margin-inline: auto;
+  border: 6px solid #fff;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 18px rgb(120 80 0 / 0.2);
+}
+.adv-daily-cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  background: #eaf5ff;
+}
+.adv-daily-cell[data-dark='true'] {
+  background: #7fb4f0;
+}
+.adv-daily-cell svg {
+  width: 100%;
+  height: 100%;
+}
+.adv-daily-title {
+  color: #8a4b00;
+  font-size: clamp(1.5rem, 3.4vw, 2.125rem);
+  font-weight: 900;
+}
+.adv-daily-text {
+  margin-top: 0.5rem;
+  color: var(--adv-text);
+  font-weight: 600;
+}
+.adv-daily-facts {
+  display: grid;
+  gap: 0.375rem;
+  margin: 1rem 0 1.25rem;
+  font-weight: 700;
+}
+.adv-daily-facts span {
+  color: var(--adv-muted);
+}
+.adv-daily-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.adv-daily-done {
+  margin-top: 0.75rem;
+  font-weight: 800;
+  color: #1f7a45;
+}
+.adv-daily-mascot {
+  display: none;
+  width: auto;
+  height: 11rem;
+}
+@media (min-width: 64rem) {
+  .adv-daily-mascot {
+    display: block;
+  }
+}
+
+/* ---- Play ---- */
+.adv-play {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+@media (min-width: 48rem) {
+  .adv-play {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.adv-play-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 1.75rem 1.5rem;
+  border-radius: 2rem;
+  background: var(--tint);
+  box-shadow: var(--adv-shadow);
+  text-align: center;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.adv-play-card[data-k='bot'] {
+  --tint: #dff0ff;
+}
+.adv-play-card[data-k='friend'] {
+  --tint: #dcf6e6;
+}
+.adv-play-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgb(25 118 243 / 0.2);
+}
+.adv-play-art {
+  display: flex;
+  gap: 0.5rem;
+}
+.adv-play-art svg {
+  width: 5.5rem;
+  height: 5.5rem;
+}
+.adv-play-card h3 {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+.adv-play-card p {
+  margin-bottom: 0.75rem;
+  color: var(--adv-muted);
+  font-weight: 600;
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-play-card {
+    transition: none;
+  }
+  .adv-play-card:hover {
+    transform: none;
+  }
+}
+
+/* ---- Achievements ---- */
+.adv-ach-section {
+  padding: 2.5rem 1rem 2rem;
+  border-radius: 2rem;
+  background: linear-gradient(180deg, #fff 0%, var(--adv-blue-light) 100%);
+  box-shadow: var(--adv-shadow);
+}
+.adv-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 62rem;
+  margin: 1.75rem auto 0;
+}
+@media (min-width: 48rem) {
+  .adv-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.adv-stat {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  padding: 1.125rem 0.75rem;
+  border-radius: var(--adv-radius);
+  background: var(--tint);
+  text-align: center;
+}
+.adv-stat[data-k='stars'] {
+  --tint: #fff1cc;
+}
+.adv-stat[data-k='level'] {
+  --tint: #e6e0ff;
+}
+.adv-stat[data-k='lessons'] {
+  --tint: #dcf6e6;
+}
+.adv-stat[data-k='streak'] {
+  --tint: #ffe3d2;
+}
+.adv-stat strong {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+.adv-stat > span:last-child {
+  color: var(--adv-muted);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+.adv-stat-art {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--adv-green);
+  font-size: 1.75rem;
+  font-weight: 900;
+}
+.adv-badges-title {
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+}
+.adv-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: 62rem;
+  margin: 1rem auto 0;
+}
+.adv-badge {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  width: 6.5rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(25 118 243 / 0.12);
+  text-align: center;
+}
+.adv-badge[data-earned='false'] {
+  opacity: 0.55;
+}
+.adv-badge-icon {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+.adv-badge-name {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.adv-badges-more {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+/* ---- Final call to action ---- */
+.adv-final {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  padding: 2.5rem 1.5rem 0;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #6fb8ff, var(--adv-sky) 70%);
+  text-align: center;
+}
+@media (min-width: 48rem) {
+  .adv-final {
+    grid-template-columns: 1fr auto;
+    justify-items: start;
+    align-items: end;
+    padding: 2.5rem 3rem 0;
+    text-align: left;
+  }
+}
+.adv-final-text {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: inherit;
+  padding-bottom: 2.5rem;
+}
+.adv-final-title {
+  color: var(--adv-blue-dark);
+  font-size: clamp(1.625rem, 3.6vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.adv-final-text p {
+  color: var(--adv-text);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.adv-final-btn {
+  margin-top: 0.5rem;
+  min-height: 3.5rem;
+  padding-inline: 2.25rem;
+  font-size: 1.25rem;
+}
+.adv-final-mascot {
+  width: auto;
+  height: 12rem;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  margin-top: 2rem;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  color: var(--fg);
+}
+.site-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  width: min(100% - 2rem, 75rem);
+  margin-inline: auto;
+  padding-block: 1.5rem;
+}
+.site-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--adv-blue-dark);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  font-weight: 700;
+}
+.site-footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+.site-footer-links a:hover {
+  color: var(--adv-blue);
+}
+.site-footer-copy {
+  color: var(--adv-muted);
+  font-size: 0.875rem;
+}
+
+/* ---- The other pages (puzzles, journey, chess set-up) in the same look ---- */
+html:has(.adv-page),
+html:has(.adv-home) {
+  --bg: var(--adv-bg);
+  --fg: var(--adv-text);
+  --muted: var(--adv-muted);
+  --card: #fff;
+  --border: #d3e3f6;
+  --accent: var(--adv-blue);
+  --accent-fg: #fff;
+}
+html:has(.adv-page) body {
+  background: var(--adv-bg);
+  color: var(--adv-text);
+}
+.adv-banner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 1rem;
+  overflow: hidden;
+  padding: 1.5rem 1.5rem 0;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #6fb8ff, var(--adv-sky) 70%);
+}
+.adv-banner-text {
+  padding-bottom: 1.5rem;
+}
+.adv-banner-title {
+  color: var(--adv-blue-dark);
+  font-size: clamp(1.625rem, 4vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+}
+.adv-banner-sub {
+  margin-top: 0.375rem;
+  color: var(--adv-text);
+  font-weight: 600;
+}
+.adv-banner-mascot {
+  width: auto;
+  height: 8.5rem;
+}
+@media (max-width: 36rem) {
+  .adv-banner-mascot {
+    display: none;
+  }
+}
+.adv-page .card {
+  border: 0;
+  border-radius: 1.5rem;
+  box-shadow: var(--adv-shadow);
+}
+.adv-page .btn {
+  min-height: 3rem;
+  padding-inline: 1.25rem;
+  border: 0;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 4px 0 #b9d6f6;
+  color: var(--adv-blue-dark);
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.adv-page .btn:hover,
+.adv-page .btn:focus-visible {
+  transform: translateY(-2px);
+}
+.adv-page .btn-primary {
+  background: var(--adv-blue);
+  box-shadow: 0 4px 0 var(--adv-blue-dark);
+  color: #fff;
+}
+.adv-page .btn:disabled {
+  opacity: 0.55;
+  transform: none;
+}
+.adv-page .btn-lg {
+  min-height: 3.25rem;
+  font-size: 1.0625rem;
+}
+.adv-page h2 {
+  color: var(--adv-text);
+  font-weight: 800;
+}
+
+/* Puzzles */
+.adv-page .puzzle-daily {
+  background: linear-gradient(135deg, #fff6d6, #ffe4b8);
+}
+.adv-page .puzzle-daily .btn-primary {
+  background: var(--adv-gold);
+  box-shadow: 0 4px 0 #d9a400;
+  color: #5a3b00;
+}
+.adv-page .puzzle-bar {
+  border-radius: 9999px;
+}
+
+/* Journey */
+.adv-page .journey-stage {
+  border: 0;
+}
+.adv-page .journey-go {
+  background: var(--adv-gold);
+  box-shadow: 0 5px 0 #d9a400;
+  color: #5a3b00;
+}
+.adv-page .journey-node {
+  box-shadow: 0 2px 0 rgb(25 118 243 / 0.15);
+  text-decoration: none;
+}
+.adv-page .journey-badge {
+  border: 0;
+  box-shadow: var(--adv-shadow);
+}
+
+/* Chess set-up */
+.adv-page .setup-option {
+  border: 2px solid #d3e3f6;
+  border-radius: 9999px;
+  background: #fff;
+}
+.adv-page .setup-option.is-checked {
+  border-color: var(--adv-blue);
+  background: var(--adv-blue-light);
+  color: var(--adv-blue-dark);
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-page .btn {
+    transition: none;
+  }
+  .adv-page .btn:hover,
+  .adv-page .btn:focus-visible {
+    transform: none;
+  }
+}
+
+/* ---- Playing chess (a game, a replay) looks like a lesson: the sky and meadow, a wooden frame, white panels ---- */
+.play-scene .play-head h1 {
+  color: var(--adv-blue-dark);
+  font-weight: 900;
+}
+@media (min-width: 64rem) and (min-height: 26rem) {
+  html:has(.play-scene) body {
+    background: #bfe6f8 url('/scene/bg.svg') center bottom / cover no-repeat fixed;
+  }
+  html:has(.play-scene) .site-header {
+    background: rgb(255 255 255 / 0.82);
+  }
+  html.board-stage .play-scene {
+    grid-template-columns: minmax(0, 1fr) clamp(18rem, 24vw, 22rem);
+    column-gap: 1.5rem;
+  }
+  /* The board in the same wooden frame as in a lesson, as large as the screen allows. */
+  html.board-stage .play-scene .play-board {
+    justify-self: center;
+    width: clamp(15rem, min(calc(100dvh - 8.5rem), calc(100vw - 28rem)), 60rem);
+    max-width: none;
+    padding: 0.375rem;
+    border: 0.5rem solid #eba54e;
+    border-radius: 1.5rem;
+    background: #fbeccb;
+    box-shadow:
+      0 0 0 3px #d98a2b,
+      0 10px 24px rgb(120 70 10 / 0.3);
+  }
+  html.board-stage .play-scene .play-head,
+  html.board-stage .play-scene .stage-aside {
+    padding: 0.875rem 1rem;
+    border: 2px solid rgb(255 255 255 / 0.95);
+    border-radius: 1.75rem;
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 8px 22px rgb(30 80 140 / 0.2);
+  }
+  html.board-stage .play-scene .play-head {
+    align-self: start;
+  }
+  html.board-stage .play-scene .stage-aside {
+    align-self: start;
+    max-height: calc(100dvh - 15rem);
+  }
+  html.board-stage .play-scene .play-head .card,
+  html.board-stage .play-scene .stage-aside .card {
+    background: var(--adv-blue-light);
+    box-shadow: none;
+  }
+}
+
+/* The "keep your journey" prompt inside the achievements. */
+.adv-save {
+  max-width: 62rem;
+  margin: 1.5rem auto 0;
+}
+.adv-save .save-progress {
+  border: 0;
+  border-radius: 1.5rem;
+  background: #fff1cc;
+  box-shadow: none;
+}
+.adv-save .btn {
+  min-height: 3rem;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--adv-blue);
+  box-shadow: 0 4px 0 var(--adv-blue-dark);
+  color: #fff;
+  font-weight: 800;
+}
+
+/* Hero text: straight on the picture; a white glow keeps the words readable. */
+@media (min-width: 64rem) {
+  .adv-hero {
+    align-content: center;
+    padding-block: 2rem;
+  }
+  .adv-hero-text {
+    max-width: 41rem;
+  }
+  .adv-hero-title {
+    font-size: clamp(1.875rem, 3.8vw, 2.75rem);
+    text-wrap: balance;
+    text-shadow:
+      0 3px 0 #fff,
+      0 0 6px #fff,
+      0 0 18px rgb(255 255 255 / 0.95),
+      0 0 34px rgb(255 255 255 / 0.8);
+  }
+  .adv-hero-sub {
+    margin-top: 0.75rem;
+    color: #1b3354;
+    font-size: clamp(1rem, 1.5vw, 1.1875rem);
+    font-weight: 700;
+    text-wrap: balance;
+    text-shadow:
+      0 0 6px #fff,
+      0 0 16px rgb(255 255 255 / 0.95),
+      0 0 28px rgb(255 255 255 / 0.8);
+  }
+  .adv-hero-perks {
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+  .adv-hero-perks li {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 2px 8px rgb(25 90 180 / 0.18);
+    font-size: 0.875rem;
+  }
+}

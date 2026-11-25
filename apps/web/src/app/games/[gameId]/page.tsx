@@ -37,7 +37,9 @@ export default async function GamePage({ params }: Props) {
   const name = t(`games.${gameId}.name`);
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[minmax(0,1fr)_380px]">
+    <div
+      className={`${gameId === 'chess' ? 'adv-page ' : ''}mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[minmax(0,1fr)_380px]`}
+    >
       <JsonLd
         data={{
           '@context': 'https://schema.org',

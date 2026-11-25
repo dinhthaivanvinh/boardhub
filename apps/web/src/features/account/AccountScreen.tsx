@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { PageBanner } from '@/features/home/PageBanner';
 import { useEffect, useState, type FormEvent } from 'react';
 import type { AuthResponse, PublicUser } from '@bg/protocol';
 import { errorKey } from '@/game-runtime/error-key';
@@ -42,9 +43,12 @@ export function AccountScreen() {
   // No session yet: choose how to play (nothing is created behind your back).
   if (!user) {
     return (
-      <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-10">
-        <h1 className="text-2xl font-bold tracking-tight">{t('account.title')}</h1>
-        <p className="text-[var(--muted)]">{t('authPrompt.subtitle')}</p>
+      <div className="adv-page mx-auto flex max-w-xl flex-col gap-6 px-4 py-8">
+        <PageBanner
+          title={t('account.title')}
+          subtitle={t('authPrompt.subtitle')}
+          mascot="mascot-thumbs.webp"
+        />
         <div className="card">
           <AuthPanel />
         </div>
@@ -53,13 +57,16 @@ export function AccountScreen() {
   }
 
   return (
-    <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-10">
-      <h1 className="text-2xl font-bold tracking-tight">{t('account.title')}</h1>
-      <p className="text-[var(--muted)]">
-        {user.kind === 'guest'
-          ? t('account.guestNote')
-          : t('account.registeredAs', { email: user.email ?? '' })}
-      </p>
+    <div className="adv-page mx-auto flex max-w-xl flex-col gap-6 px-4 py-8">
+      <PageBanner
+        title={t('account.title')}
+        subtitle={
+          user.kind === 'guest'
+            ? t('account.guestNote')
+            : t('account.registeredAs', { email: user.email ?? '' })
+        }
+        mascot="mascot-thumbs.webp"
+      />
 
       {error && (
         <p role="alert" className="text-sm text-[var(--danger)]">

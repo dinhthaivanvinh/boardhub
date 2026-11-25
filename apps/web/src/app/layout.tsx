@@ -16,7 +16,13 @@ import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
 import { MobileNav } from '@/features/settings/MobileNav';
 import { NavMenus } from '@/features/settings/NavMenus';
 import { TIME_ZONE } from '@/i18n/messages';
+import { NAV_LINKS } from '@/features/settings/nav-links';
 import './globals.css';
+
+const FOOTER_LINKS = [
+  { href: '/', key: 'home' as const },
+  ...NAV_LINKS.map((l) => ({ href: l.href, key: l.key })),
+];
 
 /** A round, friendly face for a young audience; the system fonts stay as the fallback. */
 const rounded = Nunito({ subsets: ['latin', 'vietnamese'], display: 'swap', variable: '--font-rounded' });
@@ -39,7 +45,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f7f5f0' },
+    { media: '(prefers-color-scheme: light)', color: '#f5f9ff' },
     { media: '(prefers-color-scheme: dark)', color: '#15140f' },
   ],
 };
@@ -48,6 +54,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const locale = await getLocale();
   const messages = await getMessages();
   const t = await getTranslations('app');
+  const tn = await getTranslations('nav');
   return (
     <html lang={locale} className={rounded.variable}>
       <body>
@@ -75,13 +82,20 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <ProgressSync />
           <VisitPing />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
-          <footer className="border-t border-[var(--border)]">
-            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-[var(--muted)]">
-              <span className="flex items-center gap-2">
-                <Logo size={18} />
+          <footer className="site-footer">
+            <div className="site-footer-inner">
+              <span className="site-footer-brand">
+                <Logo size={28} />
                 {t('name')}
               </span>
-              <span>{t('footer')}</span>
+              <nav aria-label={t('footerLinks')} className="site-footer-links">
+                {FOOTER_LINKS.map((l) => (
+                  <Link key={l.href} href={l.href}>
+                    {tn(l.key)}
+                  </Link>
+                ))}
+              </nav>
+              <span className="site-footer-copy">{t('copyright', { year: new Date().getFullYear() })}</span>
             </div>
           </footer>
         </NextIntlClientProvider>

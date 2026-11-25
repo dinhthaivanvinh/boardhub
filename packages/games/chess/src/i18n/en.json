@@ -756,15 +756,6 @@
         }
       },
       "home": {
-        "title": "Knight says",
-        "newcomer": "Hello! I'm Knight. Shall we learn chess together?",
-        "next": "Today let us learn \"{lesson}\"!",
-        "dailyPending": "Today's puzzle is waiting for you!",
-        "dailyDone": "You solved today's puzzle. Great job!",
-        "allDone": "You finished every lesson! Now let us solve puzzles.",
-        "continue": "Keep learning",
-        "start": "Start learning",
-        "puzzle": "Today's puzzle",
         "map": "See the journey"
       },
       "save": {

@@ -49,6 +49,8 @@ export {
   JOURNEY,
   JOURNEY_LESSONS,
   RANKS,
+  STARS_PER_LESSON,
+  STARS_PER_PUZZLE,
   earnedBadges,
   nextLessonId,
   learnerRank,

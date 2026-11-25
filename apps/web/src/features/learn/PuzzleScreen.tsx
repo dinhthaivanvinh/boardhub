@@ -14,6 +14,7 @@ import {
   type PuzzleTier,
 } from '@bg/game-chess';
 import { BoardStage } from '@/components/BoardStage';
+import { PageBanner } from '@/features/home/PageBanner';
 import { LearnStats, useLearnStats } from './LearnStats';
 import { useMarkPuzzle } from './use-progress';
 import { useReducedMotion } from './use-reduced-motion';
@@ -83,12 +84,10 @@ function Menu({
 }) {
   const t = useTranslations('games.chess.learn');
   return (
-    <div className="mx-auto grid max-w-4xl gap-6 px-4 py-6">
-      <header className="puzzle-head">
-        <h1 className="puzzle-title">{t('puzzles.title')}</h1>
-        <p className="mt-1 text-[var(--muted)]">{t('puzzles.subtitle')}</p>
+    <div className="adv-page mx-auto grid max-w-5xl gap-6 px-4 py-6">
+      <PageBanner title={t('puzzles.title')} subtitle={t('puzzles.subtitle')} mascot="mascot-thinking.webp">
         <LearnStats className="mt-3" />
-      </header>
+      </PageBanner>
 
       <section className="card puzzle-daily" aria-labelledby="puzzle-daily-title">
         <span className="puzzle-daily-icon" aria-hidden="true">
@@ -214,7 +213,7 @@ function Play({
 
   return (
     <div
-      className="stage-screen mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
+      className="stage-screen lesson-scene mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
       data-game="chess"
     >
       <BoardStage />

@@ -3,7 +3,9 @@
     "name": "BoardHub",
     "tagline": "Learn and play chess, plus other board games, right in your browser.",
     "footer": "Chess and board games, free in your browser.",
-    "slogan": "Learning chess is fun!"
+    "slogan": "Learning chess is fun!",
+    "footerLinks": "Links",
+    "copyright": "© {year} BoardHub. Learn chess the fun way!"
   },
   "nav": {
     "home": "Home",
@@ -385,30 +387,14 @@
     }
   },
   "portal": {
-    "title": "Learn and play chess, right in your browser",
-    "tagline": "Meet each piece, learn famous openings one step at a time, then play the computer or your friends. Nothing to install.",
-    "ctaLearn": "Start learning",
+    "title": "Start your journey to become a little chess champion!",
+    "tagline": "Learn chess the fun way, discover its secrets and beat one challenge after another with us!",
+    "ctaLearn": "Start learning now",
     "final": {
-      "title": "Are you ready to explore chess with us?",
-      "text": "Each lesson takes a few minutes, with a voice and pictures. Every step you finish earns a star!"
+      "title": "Learn a little every day and get better every day!",
+      "text": "Explore the world of chess together and become a little champion!"
     },
-    "ctaPlay": "Play the computer",
-    "what": {
-      "title": "What is chess?",
-      "text": "Chess is a strategy game for two players, more than a thousand years old. Each side commands an army on the board and tries to capture the enemy king.",
-      "goal": {
-        "title": "The goal",
-        "text": "Checkmate: the enemy king is attacked and has no way to escape."
-      },
-      "board": {
-        "title": "The board",
-        "text": "64 squares (8 × 8). Each side has 16 pieces: 1 king, 1 queen, 2 rooks, 2 bishops, 2 knights and 8 pawns."
-      },
-      "first": {
-        "title": "How to play",
-        "text": "Players take turns making one move. White goes first, one piece per turn."
-      }
-    },
+    "ctaPlay": "Try a game of chess",
     "path": {
       "title": "Your learning path",
       "text": "This order is the easiest. Every lesson is short, with pictures, a voice and a chance to try it yourself.",
@@ -454,7 +440,7 @@
       }
     },
     "pieces": {
-      "title": "Meet each piece",
+      "title": "Meet the chess army",
       "tag": {
         "pawn": "Moves straight, captures diagonally",
         "rook": "Moves straight like a rail",
@@ -462,7 +448,8 @@
         "knight": "Jumps in an L",
         "queen": "The strongest piece",
         "king": "The most important piece"
-      }
+      },
+      "explore": "Explore"
     },
     "more": {
       "badge": "{n} more games",
@@ -473,7 +460,103 @@
     "join": {
       "title": "Got a room code?",
       "text": "Enter the 6-character code your friend sent to join the room."
-    }
+    },
+    "perks": {
+      "age": "For kids from 5 years old",
+      "steps": "Easy steps, one at a time",
+      "rewards": "Earn stars and badges"
+    },
+    "benefits": {
+      "title": "Explore the world of chess",
+      "know": {
+        "title": "Get to know chess",
+        "text": "Discover the board and the fun pieces."
+      },
+      "think": {
+        "title": "Train your thinking",
+        "text": "Grow your eye for detail and your problem solving."
+      },
+      "challenge": {
+        "title": "Challenge yourself",
+        "text": "Solve puzzles and take on new challenges."
+      }
+    },
+    "map": {
+      "title": "The adventure map to conquer chess",
+      "lessons": "{n}/{total} lessons",
+      "state": {
+        "new": "Ready",
+        "doing": "Learning",
+        "done": "Done",
+        "play": "Play now"
+      },
+      "coordinates": {
+        "place": "Chessboard Village",
+        "text": "Learn the 64 squares and the coordinates."
+      },
+      "pieces": {
+        "place": "Piece Forest",
+        "text": "Learn how each piece moves."
+      },
+      "capture": {
+        "place": "Battle Valley",
+        "text": "Learn to capture and to protect your pieces."
+      },
+      "checkmate": {
+        "place": "King's Castle",
+        "text": "Learn check and checkmate."
+      },
+      "openings": {
+        "place": "Opening Road",
+        "text": "Learn the basic openings."
+      },
+      "special": {
+        "place": "Magic Gate",
+        "text": "Learn castling, en passant and promotion."
+      },
+      "tactics": {
+        "place": "Tactics Mountain",
+        "text": "Learn forks, pins, endgames and draws."
+      },
+      "play": {
+        "place": "Champions Arena",
+        "text": "Play the computer or a friend."
+      }
+    },
+    "daily": {
+      "title": "Today's challenge!",
+      "text": "A new puzzle every day: find the move that checkmates the black king in one move.",
+      "level": "Level:",
+      "reward": "Reward:",
+      "stars": "{n} star",
+      "go": "Solve the puzzle",
+      "again": "Play again",
+      "done": "You solved today's puzzle. Come back tomorrow!",
+      "boardLabel": "The board of today's puzzle"
+    },
+    "play": {
+      "title": "Ready to battle your brain?",
+      "bot": {
+        "title": "Play the computer",
+        "text": "Test yourself against the computer at many levels.",
+        "cta": "Play the computer"
+      },
+      "friend": {
+        "title": "Play with friends",
+        "text": "Invite a friend to a fun game of chess.",
+        "cta": "Invite a friend"
+      }
+    },
+    "achievements": {
+      "title": "Your achievements",
+      "stars": "Total stars",
+      "level": "Current level",
+      "lessons": "Lessons done",
+      "streak": "Days in a row",
+      "badges": "Badges ({n}/{total})",
+      "all": "See all achievements"
+    },
+    "ctaContinue": "Keep learning"
   },
   "office": {
     "title": "Office",

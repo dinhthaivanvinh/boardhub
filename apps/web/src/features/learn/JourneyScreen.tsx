@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { BADGES, earnedBadges, JOURNEY, nextLessonId, practiceId, PUZZLES } from '@bg/game-chess';
 import { buildPlayUrl } from '@/game-runtime/match-setup';
 import { lessonName } from './lesson-name';
+import { PageBanner } from '@/features/home/PageBanner';
 import { LearnStats, useLearnStats } from './LearnStats';
 import { SaveProgress } from './SaveProgress';
 
@@ -18,17 +19,15 @@ export function JourneyScreen() {
   const solvedCount = new Set(puzzles.solved.filter((id) => PUZZLES.some((p) => p.id === id))).size;
 
   return (
-    <div className="mx-auto grid max-w-4xl gap-6 px-4 py-6">
-      <header className="puzzle-head">
-        <h1 className="puzzle-title">{t(`${L}.title`)}</h1>
-        <p className="mt-1 text-[var(--muted)]">{t(`${L}.subtitle`)}</p>
+    <div className="adv-page mx-auto grid max-w-5xl gap-6 px-4 py-6">
+      <PageBanner title={t(`${L}.title`)} subtitle={t(`${L}.subtitle`)} mascot="mascot-pointing.webp">
         <LearnStats className="mt-3" />
         <p className="mt-2 text-sm font-semibold" data-testid="journey-next-rank">
           {rank.next
             ? t(`${L}.toNext`, { n: rank.toNext ?? 0, rank: t(`${L}.ranks.${rank.next.id}`) })
             : t(`${L}.topRank`)}
         </p>
-      </header>
+      </PageBanner>
 
       <SaveProgress />
 

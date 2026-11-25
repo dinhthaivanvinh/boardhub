@@ -112,146 +112,150 @@ export function Board({
     : '';
 
   return (
-    <div className="ch-board">
-      <GridBoard
-        rows={8}
-        cols={8}
-        gridLines={false}
-        label={t('games.chess.boardLabel')}
-        background={
-          <g>
-            {Array.from({ length: 64 }, (_, d) => (
-              <rect
-                key={d}
-                x={colOf(d) * CELL}
-                y={rowOf(d) * CELL}
-                width={CELL}
-                height={CELL}
-                className={(rowOf(d) + colOf(d)) % 2 === 0 ? 'ch-light' : 'ch-dark'}
-              />
-            ))}
-            {Array.from({ length: 8 }, (_, i) => (
-              <g key={i} className="ch-coord" aria-hidden="true">
-                <text x={i * CELL + CELL - 3} y={8 * CELL - 3} textAnchor="end">
-                  {FILES[flipped ? 7 - i : i]}
-                </text>
-                <text x={2} y={i * CELL + 9}>
-                  {flipped ? i + 1 : 8 - i}
-                </text>
-              </g>
-            ))}
-          </g>
-        }
-        cellLabel={(display) => {
-          const s = toBoard(display);
-          const p = view.board[s];
-          return t('games.chess.cellLabel', {
-            square: squareName(s),
-            piece: p ? pieceLabel(p) : t('games.chess.empty'),
-          });
-        }}
-        onActivate={activate}
-        cellData={(display) => {
-          const s = toBoard(display);
-          return {
-            'data-square': squareName(s),
-            'data-piece': view.board[s] ?? undefined,
-            'data-selected': s === selected ? 'true' : undefined,
-            'data-target': targets.has(s) ? 'true' : undefined,
-            'data-last': last && (s === last.from || s === last.to) ? 'true' : undefined,
-            'data-check': s === checkedKing ? 'true' : undefined,
-          };
-        }}
-        renderCell={(display, geom) => {
-          const s = toBoard(display);
-          const p = view.board[s];
-          const cx = geom.x + HALF;
-          const cy = geom.y + HALF;
-          const isLast = last && (s === last.from || s === last.to);
-          return (
-            <>
-              {isLast && <rect className="ch-last" x={geom.x} y={geom.y} width={CELL} height={CELL} />}
-              {s === checkedKing && <circle className="ch-check-glow" cx={cx} cy={cy} r={CELL * 0.48} />}
-              {s === selected && (
-                <rect className="ch-selected-sq" x={geom.x} y={geom.y} width={CELL} height={CELL} />
-              )}
-              {p && !sliding.has(s) && <PieceShape piece={p} cx={cx} cy={cy + 1} className={pieceClass(s)} />}
-              {targets.has(s) &&
-                (p || (last && view.enPassant === s) ? (
-                  <circle className="ch-capture" cx={cx} cy={cy} r={CELL * 0.44} />
-                ) : (
-                  <circle className="ch-target" cx={cx} cy={cy} r={CELL * 0.14} />
-                ))}
-            </>
-          );
-        }}
-        overlay={
-          last ? (
-            <>
-              {rookMove && view.board[rookMove.to] && (
-                <SlidingPiece
-                  key={`r${view.moveCount}`}
-                  from={centre(rookMove.from)}
-                  to={centre(rookMove.to)}
-                  animate={settings.animations}
-                >
-                  <PieceShape
-                    piece={view.board[rookMove.to]!}
-                    cx={centre(rookMove.to).x}
-                    cy={centre(rookMove.to).y + 1}
-                  />
-                </SlidingPiece>
-              )}
-              {view.board[last.to] && (
-                <SlidingPiece
-                  key={view.moveCount}
-                  from={centre(last.from)}
-                  to={centre(last.to)}
-                  animate={settings.animations}
-                >
-                  <PieceShape
-                    piece={view.board[last.to]!}
-                    cx={centre(last.to).x}
-                    cy={centre(last.to).y + 1}
-                    className={pieceClass(last.to)}
-                  />
-                </SlidingPiece>
-              )}
-            </>
-          ) : undefined
-        }
-      />
+    <div className="ch-learn-frame">
+      <div className="ch-learn-ranks" aria-hidden="true">
+        {Array.from({ length: 8 }, (_, i) => (
+          <span key={i}>{flipped ? i + 1 : 8 - i}</span>
+        ))}
+      </div>
+      <div className="ch-board">
+        <GridBoard
+          rows={8}
+          cols={8}
+          gridLines={false}
+          label={t('games.chess.boardLabel')}
+          background={
+            <g>
+              {Array.from({ length: 64 }, (_, d) => (
+                <rect
+                  key={d}
+                  x={colOf(d) * CELL}
+                  y={rowOf(d) * CELL}
+                  width={CELL}
+                  height={CELL}
+                  className={(rowOf(d) + colOf(d)) % 2 === 0 ? 'ch-light' : 'ch-dark'}
+                />
+              ))}
+            </g>
+          }
+          cellLabel={(display) => {
+            const s = toBoard(display);
+            const p = view.board[s];
+            return t('games.chess.cellLabel', {
+              square: squareName(s),
+              piece: p ? pieceLabel(p) : t('games.chess.empty'),
+            });
+          }}
+          onActivate={activate}
+          cellData={(display) => {
+            const s = toBoard(display);
+            return {
+              'data-square': squareName(s),
+              'data-piece': view.board[s] ?? undefined,
+              'data-selected': s === selected ? 'true' : undefined,
+              'data-target': targets.has(s) ? 'true' : undefined,
+              'data-last': last && (s === last.from || s === last.to) ? 'true' : undefined,
+              'data-check': s === checkedKing ? 'true' : undefined,
+            };
+          }}
+          renderCell={(display, geom) => {
+            const s = toBoard(display);
+            const p = view.board[s];
+            const cx = geom.x + HALF;
+            const cy = geom.y + HALF;
+            const isLast = last && (s === last.from || s === last.to);
+            return (
+              <>
+                {isLast && <rect className="ch-last" x={geom.x} y={geom.y} width={CELL} height={CELL} />}
+                {s === checkedKing && <circle className="ch-check-glow" cx={cx} cy={cy} r={CELL * 0.48} />}
+                {s === selected && (
+                  <rect className="ch-selected-sq" x={geom.x} y={geom.y} width={CELL} height={CELL} />
+                )}
+                {p && !sliding.has(s) && (
+                  <PieceShape piece={p} cx={cx} cy={cy + 1} className={pieceClass(s)} />
+                )}
+                {targets.has(s) &&
+                  (p || (last && view.enPassant === s) ? (
+                    <circle className="ch-capture" cx={cx} cy={cy} r={CELL * 0.44} />
+                  ) : (
+                    <circle className="ch-target" cx={cx} cy={cy} r={CELL * 0.14} />
+                  ))}
+              </>
+            );
+          }}
+          overlay={
+            last ? (
+              <>
+                {rookMove && view.board[rookMove.to] && (
+                  <SlidingPiece
+                    key={`r${view.moveCount}`}
+                    from={centre(rookMove.from)}
+                    to={centre(rookMove.to)}
+                    animate={settings.animations}
+                  >
+                    <PieceShape
+                      piece={view.board[rookMove.to]!}
+                      cx={centre(rookMove.to).x}
+                      cy={centre(rookMove.to).y + 1}
+                    />
+                  </SlidingPiece>
+                )}
+                {view.board[last.to] && (
+                  <SlidingPiece
+                    key={view.moveCount}
+                    from={centre(last.from)}
+                    to={centre(last.to)}
+                    animate={settings.animations}
+                  >
+                    <PieceShape
+                      piece={view.board[last.to]!}
+                      cx={centre(last.to).x}
+                      cy={centre(last.to).y + 1}
+                      className={pieceClass(last.to)}
+                    />
+                  </SlidingPiece>
+                )}
+              </>
+            ) : undefined
+          }
+        />
 
-      {promoting && (
-        <div className="ch-promotion" role="dialog" aria-label={t('games.chess.promoteTo')}>
-          <p className="ch-promotion-title">{t('games.chess.promoteTo')}</p>
-          <div className="ch-promotion-options">
-            {PROMOTIONS.map((type) => (
-              <button
-                key={type}
-                type="button"
-                className="ch-promotion-btn"
-                aria-label={t(`games.chess.pieceNames.${type}`)}
-                onClick={() => {
-                  const move = { from: promoting.from, to: promoting.to, promotion: type };
-                  setPromoting(null);
-                  setSelected(null);
-                  onMove(move);
-                }}
-              >
-                <svg viewBox={`0 0 ${CELL} ${CELL}`} width="48" height="48" aria-hidden="true">
-                  <PieceShape piece={`${myColor}${type as PieceType}` as Piece} cx={HALF} cy={HALF + 1} />
-                </svg>
-              </button>
-            ))}
+        {promoting && (
+          <div className="ch-promotion" role="dialog" aria-label={t('games.chess.promoteTo')}>
+            <p className="ch-promotion-title">{t('games.chess.promoteTo')}</p>
+            <div className="ch-promotion-options">
+              {PROMOTIONS.map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  className="ch-promotion-btn"
+                  aria-label={t(`games.chess.pieceNames.${type}`)}
+                  onClick={() => {
+                    const move = { from: promoting.from, to: promoting.to, promotion: type };
+                    setPromoting(null);
+                    setSelected(null);
+                    onMove(move);
+                  }}
+                >
+                  <svg viewBox={`0 0 ${CELL} ${CELL}`} width="48" height="48" aria-hidden="true">
+                    <PieceShape piece={`${myColor}${type as PieceType}` as Piece} cx={HALF} cy={HALF + 1} />
+                  </svg>
+                </button>
+              ))}
+            </div>
+            <button type="button" className="btn" onClick={() => setPromoting(null)}>
+              {t('games.chess.cancel')}
+            </button>
           </div>
-          <button type="button" className="btn" onClick={() => setPromoting(null)}>
-            {t('games.chess.cancel')}
-          </button>
-        </div>
-      )}
+        )}
 
-      <VisuallyHidden live>{lastText}</VisuallyHidden>
+        <VisuallyHidden live>{lastText}</VisuallyHidden>
+      </div>
+      <div className="ch-learn-files" aria-hidden="true">
+        {Array.from({ length: 8 }, (_, i) => (
+          <span key={i}>{FILES[flipped ? 7 - i : i]}</span>
+        ))}
+      </div>
     </div>
   );
 }

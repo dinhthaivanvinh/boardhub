@@ -762,3 +762,104 @@ html:has(.adv-home) body {
     transform: none;
   }
 }
+
+/* ---- Achievements ---- */
+.adv-ach-section {
+  padding: 2.5rem 1rem 2rem;
+  border-radius: 2rem;
+  background: linear-gradient(180deg, #fff 0%, var(--adv-blue-light) 100%);
+  box-shadow: var(--adv-shadow);
+}
+.adv-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 62rem;
+  margin: 1.75rem auto 0;
+}
+@media (min-width: 48rem) {
+  .adv-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.adv-stat {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  padding: 1.125rem 0.75rem;
+  border-radius: var(--adv-radius);
+  background: var(--tint);
+  text-align: center;
+}
+.adv-stat[data-k='stars'] {
+  --tint: #fff1cc;
+}
+.adv-stat[data-k='level'] {
+  --tint: #e6e0ff;
+}
+.adv-stat[data-k='lessons'] {
+  --tint: #dcf6e6;
+}
+.adv-stat[data-k='streak'] {
+  --tint: #ffe3d2;
+}
+.adv-stat strong {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+.adv-stat > span:last-child {
+  color: var(--adv-muted);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+.adv-stat-art {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--adv-green);
+  font-size: 1.75rem;
+  font-weight: 900;
+}
+.adv-badges-title {
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+}
+.adv-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: 62rem;
+  margin: 1rem auto 0;
+}
+.adv-badge {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  width: 6.5rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(25 118 243 / 0.12);
+  text-align: center;
+}
+.adv-badge[data-earned='false'] {
+  opacity: 0.55;
+}
+.adv-badge-icon {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+.adv-badge-name {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.adv-badges-more {
+  margin-top: 1.5rem;
+  text-align: center;
+}

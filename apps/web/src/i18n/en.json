@@ -544,6 +544,15 @@
         "text": "Invite a friend to a fun game of chess.",
         "cta": "Invite a friend"
       }
+    },
+    "achievements": {
+      "title": "Your achievements",
+      "stars": "Total stars",
+      "level": "Current level",
+      "lessons": "Lessons done",
+      "streak": "Days in a row",
+      "badges": "Badges ({n}/{total})",
+      "all": "See all achievements"
     }
   },
   "office": {

@@ -544,6 +544,15 @@
         "text": "Mời bạn bè tham gia một ván cờ thú vị.",
         "cta": "Mời bạn chơi"
       }
+    },
+    "achievements": {
+      "title": "Thành tích của con",
+      "stars": "Tổng số sao",
+      "level": "Cấp độ hiện tại",
+      "lessons": "Bài đã học",
+      "streak": "Ngày liên tiếp",
+      "badges": "Huy hiệu ({n}/{total})",
+      "all": "Xem tất cả thành tích"
     }
   },
   "office": {

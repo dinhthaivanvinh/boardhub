@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { PieceGlyph, PIECE_LESSONS } from '@bg/game-chess';
 import { toLocale } from '@/i18n/messages';
+import { Achievements } from '@/features/learn/Achievements';
 import { AdventureMap } from '@/features/learn/AdventureMap';
 import { DailyChallenge } from '@/features/learn/DailyChallenge';
 import { HomeProgress } from '@/features/learn/HomeProgress';
@@ -145,6 +146,10 @@ export default async function HomePage() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section aria-labelledby="home-achievements" className="adv-ach-section">
+          <Achievements />
         </section>
 
         <section className="home-final" aria-labelledby="home-final">

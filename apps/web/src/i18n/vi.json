@@ -555,7 +555,8 @@
       "streak": "Ngày liên tiếp",
       "badges": "Huy hiệu ({n}/{total})",
       "all": "Xem tất cả thành tích"
-    }
+    },
+    "ctaContinue": "Học tiếp"
   },
   "office": {
     "title": "Văn phòng",

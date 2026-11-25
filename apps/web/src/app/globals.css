@@ -1767,61 +1767,7 @@ nav section[data-g='5'] {
   background: color-mix(in srgb, var(--fg) 8%, var(--card));
   filter: grayscale(1);
 }
-
-/* Chú Mã trên trang chủ. */
-.home-helper {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: start;
-  gap: 1rem;
-  border: 2px solid color-mix(in srgb, var(--k3) 45%, var(--border));
-  border-radius: 1.5rem;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--k3) 12%, var(--card)),
-    color-mix(in srgb, var(--k4) 10%, var(--card))
-  );
-}
-.home-helper-mascot {
-  display: grid;
-  place-items: center;
-  width: 5.5rem;
-  height: 5.5rem;
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--k3) 22%, var(--card));
-  animation: home-float 3s ease-in-out infinite;
-}
-.home-helper-title {
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--k3) 80%, var(--fg));
-}
-.home-helper-bubble {
-  display: inline-block;
-  margin: 0.35rem 0 0.5rem;
-  padding: 0.6rem 1rem;
-  border: 2px solid color-mix(in srgb, var(--k3) 40%, var(--border));
-  border-radius: 1.25rem;
-  background: var(--card);
-  font-size: 1.1rem;
-  font-weight: 800;
-}
-.home-helper-stats {
-  grid-column: 1 / -1;
-}
-@media (max-width: 30rem) {
-  .home-helper {
-    grid-template-columns: 1fr;
-  }
-  .home-helper-mascot {
-    width: 4.5rem;
-    height: 4.5rem;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .home-helper-mascot,
   .puzzle-reward {
     animation: none;
   }
@@ -1851,9 +1797,6 @@ nav section[data-g='5'] {
 }
 .save-progress-body {
   flex: 1 1 16rem;
-}
-.home-helper-save {
-  grid-column: 1 / -1;
 }
 
 /* Dấu "đã luyện tập" trên một bài của hành trình. */

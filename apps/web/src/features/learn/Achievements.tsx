@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { BADGES, earnedBadges, JOURNEY_LESSONS, PieceGlyph } from '@bg/game-chess';
 import { Star } from './AdventureMap';
 import { useLearnStats } from './LearnStats';
+import { SaveProgress } from './SaveProgress';
 
 /** What the child has earned, all worked out from the progress stored on this device (no made-up numbers). */
 export function Achievements() {
@@ -65,6 +66,9 @@ export function Achievements() {
           );
         })}
       </ul>
+      <div className="adv-save">
+        <SaveProgress compact />
+      </div>
       <p className="adv-badges-more">
         <Link href="/journey" className="adv-btn adv-btn-light">
           {t('all')}

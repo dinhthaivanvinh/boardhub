@@ -867,28 +867,6 @@ html:has(.adv-home) body {
   text-align: center;
 }
 
-/* ---- The helper under the hero: it matches the new look ---- */
-html .home-helper {
-  border: 0;
-  border-radius: 2rem;
-  background: #fff;
-  box-shadow: var(--adv-shadow);
-}
-html .home-helper .btn {
-  min-height: 3rem;
-  border: 0;
-  border-radius: 9999px;
-  background: #fff;
-  box-shadow: 0 4px 0 #b9d6f6;
-  color: var(--adv-blue-dark);
-  font-weight: 800;
-}
-html .home-helper .btn-primary {
-  background: var(--adv-blue);
-  box-shadow: 0 4px 0 var(--adv-blue-dark);
-  color: #fff;
-}
-
 /* ---- Final call to action ---- */
 .adv-final {
   display: grid;
@@ -1174,4 +1152,25 @@ html:has(.adv-page) body {
     background: var(--adv-blue-light);
     box-shadow: none;
   }
+}
+
+/* The "keep your journey" prompt inside the achievements. */
+.adv-save {
+  max-width: 62rem;
+  margin: 1.5rem auto 0;
+}
+.adv-save .save-progress {
+  border: 0;
+  border-radius: 1.5rem;
+  background: #fff1cc;
+  box-shadow: none;
+}
+.adv-save .btn {
+  min-height: 3rem;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--adv-blue);
+  box-shadow: 0 4px 0 var(--adv-blue-dark);
+  color: #fff;
+  font-weight: 800;
 }

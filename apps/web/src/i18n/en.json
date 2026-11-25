@@ -555,7 +555,8 @@
       "streak": "Days in a row",
       "badges": "Badges ({n}/{total})",
       "all": "See all achievements"
-    }
+    },
+    "ctaContinue": "Keep learning"
   },
   "office": {
     "title": "Office",

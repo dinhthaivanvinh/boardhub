@@ -7,7 +7,7 @@ import { toLocale } from '@/i18n/messages';
 import { Achievements } from '@/features/learn/Achievements';
 import { AdventureMap } from '@/features/learn/AdventureMap';
 import { DailyChallenge } from '@/features/learn/DailyChallenge';
-import { HomeProgress } from '@/features/learn/HomeProgress';
+import { LearnCta } from '@/features/learn/LearnCta';
 import { JsonLd } from '@/seo/JsonLd';
 import { absolute, publicPage, SITE_NAME } from '@/seo/site';
 
@@ -47,9 +47,7 @@ export default async function HomePage() {
           </h1>
           <p className="adv-hero-sub">{t('tagline')}</p>
           <div className="adv-hero-cta">
-            <Link href="/learn/chess/coordinates" className="adv-btn adv-btn-primary" data-testid="cta-learn">
-              {t('ctaLearn')}
-            </Link>
+            <LearnCta className="adv-btn adv-btn-primary" testId="cta-learn" />
             <Link href="/games/chess" className="adv-btn adv-btn-light" data-testid="cta-play">
               {t('ctaPlay')}
             </Link>
@@ -71,8 +69,6 @@ export default async function HomePage() {
       </section>
 
       <div className="adv-home">
-        <HomeProgress />
-
         <section aria-labelledby="home-benefits">
           <h2 id="home-benefits" className="adv-section-title">
             {t('benefits.title')}
@@ -152,9 +148,7 @@ export default async function HomePage() {
               {t('final.title')}
             </h2>
             <p>{t('final.text')}</p>
-            <Link href="/learn/chess/coordinates" className="adv-btn adv-btn-primary adv-final-btn">
-              {t('ctaLearn')}
-            </Link>
+            <LearnCta className="adv-btn adv-btn-primary adv-final-btn" />
           </div>
           <Image
             src="/scene/mascot-welldone.webp"

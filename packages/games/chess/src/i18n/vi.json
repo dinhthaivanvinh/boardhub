@@ -756,15 +756,6 @@
         }
       },
       "home": {
-        "title": "Chú Mã nói",
-        "newcomer": "Xin chào! Mình là chú Mã. Cùng học cờ vua nhé?",
-        "next": "Hôm nay mình học bài \"{lesson}\" nhé!",
-        "dailyPending": "Còn câu đố hôm nay đang chờ bạn nè!",
-        "dailyDone": "Hôm nay bạn đã giải câu đố rồi. Giỏi quá!",
-        "allDone": "Bạn học hết mọi bài rồi! Giờ mình đi giải câu đố nhé.",
-        "continue": "Học tiếp",
-        "start": "Bắt đầu học",
-        "puzzle": "Câu đố hôm nay",
         "map": "Xem hành trình"
       },
       "save": {

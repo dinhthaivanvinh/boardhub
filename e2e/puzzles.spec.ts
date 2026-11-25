@@ -68,7 +68,7 @@ test('the next puzzle button moves to a different position', async ({ page }) =>
 
 test('the puzzle of the day opens straight from the home page and is marked done', async ({ page }) => {
   await page.goto('/');
-  await page.getByTestId('helper-puzzle').click();
+  await page.getByTestId('daily-go').click();
   await expect(page).toHaveURL(/\/puzzles\/daily$/);
   await expect(page.getByRole('grid')).toBeVisible();
   await solvePuzzle(page);
@@ -77,16 +77,16 @@ test('the puzzle of the day opens straight from the home page and is marked done
   await expect(page.getByText('Bạn đã giải câu đố hôm nay rồi. Mai quay lại nhé!')).toBeVisible();
 });
 
-test('the home helper tells a newcomer to start, then points at the next lesson', async ({ page }) => {
+test('the home learn button starts a newcomer and then carries on with the next lesson', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByTestId('home-helper-line')).toContainText('chú Mã');
-  await expect(page.getByTestId('helper-learn')).toHaveAttribute('href', '/learn/chess/coordinates');
+  await expect(page.getByTestId('cta-learn')).toHaveAttribute('href', '/learn/chess/coordinates');
+  await expect(page.getByTestId('cta-learn')).toHaveText('Bắt đầu học ngay');
 
   await page.evaluate(() => window.localStorage.setItem('learn.chess.v1', JSON.stringify(['coordinates'])));
   await page.reload();
-  await expect(page.getByTestId('helper-learn')).toHaveAttribute('href', '/learn/chess/setup');
-  await expect(page.getByTestId('home-helper-line')).toContainText('học bài');
-  await expect(page.getByTestId('stat-stars')).toHaveText('3 ⭐');
+  await expect(page.getByTestId('cta-learn')).toHaveAttribute('href', '/learn/chess/setup');
+  await expect(page.getByTestId('cta-learn')).toHaveText('Học tiếp');
+  await expect(page.getByTestId('ach-stars')).toContainText('3');
 });
 
 test('the journey shows the next lesson, the stages and the badges earned', async ({ page }) => {

@@ -109,9 +109,15 @@ function LessonNav({ currentId }: { currentId: string }) {
                       aria-current={current ? 'page' : undefined}
                       className="lesson-link flex items-center justify-between gap-2 text-sm whitespace-nowrap md:whitespace-normal"
                     >
-                      <span className="lesson-icon" aria-hidden="true">
-                        {iconOf(id, g)}
-                      </span>
+                      {id === COORDINATES_LESSON_ID ? (
+                        <span className="lesson-icon" aria-hidden="true">
+                          <span className="lesson-face" />
+                        </span>
+                      ) : (
+                        <span className="lesson-icon" aria-hidden="true">
+                          {iconOf(id, g)}
+                        </span>
+                      )}
                       <span className="lesson-link-name">{lessonName(id, t)}</span>
                       {done.has(id) ? (
                         <span className="lesson-done" aria-label={t(`${L}.completed`)}>

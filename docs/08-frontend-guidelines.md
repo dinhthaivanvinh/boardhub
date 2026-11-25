@@ -84,8 +84,10 @@ Desktop                                   Mobile
 Từ 1024 px rộng (`html.board-stage`, trang không cuộn) màn bài học (`LessonScreen`, lớp `lesson-scene`) theo thiết kế: nền
 trời xanh và đồng cỏ (`public/scene/bg.svg`), thẻ menu bài học bên trái (mỗi bài có biểu tượng, dấu tick xanh khi đã học, mũi
 tên khi chưa), các bước dạng viên thuốc ở giữa phía trên, **bàn cờ khung gỗ ở chính giữa**, và bên phải một bóng nói chứa chữ,
-ba nút đọc to và nút `Tiếp tục` màu cam, có bạn nhỏ (`public/scene/boy.svg`) đứng ở góc bóng. Ở màn cao từ 46 rem và rộng từ
-80 rem có thêm biển gỗ và con tốt (`pawn.svg`) ở góc dưới. Hình vẽ là SVG tự làm; muốn dùng hình khác thì thay file cùng tên.
+ba nút đọc to và nút `Tiếp tục` màu cam, có bạn nhỏ mascot đứng ở góc bóng (chỉ tay khi đọc bài, mừng khi xong bài). Ở màn cao từ
+46 rem và rộng từ 80 rem có thêm biển gỗ và mascot đang đọc sách ở góc dưới. Mascot là các tư thế của một bộ hình do chủ dự án
+tạo, đã tách nền và lưu thành `public/scene/mascot-*.webp` (`pointing`, `cheer`, `thinking`, `thumbs`, `reading`, `welldone`,
+và `face` cho ô tài khoản và bài đầu tiên); muốn đổi hình thì thay file cùng tên. Nền trời và đồng cỏ là `bg.svg` tự vẽ.
 
 - `.ch-learn` là một lưới hai cột (`.ch-learn-layout` là `display: contents`): các bước và bàn cờ ở cột giữa, bóng nói chiếm cột
   phải. Cỡ bàn cờ tính theo chiều cao màn hình và bề rộng của bài (`cqw`) nên cột chữ không bao giờ bị cắt.

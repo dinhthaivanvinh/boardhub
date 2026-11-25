@@ -2244,15 +2244,20 @@ nav section[data-g='5'] {
 .account-pill:hover {
   background: color-mix(in srgb, var(--k3) 14%, var(--card));
 }
+.account-face,
+.lesson-face {
+  display: inline-block;
+  flex: none;
+  border-radius: 9999px;
+  background: #fde68a url('/scene/mascot-face.webp') center top / 118% no-repeat;
+}
 .account-face {
-  display: inline-grid;
-  place-items: center;
   width: 2rem;
   height: 2rem;
-  border-radius: 9999px;
-  background: #fde68a;
-  font-size: 1.25rem;
-  line-height: 1;
+}
+.lesson-face {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 /* Menu bài học: thẻ bo tròn, biểu tượng trước tên, dấu tick xanh khi đã học xong. */
@@ -2388,10 +2393,16 @@ nav section[data-g='5'] {
   html.board-stage .lesson-scene .ch-learn-side::before {
     content: '';
     float: right;
-    width: 7.5rem;
-    height: 9rem;
+    width: 6.5rem;
+    height: 9.5rem;
     margin: -0.25rem -0.25rem 0.25rem 0.5rem;
-    background: url('/scene/boy.svg') center / contain no-repeat;
+    background: url('/scene/mascot-pointing.webp') center / contain no-repeat;
+  }
+  html.board-stage .lesson-scene .ch-learn:has([data-testid='mate-prompt']) .ch-learn-side::before {
+    background-image: url('/scene/mascot-thinking.webp');
+  }
+  html.board-stage .lesson-scene .ch-learn:has(.ch-celebrate) .ch-learn-side::before {
+    background-image: url('/scene/mascot-cheer.webp');
   }
   html.board-stage .lesson-scene .ch-learn-side .ch-learn-actions,
   html.board-stage .lesson-scene .ch-learn-side .btn,
@@ -2537,8 +2548,19 @@ nav section[data-g='5'] {
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 7rem;
+    width: 8.5rem;
     height: 9.5rem;
-    background: url('/scene/pawn.svg') center bottom / contain no-repeat;
+    background: url('/scene/mascot-reading.webp') center bottom / contain no-repeat;
+  }
+}
+
+/* A narrower lesson (a laptop screen): the step pills lose their pictures so that they always fit above the board. */
+@container (max-width: 64rem) {
+  html.board-stage .lesson-scene .ch-learn-steps li {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li::before {
+    display: none;
   }
 }

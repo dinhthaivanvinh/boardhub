@@ -11,9 +11,7 @@ export function AccountLink() {
   const user = useSession((s) => s.user);
   return (
     <Link href="/profile" className="account-pill">
-      <span className="account-face" aria-hidden="true">
-        🧒
-      </span>
+      <span className="account-face" aria-hidden="true" />
       <span className="max-w-32 truncate">{hydrated && user ? user.displayName : t('account')}</span>
     </Link>
   );

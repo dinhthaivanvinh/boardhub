@@ -385,14 +385,14 @@
     }
   },
   "portal": {
-    "title": "Learn and play chess, right in your browser",
-    "tagline": "Meet each piece, learn famous openings one step at a time, then play the computer or your friends. Nothing to install.",
-    "ctaLearn": "Start learning",
+    "title": "Start your journey to become a little chess champion!",
+    "tagline": "Learn chess the fun way, discover its secrets and beat one challenge after another with us!",
+    "ctaLearn": "Start learning now",
     "final": {
       "title": "Are you ready to explore chess with us?",
       "text": "Each lesson takes a few minutes, with a voice and pictures. Every step you finish earns a star!"
     },
-    "ctaPlay": "Play the computer",
+    "ctaPlay": "Try a game of chess",
     "what": {
       "title": "What is chess?",
       "text": "Chess is a strategy game for two players, more than a thousand years old. Each side commands an army on the board and tries to capture the enemy king.",
@@ -473,6 +473,11 @@
     "join": {
       "title": "Got a room code?",
       "text": "Enter the 6-character code your friend sent to join the room."
+    },
+    "perks": {
+      "age": "For kids from 5 years old",
+      "steps": "Easy steps, one at a time",
+      "rewards": "Earn stars and badges"
     }
   },
   "office": {

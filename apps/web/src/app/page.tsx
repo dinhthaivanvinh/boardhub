@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { PieceGlyph, PIECE_LESSONS } from '@bg/game-chess';
@@ -63,37 +64,37 @@ export default async function HomePage() {
         }}
       />
 
-      <section className="hero home-hero">
-        <span className="home-blob home-blob-a" aria-hidden="true" />
-        <span className="home-blob home-blob-b" aria-hidden="true" />
-        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-6 md:grid-cols-[1.1fr_1fr] md:py-8">
-          <div className="relative">
-            <h1 className="home-title">{t('title')}</h1>
-            <p className="home-tagline">{t('tagline')}</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                href="/learn/chess/coordinates"
-                className="btn btn-primary btn-lg home-cta"
-                data-testid="cta-learn"
-              >
-                <span aria-hidden="true">🎓</span> {t('ctaLearn')}
-              </Link>
-              <Link href="/games/chess" className="btn btn-lg home-cta" data-testid="cta-play">
-                <span aria-hidden="true">🎮</span> {t('ctaPlay')}
-              </Link>
-            </div>
+      <section className="adv-hero" aria-labelledby="adv-hero-title">
+        <div className="adv-hero-text">
+          <h1 id="adv-hero-title" className="adv-hero-title">
+            {t('title')}
+          </h1>
+          <p className="adv-hero-sub">{t('tagline')}</p>
+          <div className="adv-hero-cta">
+            <Link href="/learn/chess/coordinates" className="adv-btn adv-btn-primary" data-testid="cta-learn">
+              {t('ctaLearn')}
+            </Link>
+            <Link href="/games/chess" className="adv-btn adv-btn-light" data-testid="cta-play">
+              {t('ctaPlay')}
+            </Link>
           </div>
-          <ul className="home-parade" aria-hidden="true" data-game="chess">
-            {(['wK', 'wQ', 'wR', 'wB', 'wN', 'wP'] as const).map((piece, i) => (
-              <li key={piece} className="home-piece" data-i={i}>
-                <PieceGlyph piece={piece} size={52} />
-              </li>
+          <ul className="adv-hero-perks">
+            {(['age', 'steps', 'rewards'] as const).map((k) => (
+              <li key={k}>{t(`perks.${k}`)}</li>
             ))}
           </ul>
         </div>
+        <Image
+          src="/home/hero-cheer.webp"
+          alt=""
+          width={640}
+          height={656}
+          priority
+          className="adv-hero-mascot"
+        />
       </section>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-6 md:py-8">
+      <div className="adv-home">
         <HomeProgress />
 
         <section aria-labelledby="home-what">

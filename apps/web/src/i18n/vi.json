@@ -385,14 +385,14 @@
     }
   },
   "portal": {
-    "title": "Học và chơi cờ vua, ngay trên trình duyệt",
-    "tagline": "Làm quen từng quân cờ, học những khai cuộc nổi tiếng từng bước một, rồi chơi với máy hoặc với bạn bè. Không cần cài đặt.",
-    "ctaLearn": "Bắt đầu học",
+    "title": "Bắt đầu hành trình trở thành kiện tướng nhí!",
+    "tagline": "Học cờ vua thật vui, khám phá những bí mật thú vị và chinh phục từng thử thách cùng chúng mình!",
+    "ctaLearn": "Bắt đầu học ngay",
     "final": {
       "title": "Bạn đã sẵn sàng khám phá cờ vua cùng chúng mình chưa?",
       "text": "Mỗi bài chỉ vài phút, có giọng đọc và hình vẽ. Mỗi bước xong là được một ngôi sao!"
     },
-    "ctaPlay": "Chơi với máy",
+    "ctaPlay": "Chơi thử cờ vua",
     "what": {
       "title": "Cờ vua là gì?",
       "text": "Cờ vua là trò chơi chiến thuật cho hai người, hơn một nghìn năm tuổi. Mỗi bên điều khiển một đội quân trên bàn cờ và cố gắng bắt vua của đối phương.",
@@ -473,6 +473,11 @@
     "join": {
       "title": "Có mã phòng?",
       "text": "Nhập mã 6 ký tự bạn bè gửi để vào thẳng phòng."
+    },
+    "perks": {
+      "age": "Dành cho bé từ 5 tuổi",
+      "steps": "Học từng bước dễ hiểu",
+      "rewards": "Nhận sao và huy hiệu"
     }
   },
   "office": {

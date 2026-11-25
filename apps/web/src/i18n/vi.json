@@ -3,7 +3,9 @@
     "name": "BoardHub",
     "tagline": "Học và chơi cờ vua, cùng các board game khác, ngay trên trình duyệt.",
     "footer": "Cờ vua và các board game, miễn phí trên trình duyệt.",
-    "slogan": "Học cờ thật vui!"
+    "slogan": "Học cờ thật vui!",
+    "footerLinks": "Liên kết",
+    "copyright": "© {year} BoardHub. Học cờ thật vui!"
   },
   "nav": {
     "home": "Trang chủ",
@@ -389,8 +391,8 @@
     "tagline": "Học cờ vua thật vui, khám phá những bí mật thú vị và chinh phục từng thử thách cùng chúng mình!",
     "ctaLearn": "Bắt đầu học ngay",
     "final": {
-      "title": "Bạn đã sẵn sàng khám phá cờ vua cùng chúng mình chưa?",
-      "text": "Mỗi bài chỉ vài phút, có giọng đọc và hình vẽ. Mỗi bước xong là được một ngôi sao!"
+      "title": "Mỗi ngày học một chút, giỏi hơn mỗi ngày!",
+      "text": "Cùng khám phá thế giới cờ vua và trở thành một kiện tướng nhí!"
     },
     "ctaPlay": "Chơi thử cờ vua",
     "path": {

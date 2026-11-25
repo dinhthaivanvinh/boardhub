@@ -863,3 +863,120 @@ html:has(.adv-home) body {
   margin-top: 1.5rem;
   text-align: center;
 }
+
+/* ---- The helper under the hero: it matches the new look ---- */
+html .home-helper {
+  border: 0;
+  border-radius: 2rem;
+  background: #fff;
+  box-shadow: var(--adv-shadow);
+}
+html .home-helper .btn {
+  min-height: 3rem;
+  border: 0;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 4px 0 #b9d6f6;
+  color: var(--adv-blue-dark);
+  font-weight: 800;
+}
+html .home-helper .btn-primary {
+  background: var(--adv-blue);
+  box-shadow: 0 4px 0 var(--adv-blue-dark);
+  color: #fff;
+}
+
+/* ---- Final call to action ---- */
+.adv-final {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  padding: 2.5rem 1.5rem 0;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #6fb8ff, var(--adv-sky) 70%);
+  text-align: center;
+}
+@media (min-width: 48rem) {
+  .adv-final {
+    grid-template-columns: 1fr auto;
+    justify-items: start;
+    align-items: end;
+    padding: 2.5rem 3rem 0;
+    text-align: left;
+  }
+}
+.adv-final-text {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: inherit;
+  padding-bottom: 2.5rem;
+}
+.adv-final-title {
+  color: var(--adv-blue-dark);
+  font-size: clamp(1.625rem, 3.6vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.adv-final-text p {
+  color: var(--adv-text);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.adv-final-btn {
+  margin-top: 0.5rem;
+  min-height: 3.5rem;
+  padding-inline: 2.25rem;
+  font-size: 1.25rem;
+}
+.adv-final-mascot {
+  width: auto;
+  height: 12rem;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  margin-top: 2rem;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  color: var(--fg);
+}
+.site-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  width: min(100% - 2rem, 75rem);
+  margin-inline: auto;
+  padding-block: 1.5rem;
+}
+.site-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--adv-blue-dark);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  font-weight: 700;
+}
+.site-footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+.site-footer-links a:hover {
+  color: var(--adv-blue);
+}
+.site-footer-copy {
+  color: var(--adv-muted);
+  font-size: 0.875rem;
+}

@@ -3,7 +3,9 @@
     "name": "BoardHub",
     "tagline": "Learn and play chess, plus other board games, right in your browser.",
     "footer": "Chess and board games, free in your browser.",
-    "slogan": "Learning chess is fun!"
+    "slogan": "Learning chess is fun!",
+    "footerLinks": "Links",
+    "copyright": "© {year} BoardHub. Learn chess the fun way!"
   },
   "nav": {
     "home": "Home",
@@ -389,8 +391,8 @@
     "tagline": "Learn chess the fun way, discover its secrets and beat one challenge after another with us!",
     "ctaLearn": "Start learning now",
     "final": {
-      "title": "Are you ready to explore chess with us?",
-      "text": "Each lesson takes a few minutes, with a voice and pictures. Every step you finish earns a star!"
+      "title": "Learn a little every day and get better every day!",
+      "text": "Explore the world of chess together and become a little champion!"
     },
     "ctaPlay": "Try a game of chess",
     "path": {

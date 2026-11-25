@@ -152,17 +152,24 @@ export default async function HomePage() {
           <Achievements />
         </section>
 
-        <section className="home-final" aria-labelledby="home-final">
-          <span className="home-final-emoji" aria-hidden="true">
-            🌟
-          </span>
-          <h2 id="home-final" className="text-2xl font-extrabold">
-            {t('final.title')}
-          </h2>
-          <p>{t('final.text')}</p>
-          <Link href="/learn/chess/coordinates" className="btn btn-lg home-final-btn">
-            <span aria-hidden="true">🎓</span> {t('ctaLearn')}
-          </Link>
+        <section className="adv-final" aria-labelledby="home-final">
+          <div className="adv-final-text">
+            <h2 id="home-final" className="adv-final-title">
+              {t('final.title')}
+            </h2>
+            <p>{t('final.text')}</p>
+            <Link href="/learn/chess/coordinates" className="adv-btn adv-btn-primary adv-final-btn">
+              {t('ctaLearn')}
+            </Link>
+          </div>
+          <Image
+            src="/scene/mascot-welldone.webp"
+            alt=""
+            width={160}
+            height={230}
+            loading="lazy"
+            className="adv-final-mascot"
+          />
         </section>
       </div>
     </>

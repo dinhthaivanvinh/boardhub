@@ -393,22 +393,6 @@
       "text": "Mỗi bài chỉ vài phút, có giọng đọc và hình vẽ. Mỗi bước xong là được một ngôi sao!"
     },
     "ctaPlay": "Chơi thử cờ vua",
-    "what": {
-      "title": "Cờ vua là gì?",
-      "text": "Cờ vua là trò chơi chiến thuật cho hai người, hơn một nghìn năm tuổi. Mỗi bên điều khiển một đội quân trên bàn cờ và cố gắng bắt vua của đối phương.",
-      "goal": {
-        "title": "Mục tiêu",
-        "text": "Chiếu hết: vua đối phương bị tấn công và không còn cách nào thoát."
-      },
-      "board": {
-        "title": "Bàn cờ",
-        "text": "64 ô vuông (8 × 8). Mỗi bên có 16 quân: 1 vua, 1 hậu, 2 xe, 2 tượng, 2 mã và 8 tốt."
-      },
-      "first": {
-        "title": "Cách chơi",
-        "text": "Hai bên thay phiên đi một nước. Bên Trắng đi trước, mỗi lượt chỉ đi một quân."
-      }
-    },
     "path": {
       "title": "Lộ trình học",
       "text": "Học theo thứ tự này sẽ dễ nhất. Mỗi bài ngắn, có hình minh hoạ, giọng đọc và để con tự thử.",
@@ -454,7 +438,7 @@
       }
     },
     "pieces": {
-      "title": "Làm quen từng quân cờ",
+      "title": "Làm quen với đội quân cờ vua",
       "tag": {
         "pawn": "Đi thẳng, ăn chéo",
         "rook": "Đi thẳng như đường ray",
@@ -462,7 +446,8 @@
         "knight": "Nhảy hình chữ L",
         "queen": "Mạnh nhất bàn cờ",
         "king": "Quan trọng nhất"
-      }
+      },
+      "explore": "Khám phá"
     },
     "more": {
       "badge": "{n} game khác",
@@ -478,6 +463,21 @@
       "age": "Dành cho bé từ 5 tuổi",
       "steps": "Học từng bước dễ hiểu",
       "rewards": "Nhận sao và huy hiệu"
+    },
+    "benefits": {
+      "title": "Khám phá thế giới cờ vua",
+      "know": {
+        "title": "Làm quen cờ vua",
+        "text": "Khám phá bàn cờ và những quân cờ thú vị."
+      },
+      "think": {
+        "title": "Rèn luyện tư duy",
+        "text": "Phát triển khả năng quan sát và giải quyết vấn đề."
+      },
+      "challenge": {
+        "title": "Thử thách bản thân",
+        "text": "Giải câu đố và chinh phục những thử thách mới."
+      }
     }
   },
   "office": {

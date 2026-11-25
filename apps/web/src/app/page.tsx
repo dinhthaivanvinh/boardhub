@@ -40,10 +40,10 @@ function BoardIcon() {
   );
 }
 
-const FACTS = [
-  { key: 'goal', icon: '🎯' },
-  { key: 'board', icon: 'board' },
-  { key: 'first', icon: '🤝' },
+const BENEFITS = [
+  { key: 'know', mascot: 'reading' },
+  { key: 'think', mascot: 'thinking' },
+  { key: 'challenge', mascot: 'cheer' },
 ] as const;
 
 /** The home page: an introduction to chess, with the way to learn it and to play it (ADR-0010). */
@@ -97,37 +97,42 @@ export default async function HomePage() {
       <div className="adv-home">
         <HomeProgress />
 
-        <section aria-labelledby="home-what">
-          <h2 id="home-what" className="text-xl font-bold">
-            {t('what.title')}
+        <section aria-labelledby="home-benefits">
+          <h2 id="home-benefits" className="adv-section-title">
+            {t('benefits.title')}
           </h2>
-          <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('what.text')}</p>
-          <ul className="mt-4 grid gap-3 md:grid-cols-3">
-            {FACTS.map((k, i) => (
-              <li key={k.key} className="card home-fact" data-i={i}>
-                <span className="home-fact-icon" aria-hidden="true">
-                  {k.icon === 'board' ? <BoardIcon /> : k.icon}
-                </span>
-                <h3 className="font-semibold">{t(`what.${k.key}.title`)}</h3>
-                <p className="mt-1 text-sm text-[var(--muted)]">{t(`what.${k.key}.text`)}</p>
+          <ul className="adv-benefits">
+            {BENEFITS.map((k, i) => (
+              <li key={k.key} className="adv-benefit" data-i={i}>
+                <Image
+                  src={`/scene/mascot-${k.mascot}.webp`}
+                  alt=""
+                  width={120}
+                  height={170}
+                  loading="lazy"
+                />
+                <h3>{t(`benefits.${k.key}.title`)}</h3>
+                <p>{t(`benefits.${k.key}.text`)}</p>
               </li>
             ))}
           </ul>
         </section>
 
         <section aria-labelledby="home-pieces">
-          <h2 id="home-pieces" className="text-xl font-bold">
+          <h2 id="home-pieces" className="adv-section-title">
             {t('pieces.title')}
           </h2>
-          <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6" data-game="chess">
+          <ul className="adv-pieces" data-game="chess">
             {PIECE_LESSONS.map((l, i) => (
-              <li key={l.id}>
-                <Link href={`/learn/chess/${l.id}`} className="card home-piece-card" data-i={i}>
-                  <span className="home-piece-bubble">
-                    <PieceGlyph piece={`w${l.piece}`} size={56} />
-                  </span>
-                  <strong>{tp(`pieceNames.${l.piece}`)}</strong>
-                  <span className="text-sm text-[var(--muted)]">{t(`pieces.tag.${l.id}`)}</span>
+              <li key={l.id} className="adv-piece" data-i={i}>
+                <span className="adv-piece-art">
+                  <PieceGlyph piece={`w${l.piece}`} size={84} />
+                </span>
+                <h3>{tp(`pieceNames.${l.piece}`)}</h3>
+                <p>{t(`pieces.tag.${l.id}`)}</p>
+                <Link href={`/learn/chess/${l.id}`} className="adv-btn adv-btn-light adv-piece-btn">
+                  {t('pieces.explore')}
+                  <span className="sr-only"> {tp(`pieceNames.${l.piece}`)}</span>
                 </Link>
               </li>
             ))}

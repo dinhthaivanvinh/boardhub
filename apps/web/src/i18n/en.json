@@ -393,22 +393,6 @@
       "text": "Each lesson takes a few minutes, with a voice and pictures. Every step you finish earns a star!"
     },
     "ctaPlay": "Try a game of chess",
-    "what": {
-      "title": "What is chess?",
-      "text": "Chess is a strategy game for two players, more than a thousand years old. Each side commands an army on the board and tries to capture the enemy king.",
-      "goal": {
-        "title": "The goal",
-        "text": "Checkmate: the enemy king is attacked and has no way to escape."
-      },
-      "board": {
-        "title": "The board",
-        "text": "64 squares (8 × 8). Each side has 16 pieces: 1 king, 1 queen, 2 rooks, 2 bishops, 2 knights and 8 pawns."
-      },
-      "first": {
-        "title": "How to play",
-        "text": "Players take turns making one move. White goes first, one piece per turn."
-      }
-    },
     "path": {
       "title": "Your learning path",
       "text": "This order is the easiest. Every lesson is short, with pictures, a voice and a chance to try it yourself.",
@@ -454,7 +438,7 @@
       }
     },
     "pieces": {
-      "title": "Meet each piece",
+      "title": "Meet the chess army",
       "tag": {
         "pawn": "Moves straight, captures diagonally",
         "rook": "Moves straight like a rail",
@@ -462,7 +446,8 @@
         "knight": "Jumps in an L",
         "queen": "The strongest piece",
         "king": "The most important piece"
-      }
+      },
+      "explore": "Explore"
     },
     "more": {
       "badge": "{n} more games",
@@ -478,6 +463,21 @@
       "age": "For kids from 5 years old",
       "steps": "Easy steps, one at a time",
       "rewards": "Earn stars and badges"
+    },
+    "benefits": {
+      "title": "Explore the world of chess",
+      "know": {
+        "title": "Get to know chess",
+        "text": "Discover the board and the fun pieces."
+      },
+      "think": {
+        "title": "Train your thinking",
+        "text": "Grow your eye for detail and your problem solving."
+      },
+      "challenge": {
+        "title": "Challenge yourself",
+        "text": "Solve puzzles and take on new challenges."
+      }
     }
   },
   "office": {

@@ -47,24 +47,15 @@ const ORDER: string[] = [
 
 type NavGroup = { heading: string; ids: string[] };
 
-/** A small picture in front of each lesson and each group of the menu (decoration). */
-const LESSON_ICON: Record<string, string> = {
-  [COORDINATES_LESSON_ID]: '🧒',
-  [SETUP_LESSON_ID]: '♟️',
+/** The piece glyph in front of a piece lesson of the menu; other lessons have no picture. */
+const PIECE_GLYPH: Record<string, string> = {
   pawn: '♙',
   rook: '♖',
   bishop: '♗',
   knight: '♘',
   queen: '♕',
   king: '♔',
-  [CAPTURE_LESSON_ID]: '🛡️',
-  [CHECKMATE_LESSON_ID]: '🏁',
-  [DRAWS_LESSON_ID]: '🤝',
-  [TACTICS_LESSON_ID]: '🎯',
 };
-const GROUP_ICON = ['👑', '⭐', '📖', '🎓', '✨', '🎯'];
-const iconOf = (id: string, group: number) =>
-  LESSON_ICON[id] ?? (group === 3 ? '📖' : group === 4 ? '✨' : '•');
 
 /** Every lesson, grouped in the order they are meant to be taken: one menu to jump to any of them. */
 function LessonNav({ currentId }: { currentId: string }) {
@@ -96,7 +87,6 @@ function LessonNav({ currentId }: { currentId: string }) {
             className="flex shrink-0 gap-2 md:block"
           >
             <h2 className="lesson-group-title mb-1 hidden text-xs font-semibold tracking-wide uppercase md:flex">
-              <span aria-hidden="true">{GROUP_ICON[g]}</span>
               {group.heading}
             </h2>
             <ul className="flex gap-2 md:flex-col md:gap-1.5">
@@ -113,11 +103,11 @@ function LessonNav({ currentId }: { currentId: string }) {
                         <span className="lesson-icon" aria-hidden="true">
                           <span className="lesson-face" />
                         </span>
-                      ) : (
+                      ) : PIECE_GLYPH[id] ? (
                         <span className="lesson-icon" aria-hidden="true">
-                          {iconOf(id, g)}
+                          {PIECE_GLYPH[id]}
                         </span>
-                      )}
+                      ) : null}
                       <span className="lesson-link-name">{lessonName(id, t)}</span>
                       {done.has(id) ? (
                         <span className="lesson-done" aria-label={t(`${L}.completed`)}>
@@ -173,12 +163,12 @@ function LessonFooter({ lessonId }: { lessonId: string }) {
           className="btn btn-primary ch-next"
           data-testid="practice-link"
         >
-          <span aria-hidden="true">💪</span> {done.has(practiceId(lessonId)) ? t('ctaDone') : t('cta')}
+          {done.has(practiceId(lessonId)) ? t('ctaDone') : t('cta')}
         </Link>
       )}
       {toPuzzles && (
         <Link href="/puzzles" className="btn btn-primary ch-next" data-testid="practice-puzzles-link">
-          <span aria-hidden="true">🧩</span> {t('morePuzzles')}
+          {t('morePuzzles')}
         </Link>
       )}
       <NextLessonLink lessonId={lessonId} secondary={hasPractice || toPuzzles} />

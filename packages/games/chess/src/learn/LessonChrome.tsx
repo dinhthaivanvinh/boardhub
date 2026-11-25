@@ -34,7 +34,6 @@ export function LessonHeader({
           <li key={s} aria-current={s === stage ? 'step' : undefined} data-done={i < index} data-i={i % 6}>
             {i < index ? (
               <button type="button" className="ch-step-btn" onClick={() => onStage(s)}>
-                <span aria-hidden="true">⭐ </span>
                 {label(s)}
               </button>
             ) : (

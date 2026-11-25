@@ -59,7 +59,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 {t('name')}
               </Link>
               <span className="site-slogan" aria-hidden="true">
-                {t('slogan')} <span className="site-slogan-stars">✦</span>
+                {t('slogan')}
               </span>
               <div className="flex items-center gap-2 sm:gap-4">
                 <NavMenus />

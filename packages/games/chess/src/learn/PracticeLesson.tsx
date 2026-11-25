@@ -170,7 +170,7 @@ function StarRoundView(props: RoundProps<StarRound>) {
           !hint && (
             <div className="ch-learn-actions">
               <button type="button" className="btn" onClick={() => setHint(true)}>
-                <span aria-hidden="true">💡</span> {t('games.chess.learn.hint')}
+                {t('games.chess.learn.hint')}
               </button>
             </div>
           )
@@ -273,7 +273,7 @@ function MoveRoundView(props: RoundProps<MoveRound>) {
                 disabled={hint >= 2}
                 onClick={() => setHint((h) => h + 1)}
               >
-                <span aria-hidden="true">💡</span> {t('games.chess.learn.hint')}
+                {t('games.chess.learn.hint')}
               </button>
             </div>
           )

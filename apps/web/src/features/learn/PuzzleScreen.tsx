@@ -85,9 +85,7 @@ function Menu({
   return (
     <div className="mx-auto grid max-w-4xl gap-6 px-4 py-6">
       <header className="puzzle-head">
-        <h1 className="puzzle-title">
-          <span aria-hidden="true">🧩</span> {t('puzzles.title')}
-        </h1>
+        <h1 className="puzzle-title">{t('puzzles.title')}</h1>
         <p className="mt-1 text-[var(--muted)]">{t('puzzles.subtitle')}</p>
         <LearnStats className="mt-3" />
       </header>
@@ -154,7 +152,7 @@ function Menu({
 
       <p>
         <Link href="/journey" className="btn">
-          <span aria-hidden="true">🗺️</span> {t('journey.home.map')}
+          {t('journey.home.map')}
         </Link>
       </p>
     </div>
@@ -224,9 +222,7 @@ function Play({
         <div className="stage-aside min-w-0">
           <section className="ch-learn" aria-label={label}>
             <header className="ch-learn-header">
-              <h1 className="ch-learn-title">
-                <span aria-hidden="true">🧩</span> {label}
-              </h1>
+              <h1 className="ch-learn-title">{label}</h1>
               <button type="button" className="btn ch-back" onClick={onMenu}>
                 <span aria-hidden="true">←</span> {t(`${L}.back`)}
               </button>

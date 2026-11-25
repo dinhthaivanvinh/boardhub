@@ -6,17 +6,6 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { groupOf, linkOf, NAV_GROUPS, NAV_LINKS } from './nav-links';
 
-/** A small picture in front of each header link (decoration: the link has its own name). */
-const NAV_ICON: Record<string, string> = {
-  learnChess: '🏠',
-  puzzles: '🧩',
-  journey: '🏆',
-  playChess: '🎮',
-  boardGames: '🎲',
-  office: '🏢',
-  party: '🎉',
-};
-
 /** Header menus for wide screens: "Board game ▾" and "Văn phòng ▾". */
 export function NavMenus() {
   const t = useTranslations('nav');
@@ -51,9 +40,6 @@ export function NavMenus() {
           data-current={currentLink === link.key ? 'true' : undefined}
           aria-current={currentLink === link.key ? 'page' : undefined}
         >
-          <span className="nav-icon" aria-hidden="true">
-            {NAV_ICON[link.key]}
-          </span>
           {t(link.key)}
         </Link>
       ))}
@@ -70,9 +56,6 @@ export function NavMenus() {
               data-current={current === group.key ? 'true' : undefined}
               onClick={() => setOpen(isOpen ? null : group.key)}
             >
-              <span className="nav-icon" aria-hidden="true">
-                {NAV_ICON[group.key]}
-              </span>
               {t(group.key)}
               <svg
                 viewBox="0 0 12 12"

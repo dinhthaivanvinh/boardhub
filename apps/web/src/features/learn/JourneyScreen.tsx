@@ -20,9 +20,7 @@ export function JourneyScreen() {
   return (
     <div className="mx-auto grid max-w-4xl gap-6 px-4 py-6">
       <header className="puzzle-head">
-        <h1 className="puzzle-title">
-          <span aria-hidden="true">🗺️</span> {t(`${L}.title`)}
-        </h1>
+        <h1 className="puzzle-title">{t(`${L}.title`)}</h1>
         <p className="mt-1 text-[var(--muted)]">{t(`${L}.subtitle`)}</p>
         <LearnStats className="mt-3" />
         <p className="mt-2 text-sm font-semibold" data-testid="journey-next-rank">
@@ -69,7 +67,6 @@ export function JourneyScreen() {
                         {state === 'done' && <span className="sr-only">{t(`${L}.done`)}</span>}
                         {done.has(practiceId(id)) && (
                           <span className="journey-node-practice" title={t(`${L}.practiceDone`)}>
-                            <span aria-hidden="true">💪</span>
                             <span className="sr-only">{t(`${L}.practiceDone`)}</span>
                           </span>
                         )}

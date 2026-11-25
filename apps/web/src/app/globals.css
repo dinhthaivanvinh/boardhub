@@ -2205,20 +2205,10 @@ nav section[data-g='5'] {
   text-underline-offset: 6px;
   white-space: nowrap;
 }
-.site-slogan-stars {
-  color: #f59e0b;
-  text-decoration: none;
-  display: inline-block;
-}
 @media (min-width: 80rem) {
   .site-slogan {
     display: inline;
   }
-}
-.nav-icon {
-  margin-right: 0.375rem;
-  font-size: 1.125rem;
-  line-height: 1;
 }
 .nav-link {
   display: inline-flex;
@@ -2447,9 +2437,6 @@ nav section[data-g='5'] {
     font-size: 0.75rem;
     white-space: nowrap;
   }
-  html.board-stage .lesson-scene .ch-learn-steps:has(li:nth-child(6)) li::before {
-    display: none;
-  }
   html.board-stage .lesson-scene .ch-learn-header .ch-back {
     flex: none;
     order: -1;
@@ -2457,27 +2444,6 @@ nav section[data-g='5'] {
     padding: 0.125rem 0.625rem;
     font-size: 0.8125rem;
     white-space: nowrap;
-  }
-  html.board-stage .lesson-scene .ch-learn-steps li::before {
-    margin-right: 0.375rem;
-  }
-  html.board-stage .lesson-scene .ch-learn-steps li[data-i='0']::before {
-    content: '👑';
-  }
-  html.board-stage .lesson-scene .ch-learn-steps li[data-i='1']::before {
-    content: '👁️';
-  }
-  html.board-stage .lesson-scene .ch-learn-steps li[data-i='2']::before {
-    content: '✋';
-  }
-  html.board-stage .lesson-scene .ch-learn-steps li[data-i='3']::before {
-    content: '⭐';
-  }
-  html.board-stage .lesson-scene .ch-learn-steps li[data-i='4']::before {
-    content: '✔️';
-  }
-  html.board-stage .lesson-scene .ch-learn-steps li[data-i='5']::before {
-    content: '🏆';
   }
   html.board-stage .lesson-scene .ch-learn-steps li[aria-current='step'] {
     border-color: #1d6fd6;
@@ -2560,7 +2526,28 @@ nav section[data-g='5'] {
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
   }
-  html.board-stage .lesson-scene .ch-learn-steps li::before {
-    display: none;
-  }
+}
+
+/* No underline under the label of a button or a link that looks like one. */
+.btn,
+.nav-link,
+.nav-dropdown-link,
+.account-pill,
+.lesson-link,
+.ch-step-btn,
+html .lesson-back,
+.lesson-link:hover,
+.btn:hover,
+.nav-link:hover,
+.account-pill:hover,
+.ch-step-btn:hover,
+html .lesson-back:hover {
+  text-decoration: none;
+}
+
+/* The scrollbars of the lesson scene are thin and quiet, so no square arrow box shows under a rounded corner. */
+html.board-stage .lesson-scene nav[aria-label],
+html.board-stage .lesson-scene .ch-learn-side {
+  scrollbar-width: thin;
+  scrollbar-color: #9cc3ec transparent;
 }

@@ -246,7 +246,7 @@
   .ch-learn-boardcol {
     width: clamp(
       16rem,
-      min(calc((100vw - var(--ch-nav, 0rem)) * 0.55), calc(100dvh - 14rem), calc(100cqw - 26rem)),
+      min(calc((100vw - var(--ch-nav, 0rem)) * 0.55), calc(100dvh - 14rem), calc(100cqw - 24rem)),
       42rem
     );
     margin-inline: 0;
@@ -405,8 +405,8 @@ html.board-stage .ch-learn .ch-voice-row > * {
   justify-content: center;
   text-align: center;
   white-space: nowrap;
-  font-size: clamp(0.8125rem, 3.4vw, 0.9375rem);
-  min-height: 2.75rem;
+  font-size: clamp(0.8125rem, 3.4vw, 0.875rem);
+  min-height: 2.5rem;
   padding: 0.25rem 0.5rem;
   gap: 0.25rem;
 }
@@ -541,8 +541,8 @@ html.board-stage .ch-learn .ch-voice-row .ch-learn-toggle input {
   html.board-stage .ch-learn-boardcol {
     width: clamp(
       15rem,
-      min(calc((100vw - var(--ch-nav, 0rem)) * 0.6), calc(100dvh - 11.5rem), calc(100cqw - 26rem)),
-      46rem
+      min(calc((100vw - var(--ch-nav, 0rem)) * 0.6), calc(100dvh - 11.5rem), calc(100cqw - 24rem)),
+      52rem
     );
   }
   html.board-stage .ch-learn {
@@ -570,19 +570,19 @@ html.board-stage .ch-learn .ch-voice-row .ch-learn-toggle input {
     padding: 0;
   }
   html.board-stage .ch-learn .btn {
-    min-height: 2.75rem;
-    padding: 0.375rem 1rem;
-    font-size: 1rem;
-    border-radius: 0.875rem;
+    min-height: 2.5rem;
+    padding: 0.25rem 0.875rem;
+    font-size: 0.9375rem;
+    border-radius: 0.75rem;
   }
   html.board-stage .ch-learn-header .ch-back {
     min-height: 2.5rem;
     padding: 0.25rem 0.875rem;
   }
   html.board-stage .ch-learn .ch-learn-toggle {
-    min-height: 2.5rem;
-    font-size: 0.9375rem;
-    padding: 0.125rem 0.75rem;
+    min-height: 2.25rem;
+    font-size: 0.875rem;
+    padding: 0.125rem 0.625rem;
   }
   html.board-stage .ch-learn .ch-learn-toggle input {
     width: 1.125rem;

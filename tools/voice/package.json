@@ -3,7 +3,6 @@
   "private": true,
   "description": "Makes the pre-recorded lesson voice (mp3 files). Not part of the pnpm workspace: run it by hand, see README.md.",
   "dependencies": {
-    "@breezystack/lamejs": "1.2.7",
-    "sherpa-onnx-node": "1.12.20"
+    "node-edge-tts": "^1.2.12"
   }
 }

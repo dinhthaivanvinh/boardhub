@@ -773,6 +773,7 @@
     "denied": "This page is for admins only.",
     "signIn": "Sign in",
     "tabs": {
+      "stats": "Statistics",
       "open": "New reports",
       "resolved": "Handled",
       "games": "Games",
@@ -810,6 +811,18 @@
     "banned": {
       "text": "This account has been banned for breaking the rules.",
       "signOut": "Sign out"
+    },
+    "stats": {
+      "today": "Today",
+      "total": "All visitors",
+      "anonymous": "Not signed in",
+      "guest": "Guests",
+      "registered": "Registered",
+      "signedIn": "With an account (guest or registered): {count}",
+      "days": "Last {count} days",
+      "day": "Day",
+      "refresh": "Refresh",
+      "note": "Each browser is counted once a day (Vietnam time), by a random id the browser makes up; no name, email or network address is stored. Someone using several devices or clearing browser data is counted more than once. Someone who signs in during the day counts at their highest level."
     }
   },
   "authPrompt": {

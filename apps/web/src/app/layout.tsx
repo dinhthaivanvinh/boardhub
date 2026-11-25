@@ -9,6 +9,7 @@ import { OG_LOCALE, SITE_NAME, SITE_URL } from '@/seo/site';
 import { AccountLink } from '@/features/account/AccountLink';
 import { AuthPrompt } from '@/features/account/AuthPrompt';
 import { ProgressSync } from '@/features/learn/ProgressSync';
+import { VisitPing } from '@/features/stats/VisitPing';
 import { AdminLink } from '@/features/admin/AdminLink';
 import { BannedBanner } from '@/features/admin/BannedBanner';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
@@ -69,6 +70,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <BannedBanner />
           <AuthPrompt />
           <ProgressSync />
+          <VisitPing />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
           <footer className="border-t border-[var(--border)]">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-6 text-sm text-[var(--muted)]">

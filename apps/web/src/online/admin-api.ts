@@ -3,6 +3,7 @@
 import type {
   AdminGameSetting,
   AdminReport,
+  AdminStats,
   GamesStatus,
   ReportCreatePayload,
   ReportResolvePayload,
@@ -37,3 +38,6 @@ export const adminSanctioned = () =>
 
 export const setSanctions = (userId: string, patch: Partial<UserSanctions>) =>
   apiRequest<{ sanctions: UserSanctions }>('PUT', `/api/admin/users/${userId}/sanctions`, patch, token());
+
+export const adminStats = (days = 14) =>
+  apiRequest<AdminStats>('GET', `/api/admin/stats?days=${days}`, undefined, token());

@@ -3,53 +3,50 @@
  * `index.json` listing the files that exist. Run by hand, see README.md.
  *
  *   pnpm --filter @bg/server exec tsx ../../tools/voice/build.mts [--force]
+ *
+ * The voice is the Microsoft Edge neural voice (the one of Edge's "Read aloud"), fetched online one sentence at a
+ * time. Environment: VOICE_NAME (default vi-VN-HoaiMyNeural), VOICE_RATE (default -25%).
  */
 import { createRequire } from 'node:module';
-import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Mp3Encoder } from '@breezystack/lamejs';
 import { speechEntries } from '../../packages/games/chess/src/learn/speech-texts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(join(here, 'package.json'));
-const sherpa = require('sherpa-onnx-node');
+const { EdgeTTS } = require('node-edge-tts') as {
+  EdgeTTS: new (o: Record<string, unknown>) => { ttsPromise(text: string, file: string): Promise<void> };
+};
 
-const MODEL_DIR = process.env.VOICE_MODEL_DIR ?? join(here, 'model', 'vits-piper-vi_VN-vais1000-medium');
 const OUT_DIR = join(here, '..', '..', 'apps', 'web', 'public', 'audio', 'vi');
 const FORCE = process.argv.includes('--force');
-/** A little slower than the voice's natural speed: the listeners are five years old. */
-const SPEED = 0.6;
-const KBPS = 48;
+const VOICE = process.env.VOICE_NAME ?? 'vi-VN-HoaiMyNeural';
+/** Slower than the voice's natural speed: the listeners are five years old. */
+const RATE = process.env.VOICE_RATE ?? '-25%';
 
-const tts = new sherpa.OfflineTts({
-  model: {
-    vits: {
-      model: join(MODEL_DIR, 'vi_VN-vais1000-medium.onnx'),
-      tokens: join(MODEL_DIR, 'tokens.txt'),
-      dataDir: join(MODEL_DIR, 'espeak-ng-data'),
-    },
-    debug: false,
-    numThreads: 2,
-    provider: 'cpu',
-  },
-  maxNumSentences: 1,
+const tts = new EdgeTTS({
+  voice: VOICE,
+  lang: 'vi-VN',
+  outputFormat: 'audio-24khz-48kbitrate-mono-mp3',
+  rate: RATE,
+  timeout: 30_000,
 });
 
-/** Float samples (-1..1) to a mono mp3, with the peak brought to 90% so every file is about as loud. */
-function toMp3(samples: Float32Array, sampleRate: number): Buffer {
-  let peak = 0;
-  for (const s of samples) peak = Math.max(peak, Math.abs(s));
-  const gain = peak > 0 ? 0.9 / peak : 1;
-  const pcm = new Int16Array(samples.length);
-  for (let i = 0; i < samples.length; i++)
-    pcm[i] = Math.max(-32768, Math.min(32767, Math.round(samples[i]! * gain * 32767)));
-  const encoder = new Mp3Encoder(1, sampleRate, KBPS);
-  const parts: Buffer[] = [];
-  for (let i = 0; i < pcm.length; i += 1152)
-    parts.push(Buffer.from(encoder.encodeBuffer(pcm.subarray(i, i + 1152))));
-  parts.push(Buffer.from(encoder.flush()));
-  return Buffer.concat(parts.filter((p) => p.length > 0));
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Asks again a few times: the online service now and then drops a request. */
+async function speak(text: string, file: string) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      await tts.ttsPromise(text, file);
+      if (statSync(file).size > 1000) return;
+      throw new Error('empty audio');
+    } catch (err) {
+      if (attempt >= 8) throw new Error(`no audio for: ${text}`, { cause: err });
+      await sleep(5000 * attempt);
+    }
+  }
 }
 
 mkdirSync(OUT_DIR, { recursive: true });
@@ -65,11 +62,9 @@ for (const [i, entry] of entries.entries()) {
     kept++;
     continue;
   }
-  const audio = tts.generate({ text: entry.spoken, sid: 0, speed: SPEED });
-  if (audio.samples.length === 0) throw new Error(`no audio for: ${entry.spoken}`);
-  const mp3 = toMp3(audio.samples, audio.sampleRate);
-  writeFileSync(file, mp3);
-  bytes += mp3.length;
+  await speak(entry.spoken, file);
+  await sleep(700); // the service answers 429 to a fast client
+  bytes += statSync(file).size;
   made++;
   if (made % 25 === 0) console.log(`${i + 1}/${entries.length}`);
 }
@@ -83,11 +78,9 @@ writeFileSync(
   join(OUT_DIR, 'index.json'),
   JSON.stringify(
     {
-      version: 1,
+      version: 2,
       lang: 'vi',
-      voice: 'vi_VN-vais1000-medium (Piper)',
-      credit:
-        'VAIS-1000 Vietnamese speech synthesis corpus, CC BY 4.0, https://ieee-dataport.org/documents/vais-1000-vietnamese-speech-synthesis-corpus',
+      voice: `${VOICE} (Microsoft Edge neural voice), rate ${RATE}`,
       files: entries.map((e) => e.key).sort(),
     },
     null,

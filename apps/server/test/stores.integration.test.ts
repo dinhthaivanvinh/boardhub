@@ -14,6 +14,7 @@ import { InlineBotRunner } from '../src/bots/bot-runner';
 import { loadConfig } from '../src/config';
 import { createDb, migrateToLatest } from '../src/db/database';
 import { PgAdminRepo } from '../src/db/pg-admin-repo';
+import { PgVisitRepo } from '../src/db/pg-visit-repo';
 import { PgHistoryRepo, PgOfficeRepo, PgUserRepo } from '../src/db/pg-repos';
 import { RedisOfficeStore, type OfficeSessionRecord } from '../src/office/store';
 import type { Room } from '../src/domain/types';
@@ -532,5 +533,30 @@ describe('admin storage in Postgres', () => {
     expect((await repo.listSanctioned(now, 500)).some((s) => s.userId === target)).toBe(true);
     await repo.setSanctions(target, { mutedUntil: null, bannedUntil: null }, admin, now);
     expect((await repo.listSanctioned(now, 500)).some((s) => s.userId === target)).toBe(false);
+  });
+});
+
+describe('visit statistics in Postgres', () => {
+  it('counts each visitor once a day, as the highest kind, and forgets old days', async () => {
+    const repo = new PgVisitRepo(db);
+    const day = '2099-01-0' + (1 + Math.floor(Math.random() * 8));
+    const old = '2098-12-31';
+    const id = (c: string) => c.repeat(20) + randomUUID().slice(0, 8);
+    const [a, b, c] = [id('a'), id('b'), id('c')];
+    await repo.record(day, a, 'anonymous');
+    await repo.record(day, a, 'anonymous');
+    await repo.record(day, b, 'guest');
+    await repo.record(day, c, 'anonymous');
+    await repo.record(day, c, 'registered'); // signs in later: upgraded
+    await repo.record(day, c, 'anonymous'); // a later ping without the token never lowers it
+    await repo.record(old, a, 'guest');
+    const [today, none] = await repo.counts([day, '2097-01-01']);
+    expect(today!.anonymous).toBeGreaterThanOrEqual(1);
+    expect(today!.guest).toBeGreaterThanOrEqual(1);
+    expect(today!.registered).toBeGreaterThanOrEqual(1);
+    expect(today!.total).toBe(today!.anonymous + today!.guest + today!.registered);
+    expect(none).toEqual({ day: '2097-01-01', anonymous: 0, guest: 0, registered: 0, total: 0 });
+    await repo.prune('2099-01-01');
+    expect((await repo.counts([old]))[0]!.total).toBe(0);
   });
 });

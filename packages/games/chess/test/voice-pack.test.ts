@@ -193,7 +193,6 @@ describe('the recordings shipped with the app', () => {
   const dir = join(__dirname, '../../../../apps/web/public/audio/vi');
   const index = JSON.parse(readFileSync(join(dir, 'index.json'), 'utf8')) as {
     files: string[];
-    credit: string;
   };
 
   it('are exactly the sentences the lessons say: run tools/voice again after changing a lesson text', () => {
@@ -209,9 +208,5 @@ describe('the recordings shipped with the app', () => {
       expect(existsSync(file), key).toBe(true);
       expect(statSync(file).size, key).toBeGreaterThan(1000);
     }
-  });
-
-  it('name where the voice comes from (its licence asks for it)', () => {
-    expect(index.credit).toContain('CC BY 4.0');
   });
 });

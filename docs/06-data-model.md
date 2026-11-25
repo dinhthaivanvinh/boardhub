@@ -77,9 +77,15 @@ player_reports
 user_sanctions                     PK user_id → users (cascade)
   muted_until, banned_until timestamptz null    đã qua = hết hạn; "đến khi gỡ" = năm 9999
   updated_at, updated_by
+
+daily_visits                       PK (day, visitor_id)   thống kê người dùng cho trang admin
+  day text             YYYY-MM-DD theo giờ Việt Nam (cố định +7)
+  visitor_id text      mã ngẫu nhiên do trình duyệt tự tạo; không phải tên, email hay địa chỉ mạng
+  kind text            anonymous | guest | registered: mức cao nhất của người đó trong ngày (đăng nhập sau thì nâng lên)
+  Giữ 90 ngày; ngày cũ bị xoá khi có lượt vào đầu tiên của mỗi ngày.
 ```
 
-Không có `DATABASE_URL`: `MemoryAdminRepo`.
+Không có `DATABASE_URL`: `MemoryAdminRepo` và `MemoryVisitRepo`.
 
 Không có `DATABASE_URL` thì server dùng bản trong bộ nhớ (`MemoryUserRepo`, `MemoryHistoryRepo`): chỉ dành cho dev,
 mất khi khởi động lại. Ván `local` và ván với bot ở trình duyệt không lưu lên server.

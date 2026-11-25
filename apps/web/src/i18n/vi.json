@@ -773,6 +773,7 @@
     "denied": "Trang này chỉ dành cho quản trị viên.",
     "signIn": "Đăng nhập",
     "tabs": {
+      "stats": "Thống kê",
       "open": "Báo cáo mới",
       "resolved": "Đã xử lý",
       "games": "Game",
@@ -810,6 +811,18 @@
     "banned": {
       "text": "Tài khoản này đã bị khoá vì vi phạm quy định.",
       "signOut": "Đăng xuất"
+    },
+    "stats": {
+      "today": "Hôm nay",
+      "total": "Tổng số người",
+      "anonymous": "Chưa đăng nhập",
+      "guest": "Khách",
+      "registered": "Đã đăng ký",
+      "signedIn": "Có tài khoản (khách hoặc đã đăng ký): {count}",
+      "days": "{count} ngày gần nhất",
+      "day": "Ngày",
+      "refresh": "Làm mới",
+      "note": "Mỗi trình duyệt được đếm một lần mỗi ngày (giờ Việt Nam), theo mã ngẫu nhiên do trình duyệt tự tạo; không lưu tên, email hay địa chỉ mạng. Một người vào bằng nhiều thiết bị hoặc xoá dữ liệu trình duyệt sẽ được đếm nhiều lần. Người đăng nhập trong ngày được tính ở mức cao nhất của họ."
     }
   },
   "authPrompt": {

@@ -216,7 +216,7 @@ function Play({
 
   return (
     <div
-      className="stage-screen mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
+      className="stage-screen mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
       data-game="chess"
     >
       <BoardStage />

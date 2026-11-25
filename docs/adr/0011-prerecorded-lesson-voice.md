@@ -1,6 +1,6 @@
 # ADR-0011: Giọng đọc của bài học là file mp3 thu sẵn, giọng trình duyệt chỉ để dự phòng
 
-- Trạng thái: Accepted · Ngày: 2026-11-24
+- Trạng thái: Accepted (phần chọn giọng và nguồn giọng được thay bởi [ADR-0012](0012-edge-neural-voice.md)) · Ngày: 2026-11-24
 
 ## Bối cảnh
 

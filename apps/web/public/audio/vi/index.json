@@ -1,8 +1,7 @@
 {
- "version": 1,
+ "version": 2,
  "lang": "vi",
- "voice": "vi_VN-vais1000-medium (Piper)",
- "credit": "VAIS-1000 Vietnamese speech synthesis corpus, CC BY 4.0, https://ieee-dataport.org/documents/vais-1000-vietnamese-speech-synthesis-corpus",
+ "voice": "vi-VN-HoaiMyNeural (Microsoft Edge neural voice), rate -25%",
  "files": [
   "0008a6b2c477a9",
   "00090708bf0b94",

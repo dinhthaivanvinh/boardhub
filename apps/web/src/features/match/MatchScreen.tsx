@@ -92,10 +92,10 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
     // Mobile: title + status above the board, everything else below. Desktop: board left, panel right.
     <div
       data-game={gameId}
-      className="stage-screen mx-auto grid max-w-[90rem] gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-6 lg:py-6"
+      className={`stage-screen ${gameId === 'chess' ? 'adv-page play-scene ' : ''}mx-auto grid max-w-[90rem] gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-6 lg:py-6`}
     >
       <BoardStage />
-      <div className="flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
+      <div className="play-head flex flex-col gap-2 lg:col-start-2 lg:row-start-1">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-xl font-bold tracking-tight lg:text-2xl">{t(`games.${gameId}.name`)}</h1>
           <RulesButton gameId={gameId} config={setup.config} />
@@ -115,7 +115,7 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
 
       <section
         ref={boardRef}
-        className="relative mx-auto w-full max-w-[min(100%,calc(100dvh-8rem))] lg:sticky lg:top-[4.5rem] lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-start"
+        className="play-board relative mx-auto w-full max-w-[min(100%,calc(100dvh-8rem))] lg:sticky lg:top-[4.5rem] lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-start"
       >
         <Board
           view={view}

@@ -26,6 +26,8 @@ const config: NextConfig = {
   // Let phones and other machines on the home network use `pnpm dev` through the LAN IP
   // (Next.js blocks dev assets for hosts other than localhost). Dev only; `*` is one label of the hostname.
   allowedDevOrigins: ['192.168.*.*', '10.*.*.*'],
+  // The round "N" tool button of `next dev` covers the lesson menu; it is not part of the site.
+  devIndicators: false,
   // The pre-recorded lesson voice (public/audio): a sentence's file is named after its text, so it can be kept for
   // a day; the list of files is checked more often.
   // There is no list of lessons any more: the home page has the path.

@@ -5,7 +5,7 @@ test('the home page introduces chess and leads to learning, playing and the othe
 }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Học và chơi cờ vua, ngay trên trình duyệt',
+    'Bắt đầu hành trình trở thành kiện tướng nhí!',
   );
   await page.getByTestId('cta-learn').click();
   await expect(page).toHaveURL(/\/learn\/chess\/coordinates$/);

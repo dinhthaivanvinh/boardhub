@@ -12,6 +12,7 @@ const flat = (obj: unknown, prefix = ''): string[] =>
   );
 
 const page = readFileSync(join(__dirname, '../src/app/page.tsx'), 'utf8');
+const stepsSource = readFileSync(join(__dirname, '../src/features/learn/adventure-steps.ts'), 'utf8');
 
 describe('home page messages', () => {
   for (const [name, messages] of [
@@ -19,21 +20,17 @@ describe('home page messages', () => {
     ['en', en],
   ] as const) {
     it(`${name}: every text the home page asks for exists`, () => {
-      // t('what.title'), t('more.badge', {...}): the plain keys of the portal namespace.
+      // t('benefits.title'), t('play.title'): the plain keys of the portal namespace.
       const plain = [...page.matchAll(/\bt\('([\w.]+)'/g)].map((m) => m[1]!);
       expect(plain.length).toBeGreaterThan(5);
       for (const key of plain) expect(get(messages.portal, key), `portal.${key}`).toBeTypeOf('string');
 
-      // The lesson path: one title, text and call to action per step, listed in STEPS.
-      const steps = [
-        ...(/const STEPS = \[([\s\S]*?)\] as const/.exec(page)?.[1] ?? '').matchAll(/key: '(\w+)'/g),
-      ].map((m) => m[1]!);
-      expect(steps.length).toBeGreaterThanOrEqual(4);
+      // The adventure map: a place name, a text and a lesson title for each of the eight places.
+      const steps = [...stepsSource.matchAll(/key: '(\w+)'/g)].map((m) => m[1]!);
+      expect(steps.length).toBe(8);
       for (const step of steps) {
-        for (const part of ['title', 'text', 'cta']) {
-          expect(get(messages.portal, `path.${step}.${part}`), `portal.path.${step}.${part}`).toBeTypeOf(
-            'string',
-          );
+        for (const key of [`map.${step}.place`, `map.${step}.text`, `path.${step}.title`]) {
+          expect(get(messages.portal, key), `portal.${key}`).toBeTypeOf('string');
         }
       }
     });

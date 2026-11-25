@@ -135,3 +135,25 @@ test('the header links to the puzzles and the journey', async ({ page, isMobile 
   await scope.getByRole('link', { name: 'Hành trình' }).click();
   await expect(page).toHaveURL(/\/journey$/);
 });
+
+test('the adventure map and the achievements on the home page follow the real progress', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.adv-place')).toHaveCount(8);
+  await expect(page.getByTestId('ach-stars')).toContainText('0');
+
+  await page.evaluate(() => window.localStorage.setItem('learn.chess.v1', JSON.stringify(['coordinates'])));
+  await page.reload();
+  const first = page.locator('.adv-place').first();
+  await expect(first).toHaveAttribute('data-state', 'doing');
+  await expect(first).toContainText('1/2 bài');
+  await expect(first.getByRole('link')).toHaveAttribute('href', '/learn/chess/setup');
+  await expect(page.getByTestId('ach-stars')).toContainText('3');
+  await expect(page.getByTestId('ach-lessons')).toContainText('1/21');
+});
+
+test('the home page does not scroll sideways', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  const wider = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  expect(wider).toBe(false);
+});

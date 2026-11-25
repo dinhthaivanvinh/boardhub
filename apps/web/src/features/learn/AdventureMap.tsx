@@ -72,7 +72,7 @@ export function AdventureMap() {
                 {step.key === 'coordinates' ? (
                   <Board />
                 ) : step.key === 'play' ? (
-                  <Image src="/scene/mascot-face.webp" alt="" width={44} height={44} />
+                  <Image src="/scene/mascot-face.png" alt="" width={44} height={44} />
                 ) : (
                   piece && <PieceGlyph piece={piece} size={44} />
                 )}

@@ -17,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const BENEFITS = [
-  { key: 'know', mascot: 'reading' },
-  { key: 'think', mascot: 'thinking' },
-  { key: 'challenge', mascot: 'cheer' },
+  { key: 'know', mascot: 'reading.webp' },
+  { key: 'think', mascot: 'thinking.webp' },
+  { key: 'challenge', mascot: 'cheer.png' },
 ] as const;
 
 /** The home page: an introduction to chess, with the way to learn it and to play it (ADR-0010). */
@@ -80,13 +80,7 @@ export default async function HomePage() {
           <ul className="adv-benefits">
             {BENEFITS.map((k, i) => (
               <li key={k.key} className="adv-benefit" data-i={i}>
-                <Image
-                  src={`/scene/mascot-${k.mascot}.webp`}
-                  alt=""
-                  width={120}
-                  height={170}
-                  loading="lazy"
-                />
+                <Image src={`/scene/mascot-${k.mascot}`} alt="" width={120} height={170} loading="lazy" />
                 <h3>{t(`benefits.${k.key}.title`)}</h3>
                 <p>{t(`benefits.${k.key}.text`)}</p>
               </li>

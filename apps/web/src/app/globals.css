@@ -1878,9 +1878,6 @@ nav section[data-g='5'] {
   font-family: var(--font-rounded), system-ui, sans-serif;
   font-size: 1.25rem;
   font-weight: 800;
-  text-decoration: underline wavy #f59e0b;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
   white-space: nowrap;
 }
 @media (min-width: 80rem) {
@@ -1917,7 +1914,7 @@ nav section[data-g='5'] {
   display: inline-block;
   flex: none;
   border-radius: 9999px;
-  background: #fde68a url('/scene/mascot-face.webp') center top / 118% no-repeat;
+  background: #fde68a url('/scene/mascot-face.png') center / 100% no-repeat;
 }
 .account-face {
   width: 2rem;
@@ -2072,7 +2069,7 @@ nav section[data-g='5'] {
     background-image: url('/scene/mascot-thinking.webp');
   }
   html.board-stage .lesson-scene .ch-learn:has(.ch-celebrate) .ch-learn-side::before {
-    background-image: url('/scene/mascot-cheer.webp');
+    background-image: url('/scene/mascot-cheer.png');
   }
   html.board-stage .lesson-scene .ch-learn-side .ch-learn-actions,
   html.board-stage .lesson-scene .ch-learn-side .btn,

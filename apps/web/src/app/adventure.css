@@ -1,0 +1,75 @@
+/*
+ * The adventure look of the home page and of the header (docs/08 §6.2): a bright, rounded, game-like style for
+ * children. Rules here use `html ` or `.adv-` prefixes so they win over the older rules in globals.css, which is
+ * imported after this file.
+ */
+:root {
+  --adv-blue: #1976f3;
+  --adv-blue-dark: #1554b8;
+  --adv-blue-light: #eaf5ff;
+  --adv-sky: #bde4ff;
+  --adv-gold: #ffc928;
+  --adv-orange: #ffad45;
+  --adv-bg: #f5f9ff;
+  --adv-text: #243b5a;
+  --adv-muted: #5b6f89;
+  --adv-green: #48bd78;
+  --adv-shadow: 0 8px 24px rgb(25 118 243 / 0.14);
+  --adv-radius: 1.5rem;
+}
+
+/* ---- Header: a floating white bar ---- */
+html .site-header {
+  top: 0.5rem;
+  width: min(100% - 1rem, 80rem);
+  margin: 0.5rem auto 0;
+  border: 0;
+  border-image: none;
+  border-radius: 1.75rem;
+  background: #fff;
+  box-shadow: var(--adv-shadow);
+}
+html .site-header .site-brand {
+  color: var(--adv-blue-dark);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+html .site-header .site-slogan {
+  color: var(--adv-muted);
+}
+html .site-header .nav-link {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--adv-text);
+  font-weight: 700;
+  transition:
+    background-color 0.15s,
+    transform 0.15s;
+}
+html .site-header .nav-link:hover {
+  background: var(--adv-blue-light);
+  transform: translateY(-1px);
+}
+html .site-header .nav-link[data-current='true'] {
+  background: var(--adv-blue);
+  color: #fff;
+}
+html .site-header .account-pill {
+  background: var(--adv-blue-light);
+  color: var(--adv-text);
+}
+
+/* The home page has the light blue background of the design. */
+html:has(.adv-home) body {
+  background: var(--adv-bg);
+  color: var(--adv-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .site-header .nav-link {
+    transition: none;
+  }
+  html .site-header .nav-link:hover {
+    transform: none;
+  }
+}

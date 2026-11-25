@@ -1356,6 +1356,12 @@ body {
   html.board-stage .stage-screen .card {
     padding: 0.5rem 0.75rem;
   }
+  /* The side panel of a game or a replay: buttons no bigger than they need to be, so the board stays the centre. */
+  html.board-stage .stage-aside .btn {
+    min-height: 2.5rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+  }
   html.board-stage .stage-aside {
     min-height: 0;
     max-height: 100%;
@@ -1729,6 +1735,16 @@ nav section[data-g='5'] {
   background: var(--c, var(--k3));
   color: #fff;
   box-shadow: 0 3px 0 color-mix(in srgb, var(--c, var(--k3)) 55%, #000);
+}
+
+/* Màn có bàn cờ cố định: menu bài học gọn lại để bàn cờ là tâm điểm. */
+@media (min-width: 64rem) and (min-height: 26rem) {
+  html.board-stage .lesson-link {
+    min-height: 2rem;
+    padding: 0.125rem 0.75rem;
+    border-width: 1.5px;
+    font-size: 0.8125rem;
+  }
 }
 
 /* Ô chọn khi tạo ván mới. */

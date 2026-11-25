@@ -168,7 +168,7 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
       <Link href="/" className="text-sm underline-offset-4 hover:underline md:hidden">
         ← {t('games.chess.learn.backToHome')}
       </Link>
-      <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
+      <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[11rem_minmax(0,1fr)]">
         <LessonNav currentId={lessonId} />
         <div className="stage-aside min-w-0">
           {piece && (

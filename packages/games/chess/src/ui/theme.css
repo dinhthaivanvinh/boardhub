@@ -94,6 +94,8 @@
 .ch-learn {
   display: grid;
   gap: 0.75rem;
+  /* The board is sized from the width of the lesson (cqw), so the text and buttons beside it always fit. */
+  container-type: inline-size;
 }
 .ch-learn-header {
   display: flex;
@@ -242,7 +244,11 @@
     grid-template-columns: auto minmax(0, 1fr);
   }
   .ch-learn-boardcol {
-    width: clamp(16rem, min(calc((100vw - var(--ch-nav, 0rem)) * 0.55), calc(100dvh - 14rem)), 42rem);
+    width: clamp(
+      16rem,
+      min(calc((100vw - var(--ch-nav, 0rem)) * 0.55), calc(100dvh - 14rem), calc(100cqw - 26rem)),
+      42rem
+    );
     margin-inline: 0;
   }
 }
@@ -533,7 +539,11 @@ html.board-stage .ch-learn .ch-voice-row .ch-learn-toggle input {
 /* Bàn cờ cố định (trang không cuộn): bàn cờ to hết mức vừa màn hình, nút gọn lại cho cân với bàn cờ. */
 @media (min-width: 64rem) and (min-height: 26rem) {
   html.board-stage .ch-learn-boardcol {
-    width: clamp(15rem, min(calc((100vw - var(--ch-nav, 0rem)) * 0.6), calc(100dvh - 11.5rem)), 46rem);
+    width: clamp(
+      15rem,
+      min(calc((100vw - var(--ch-nav, 0rem)) * 0.6), calc(100dvh - 11.5rem), calc(100cqw - 26rem)),
+      46rem
+    );
   }
   html.board-stage .ch-learn {
     gap: 0.5rem;

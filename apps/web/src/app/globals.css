@@ -2415,7 +2415,12 @@ nav section[data-g='5'] {
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  html.board-stage .lesson-scene .ch-learn-steps li {
+  html.board-stage .lesson-scene .ch-learn-steps li,
+  html.board-stage .lesson-scene .ch-learn-steps li[aria-current='step'] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    font-size: 0.875rem;
     white-space: nowrap;
     padding: 0.25rem 0.875rem;
     border: 2px solid #fff;
@@ -2432,17 +2437,37 @@ nav section[data-g='5'] {
     flex-wrap: nowrap;
     gap: 0.25rem;
   }
-  html.board-stage .lesson-scene .ch-learn-steps:has(li:nth-child(6)) li {
+  html.board-stage .lesson-scene .ch-learn-steps:has(li:nth-child(6)) li,
+  html.board-stage .lesson-scene .ch-learn-steps:has(li:nth-child(6)) li[aria-current='step'] {
+    padding: 0.25rem 0.4rem;
+    border-width: 1.5px;
+    font-size: 0.75rem;
+  }
+  html.board-stage .lesson-scene .ch-learn-header:has(li:nth-child(6)) {
+    gap: 0.2rem;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps:has(li:nth-child(6)) {
+    gap: 0.2rem;
+  }
+  html.board-stage .lesson-scene .ch-learn-header:has(li:nth-child(6)) .ch-back {
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
-    white-space: nowrap;
+    border-width: 1.5px;
   }
+  /* The Back button is one of the pills: the same height, the same look, in front of the steps. */
   html.board-stage .lesson-scene .ch-learn-header .ch-back {
     flex: none;
     order: -1;
-    min-height: 2rem;
-    padding: 0.125rem 0.625rem;
-    font-size: 0.8125rem;
+    margin: 0;
+    min-height: 2.25rem;
+    padding: 0.25rem 0.875rem;
+    border: 2px solid #fff;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.88);
+    box-shadow: 0 3px 8px rgb(30 80 140 / 0.15);
+    color: #1e3a6e;
+    font-size: 0.875rem;
+    font-weight: 800;
     white-space: nowrap;
   }
   html.board-stage .lesson-scene .ch-learn-steps li[aria-current='step'] {
@@ -2517,14 +2542,6 @@ nav section[data-g='5'] {
     width: 8.5rem;
     height: 9.5rem;
     background: url('/scene/mascot-reading.webp') center bottom / contain no-repeat;
-  }
-}
-
-/* A narrower lesson (a laptop screen): the step pills lose their pictures so that they always fit above the board. */
-@container (max-width: 64rem) {
-  html.board-stage .lesson-scene .ch-learn-steps li {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
   }
 }
 

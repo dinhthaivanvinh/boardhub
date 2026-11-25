@@ -376,7 +376,7 @@ html:has(.adv-home) body {
 }
 @media (min-width: 64rem) {
   .adv-map {
-    --gap: 2.5rem;
+    --gap: 3rem;
     grid-template-columns: repeat(4, 1fr);
   }
   /* The path turns at the right end and comes back: 1-2-3-4 then 8-7-6-5 under them. */
@@ -542,7 +542,7 @@ html:has(.adv-home) body {
   color: #5a3b00;
 }
 
-/* The dashed path behind the cards. */
+/* The path behind the cards: a thick, solid road in the blue of the site. */
 @media (min-width: 64rem) {
   .adv-place::after {
     content: '';
@@ -550,16 +550,15 @@ html:has(.adv-home) body {
     top: 3.5rem;
     left: 50%;
     width: calc(100% + var(--gap));
-    border-top: 5px dashed #fff;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background: var(--adv-blue);
+    box-shadow: 0 0 0 3px #fff;
   }
   .adv-place[data-i='3']::after {
     /* the turn: down from the fourth place to the fifth one under it */
-    top: 3.5rem;
-    left: 50%;
-    width: 0;
+    width: 0.625rem;
     height: calc(100% + 2rem);
-    border-top: 0;
-    border-left: 5px dashed #fff;
   }
   .adv-place[data-i='4']::after,
   .adv-place[data-i='5']::after,
@@ -571,19 +570,23 @@ html:has(.adv-home) body {
     display: none;
   }
 }
-/* On a phone: one column, with the path running down the left side. */
+/* On a phone: one column, with the road running down between the cards. */
 @media (max-width: 63.999rem) {
   .adv-map {
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
   .adv-place:not(:last-child)::after {
     content: '';
     position: absolute;
     z-index: 0;
     top: 50%;
-    bottom: -2rem;
+    bottom: -1.75rem;
     left: 50%;
-    border-left: 5px dashed #fff;
+    width: 0.625rem;
+    margin-left: -0.3125rem;
+    border-radius: 9999px;
+    background: var(--adv-blue);
+    box-shadow: 0 0 0 3px #fff;
   }
   .adv-place-card {
     grid-template-columns: 4.75rem 1fr;
@@ -979,4 +982,145 @@ html .home-helper .btn-primary {
 .site-footer-copy {
   color: var(--adv-muted);
   font-size: 0.875rem;
+}
+
+/* ---- The other pages (puzzles, journey, chess set-up) in the same look ---- */
+html:has(.adv-page),
+html:has(.adv-home) {
+  --bg: var(--adv-bg);
+  --fg: var(--adv-text);
+  --muted: var(--adv-muted);
+  --card: #fff;
+  --border: #d3e3f6;
+  --accent: var(--adv-blue);
+  --accent-fg: #fff;
+}
+html:has(.adv-page) body {
+  background: var(--adv-bg);
+  color: var(--adv-text);
+}
+.adv-banner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 1rem;
+  overflow: hidden;
+  padding: 1.5rem 1.5rem 0;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #6fb8ff, var(--adv-sky) 70%);
+}
+.adv-banner-text {
+  padding-bottom: 1.5rem;
+}
+.adv-banner-title {
+  color: var(--adv-blue-dark);
+  font-size: clamp(1.625rem, 4vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+}
+.adv-banner-sub {
+  margin-top: 0.375rem;
+  color: var(--adv-text);
+  font-weight: 600;
+}
+.adv-banner-mascot {
+  width: auto;
+  height: 8.5rem;
+}
+@media (max-width: 36rem) {
+  .adv-banner-mascot {
+    display: none;
+  }
+}
+.adv-page .card {
+  border: 0;
+  border-radius: 1.5rem;
+  box-shadow: var(--adv-shadow);
+}
+.adv-page .btn {
+  min-height: 3rem;
+  padding-inline: 1.25rem;
+  border: 0;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 4px 0 #b9d6f6;
+  color: var(--adv-blue-dark);
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.adv-page .btn:hover,
+.adv-page .btn:focus-visible {
+  transform: translateY(-2px);
+}
+.adv-page .btn-primary {
+  background: var(--adv-blue);
+  box-shadow: 0 4px 0 var(--adv-blue-dark);
+  color: #fff;
+}
+.adv-page .btn:disabled {
+  opacity: 0.55;
+  transform: none;
+}
+.adv-page .btn-lg {
+  min-height: 3.25rem;
+  font-size: 1.0625rem;
+}
+.adv-page h2 {
+  color: var(--adv-text);
+  font-weight: 800;
+}
+
+/* Puzzles */
+.adv-page .puzzle-daily {
+  background: linear-gradient(135deg, #fff6d6, #ffe4b8);
+}
+.adv-page .puzzle-daily .btn-primary {
+  background: var(--adv-gold);
+  box-shadow: 0 4px 0 #d9a400;
+  color: #5a3b00;
+}
+.adv-page .puzzle-bar {
+  border-radius: 9999px;
+}
+
+/* Journey */
+.adv-page .journey-stage {
+  border: 0;
+}
+.adv-page .journey-go {
+  background: var(--adv-gold);
+  box-shadow: 0 5px 0 #d9a400;
+  color: #5a3b00;
+}
+.adv-page .journey-node {
+  box-shadow: 0 2px 0 rgb(25 118 243 / 0.15);
+  text-decoration: none;
+}
+.adv-page .journey-badge {
+  border: 0;
+  box-shadow: var(--adv-shadow);
+}
+
+/* Chess set-up */
+.adv-page .setup-option {
+  border: 2px solid #d3e3f6;
+  border-radius: 9999px;
+  background: #fff;
+}
+.adv-page .setup-option.is-checked {
+  border-color: var(--adv-blue);
+  background: var(--adv-blue-light);
+  color: var(--adv-blue-dark);
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-page .btn {
+    transition: none;
+  }
+  .adv-page .btn:hover,
+  .adv-page .btn:focus-visible {
+    transform: none;
+  }
 }

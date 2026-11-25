@@ -2349,8 +2349,10 @@ nav section[data-g='5'] {
   html.board-stage .lesson-scene .ch-learn-boardcol {
     grid-column: 1;
     grid-row: 2;
+    /* The frame is as tall as the board, whatever the bubble beside it needs. */
+    align-self: start;
     margin-inline: auto;
-    width: clamp(15rem, min(calc(100dvh - 13.25rem), calc(100cqw - clamp(19rem, 30vw, 27rem) - 2rem)), 60rem);
+    width: clamp(15rem, min(calc(100dvh - 9rem), calc(100cqw - clamp(19rem, 30vw, 27rem) - 2rem)), 60rem);
     padding: 0.375rem;
     border: 0.5rem solid #eba54e;
     border-radius: 1.5rem;

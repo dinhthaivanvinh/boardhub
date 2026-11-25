@@ -47,6 +47,25 @@ const ORDER: string[] = [
 
 type NavGroup = { heading: string; ids: string[] };
 
+/** A small picture in front of each lesson and each group of the menu (decoration). */
+const LESSON_ICON: Record<string, string> = {
+  [COORDINATES_LESSON_ID]: '🧒',
+  [SETUP_LESSON_ID]: '♟️',
+  pawn: '♙',
+  rook: '♖',
+  bishop: '♗',
+  knight: '♘',
+  queen: '♕',
+  king: '♔',
+  [CAPTURE_LESSON_ID]: '🛡️',
+  [CHECKMATE_LESSON_ID]: '🏁',
+  [DRAWS_LESSON_ID]: '🤝',
+  [TACTICS_LESSON_ID]: '🎯',
+};
+const GROUP_ICON = ['👑', '⭐', '📖', '🎓', '✨', '🎯'];
+const iconOf = (id: string, group: number) =>
+  LESSON_ICON[id] ?? (group === 3 ? '📖' : group === 4 ? '✨' : '•');
+
 /** Every lesson, grouped in the order they are meant to be taken: one menu to jump to any of them. */
 function LessonNav({ currentId }: { currentId: string }) {
   const t = useTranslations();
@@ -65,7 +84,7 @@ function LessonNav({ currentId }: { currentId: string }) {
       aria-label={t(`${L}.allLessons`)}
       className="md:sticky md:top-20 md:max-h-full md:self-start md:overflow-y-auto"
     >
-      <Link href="/" className="mb-2 hidden text-sm underline-offset-4 hover:underline md:block">
+      <Link href="/" className="lesson-back mb-2 hidden text-sm underline-offset-4 hover:underline md:block">
         ← {t(`${L}.backToHome`)}
       </Link>
       <div className="flex gap-4 overflow-x-auto pb-1 md:flex-col md:gap-3 md:overflow-visible">
@@ -76,7 +95,8 @@ function LessonNav({ currentId }: { currentId: string }) {
             data-g={g}
             className="flex shrink-0 gap-2 md:block"
           >
-            <h2 className="mb-1 hidden text-xs font-semibold tracking-wide text-[var(--muted)] uppercase md:block">
+            <h2 className="lesson-group-title mb-1 hidden text-xs font-semibold tracking-wide uppercase md:flex">
+              <span aria-hidden="true">{GROUP_ICON[g]}</span>
               {group.heading}
             </h2>
             <ul className="flex gap-2 md:flex-col md:gap-1.5">
@@ -89,8 +109,19 @@ function LessonNav({ currentId }: { currentId: string }) {
                       aria-current={current ? 'page' : undefined}
                       className="lesson-link flex items-center justify-between gap-2 text-sm whitespace-nowrap md:whitespace-normal"
                     >
-                      <span>{lessonName(id, t)}</span>
-                      {done.has(id) && <span aria-label={t(`${L}.completed`)}>✓</span>}
+                      <span className="lesson-icon" aria-hidden="true">
+                        {iconOf(id, g)}
+                      </span>
+                      <span className="lesson-link-name">{lessonName(id, t)}</span>
+                      {done.has(id) ? (
+                        <span className="lesson-done" aria-label={t(`${L}.completed`)}>
+                          ✓
+                        </span>
+                      ) : (
+                        <span className="lesson-chevron" aria-hidden="true">
+                          ›
+                        </span>
+                      )}
                     </Link>
                   </li>
                 );
@@ -160,15 +191,19 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
   const footer = <LessonFooter lessonId={lessonId} />;
   return (
     <div
-      className="stage-screen mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
+      className="stage-screen lesson-scene mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
       data-game="chess"
       style={{ '--ch-nav': '15rem' } as React.CSSProperties}
     >
       <BoardStage />
+      <div className="scene-decor" aria-hidden="true">
+        <span className="scene-sign">{t('games.chess.learn.funSign')} ♥</span>
+        <span className="scene-pawn" />
+      </div>
       <Link href="/" className="text-sm underline-offset-4 hover:underline md:hidden">
         ← {t('games.chess.learn.backToHome')}
       </Link>
-      <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[11rem_minmax(0,1fr)]">
+      <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[11rem_minmax(0,1fr)] lg:grid-cols-[14.5rem_minmax(0,1fr)]">
         <LessonNav currentId={lessonId} />
         <div className="stage-aside min-w-0">
           {piece && (

@@ -79,6 +79,21 @@ Desktop                                   Mobile
 └──────────────────────┴──────────┘       └──────────────┘
 ```
 
+### 6.1 Màn bài học (cờ vua) trên màn rộng
+
+Từ 1024 px rộng (`html.board-stage`, trang không cuộn) màn bài học (`LessonScreen`, lớp `lesson-scene`) theo thiết kế: nền
+trời xanh và đồng cỏ (`public/scene/bg.svg`), thẻ menu bài học bên trái (mỗi bài có biểu tượng, dấu tick xanh khi đã học, mũi
+tên khi chưa), các bước dạng viên thuốc ở giữa phía trên, **bàn cờ khung gỗ ở chính giữa**, và bên phải một bóng nói chứa chữ,
+ba nút đọc to và nút `Tiếp tục` màu cam, có bạn nhỏ (`public/scene/boy.svg`) đứng ở góc bóng. Ở màn cao từ 46 rem và rộng từ
+80 rem có thêm biển gỗ và con tốt (`pawn.svg`) ở góc dưới. Hình vẽ là SVG tự làm; muốn dùng hình khác thì thay file cùng tên.
+
+- `.ch-learn` là một lưới hai cột (`.ch-learn-layout` là `display: contents`): các bước và bàn cờ ở cột giữa, bóng nói chiếm cột
+  phải. Cỡ bàn cờ tính theo chiều cao màn hình và bề rộng của bài (`cqw`) nên cột chữ không bao giờ bị cắt.
+- Bàn cờ không dịch chuyển khi cuộn: nếu bài nói nhiều thì chính bóng nói cuộn bên trong (`overflow-y`).
+- Bài có từ 6 bước trở lên (toạ độ, chiến thuật) thu nhỏ các viên thuốc về một hàng để bàn cờ không bị đẩy xuống.
+- Màn hẹp hơn (điện thoại, máy tính bảng) giữ giao diện gọn như trước; chỉ nút `Tiếp tục` là màu cam.
+- Header toàn site có logo to, câu chào `app.slogan` (từ 80 rem), mỗi mục có biểu tượng và ô tài khoản có mặt cười.
+
 ## 7. i18n
 
 - Dùng `next-intl`. Chuỗi chung nằm ở `apps/web/src/i18n/{vi,en}.json`.

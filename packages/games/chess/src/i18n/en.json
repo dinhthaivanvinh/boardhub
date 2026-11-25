@@ -820,6 +820,7 @@
       },
       "allDone": "Great! You finished the practice.",
       "done": "You finished the practice! You earned {stars} ⭐."
-    }
+    },
+    "funSign": "Chess is great fun!"
   }
 }

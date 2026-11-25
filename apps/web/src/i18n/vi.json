@@ -2,7 +2,8 @@
   "app": {
     "name": "BoardHub",
     "tagline": "Học và chơi cờ vua, cùng các board game khác, ngay trên trình duyệt.",
-    "footer": "Cờ vua và các board game, miễn phí trên trình duyệt."
+    "footer": "Cờ vua và các board game, miễn phí trên trình duyệt.",
+    "slogan": "Học cờ thật vui!"
   },
   "nav": {
     "home": "Trang chủ",

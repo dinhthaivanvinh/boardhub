@@ -2,7 +2,8 @@
   "app": {
     "name": "BoardHub",
     "tagline": "Learn and play chess, plus other board games, right in your browser.",
-    "footer": "Chess and board games, free in your browser."
+    "footer": "Chess and board games, free in your browser.",
+    "slogan": "Learning chess is fun!"
   },
   "nav": {
     "home": "Home",

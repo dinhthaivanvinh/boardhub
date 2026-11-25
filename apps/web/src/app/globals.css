@@ -2183,3 +2183,362 @@ nav section[data-g='5'] {
   font-size: 0.95rem;
   line-height: 1;
 }
+
+/* ---------------------------------------------------------------------------------------------------------
+   Màn hình bài học theo thiết kế mới: trời xanh và đồng cỏ, menu bài học bên trái, bàn cờ khung gỗ ở giữa, bóng
+   nói với bạn nhỏ bên phải. Chỉ có trên màn rộng (board-stage); màn nhỏ giữ giao diện gọn như cũ. */
+
+/* Header: logo to, câu chào, mỗi mục có hình nhỏ. */
+.site-brand {
+  font-size: 1.5rem;
+}
+.site-slogan {
+  display: none;
+  margin-right: auto;
+  margin-left: 0.5rem;
+  color: #2563eb;
+  font-family: var(--font-rounded), system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-decoration: underline wavy #f59e0b;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  white-space: nowrap;
+}
+.site-slogan-stars {
+  color: #f59e0b;
+  text-decoration: none;
+  display: inline-block;
+}
+@media (min-width: 80rem) {
+  .site-slogan {
+    display: inline;
+  }
+}
+.nav-icon {
+  margin-right: 0.375rem;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.875rem;
+  background: color-mix(in srgb, var(--k3) 7%, var(--card));
+}
+.nav-link[data-current='true'] {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.account-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 11rem;
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--k3) 7%, var(--card));
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.account-pill:hover {
+  background: color-mix(in srgb, var(--k3) 14%, var(--card));
+}
+.account-face {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: #fde68a;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* Menu bài học: thẻ bo tròn, biểu tượng trước tên, dấu tick xanh khi đã học xong. */
+.lesson-group-title {
+  align-items: center;
+  gap: 0.375rem;
+  color: #3b2f1e;
+  letter-spacing: 0.02em;
+}
+.lesson-link {
+  gap: 0.5rem;
+}
+.lesson-icon {
+  flex: none;
+  width: 1.5rem;
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+.lesson-link-name {
+  flex: 1 1 auto;
+}
+.lesson-done {
+  color: #16a34a;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.lesson-chevron {
+  opacity: 0.55;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.lesson-link[aria-current='page'] .lesson-done,
+.lesson-link[aria-current='page'] .lesson-chevron {
+  color: #fff;
+  opacity: 1;
+}
+
+.scene-decor {
+  display: none;
+}
+
+@media (min-width: 64rem) and (min-height: 26rem) {
+  html:has(.lesson-scene) body {
+    background: #bfe6f8 url('/scene/bg.svg') center bottom / cover no-repeat fixed;
+  }
+  html:has(.lesson-scene) .site-header {
+    background: rgb(255 255 255 / 0.82);
+  }
+
+  /* The nav card on the left. */
+  html.board-stage .lesson-scene nav[aria-label] {
+    padding: 0.75rem;
+    border: 2px solid rgb(255 255 255 / 0.9);
+    border-radius: 1.5rem;
+    background: rgb(255 255 255 / 0.78);
+    box-shadow: 0 6px 18px rgb(30 80 140 / 0.16);
+  }
+  html.board-stage .lesson-scene .lesson-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 1rem;
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgb(30 80 140 / 0.15);
+    color: #1e3a6e;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  html.board-stage .lesson-scene .lesson-group-title {
+    font-size: 0.8125rem;
+  }
+  html.board-stage .lesson-scene .lesson-link {
+    min-height: 2.25rem;
+    font-size: 0.875rem;
+  }
+
+  /* One grid for the whole lesson: tabs and board in the middle, the speech bubble on the right. */
+  html.board-stage .lesson-scene .stage-aside {
+    overflow: hidden;
+  }
+  html.board-stage .lesson-scene .ch-learn {
+    grid-template-columns: minmax(0, 1fr) clamp(19rem, 30vw, 27rem);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 1.5rem;
+    row-gap: 0.5rem;
+    align-content: start;
+  }
+  html.board-stage .lesson-scene .ch-learn-layout {
+    display: contents;
+  }
+  html.board-stage .lesson-scene .ch-learn-header {
+    grid-column: 1;
+    grid-row: 1;
+    justify-content: center;
+  }
+  html.board-stage .lesson-scene .ch-learn-boardcol {
+    grid-column: 1;
+    grid-row: 2;
+    margin-inline: auto;
+    width: clamp(15rem, min(calc(100dvh - 13.25rem), calc(100cqw - clamp(19rem, 30vw, 27rem) - 2rem)), 60rem);
+    padding: 0.375rem;
+    border: 0.5rem solid #eba54e;
+    border-radius: 1.5rem;
+    background: #fbeccb;
+    box-shadow:
+      0 0 0 3px #d98a2b,
+      0 10px 24px rgb(120 70 10 / 0.3);
+  }
+  html.board-stage .lesson-scene .ch-learn-side {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: block;
+    position: relative;
+    z-index: 1;
+    align-self: start;
+    margin-top: 0.5rem;
+    /* The bubble scrolls by itself when a lesson has a lot to say; the board never moves. */
+    max-height: calc(100dvh - 9rem);
+    overflow-y: auto;
+    padding: 1rem 1.25rem 1.25rem;
+    border: 2px solid rgb(255 255 255 / 0.95);
+    border-radius: 2rem;
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 8px 22px rgb(30 80 140 / 0.2);
+  }
+  html.board-stage .lesson-scene .ch-learn-side > * + * {
+    margin-top: 0.75rem;
+  }
+  /* The boy stands at the top right of the bubble; the text flows around him. */
+  html.board-stage .lesson-scene .ch-learn-side::before {
+    content: '';
+    float: right;
+    width: 7.5rem;
+    height: 9rem;
+    margin: -0.25rem -0.25rem 0.25rem 0.5rem;
+    background: url('/scene/boy.svg') center / contain no-repeat;
+  }
+  html.board-stage .lesson-scene .ch-learn-side .ch-learn-actions,
+  html.board-stage .lesson-scene .ch-learn-side .btn,
+  html.board-stage .lesson-scene .ch-learn-side .ch-next {
+    clear: both;
+  }
+  html.board-stage .lesson-scene .ch-learn-text {
+    color: #1e2a4a;
+    font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* The steps are pills with a picture, centred above the board. */
+  html.board-stage .lesson-scene .ch-learn-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li {
+    white-space: nowrap;
+    padding: 0.25rem 0.875rem;
+    border: 2px solid #fff;
+    background: rgb(255 255 255 / 0.88);
+    box-shadow: 0 3px 8px rgb(30 80 140 / 0.15);
+    font-weight: 800;
+  }
+  /* A lesson with many steps (coordinates, tactics): one row, no pictures, so the board never moves down. */
+  html.board-stage .lesson-scene .ch-learn-header {
+    flex-wrap: nowrap;
+    gap: 0.375rem;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps:has(li:nth-child(6)) li {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps:has(li:nth-child(6)) li::before {
+    display: none;
+  }
+  html.board-stage .lesson-scene .ch-learn-header .ch-back {
+    flex: none;
+    order: -1;
+    min-height: 2rem;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li::before {
+    margin-right: 0.375rem;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[data-i='0']::before {
+    content: '👑';
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[data-i='1']::before {
+    content: '👁️';
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[data-i='2']::before {
+    content: '✋';
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[data-i='3']::before {
+    content: '⭐';
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[data-i='4']::before {
+    content: '✔️';
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[data-i='5']::before {
+    content: '🏆';
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[aria-current='step'] {
+    border-color: #1d6fd6;
+    background: #1d86f0;
+    color: #fff;
+  }
+  html.board-stage .lesson-scene .ch-learn-steps li[data-done='true'] .ch-step-btn {
+    color: inherit;
+  }
+
+  /* The buttons of the bubble: a blue "read aloud" row and a big orange "Continue". */
+  html.board-stage .lesson-scene .ch-learn .ch-voice-row > * {
+    border-color: #6aa9ef;
+    background: #e7f2ff;
+    color: #123a73;
+    font-weight: 700;
+    box-shadow: 0 3px 0 #b7d4f6;
+  }
+  html.board-stage .lesson-scene .ch-learn .ch-next,
+  html.board-stage .lesson-scene .ch-learn .btn-primary {
+    display: flex;
+    width: 100%;
+    min-height: 3rem;
+    border: 0;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, #ffa733, #ff8412);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 800;
+    box-shadow: 0 4px 0 #d96a05;
+  }
+
+  /* The sign and the pawn on the meadow, behind the bubble, only where there is room. */
+  html.board-stage .lesson-scene .scene-decor {
+    display: none;
+  }
+}
+
+@media (min-width: 80rem) and (min-height: 46rem) {
+  html.board-stage .lesson-scene .scene-decor {
+    display: block;
+    position: fixed;
+    right: 1.5rem;
+    bottom: 0.75rem;
+    z-index: 0;
+    width: 17rem;
+    height: 10rem;
+    pointer-events: none;
+  }
+  html.board-stage .lesson-scene .scene-sign {
+    position: absolute;
+    left: 0;
+    bottom: 0.5rem;
+    width: 10.5rem;
+    padding: 0.75rem 0.5rem;
+    border: 3px solid #8a5a2b;
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, #e3b074, #c98a45);
+    color: #3b2308;
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
+    transform: rotate(-3deg);
+    box-shadow: 0 4px 0 #7a4c20;
+  }
+  html.board-stage .lesson-scene .scene-pawn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 7rem;
+    height: 9.5rem;
+    background: url('/scene/pawn.svg') center bottom / contain no-repeat;
+  }
+}

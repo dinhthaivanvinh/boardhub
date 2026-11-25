@@ -5,6 +5,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import { PieceGlyph, PIECE_LESSONS } from '@bg/game-chess';
 import { toLocale } from '@/i18n/messages';
 import { AdventureMap } from '@/features/learn/AdventureMap';
+import { DailyChallenge } from '@/features/learn/DailyChallenge';
 import { HomeProgress } from '@/features/learn/HomeProgress';
 import { JsonLd } from '@/seo/JsonLd';
 import { absolute, publicPage, SITE_NAME } from '@/seo/site';
@@ -119,6 +120,31 @@ export default async function HomePage() {
           </h2>
           <p className="adv-section-sub">{t('path.text')}</p>
           <AdventureMap />
+        </section>
+
+        <section aria-labelledby="home-daily" className="adv-daily-section">
+          <DailyChallenge />
+        </section>
+
+        <section aria-labelledby="home-play">
+          <h2 id="home-play" className="adv-section-title">
+            {t('play.title')}
+          </h2>
+          <ul className="adv-play">
+            {(['bot', 'friend'] as const).map((k) => (
+              <li key={k} className="adv-play-card" data-k={k} data-game="chess">
+                <span className="adv-play-art" aria-hidden="true">
+                  <PieceGlyph piece={k === 'bot' ? 'wN' : 'wK'} size={96} />
+                  <PieceGlyph piece={k === 'bot' ? 'bN' : 'bQ'} size={96} />
+                </span>
+                <h3>{t(`play.${k}.title`)}</h3>
+                <p>{t(`play.${k}.text`)}</p>
+                <Link href="/games/chess" className="adv-btn adv-btn-primary" data-testid={`play-${k}`}>
+                  {t(`play.${k}.cta`)}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section className="home-final" aria-labelledby="home-final">

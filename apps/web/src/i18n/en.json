@@ -520,6 +520,30 @@
         "place": "Champions Arena",
         "text": "Play the computer or a friend."
       }
+    },
+    "daily": {
+      "title": "Today's challenge!",
+      "text": "A new puzzle every day: find the move that checkmates the black king in one move.",
+      "level": "Level:",
+      "reward": "Reward:",
+      "stars": "{n} star",
+      "go": "Solve the puzzle",
+      "again": "Play again",
+      "done": "You solved today's puzzle. Come back tomorrow!",
+      "boardLabel": "The board of today's puzzle"
+    },
+    "play": {
+      "title": "Ready to battle your brain?",
+      "bot": {
+        "title": "Play the computer",
+        "text": "Test yourself against the computer at many levels.",
+        "cta": "Play the computer"
+      },
+      "friend": {
+        "title": "Play with friends",
+        "text": "Invite a friend to a fun game of chess.",
+        "cta": "Invite a friend"
+      }
     }
   },
   "office": {

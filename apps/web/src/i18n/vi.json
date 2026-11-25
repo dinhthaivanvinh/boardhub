@@ -520,6 +520,30 @@
         "place": "Đấu trường kiện tướng",
         "text": "Chơi với máy hoặc với bạn bè."
       }
+    },
+    "daily": {
+      "title": "Thử thách hôm nay!",
+      "text": "Mỗi ngày có một câu đố mới: tìm nước đi chiếu hết vua đen chỉ trong 1 nước.",
+      "level": "Mức độ:",
+      "reward": "Phần thưởng:",
+      "stars": "{n} sao",
+      "go": "Giải câu đố",
+      "again": "Chơi lại",
+      "done": "Con đã giải câu đố hôm nay rồi. Mai quay lại nhé!",
+      "boardLabel": "Bàn cờ của câu đố hôm nay"
+    },
+    "play": {
+      "title": "Sẵn sàng đấu trí chưa?",
+      "bot": {
+        "title": "Chơi với máy",
+        "text": "Thử sức với đối thủ máy ở nhiều mức độ.",
+        "cta": "Chơi với máy"
+      },
+      "friend": {
+        "title": "Chơi cùng bạn bè",
+        "text": "Mời bạn bè tham gia một ván cờ thú vị.",
+        "cta": "Mời bạn chơi"
+      }
     }
   },
   "office": {

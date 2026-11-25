@@ -478,6 +478,48 @@
         "title": "Thử thách bản thân",
         "text": "Giải câu đố và chinh phục những thử thách mới."
       }
+    },
+    "map": {
+      "title": "Bản đồ hành trình chinh phục cờ vua",
+      "lessons": "{n}/{total} bài",
+      "state": {
+        "new": "Sẵn sàng",
+        "doing": "Đang học",
+        "done": "Hoàn thành",
+        "play": "Vào chơi"
+      },
+      "coordinates": {
+        "place": "Ngôi làng bàn cờ",
+        "text": "Học 64 ô và toạ độ trên bàn cờ."
+      },
+      "pieces": {
+        "place": "Rừng quân cờ",
+        "text": "Học từng quân cờ đi như thế nào."
+      },
+      "capture": {
+        "place": "Thung lũng chiến đấu",
+        "text": "Học ăn quân và bảo vệ quân của mình."
+      },
+      "checkmate": {
+        "place": "Lâu đài nhà vua",
+        "text": "Học chiếu và chiếu hết."
+      },
+      "openings": {
+        "place": "Con đường khai cuộc",
+        "text": "Học những cách mở màn cơ bản."
+      },
+      "special": {
+        "place": "Cánh cổng phép thuật",
+        "text": "Học nhập thành, bắt tốt qua đường và phong cấp."
+      },
+      "tactics": {
+        "place": "Núi chiến thuật",
+        "text": "Học chĩa hai mũi, quân bị ghim, tàn cuộc và ván hoà."
+      },
+      "play": {
+        "place": "Đấu trường kiện tướng",
+        "text": "Chơi với máy hoặc với bạn bè."
+      }
     }
   },
   "office": {

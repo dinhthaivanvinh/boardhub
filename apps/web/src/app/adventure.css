@@ -294,7 +294,7 @@ html:has(.adv-home) body {
 .adv-piece {
   display: grid;
   justify-items: center;
-  align-content: start;
+  grid-template-rows: auto auto 1fr auto;
   gap: 0.375rem;
   padding: 1.25rem 0.75rem;
   border-radius: var(--adv-radius);
@@ -354,6 +354,270 @@ html:has(.adv-home) body {
     transform: none;
   }
   .adv-piece:hover .adv-piece-art {
+    animation: none;
+  }
+}
+
+/* ---- The adventure map: eight places on a winding path ---- */
+.adv-map-section {
+  padding: 2.5rem 1rem 2rem;
+  border-radius: 2rem;
+  background:
+    radial-gradient(40rem 12rem at 50% 0%, #fff 0%, transparent 70%),
+    linear-gradient(180deg, #d9f0ff 0%, #d8f3dc 100%);
+}
+.adv-map {
+  --gap: 1.25rem;
+  position: relative;
+  display: grid;
+  gap: 2rem var(--gap);
+  margin-top: 2rem;
+  counter-reset: none;
+}
+@media (min-width: 64rem) {
+  .adv-map {
+    --gap: 2.5rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* The path turns at the right end and comes back: 1-2-3-4 then 8-7-6-5 under them. */
+  .adv-place[data-i='4'] {
+    grid-area: 2 / 4;
+  }
+  .adv-place[data-i='5'] {
+    grid-area: 2 / 3;
+  }
+  .adv-place[data-i='6'] {
+    grid-area: 2 / 2;
+  }
+  .adv-place[data-i='7'] {
+    grid-area: 2 / 1;
+  }
+}
+.adv-place {
+  position: relative;
+}
+.adv-place-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 1.25rem 1rem 1rem;
+  border: 3px solid transparent;
+  border-radius: var(--adv-radius);
+  background: #fff;
+  box-shadow: var(--adv-shadow);
+  color: var(--adv-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.adv-place-card:hover,
+.adv-place-card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgb(25 118 243 / 0.22);
+}
+.adv-place[data-here='true'] .adv-place-card {
+  border-color: var(--adv-gold);
+}
+.adv-place-node {
+  position: relative;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  width: 4.75rem;
+  height: 4.75rem;
+  border-radius: 9999px;
+  background: var(--adv-blue-light);
+  box-shadow: inset 0 0 0 4px #fff;
+  outline: 4px solid var(--adv-sky);
+}
+.adv-place[data-state='done'] .adv-place-node {
+  background: #dcf6e6;
+  outline-color: var(--adv-green);
+}
+.adv-place[data-state='play'] .adv-place-node {
+  background: #fff1cc;
+  outline-color: var(--adv-orange);
+}
+.adv-place-no {
+  position: absolute;
+  top: -0.5rem;
+  left: -0.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background: var(--adv-blue);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 900;
+}
+.adv-place[data-state='done'] .adv-place-no {
+  background: var(--adv-green);
+}
+.adv-place-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+}
+.adv-place-name {
+  font-size: 1.1875rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.adv-place-lesson {
+  color: var(--adv-blue);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+.adv-place-text {
+  color: var(--adv-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.adv-place-progress {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+.adv-bar {
+  display: block;
+  overflow: hidden;
+  height: 0.625rem;
+  border-radius: 9999px;
+  background: #e3edf8;
+}
+.adv-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--adv-green), #7ed99f);
+  transform-origin: left;
+  animation: adv-grow 0.9s ease-out;
+}
+.adv-place-count {
+  color: var(--adv-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.adv-place-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+.adv-stars {
+  display: inline-flex;
+  gap: 0.125rem;
+}
+.adv-star[data-on='true'] {
+  animation: adv-twinkle 3.2s ease-in-out infinite;
+}
+.adv-place-state {
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  background: var(--adv-blue-light);
+  color: var(--adv-blue-dark);
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+.adv-place[data-state='done'] .adv-place-state {
+  background: #dcf6e6;
+  color: #1f7a45;
+}
+.adv-place[data-state='doing'] .adv-place-state,
+.adv-place[data-here='true'] .adv-place-state {
+  background: #fff1cc;
+  color: #8a5a00;
+}
+.adv-place[data-state='play'] .adv-place-state {
+  background: var(--adv-gold);
+  color: #5a3b00;
+}
+
+/* The dashed path behind the cards. */
+@media (min-width: 64rem) {
+  .adv-place::after {
+    content: '';
+    position: absolute;
+    top: 3.5rem;
+    left: 50%;
+    width: calc(100% + var(--gap));
+    border-top: 5px dashed #fff;
+  }
+  .adv-place[data-i='3']::after {
+    /* the turn: down from the fourth place to the fifth one under it */
+    top: 3.5rem;
+    left: 50%;
+    width: 0;
+    height: calc(100% + 2rem);
+    border-top: 0;
+    border-left: 5px dashed #fff;
+  }
+  .adv-place[data-i='4']::after,
+  .adv-place[data-i='5']::after,
+  .adv-place[data-i='6']::after {
+    left: auto;
+    right: 50%;
+  }
+  .adv-place[data-i='7']::after {
+    display: none;
+  }
+}
+/* On a phone: one column, with the path running down the left side. */
+@media (max-width: 63.999rem) {
+  .adv-map {
+    gap: 1.25rem;
+  }
+  .adv-place:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    bottom: -2rem;
+    left: 50%;
+    border-left: 5px dashed #fff;
+  }
+  .adv-place-card {
+    grid-template-columns: 4.75rem 1fr;
+    align-items: center;
+  }
+  .adv-place-body {
+    text-align: left;
+  }
+}
+@keyframes adv-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes adv-twinkle {
+  0%,
+  90%,
+  100% {
+    transform: scale(1) rotate(0);
+  }
+  95% {
+    transform: scale(1.25) rotate(12deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-place-card {
+    transition: none;
+  }
+  .adv-place-card:hover,
+  .adv-place-card:focus-visible {
+    transform: none;
+  }
+  .adv-bar > span,
+  .adv-star[data-on='true'] {
     animation: none;
   }
 }

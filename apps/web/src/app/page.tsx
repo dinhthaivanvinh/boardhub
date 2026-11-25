@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { PieceGlyph, PIECE_LESSONS } from '@bg/game-chess';
 import { toLocale } from '@/i18n/messages';
+import { AdventureMap } from '@/features/learn/AdventureMap';
 import { HomeProgress } from '@/features/learn/HomeProgress';
 import { JsonLd } from '@/seo/JsonLd';
 import { absolute, publicPage, SITE_NAME } from '@/seo/site';
@@ -11,33 +12,6 @@ import { absolute, publicPage, SITE_NAME } from '@/seo/site';
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('portal');
   return publicPage({ description: t('tagline'), path: '/', locale: toLocale(await getLocale()) });
-}
-
-const STEPS = [
-  { key: 'coordinates', href: '/learn/chess/coordinates', icon: 'board' },
-  { key: 'pieces', href: '/learn/chess/pawn', icon: '♟️' },
-  { key: 'capture', href: '/learn/chess/capture', icon: '🍎' },
-  { key: 'checkmate', href: '/learn/chess/checkmate', icon: '👑' },
-  { key: 'openings', href: '/learn/chess/italian', icon: '🚀' },
-  { key: 'special', href: '/learn/chess/castling', icon: '✨' },
-  { key: 'tactics', href: '/learn/chess/tactics', icon: '🧠' },
-  { key: 'play', href: '/games/chess', icon: '🎮' },
-] as const;
-
-/** A small chessboard, since there is no emoji for one. */
-function BoardIcon() {
-  return (
-    <svg viewBox="0 0 32 32" width="1.6rem" height="1.6rem" className="home-board-icon">
-      <rect width="32" height="32" rx="5" fill="#b58863" />
-      {[0, 1, 2, 3].flatMap((r) =>
-        [0, 1, 2, 3].map((c) =>
-          (r + c) % 2 === 0 ? (
-            <rect key={`${r}${c}`} x={c * 8} y={r * 8} width="8" height="8" fill="#f0d9b5" />
-          ) : null,
-        ),
-      )}
-    </svg>
-  );
 }
 
 const BENEFITS = [
@@ -139,34 +113,12 @@ export default async function HomePage() {
           </ul>
         </section>
 
-        <section aria-labelledby="home-path">
-          <h2 id="home-path" className="text-xl font-bold">
-            {t('path.title')}
+        <section aria-labelledby="home-path" className="adv-map-section">
+          <h2 id="home-path" className="adv-section-title">
+            {t('map.title')}
           </h2>
-          <p className="mt-1 max-w-3xl text-sm text-[var(--muted)]">{t('path.text')}</p>
-          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((step, i) => (
-              <li key={step.key}>
-                <div className="card home-step h-full" data-i={i}>
-                  <span className="flex items-center gap-2">
-                    <span className="home-step-number" aria-hidden="true">
-                      {i + 1}
-                    </span>
-                    <h3 className="font-semibold">{t(`path.${step.key}.title`)}</h3>
-                    <span className="home-step-icon" aria-hidden="true">
-                      {step.icon === 'board' ? <BoardIcon /> : step.icon}
-                    </span>
-                  </span>
-                  <p className="mt-2 mb-3 text-sm leading-snug text-[var(--muted)]">
-                    {t(`path.${step.key}.text`)}
-                  </p>
-                  <Link href={step.href} className="btn home-step-btn mt-auto">
-                    {t(`path.${step.key}.cta`)}
-                  </Link>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <p className="adv-section-sub">{t('path.text')}</p>
+          <AdventureMap />
         </section>
 
         <section className="home-final" aria-labelledby="home-final">

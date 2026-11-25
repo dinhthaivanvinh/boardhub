@@ -478,6 +478,48 @@
         "title": "Challenge yourself",
         "text": "Solve puzzles and take on new challenges."
       }
+    },
+    "map": {
+      "title": "The adventure map to conquer chess",
+      "lessons": "{n}/{total} lessons",
+      "state": {
+        "new": "Ready",
+        "doing": "Learning",
+        "done": "Done",
+        "play": "Play now"
+      },
+      "coordinates": {
+        "place": "Chessboard Village",
+        "text": "Learn the 64 squares and the coordinates."
+      },
+      "pieces": {
+        "place": "Piece Forest",
+        "text": "Learn how each piece moves."
+      },
+      "capture": {
+        "place": "Battle Valley",
+        "text": "Learn to capture and to protect your pieces."
+      },
+      "checkmate": {
+        "place": "King's Castle",
+        "text": "Learn check and checkmate."
+      },
+      "openings": {
+        "place": "Opening Road",
+        "text": "Learn the basic openings."
+      },
+      "special": {
+        "place": "Magic Gate",
+        "text": "Learn castling, en passant and promotion."
+      },
+      "tactics": {
+        "place": "Tactics Mountain",
+        "text": "Learn forks, pins, endgames and draws."
+      },
+      "play": {
+        "place": "Champions Arena",
+        "text": "Play the computer or a friend."
+      }
     }
   },
   "office": {

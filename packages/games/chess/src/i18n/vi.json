@@ -662,7 +662,6 @@
       "name": "Hành trình của bạn",
       "title": "Hành trình của bạn",
       "subtitle": "Học từng bước, nhận sao và huy hiệu. Bạn đi được đến đâu rồi?",
-      "stageLabel": "Chặng {n}",
       "stage": {
         "start": "Làm quen bàn cờ",
         "pieces": "Gặp các quân cờ",
@@ -672,7 +671,6 @@
         "tactics": "Mẹo nhỏ và tàn cuộc"
       },
       "next": "Học tiếp",
-      "nextHere": "Bài tiếp theo",
       "done": "Đã xong",
       "allDone": "Bạn đã học hết mọi bài rồi. Giỏi lắm!",
       "puzzlesTitle": "Giải câu đố",

@@ -662,7 +662,6 @@
       "name": "Your journey",
       "title": "Your journey",
       "subtitle": "Learn step by step, collect stars and badges. How far have you come?",
-      "stageLabel": "Stage {n}",
       "stage": {
         "start": "Meet the board",
         "pieces": "Meet the pieces",
@@ -672,7 +671,6 @@
         "tactics": "Little tricks and endgames"
       },
       "next": "Keep learning",
-      "nextHere": "Next lesson",
       "done": "Done",
       "allDone": "You finished every lesson. Great job!",
       "puzzlesTitle": "Solve puzzles",

@@ -9,6 +9,7 @@ import {
   type LessonId,
   type PuzzleProgress,
 } from '@bg/game-chess';
+import { doneKind, sendLearnEvent } from '@/features/stats/learn-ping';
 
 const listeners = new Set<() => void>();
 /** Called after progress changed on this device (not after the account's progress was merged in). */
@@ -59,6 +60,7 @@ export function useMarkDone() {
     markDone(storage(), id as LessonId);
     listeners.forEach((l) => l());
     changeListeners.forEach((l) => l());
+    sendLearnEvent(doneKind(id), id);
   }, []);
 }
 
@@ -91,6 +93,7 @@ export function useMarkPuzzle() {
     markPuzzleSolved(storage(), id, today, daily);
     puzzleListeners.forEach((l) => l());
     changeListeners.forEach((l) => l());
+    sendLearnEvent('puzzle', id);
   }, []);
 }
 

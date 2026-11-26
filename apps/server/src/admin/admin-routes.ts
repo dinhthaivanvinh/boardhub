@@ -19,7 +19,7 @@ function parse<S extends z.ZodType>(schema: S, body: unknown): z.output<S> {
   return res.data;
 }
 
-/** Admin pages and player reports (docs/05 §2.1). Every /api/admin route checks the admin list. */
+/** Admin pages and player reports (docs/05 §2.1). Every /api/admin route checks the admin role. */
 export function registerAdminRoutes(app: FastifyInstance, auth: AuthService, admin: AdminService) {
   const requireUser = async (req: FastifyRequest) => {
     const header = req.headers.authorization;
@@ -29,7 +29,7 @@ export function registerAdminRoutes(app: FastifyInstance, auth: AuthService, adm
   };
   const requireAdmin = async (req: FastifyRequest) => {
     const user = await requireUser(req);
-    admin.requireAdmin(user);
+    await admin.requireAdmin(user);
     return user;
   };
 

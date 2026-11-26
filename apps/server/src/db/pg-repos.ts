@@ -44,6 +44,14 @@ export class PgUserRepo implements UserRepo {
     return toUser(row);
   }
 
+  async touch(id: string, at: number) {
+    await this.db
+      .updateTable('users')
+      .set({ last_seen_at: new Date(at) })
+      .where('id', '=', id)
+      .execute();
+  }
+
   async getAvatar(id: string) {
     const row = await this.db.selectFrom('users').select('avatar').where('id', '=', id).executeTakeFirst();
     return row?.avatar ?? null;

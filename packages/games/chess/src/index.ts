@@ -66,3 +66,4 @@ export {
 } from './learn/practice';
 export type { MoveRound, PracticePrompt, PracticeRound, StarRound } from './learn/practice';
 export { PracticeLesson } from './learn/PracticeLesson';
+export { LEARN_ITEMS } from './learn/catalog';

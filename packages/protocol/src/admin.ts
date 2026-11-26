@@ -4,6 +4,10 @@ import { z } from 'zod';
 
 const UserId = z.uuid();
 
+/** Admin roles (table `roles`). Until each role gets its own permissions, only `super_admin` may use /admin. */
+export const ROLE_IDS = ['super_admin', 'content_manager', 'moderator', 'analyst'] as const;
+export type RoleId = (typeof ROLE_IDS)[number];
+
 export const REPORT_REASONS = ['cheating', 'abuse', 'spam', 'name', 'other'] as const;
 export const ReportReasonSchema = z.enum(REPORT_REASONS);
 export type ReportReason = z.infer<typeof ReportReasonSchema>;
@@ -103,8 +107,27 @@ export const SANCTION_FOREVER = Date.UTC(9999, 11, 31);
 
 // Visitor statistics: how many people used the site on a day (docs/05 §2.1, docs/06 §1 daily_visits).
 
-/** POST /api/visit: sent once a day per browser. `visitorId` is a random id the browser keeps; it names no one. */
-export const VisitPing = z.strictObject({ visitorId: z.string().regex(/^[A-Za-z0-9-]{16,64}$/) });
+const VisitorId = z.string().regex(/^[A-Za-z0-9-]{16,64}$/);
+
+/**
+ * POST /api/visit: sent once a day per browser and again for every new session. `visitorId` is a random id the
+ * browser keeps; it names no one.
+ */
+export const VisitPing = z.strictObject({
+  visitorId: VisitorId,
+  /** The browser was away for 30 minutes or more: one more session today. */
+  newSession: z.boolean().optional(),
+});
+
+export const LEARN_KINDS = ['lesson', 'practice', 'puzzle'] as const;
+export type LearnKind = (typeof LEARN_KINDS)[number];
+
+/** POST /api/learn-events: sent when a lesson, practice or puzzle is finished, signed in or not. */
+export const LearnEventPing = z.strictObject({
+  visitorId: VisitorId,
+  kind: z.enum(LEARN_KINDS),
+  itemId: z.string().regex(/^[a-z0-9-]{1,40}$/),
+});
 
 /** Who a visitor was that day: nobody in particular, a guest account, or a registered account. */
 export type VisitorKind = 'anonymous' | 'guest' | 'registered';
@@ -116,6 +139,8 @@ export interface DayVisits {
   guest: number;
   registered: number;
   total: number;
+  /** Visits that day: one visitor who left and came back later counts more than once. */
+  sessions: number;
 }
 
 /** GET /api/admin/stats: today and the days before it, newest first. */

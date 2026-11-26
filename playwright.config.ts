@@ -40,6 +40,8 @@ export default defineConfig({
         LOG_LEVEL: 'warn',
         BOT_DELAY_MS: '100',
         ADMIN_EMAILS: 'admin-e2e@example.com',
+        // The e2e server is in memory: the admin account is made by the test itself.
+        ADMIN_SELF_REGISTER: 'true',
         AUTH_RATE_LIMIT: '10000',
       },
       reuseExistingServer: !process.env.CI,

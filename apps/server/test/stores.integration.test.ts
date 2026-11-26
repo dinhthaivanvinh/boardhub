@@ -15,6 +15,7 @@ import { loadConfig } from '../src/config';
 import { createDb, migrateToLatest } from '../src/db/database';
 import { PgAdminRepo } from '../src/db/pg-admin-repo';
 import { PgVisitRepo } from '../src/db/pg-visit-repo';
+import { PgLearnEventRepo } from '../src/db/pg-learn-repo';
 import { PgHistoryRepo, PgOfficeRepo, PgUserRepo } from '../src/db/pg-repos';
 import { RedisOfficeStore, type OfficeSessionRecord } from '../src/office/store';
 import type { Room } from '../src/domain/types';
@@ -555,8 +556,69 @@ describe('visit statistics in Postgres', () => {
     expect(today!.guest).toBeGreaterThanOrEqual(1);
     expect(today!.registered).toBeGreaterThanOrEqual(1);
     expect(today!.total).toBe(today!.anonymous + today!.guest + today!.registered);
-    expect(none).toEqual({ day: '2097-01-01', anonymous: 0, guest: 0, registered: 0, total: 0 });
+    expect(none).toEqual({ day: '2097-01-01', anonymous: 0, guest: 0, registered: 0, total: 0, sessions: 0 });
     await repo.prune('2099-01-01');
     expect((await repo.counts([old]))[0]!.total).toBe(0);
+  });
+});
+
+describe('admin roles and activity in Postgres', () => {
+  const account = async () => {
+    const users = new PgUserRepo(db);
+    const id = randomUUID();
+    await users.create({
+      id,
+      kind: 'registered',
+      displayName: 'Boss',
+      email: `${id}@example.com`,
+      passwordHash: null,
+    });
+    return { users, id };
+  };
+
+  it('grants a role once and remembers when an account was last used', async () => {
+    const { users, id } = await account();
+    const roles = new PgAdminRepo(db);
+    expect(await roles.rolesOf(id)).toEqual([]);
+    await roles.grantRole(id, 'super_admin', null, Date.now());
+    await roles.grantRole(id, 'super_admin', null, Date.now());
+    await roles.grantRole(id, 'analyst', id, Date.now());
+    expect((await roles.rolesOf(id)).sort()).toEqual(['analyst', 'super_admin']);
+    expect(await roles.roleTaken('super_admin')).toBe(true);
+    const at = Date.UTC(2026, 10, 26, 8, 0);
+    await users.touch(id, at);
+    const row = await db.selectFrom('users').select('last_seen_at').where('id', '=', id).executeTakeFirst();
+    expect(row?.last_seen_at?.getTime()).toBe(at);
+    // Removing the account takes its roles with it, so no test super admin stays behind.
+    await db.deleteFrom('users').where('id', '=', id).execute();
+    expect(await roles.rolesOf(id)).toEqual([]);
+  });
+
+  it('counts sessions without ever lowering who the visitor was', async () => {
+    const repo = new PgVisitRepo(db);
+    const day = `2096-02-${String(1 + Math.floor(Math.random() * 28)).padStart(2, '0')}`;
+    await db.deleteFrom('daily_visits').where('day', '=', day).execute();
+    const id = randomUUID();
+    await repo.record(day, id, 'anonymous', true);
+    await repo.record(day, id, 'registered');
+    await repo.record(day, id, 'anonymous', true);
+    const [counted] = await repo.counts([day]);
+    expect(counted).toMatchObject({ total: 1, registered: 1, sessions: 2 });
+    await db.deleteFrom('daily_visits').where('day', '=', day).execute();
+  });
+
+  it('keeps one learning event per actor, day and item, and forgets old days', async () => {
+    const { id } = await account();
+    const repo = new PgLearnEventRepo(db);
+    // Far in the past, so that pruning it cannot touch anything else.
+    const day = '1990-01-02';
+    await db.deleteFrom('learn_events').where('day', '=', day).execute();
+    const event = { day, actor: `u:${id}`, userId: id, kind: 'lesson' as const, itemId: 'pawn', at: 1_000 };
+    await repo.record(event);
+    await repo.record({ ...event, at: 2_000 });
+    await repo.record({ ...event, actor: `v:${id}`, userId: null, at: 3_000 });
+    expect(await repo.listDay(day)).toEqual([event, { ...event, actor: `v:${id}`, userId: null, at: 3_000 }]);
+    await repo.prune('1990-01-03');
+    expect(await repo.listDay(day)).toEqual([]);
   });
 });

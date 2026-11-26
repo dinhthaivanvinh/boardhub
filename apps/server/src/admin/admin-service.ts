@@ -26,8 +26,10 @@ export interface AdminServiceOptions {
   repo: AdminRepo;
   users: UserRepo;
   gameIds: string[];
-  /** Emails (lower case) of registered users who may use /admin (config ADMIN_EMAILS). */
+  /** Emails of the accounts that become the first super admins (config ADMIN_EMAILS). */
   adminEmails: string[];
+  /** Dev and tests only (config ADMIN_SELF_REGISTER): signing up with a listed email grants super_admin. */
+  adminSelfRegister?: boolean;
   /** The room's chat (for evidence), by room code. */
   roomChat(code: string): Promise<ChatMessage[]>;
   /** Called after a ban: drop the user's connections and queue entries. */
@@ -52,12 +54,45 @@ export class AdminService {
     this.admins = new Set(o.adminEmails.map((e) => e.trim().toLowerCase()).filter(Boolean));
   }
 
-  isAdmin(user: UserRecord): boolean {
-    return user.kind === 'registered' && !!user.email && this.admins.has(user.email.toLowerCase());
+  // ---------------------------------------------------------------- roles
+
+  /** Admin rights belong to the account (table `user_roles`), never to an email address by itself. */
+  async isAdmin(user: UserRecord): Promise<boolean> {
+    return user.kind === 'registered' && (await this.o.repo.rolesOf(user.id)).includes('super_admin');
   }
 
-  requireAdmin(user: UserRecord): void {
-    if (!this.isAdmin(user)) throw new HubError('admin.required');
+  async requireAdmin(user: UserRecord): Promise<void> {
+    if (!(await this.isAdmin(user))) throw new HubError('admin.required');
+  }
+
+  /**
+   * Run at start-up. While nobody is a super admin, the registered accounts on ADMIN_EMAILS become one. After
+   * that the list grants nothing any more. Returns how many accounts were granted, or null if there already
+   * was a super admin.
+   */
+  async bootstrapSuperAdmins(): Promise<number | null> {
+    if (await this.o.repo.roleTaken('super_admin')) return null;
+    let granted = 0;
+    for (const email of this.admins) {
+      const user = await this.o.users.findByEmail(email);
+      if (user?.kind !== 'registered') continue;
+      await this.o.repo.grantRole(user.id, 'super_admin', null, this.now());
+      granted++;
+    }
+    return granted;
+  }
+
+  /**
+   * Sign-up does not prove who owns an address, so a stranger must not be able to take a listed one: nobody
+   * may register with it. An admin signs up first and is listed afterwards.
+   */
+  mayRegister(email: string): boolean {
+    return this.o.adminSelfRegister === true || !this.admins.has(email.toLowerCase());
+  }
+
+  async onRegistered(user: UserRecord): Promise<void> {
+    if (this.o.adminSelfRegister && user.email && this.admins.has(user.email.toLowerCase()))
+      await this.o.repo.grantRole(user.id, 'super_admin', null, this.now());
   }
 
   // ---------------------------------------------------------------- games
@@ -84,7 +119,7 @@ export class AdminService {
   }
 
   async setGameEnabled(admin: UserRecord, gameId: string, enabled: boolean): Promise<AdminGameSetting> {
-    this.requireAdmin(admin);
+    await this.requireAdmin(admin);
     if (!this.o.gameIds.includes(gameId)) throw new HubError('game.not_found');
     const at = this.now();
     await this.o.repo.setGameEnabled(gameId, enabled, admin.id, at);
@@ -108,7 +143,7 @@ export class AdminService {
   }
 
   async setSanctions(admin: UserRecord, userId: string, patch: SanctionsPatch): Promise<UserSanctions> {
-    this.requireAdmin(admin);
+    await this.requireAdmin(admin);
     if (userId === admin.id) throw new HubError('report.self');
     if (!(await this.o.users.findById(userId))) throw new HubError('user.not_found');
     await this.o.repo.setSanctions(userId, patch, admin.id, this.now());
@@ -118,7 +153,7 @@ export class AdminService {
   }
 
   async sanctioned(admin: UserRecord): Promise<SanctionedUser[]> {
-    this.requireAdmin(admin);
+    await this.requireAdmin(admin);
     const rows = await this.o.repo.listSanctioned(this.now(), 200);
     const names = await this.names(rows.map((r) => r.userId));
     return rows.map((r) => ({
@@ -161,7 +196,7 @@ export class AdminService {
   }
 
   async listReports(admin: UserRecord, status: 'open' | 'resolved'): Promise<AdminReport[]> {
-    this.requireAdmin(admin);
+    await this.requireAdmin(admin);
     const rows = await this.o.repo.listReports(status, 100);
     return this.describe(rows);
   }
@@ -176,7 +211,7 @@ export class AdminService {
     action: ReportAction,
     hours: number | null,
   ): Promise<AdminReport> {
-    this.requireAdmin(admin);
+    await this.requireAdmin(admin);
     const report = await this.o.repo.getReport(reportId);
     if (!report) throw new HubError('report.not_found');
     if (report.status !== 'open') throw new HubError('report.not_found');

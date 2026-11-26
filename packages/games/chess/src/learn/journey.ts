@@ -2,6 +2,7 @@ import { DRAWS_LESSON_ID, SETUP_LESSON_ID } from './basics';
 import { CAPTURE_LESSON_ID } from './capture';
 import { CHECKMATE_LESSON_ID } from './checkmate';
 import { COORDINATES_LESSON_ID, LESSON_IDS, OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from './data';
+import { EARLY_MATE_LESSON_ID, OPENING_BASICS_LESSON_ID } from './opening-basics';
 import { TACTICS_LESSON_ID } from './tactics';
 import { PRACTICE_LESSON_IDS, practiceId, STARS_PER_PRACTICE } from './practice';
 import { PUZZLES } from './puzzles';
@@ -17,7 +18,11 @@ export const JOURNEY: readonly JourneyStage[] = [
   // Castling and the other special moves are rules: the openings use them, so they come first.
   { id: 'specials', lessons: SPECIAL_LESSONS.map((l) => l.id) },
   { id: 'tactics', lessons: [TACTICS_LESSON_ID] },
-  { id: 'openings', lessons: OPENING_LESSONS.map((l) => l.id) },
+  {
+    id: 'openings',
+    // The three ideas and the trap first; the named openings after them are for later.
+    lessons: [OPENING_BASICS_LESSON_ID, EARLY_MATE_LESSON_ID, ...OPENING_LESSONS.map((l) => l.id)],
+  },
 ];
 
 /** Every lesson, in the order a child should take them. */
@@ -26,6 +31,34 @@ export const JOURNEY_LESSONS: readonly string[] = JOURNEY.flatMap((s) => s.lesso
 /** The lesson to do next: the first one not finished, or null when all are. */
 export const nextLessonId = (done: ReadonlySet<string>): string | null =>
   JOURNEY_LESSONS.find((id) => !done.has(id)) ?? null;
+
+/**
+ * The lessons there were when the "master" badge was first given. The badge keeps asking for exactly these, so a
+ * child who earned it does not lose it when lessons are added. Do not add to this list.
+ */
+export const MASTER_LESSONS: readonly string[] = [
+  COORDINATES_LESSON_ID,
+  SETUP_LESSON_ID,
+  'pawn',
+  'rook',
+  'bishop',
+  'knight',
+  'queen',
+  'king',
+  CAPTURE_LESSON_ID,
+  CHECKMATE_LESSON_ID,
+  DRAWS_LESSON_ID,
+  'castling',
+  'en-passant',
+  'promotion',
+  TACTICS_LESSON_ID,
+  'italian',
+  'queens-gambit',
+  'sicilian',
+  'london',
+  'ruy-lopez',
+  'french',
+];
 
 export const STARS_PER_LESSON = 3;
 export const STARS_PER_PUZZLE = 1;
@@ -118,7 +151,7 @@ export const BADGES: readonly Badge[] = [
   { id: 'puzzles100', icon: '🏆', earned: (_d, p) => solvedCount(p) >= 100 },
   { id: 'streak3', icon: '🔥', earned: (_d, p, today) => streak(p.days, today) >= 3 },
   { id: 'streak7', icon: '☄️', earned: (_d, p, today) => streak(p.days, today) >= 7 },
-  { id: 'master', icon: '🌟', earned: (d) => all(d, JOURNEY_LESSONS) },
+  { id: 'master', icon: '🌟', earned: (d) => all(d, MASTER_LESSONS) },
 ];
 
 export const earnedBadges = (done: ReadonlySet<string>, p: PuzzleProgress, today: string): string[] =>

@@ -29,6 +29,8 @@ export { DrawsLesson, SetupLesson } from './learn/BasicsLessons';
 export { CaptureLesson } from './learn/CaptureLesson';
 export { CAPTURE_LESSON_ID } from './learn/capture';
 export { TacticsLesson } from './learn/TacticsLesson';
+export { EARLY_MATE_LESSON_ID, OPENING_BASICS_LESSON_ID } from './learn/opening-basics';
+export { EarlyMateLesson, OpeningBasicsLesson } from './learn/OpeningBasicsLessons';
 export { TACTICS_LESSON_ID } from './learn/tactics';
 export { MateRoundView } from './learn/CheckmateLesson';
 export { LearnBoard, LessonLayout } from './learn/LearnBoard';

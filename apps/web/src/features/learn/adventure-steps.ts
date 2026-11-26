@@ -12,7 +12,7 @@ export const ADVENTURE_STEPS = [
   { key: 'checkmate', href: '/learn/chess/checkmate', lessons: stage('rules').slice(1) },
   { key: 'special', href: '/learn/chess/castling', lessons: stage('specials') },
   { key: 'tactics', href: '/learn/chess/tactics', lessons: stage('tactics') },
-  { key: 'openings', href: '/learn/chess/italian', lessons: stage('openings') },
+  { key: 'openings', href: '/learn/chess/opening-basics', lessons: stage('openings') },
   { key: 'play', href: '/games/chess', lessons: [] as string[] },
 ] as const;
 

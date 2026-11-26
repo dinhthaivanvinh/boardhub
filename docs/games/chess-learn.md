@@ -25,6 +25,17 @@ Làm quen bàn cờ → Quân cờ → Luật (ăn quân, chiếu hết, hoà) �
 trước khai cuộc vì các khai cuộc có nhập thành. Thứ tự chỉ khai báo ở `JOURNEY` (`learn/journey.ts`); menu bài học, nút "bài tiếp
 theo", trang Hành trình và bản đồ trang chủ đều lấy từ đó. Tiến độ lưu theo id bài nên đổi thứ tự không làm mất tiến độ.
 
+Phần Khai cuộc bắt đầu bằng hai bài dưới đây, sau đó mới đến 6 khai cuộc có tên (gắn nhãn "Nâng cao"). Huy hiệu "Bậc thầy cờ
+vua nhí" chỉ đòi 21 bài có từ lúc huy hiệu ra đời (`MASTER_LESSONS`), để thêm bài không làm bé mất huy hiệu.
+
+## 1c. Hai bài mở đầu ván (`learn/opening-basics.ts`, `OpeningBasicsLessons.tsx`)
+
+- **3 nguyên tắc mở đầu** (`opening-basics`): đưa tốt vào d4/e4 → đưa mã hoặc tượng mới ra ô an toàn (mã không ra mép) →
+  nhập thành → chọn nước tốt nhất trong 3 nước. Mọi nước thoả điều kiện đều được nhận.
+- **Coi chừng chiếu hết nhanh** (`early-mate`, bé cầm Đen): xem đòn 4 nước → tìm ô f7 → chặn khi hậu ra h5, f3, và khi hậu
+  quay lại f3 sau ...g6 → đấu lại từ đầu. Nước chặn đúng là nước sau đó Trắng không còn chiếu hết 1 nước và không có chuỗi đổi
+  quân nào trên một ô làm Đen lỗ (`defenceVerdict`). Cách kiểm này chỉ nhìn đổi quân ngay lập tức, không tính đòn xa hơn.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

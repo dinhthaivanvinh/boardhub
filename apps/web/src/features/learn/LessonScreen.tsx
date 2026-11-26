@@ -12,6 +12,10 @@ import {
   CoordinatesLesson,
   DRAWS_LESSON_ID,
   DrawsLesson,
+  EARLY_MATE_LESSON_ID,
+  EarlyMateLesson,
+  OPENING_BASICS_LESSON_ID,
+  OpeningBasicsLesson,
   JOURNEY,
   JOURNEY_LESSONS,
   SETUP_LESSON_ID,
@@ -98,7 +102,10 @@ function LessonNav({ currentId }: { currentId: string }) {
                           {PIECE_GLYPH[id]}
                         </span>
                       ) : null}
-                      <span className="lesson-link-name">{lessonName(id, t)}</span>
+                      <span className="lesson-link-name">
+                        {lessonName(id, t)}
+                        {openingLesson(id) && <span className="lesson-advanced"> {t(`${L}.advanced`)}</span>}
+                      </span>
                       {done.has(id) ? (
                         <span className="lesson-done" aria-label={t(`${L}.completed`)}>
                           ✓
@@ -240,20 +247,24 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
           {lessonId === DRAWS_LESSON_ID && (
             <DrawsLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
           )}
+          {lessonId === OPENING_BASICS_LESSON_ID && (
+            <OpeningBasicsLesson
+              t={t}
+              animate={!reduced}
+              onComplete={markDone}
+              lang={locale}
+              footer={footer}
+            />
+          )}
+          {lessonId === EARLY_MATE_LESSON_ID && (
+            <EarlyMateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
           {lessonId === CHECKMATE_LESSON_ID && (
             <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
           )}
         </div>
       </div>
-      {!piece &&
-        !opening &&
-        !special &&
-        lessonId !== COORDINATES_LESSON_ID &&
-        lessonId !== SETUP_LESSON_ID &&
-        lessonId !== DRAWS_LESSON_ID &&
-        lessonId !== CHECKMATE_LESSON_ID &&
-        lessonId !== CAPTURE_LESSON_ID &&
-        lessonId !== TACTICS_LESSON_ID && <p>{t('games.chess.learn.notFound')}</p>}
+      {!JOURNEY_LESSONS.includes(lessonId) && <p>{t('games.chess.learn.notFound')}</p>}
     </div>
   );
 }

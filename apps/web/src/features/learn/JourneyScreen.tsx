@@ -2,7 +2,15 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { BADGES, earnedBadges, JOURNEY, nextLessonId, practiceId, PUZZLES } from '@bg/game-chess';
+import {
+  BADGES,
+  earnedBadges,
+  JOURNEY,
+  nextLessonId,
+  openingLesson,
+  practiceId,
+  PUZZLES,
+} from '@bg/game-chess';
 import { buildPlayUrl } from '@/game-runtime/match-setup';
 import { lessonName } from './lesson-name';
 import { PageBanner } from '@/features/home/PageBanner';
@@ -62,7 +70,12 @@ export function JourneyScreen() {
                         <span className="journey-node-dot" aria-hidden="true">
                           {state === 'done' ? '⭐' : state === 'next' ? '▶' : '○'}
                         </span>
-                        <span className="journey-node-name">{lessonName(id, t)}</span>
+                        <span className="journey-node-name">
+                          {lessonName(id, t)}
+                          {openingLesson(id) && (
+                            <span className="lesson-advanced"> {t('games.chess.learn.advanced')}</span>
+                          )}
+                        </span>
                         {state === 'done' && <span className="sr-only">{t(`${L}.done`)}</span>}
                         {done.has(practiceId(id)) && (
                           <span className="journey-node-practice" title={t(`${L}.practiceDone`)}>

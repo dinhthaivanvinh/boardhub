@@ -85,6 +85,9 @@ trong phòng, hai người khác nhau trùng tên được hiển thị kèm 4 k
 
 ## 3. Client → Server
 
+`level` của `room:add-bot` là `'easy' | 'beginner' | 'medium' | 'hard'`; server trả `invalid.payload` (`field: 'level'`) nếu bot của
+game không có mức đó (`beginner` chỉ cờ vua có). Khi triển khai, server phải lên trước web.
+
 | Event             | Payload                                                                            | Ack `data`                      | Ai được gọi                                                                     |
 | ----------------- | ---------------------------------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------- |
 | `room:create`     | `{ gameId, config?, timeControl?, disconnectPolicy?, hostSeat? }`                  | `{ room }`                      | Mọi người                                                                       |

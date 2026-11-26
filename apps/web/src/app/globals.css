@@ -1834,6 +1834,19 @@ nav section[data-g='5'] {
 .lesson-link-name {
   flex: 1 1 auto;
 }
+/* The named openings: for later, after the basic lessons. */
+.lesson-advanced {
+  display: inline-block;
+  margin-left: 0.25rem;
+  padding: 0 0.35rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
 .lesson-done {
   color: #16a34a;
   font-size: 1.25rem;

@@ -83,6 +83,7 @@
   "bot": {
     "level": {
       "easy": "Easy",
+      "beginner": "Learner",
       "medium": "Medium",
       "hard": "Hard"
     }
@@ -485,7 +486,7 @@
       },
       "checkmate": {
         "place": "King's Castle",
-        "text": "Learn check and checkmate."
+        "text": "Learn check, checkmate and draws."
       },
       "openings": {
         "place": "Opening Road",
@@ -497,7 +498,7 @@
       },
       "tactics": {
         "place": "Tactics Mountain",
-        "text": "Learn forks, pins, endgames and draws."
+        "text": "Learn forks, pins and endgames."
       },
       "play": {
         "place": "Champions Arena",

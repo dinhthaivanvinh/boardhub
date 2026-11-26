@@ -48,6 +48,7 @@
     "subtitle": "Làm quen từng quân cờ và những khai cuộc nổi tiếng, từng bước một.",
     "piecesHeading": "Làm quen các quân cờ",
     "openingsHeading": "Học khai cuộc",
+    "advanced": "Nâng cao",
     "completed": "Đã xong",
     "playChess": "Chơi cờ vua",
     "notFound": "Không có bài học này.",
@@ -359,7 +360,7 @@
           "o1": "Đưa một quân tốt đến cuối bàn cờ",
           "o2": "Chiếu hết vua đối phương",
           "right": "Đúng rồi! Ai chiếu hết vua đối phương trước thì thắng.",
-          "wrong": "Chưa đúng. Hãy nhớ lại bài Bắt vua: vua bị chiếu hết thì thua."
+          "wrong": "Chưa đúng. Hãy nhớ: vua bị chiếu hết thì thua cả ván."
         }
       },
       "allDone": "Giỏi quá! Con đã xong phần này.",
@@ -549,6 +550,165 @@
       "fun": "Từ nay, trước khi ăn quân, hãy hỏi: quân đó có ai bảo vệ không?"
     },
     "speakResults": "Đọc kết quả",
+    "opening-basics": {
+      "name": "3 nguyên tắc mở đầu",
+      "stage": {
+        "meet": "3 điều",
+        "center": "Giữa bàn",
+        "develop": "Đưa quân ra",
+        "safe": "Cất Vua",
+        "choose": "Chọn nước",
+        "done": "Xong"
+      },
+      "meet": "Mở đầu ván cờ, con hãy nhớ 3 điều: đưa Tốt vào giữa bàn cờ, đưa Mã và Tượng ra, và nhập thành để Vua được an toàn.",
+      "intro": {
+        "center": "Bốn ô ở giữa bàn cờ rất quan trọng. Quân đứng gần giữa đi được nhiều nơi hơn.",
+        "develop": "Mã và Tượng còn đứng ở nhà thì chưa giúp được gì. Hãy đưa chúng ra ô an toàn.",
+        "safe": "Vua đứng ở giữa dễ bị tấn công. Nhập thành đưa Vua vào góc an toàn.",
+        "choose": "Hãy dùng cả 3 điều vừa học để chọn nước tốt nhất."
+      },
+      "prompt": {
+        "center": "Đưa một quân Tốt vào ô giữa bàn cờ.",
+        "develop": "Đưa một quân Mã hoặc Tượng ra.",
+        "safe": "Hãy nhập thành để Vua được an toàn.",
+        "choose": "Nước nào tốt nhất?"
+      },
+      "illegal": "Quân đó không đi được tới ô đó.",
+      "center": {
+        "good": "Đúng rồi! Quân Tốt đã chiếm ô giữa.",
+        "notCenter": "Nước đó đi được, nhưng chưa đưa Tốt vào ô giữa. Hãy thử lại.",
+        "unsafe": "Ô đó chưa an toàn: Tốt sẽ bị ăn mất. Hãy thử lại."
+      },
+      "develop": {
+        "good": "Hay lắm! Thêm một quân đã ra sân.",
+        "notMinor": "Lúc này con hãy đưa Mã hoặc Tượng ra.",
+        "again": "Quân đó đã ra rồi. Hãy gọi một quân còn đứng ở nhà.",
+        "edge": "Mã đứng ở mép bàn đi được ít nơi. Hãy chọn ô gần giữa hơn.",
+        "unsafe": "Ô đó chưa an toàn: quân của con sẽ bị ăn mất."
+      },
+      "safe": {
+        "good": "Giỏi quá! Vua đã vào chỗ an toàn.",
+        "notCastle": "Chưa phải nhập thành. Hãy bấm vào Vua rồi đi hai ô sang một bên."
+      },
+      "choose": {
+        "option": "{piece} đến {square}",
+        "castle": "Nhập thành",
+        "right": {
+          "first": "Đúng! Mã ra giúp giữa bàn cờ và tấn công Tốt đen.",
+          "second": "Đúng! Thêm một quân mới ra, và Vua sắp được nhập thành.",
+          "third": "Đúng! Vua được an toàn và Xe ra gần giữa hơn."
+        },
+        "wrong": {
+          "side": "Đi Tốt ở cạnh bàn không giúp chiếm giữa, cũng không đưa quân ra.",
+          "queen": "Hậu ra quá sớm sẽ bị đuổi chạy. Hãy đưa Mã, Tượng ra trước.",
+          "twice": "Quân đó đã ra rồi. Còn nhiều quân khác đang đứng ở nhà.",
+          "hang": "Nước đó cho không Tượng: Vua đen sẽ ăn mất."
+        }
+      },
+      "allDone": "Con làm đúng hết rồi! Bấm Tiếp tục.",
+      "done": "Con đã nhớ 3 điều mở đầu: chiếm giữa, đưa quân ra và cất Vua.",
+      "fun": "Mẹo: trước khi đi, hãy tự hỏi nước này có giúp quân của con mạnh hơn không."
+    },
+    "early-mate": {
+      "name": "Coi chừng chiếu hết nhanh",
+      "stage": {
+        "meet": "Cẩn thận",
+        "watch": "Xem",
+        "spot": "Ô yếu",
+        "defend": "Chặn đòn",
+        "replay": "Tự đấu",
+        "done": "Xong"
+      },
+      "meet": "Có một cách chiếu hết rất nhanh, chỉ trong 4 nước. Nhiều bạn mới chơi bị thua vì không nhìn thấy. Lần này con cầm quân Đen và học cách chặn.",
+      "intro": {
+        "watch": "Hãy xem Trắng chiếu hết trong 4 nước.",
+        "spot": "Hậu và Tượng trắng đang cùng nhắm vào một ô của con.",
+        "defend": "Trắng đang dọa chiếu hết. Hãy chặn đòn mà không mất quân.",
+        "replay": "Bây giờ con đấu lại từ đầu bằng quân Đen."
+      },
+      "prompt": {
+        "spot": "Bấm vào ô mà cả Hậu và Tượng trắng cùng nhắm tới.",
+        "defend": {
+          "h5": "Hậu trắng ở h5. Hãy chặn đòn.",
+          "f3": "Hậu trắng ở f3. Hãy chặn đòn.",
+          "again": "Hậu trắng quay về f3 để dọa lần nữa. Hãy chặn đòn."
+        },
+        "replay": {
+          "pawn": "Đáp lại bằng Tốt vua: đi đến ô e5.",
+          "knight": "Đưa Mã đến ô c6.",
+          "defend": "Cẩn thận! Hãy chặn đòn của Trắng."
+        }
+      },
+      "illegal": "Quân đó không đi được tới ô đó.",
+      "watch": {
+        "next": "Xem nước tiếp",
+        "s0": "Trắng đi Tốt vua lên e4.",
+        "s1": "Đen đáp lại bằng Tốt e5.",
+        "s2": "Tượng trắng ra c4 và nhìn vào ô f7.",
+        "s3": "Đen đưa Mã ra c6.",
+        "s4": "Hậu trắng ra h5. Bây giờ cả Hậu và Tượng cùng nhắm vào f7!",
+        "s5": "Đen đưa Mã ra f6 và quên bảo vệ ô f7.",
+        "s6": "Hậu ăn Tốt f7: chiếu hết! Vua không ăn được Hậu vì có Tượng bảo vệ."
+      },
+      "spot": {
+        "right": "Đúng! Ô f7 yếu vì lúc đầu chỉ có Vua bảo vệ.",
+        "wrong": "Chưa đúng. Hãy nhìn theo đường đi của Hậu và Tượng trắng."
+      },
+      "defend": {
+        "good": "Chặn được rồi! Trắng không chiếu hết được nữa.",
+        "mate": "Chưa được: Trắng vẫn chiếu hết. Hãy nhìn ô f7.",
+        "loses": "Nước đó làm con mất quân. Hãy tìm nước an toàn hơn."
+      },
+      "replay": {
+        "goOn": "Tốt lắm! Xem Trắng đi tiếp.",
+        "notThat": "Lần này hãy đi đúng nước được nhắc.",
+        "right": "Con đã chặn được đòn chiếu hết nhanh!"
+      },
+      "allDone": "Con làm đúng hết rồi! Bấm Tiếp tục.",
+      "done": "Con đã biết chặn chiếu hết nhanh. Nhớ để ý ô f7!",
+      "fun": "Hậu ra sớm hay bị đuổi. Vừa chặn đòn vừa đưa quân ra là con được lợi."
+    },
+    "basic-mates": {
+      "name": "Chiếu hết đến cùng",
+      "stage": {
+        "meet": "Cách làm",
+        "rooks": "Hai Xe",
+        "queen": "Hậu và Vua",
+        "done": "Xong"
+      },
+      "meet": "Khi đối phương chỉ còn Vua, con phải biết chiếu hết cho đến cùng. Bí quyết là ép Vua đen ra mép bàn, và luôn để ý đừng làm ván thành hoà.",
+      "intro": {
+        "rooks": "Hai Xe thay phiên nhau: một Xe chặn đường, Xe kia chiếu. Vua đen phải lùi dần ra mép bàn.",
+        "queen": "Trước hết dùng Hậu ép Vua đen ra mép. Rồi đưa Vua của con đến giúp. Cuối cùng mới chiếu hết.",
+        "rook": "Thử thách khó: dùng Xe cắt đường, đưa Vua đến gần, rồi chiếu khi hai Vua đối mặt nhau."
+      },
+      "prompt": {
+        "rooks": "Dùng hai Xe để chiếu hết Vua đen.",
+        "queen": "Dùng Hậu và Vua để chiếu hết Vua đen.",
+        "rook": "Dùng Xe và Vua để chiếu hết Vua đen."
+      },
+      "tip": {
+        "rooks": "Cho một Xe giữ đường ngay cạnh Vua đen, rồi dùng Xe kia chiếu. Nếu Vua đen đến gần một Xe, hãy chuyển Xe đó sang phía xa.",
+        "queenCage": "Đặt Hậu cách Vua đen một bước Mã. Vua đen sẽ bị ép dần ra mép.",
+        "queenKing": "Vua đen đã ở mép. Giữ Hậu lại và đưa Vua của con đến gần. Nhớ chừa cho Vua đen một ô để đi.",
+        "queenMate": "Hai Vua đã gần nhau. Hãy tìm ô để Hậu chiếu hết.",
+        "rookCut": "Dùng Xe cắt bàn cờ để Vua đen còn ít chỗ hơn, rồi đưa Vua của con đến gần.",
+        "rookKing": "Vua đen đã ở mép. Đưa Vua của con đến đối mặt, cách một ô, và giữ Xe ở xa.",
+        "rookCheck": "Hai Vua đang đối mặt. Hãy chiếu bằng Xe."
+      },
+      "illegal": "Quân đó không đi được tới ô đó.",
+      "right": "Chiếu hết! Con giỏi quá!",
+      "stalemate": "Ôi, Vua đen không bị chiếu mà cũng không đi được: ván hoà. Con hãy đi lại nước này.",
+      "lost": "Vua đen ăn được quân của con. Con hãy đi lại nước này.",
+      "tooLong": "Đi hơi lâu rồi. Mình xếp lại bàn cờ nhé. Bấm Gợi ý nếu cần.",
+      "mateNow": "Có nước chiếu hết ngay! Hãy tìm nước đó.",
+      "moves": "Số nước con đã đi: {count}",
+      "restart": "Xếp lại bàn cờ",
+      "challenge": "Thử thách thêm: Xe và Vua",
+      "allDone": "Con làm được rồi! Bấm Tiếp tục.",
+      "done": "Con đã biết chiếu hết đến cùng bằng hai Xe, và bằng Hậu với Vua.",
+      "fun": "Mẹo: trước mỗi nước, hãy nhìn xem Vua đen còn đường đi không."
+    },
     "tactics": {
       "name": "Mẹo nhỏ và tàn cuộc",
       "stage": {
@@ -746,7 +906,7 @@
         },
         "master": {
           "name": "Bậc thầy cờ vua nhí",
-          "text": "Học xong tất cả bài học."
+          "text": "Học xong tất cả các bài cơ bản."
         },
         "practice5": {
           "name": "Chăm luyện tập",

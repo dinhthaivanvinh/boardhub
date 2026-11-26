@@ -48,6 +48,7 @@
     "subtitle": "Meet each piece and a few famous openings, one step at a time.",
     "piecesHeading": "Meet the pieces",
     "openingsHeading": "Learn openings",
+    "advanced": "Advanced",
     "completed": "Done",
     "playChess": "Play chess",
     "notFound": "This lesson does not exist.",
@@ -359,7 +360,7 @@
           "o1": "To get a pawn to the end of the board",
           "o2": "To checkmate the other king",
           "right": "Right! Whoever checkmates the other king first wins.",
-          "wrong": "Not quite. Remember the lesson on catching the king: a king in checkmate loses."
+          "wrong": "Not quite. Remember: when the king is checkmated, the game is lost."
         }
       },
       "allDone": "Well done! You finished this part.",
@@ -549,6 +550,165 @@
       "fun": "From now on, before you capture, ask: does anything protect that piece?"
     },
     "speakResults": "Read results",
+    "opening-basics": {
+      "name": "3 opening ideas",
+      "stage": {
+        "meet": "3 ideas",
+        "center": "The centre",
+        "develop": "Pieces out",
+        "safe": "Safe king",
+        "choose": "Pick a move",
+        "done": "Done"
+      },
+      "meet": "At the start of a game, remember 3 things: put a pawn in the middle of the board, bring your knights and bishops out, and castle so your king is safe.",
+      "intro": {
+        "center": "The four middle squares matter a lot. A piece near the middle can reach more places.",
+        "develop": "Knights and bishops that stay at home cannot help. Bring them to safe squares.",
+        "safe": "A king in the middle is easy to attack. Castling takes it to a safe corner.",
+        "choose": "Use all 3 ideas to pick the best move."
+      },
+      "prompt": {
+        "center": "Put a pawn on a middle square.",
+        "develop": "Bring a knight or a bishop out.",
+        "safe": "Castle to keep your king safe.",
+        "choose": "Which move is best?"
+      },
+      "illegal": "That piece cannot go to that square.",
+      "center": {
+        "good": "Right! Your pawn holds a middle square.",
+        "notCenter": "You can play that, but it does not put a pawn in the middle. Try again.",
+        "unsafe": "That square is not safe: the pawn will be lost. Try again."
+      },
+      "develop": {
+        "good": "Great! One more piece is out.",
+        "notMinor": "Right now, bring out a knight or a bishop.",
+        "again": "That piece is already out. Call one that is still at home.",
+        "edge": "A knight on the edge reaches few squares. Pick one nearer the middle.",
+        "unsafe": "That square is not safe: your piece will be lost."
+      },
+      "safe": {
+        "good": "Well done! Your king is safe.",
+        "notCastle": "That is not castling. Tap the king and move it two squares to one side."
+      },
+      "choose": {
+        "option": "{piece} to {square}",
+        "castle": "Castle",
+        "right": {
+          "first": "Right! The knight helps in the middle and attacks a black pawn.",
+          "second": "Right! A new piece is out, and the king can soon castle.",
+          "third": "Right! The king is safe and the rook is nearer the middle."
+        },
+        "wrong": {
+          "side": "A pawn move at the edge does not help the middle or bring a piece out.",
+          "queen": "A queen that comes out early gets chased. Bring knights and bishops out first.",
+          "twice": "That piece is already out. Others are still at home.",
+          "hang": "That gives the bishop away: the black king takes it."
+        }
+      },
+      "allDone": "All correct! Tap Continue.",
+      "done": "You know the 3 opening ideas: the middle, pieces out and a safe king.",
+      "fun": "Tip: before you move, ask whether it makes your pieces stronger."
+    },
+    "early-mate": {
+      "name": "Watch out for the quick mate",
+      "stage": {
+        "meet": "Be careful",
+        "watch": "Watch",
+        "spot": "Weak square",
+        "defend": "Stop it",
+        "replay": "Your game",
+        "done": "Done"
+      },
+      "meet": "There is a very quick checkmate, in only 4 moves. Many new players lose because they do not see it. This time you play Black and learn to stop it.",
+      "intro": {
+        "watch": "Watch White give checkmate in 4 moves.",
+        "spot": "The white queen and bishop both aim at one of your squares.",
+        "defend": "White threatens checkmate. Stop it without losing a piece.",
+        "replay": "Now play it again from the start with Black."
+      },
+      "prompt": {
+        "spot": "Tap the square that both the white queen and bishop aim at.",
+        "defend": {
+          "h5": "The white queen is on h5. Stop the attack.",
+          "f3": "The white queen is on f3. Stop the attack.",
+          "again": "The white queen goes back to f3 to try again. Stop the attack."
+        },
+        "replay": {
+          "pawn": "Answer with your king pawn: move to e5.",
+          "knight": "Bring a knight to c6.",
+          "defend": "Careful! Stop the white attack."
+        }
+      },
+      "illegal": "That piece cannot go to that square.",
+      "watch": {
+        "next": "Show the next move",
+        "s0": "White moves the king pawn to e4.",
+        "s1": "Black answers with the pawn to e5.",
+        "s2": "The white bishop goes to c4 and looks at f7.",
+        "s3": "Black brings a knight to c6.",
+        "s4": "The white queen goes to h5. Now the queen and the bishop both aim at f7!",
+        "s5": "Black brings a knight to f6 and forgets to protect f7.",
+        "s6": "The queen takes the pawn on f7: checkmate! The king cannot take her, because the bishop protects her."
+      },
+      "spot": {
+        "right": "Right! f7 is weak because at the start only the king protects it.",
+        "wrong": "Not quite. Follow the lines of the white queen and bishop."
+      },
+      "defend": {
+        "good": "You stopped it! White cannot give checkmate now.",
+        "mate": "Not yet: White still gives checkmate. Look at f7.",
+        "loses": "That move loses a piece. Find a safer one."
+      },
+      "replay": {
+        "goOn": "Good! Watch what White does next.",
+        "notThat": "This time, play the move you are asked for.",
+        "right": "You stopped the quick checkmate!"
+      },
+      "allDone": "All correct! Tap Continue.",
+      "done": "You can stop the quick checkmate. Keep an eye on f7!",
+      "fun": "An early queen often gets chased. Defend while bringing pieces out and you come out ahead."
+    },
+    "basic-mates": {
+      "name": "Checkmate to the end",
+      "stage": {
+        "meet": "The way",
+        "rooks": "Two rooks",
+        "queen": "Queen and king",
+        "done": "Done"
+      },
+      "meet": "When the other side has only a king left, you must know how to finish with checkmate. The secret is to push the black king to the edge, and to take care the game does not become a draw.",
+      "intro": {
+        "rooks": "Two rooks take turns: one cuts off the way, the other gives check. The black king has to step back to the edge.",
+        "queen": "First push the black king to the edge with your queen. Then bring your king to help. Only then give checkmate.",
+        "rook": "A hard challenge: cut the king off with your rook, bring your king close, then give check when the kings face each other."
+      },
+      "prompt": {
+        "rooks": "Checkmate the black king with two rooks.",
+        "queen": "Checkmate the black king with your queen and king.",
+        "rook": "Checkmate the black king with your rook and king."
+      },
+      "tip": {
+        "rooks": "Let one rook hold the line next to the black king, then check with the other. If the king comes close to a rook, move that rook far away.",
+        "queenCage": "Put your queen a knight's step from the black king. The king will be pushed to the edge.",
+        "queenKing": "The black king is on the edge. Leave the queen there and bring your king closer. Leave the black king a square to move to.",
+        "queenMate": "The kings are close. Find the square where your queen gives checkmate.",
+        "rookCut": "Use your rook to cut the board so the black king has less room, then bring your king closer.",
+        "rookKing": "The black king is on the edge. Bring your king to face it, one square apart, and keep the rook far away.",
+        "rookCheck": "The kings face each other. Give check with your rook."
+      },
+      "illegal": "That piece cannot go to that square.",
+      "right": "Checkmate! Great job!",
+      "stalemate": "Oh, the black king is not in check but cannot move: a draw. Take that move again.",
+      "lost": "The black king can take your piece. Take that move again.",
+      "tooLong": "That is taking a while. Let us set up the board again. Tap Hint if you need it.",
+      "mateNow": "You can checkmate right now! Find the move.",
+      "moves": "Moves you have made: {count}",
+      "restart": "Set up the board again",
+      "challenge": "Extra challenge: rook and king",
+      "allDone": "You did it! Tap Continue.",
+      "done": "You can finish with checkmate using two rooks, and using a queen and king.",
+      "fun": "Tip: before every move, check that the black king still has somewhere to go."
+    },
     "tactics": {
       "name": "Little tricks and endgames",
       "stage": {
@@ -746,7 +906,7 @@
         },
         "master": {
           "name": "Young chess master",
-          "text": "Finish every lesson."
+          "text": "Finish all the core lessons."
         },
         "practice5": {
           "name": "Hard worker",

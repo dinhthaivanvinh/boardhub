@@ -19,6 +19,35 @@ Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài
   của trình duyệt đúng ngôn ngữ; không có giọng nào phù hợp thì không đọc và hiện lời nhắc cài giọng.
 - **Đọc câu hỏi và đọc kết quả đều bật sẵn** (công tắc nhớ trong trình duyệt). Bài nào cũng có nút **Quay lại** (bước trước, hoặc nước trước ở bài khai cuộc).
 
+## 1b. Thứ tự lộ trình
+
+Làm quen bàn cờ → Quân cờ → Luật (ăn quân, chiếu hết, hoà) → Nước đặc biệt → Mẹo và tàn cuộc → Khai cuộc. Nước đặc biệt đứng
+trước khai cuộc vì các khai cuộc có nhập thành. Thứ tự chỉ khai báo ở `JOURNEY` (`learn/journey.ts`); menu bài học, nút "bài tiếp
+theo", trang Hành trình và bản đồ trang chủ đều lấy từ đó. Tiến độ lưu theo id bài nên đổi thứ tự không làm mất tiến độ.
+
+Phần Khai cuộc bắt đầu bằng hai bài dưới đây, sau đó mới đến 6 khai cuộc có tên (gắn nhãn "Nâng cao"). Huy hiệu "Bậc thầy cờ
+vua nhí" chỉ đòi 21 bài có từ lúc huy hiệu ra đời (`MASTER_LESSONS`), để thêm bài không làm bé mất huy hiệu.
+
+## 1c. Hai bài mở đầu ván (`learn/opening-basics.ts`, `OpeningBasicsLessons.tsx`)
+
+- **3 nguyên tắc mở đầu** (`opening-basics`): đưa tốt vào d4/e4 → đưa mã hoặc tượng mới ra ô an toàn (mã không ra mép) →
+  nhập thành → chọn nước tốt nhất trong 3 nước. Mọi nước thoả điều kiện đều được nhận.
+- **Coi chừng chiếu hết nhanh** (`early-mate`, bé cầm Đen): xem đòn 4 nước → tìm ô f7 → chặn khi hậu ra h5, f3, và khi hậu
+  quay lại f3 sau ...g6 → đấu lại từ đầu. Nước chặn đúng là nước sau đó Trắng không còn chiếu hết 1 nước và không có chuỗi đổi
+  quân nào trên một ô làm Đen lỗ (`defenceVerdict`). Cách kiểm này chỉ nhìn đổi quân ngay lập tức, không tính đòn xa hơn.
+
+## 1d. Bài Chiếu hết đến cùng (`basic-mates`, `learn/basic-mates.ts`, `BasicMatesLesson.tsx`)
+
+Đứng sau bài Mẹo nhỏ. Bé cầm Trắng chơi nhiều nước liền để chiếu hết vua đen đơn độc: **hai xe** rồi **hậu + vua** (hai thế
+này xong là xong bài), **xe + vua** là thử thách thêm sau khi xong.
+
+- Máy giữ vua đen (`defenderMove`, kết quả cố định theo thế cờ): ăn quân không ai bảo vệ; nếu không thì tránh bị chiếu hết ngay
+  ở nước sau, rồi chọn chỗ rộng, gần giữa. Chỉ nhìn một nước nên không phải phòng thủ hoàn hảo.
+- Nước làm hoà do hết nước đi, hoặc để vua đen ăn mất quân: diễn ra, giải thích, rồi lùi **đúng nước đó**.
+- Quá số nước giới hạn (`limit`) thì xếp lại bàn; luôn có nút xếp lại.
+- Gợi ý: có chiếu hết 1 nước thì tô sáng quân rồi ô đến; không có thì nói bước tiếp theo của cách làm (`mateTip`). Không có bộ
+  giải tìm nước tốt nhất. Mỗi thế có một đường thắng trong test, nên luôn thắng được trước máy này.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

@@ -29,6 +29,9 @@ const LESSONS = [
   'en-passant',
   'promotion',
   'tactics',
+  'basic-mates',
+  'opening-basics',
+  'early-mate',
 ];
 
 const SHOTS = process.env.LEARN_SHOTS;
@@ -93,6 +96,9 @@ test.describe('laptop 14 inch', () => {
     'italian',
     'castling',
     'tactics',
+    'basic-mates',
+    'opening-basics',
+    'early-mate',
   ]) {
     test(`lesson ${id}: board and its buttons fit the first screen`, async ({ page }) => {
       await page.goto(`/learn/chess/${id}`);

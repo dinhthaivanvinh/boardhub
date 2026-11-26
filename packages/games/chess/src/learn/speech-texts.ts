@@ -7,6 +7,14 @@ import { MATE_ROUNDS, matingMoves } from './checkmate';
 import { coordRounds, COORD_KINDS, fileOf, rankOf } from './coordinates';
 import { OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from './data';
 import { parseMove, positionsOf } from './logic';
+import {
+  CASTLE_ROUNDS,
+  CENTER_ROUNDS,
+  CHOICE_ROUNDS,
+  DEFEND_ROUNDS,
+  DEVELOP_ROUNDS,
+  TRAP_LINE,
+} from './opening-basics';
 import { PRACTICE_LESSON_IDS, practiceRounds, STARS_PER_PRACTICE } from './practice';
 import { spellSquares } from './speech';
 import { LADDER_ROUNDS } from './tactics';
@@ -200,6 +208,52 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
   say('draws.judge.wrong');
   for (const r of JUDGE_ROUNDS) say(`draws.judge.${r.id}.right`);
   for (const q of DRAW_QUIZ) for (const k of ['q', 'right', 'wrong']) say(`draws.quiz.${q.id}.${k}`);
+
+  // ---- the three opening ideas and the four-move mate
+  for (const lesson of ['opening-basics', 'early-mate']) {
+    for (const k of ['meet', 'illegal', 'allDone', 'done', 'fun']) say(`${lesson}.${k}`);
+  }
+  for (const k of ['center', 'develop', 'safe', 'choose']) say(`opening-basics.prompt.${k}`);
+  for (const k of ['good', 'notCenter', 'unsafe']) say(`opening-basics.center.${k}`);
+  for (const k of ['good', 'notMinor', 'again', 'edge', 'unsafe']) say(`opening-basics.develop.${k}`);
+  for (const k of ['good', 'notCastle']) say(`opening-basics.safe.${k}`);
+  for (const round of CHOICE_ROUNDS) {
+    say(`opening-basics.choose.right.${round.id}`);
+    for (const { flaw } of round.options) if (flaw) say(`opening-basics.choose.wrong.${flaw}`);
+  }
+  TRAP_LINE.forEach((_, i) => say(`early-mate.watch.s${i}`));
+  for (const k of ['prompt.spot', 'spot.right', 'spot.wrong', 'defend.good', 'defend.mate', 'defend.loses'])
+    say(`early-mate.${k}`);
+  for (const k of ['goOn', 'notThat', 'right']) say(`early-mate.replay.${k}`);
+  for (const k of ['pawn', 'knight', 'defend']) say(`early-mate.prompt.replay.${k}`);
+  for (const r of DEFEND_ROUNDS) say(`early-mate.prompt.defend.${r.id}`);
+  // The hints name the squares of the suggested move; the two named moves of the replay come from the trap.
+  const suggested = [...CENTER_ROUNDS, ...DEVELOP_ROUNDS, ...CASTLE_ROUNDS, ...DEFEND_ROUNDS].map(
+    (r) => r.suggest,
+  );
+  for (const text of [...suggested, TRAP_LINE[1]!, TRAP_LINE[3]!]) {
+    const move = parseMove(text);
+    say('hintFrom', { square: squareName(move.from) });
+    say('hintTo', { from: squareName(move.from), square: squareName(move.to) });
+  }
+
+  // ---- playing on to checkmate
+  for (const k of [
+    'meet',
+    'illegal',
+    'right',
+    'stalemate',
+    'lost',
+    'tooLong',
+    'mateNow',
+    'allDone',
+    'done',
+    'fun',
+  ])
+    say(`basic-mates.${k}`);
+  for (const k of ['rooks', 'queen', 'rook']) say(`basic-mates.prompt.${k}`);
+  for (const k of ['rooks', 'queenCage', 'queenKing', 'queenMate', 'rookCut', 'rookKing', 'rookCheck'])
+    say(`basic-mates.tip.${k}`);
 
   // ---- the "start the challenge" line of a piece or special lesson names the square to reach
   for (const l of PIECE_LESSONS) say('challengeStart', { square: l.challenge.goal });

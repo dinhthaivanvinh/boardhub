@@ -1,6 +1,8 @@
 import type { Rng, Seat } from '@bg/engine';
 
-export type BotLevel = 'easy' | 'medium' | 'hard';
+/** From the weakest up. `beginner` is only offered by games that say so (their bot's `levels`). */
+export type BotLevel = 'easy' | 'beginner' | 'medium' | 'hard';
+/** The levels every game has. */
 export const BOT_LEVELS: readonly BotLevel[] = ['easy', 'medium', 'hard'];
 
 export interface BotInput<S> {

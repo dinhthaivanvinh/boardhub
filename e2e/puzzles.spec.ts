@@ -126,11 +126,20 @@ test('the journey shows the next lesson, the stages and the badges earned', asyn
     'promotion',
     'tactics',
   ];
-  await page.evaluate((ids) => window.localStorage.setItem('learn.chess.v1', JSON.stringify(ids)), all);
-  await page.reload();
-  await expect(page.getByTestId('journey-continue')).toHaveCount(0);
+  const finish = async (ids: string[]) => {
+    await page.evaluate((v) => window.localStorage.setItem('learn.chess.v1', JSON.stringify(v)), ids);
+    await page.reload();
+  };
+  // These 21 were every lesson when the "master" badge was first given: it stays, with newer lessons to do.
+  await finish(all);
+  await expect(page.getByTestId('journey-continue')).toHaveAttribute('href', '/learn/chess/basic-mates');
   await expect(page.getByTestId('journey-badge-count')).toHaveText('Đã được 8/14 huy hiệu');
   await expect(page.getByTestId('stat-stars')).toHaveText('63 ⭐');
+
+  await finish([...all, 'basic-mates', 'opening-basics', 'early-mate']);
+  await expect(page.getByTestId('journey-continue')).toHaveCount(0);
+  await expect(page.getByTestId('journey-badge-count')).toHaveText('Đã được 8/14 huy hiệu');
+  await expect(page.getByTestId('stat-stars')).toHaveText('72 ⭐');
 });
 
 test('the header links to the puzzles and the journey', async ({ page, isMobile }) => {
@@ -156,7 +165,7 @@ test('the adventure map and the achievements on the home page follow the real pr
   await expect(first).toContainText('1/2 bài');
   await expect(first.getByRole('link')).toHaveAttribute('href', '/learn/chess/setup');
   await expect(page.getByTestId('ach-stars')).toContainText('3');
-  await expect(page.getByTestId('ach-lessons')).toContainText('1/21');
+  await expect(page.getByTestId('ach-lessons')).toContainText('1/24');
 });
 
 test('the home page does not scroll sideways', async ({ page }) => {

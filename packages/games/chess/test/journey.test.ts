@@ -3,6 +3,7 @@ import {
   BADGES,
   earnedBadges,
   JOURNEY_LESSONS,
+  MASTER_LESSONS,
   nextLessonId,
   learnerRank,
   totalStars,
@@ -25,6 +26,16 @@ describe('the journey', () => {
   it('lists every lesson exactly once, in the order to take them', () => {
     expect([...JOURNEY_LESSONS].sort()).toEqual([...LESSON_IDS].sort());
     expect(JOURNEY_LESSONS[0]).toBe('coordinates');
+  });
+
+  it('teaches the special moves before the openings, which use them', () => {
+    const at = (id: string) => JOURNEY_LESSONS.indexOf(id);
+    expect(at('castling')).toBeGreaterThan(at('draws'));
+    expect(at('tactics')).toBeGreaterThan(at('promotion'));
+    expect(at('basic-mates')).toBe(at('tactics') + 1);
+    expect(at('opening-basics')).toBeGreaterThan(at('tactics'));
+    expect(at('early-mate')).toBe(at('opening-basics') + 1);
+    expect(at('italian')).toBe(at('early-mate') + 1);
   });
 
   it('points at the first lesson not done, and at nothing when all are', () => {
@@ -64,6 +75,15 @@ describe('badges', () => {
     const six = new Set(['pawn', 'rook', 'bishop', 'knight', 'queen', 'king']);
     expect(earnedBadges(six, EMPTY_PUZZLE_PROGRESS, today)).toContain('pieces');
     expect(earnedBadges(new Set(JOURNEY_LESSONS), EMPTY_PUZZLE_PROGRESS, today)).toContain('master');
+  });
+
+  it('the master badge still asks only for the lessons there were when it was first given', () => {
+    expect(MASTER_LESSONS).toHaveLength(21);
+    for (const id of MASTER_LESSONS) expect(JOURNEY_LESSONS).toContain(id);
+    expect(earnedBadges(new Set(MASTER_LESSONS), EMPTY_PUZZLE_PROGRESS, today)).toContain('master');
+    expect(earnedBadges(new Set(MASTER_LESSONS.slice(1)), EMPTY_PUZZLE_PROGRESS, today)).not.toContain(
+      'master',
+    );
   });
 
   it('puzzle and streak badges', () => {

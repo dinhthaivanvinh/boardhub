@@ -83,6 +83,7 @@
   "bot": {
     "level": {
       "easy": "Dễ",
+      "beginner": "Tập chơi",
       "medium": "Vừa",
       "hard": "Khó"
     }
@@ -485,7 +486,7 @@
       },
       "checkmate": {
         "place": "Lâu đài nhà vua",
-        "text": "Học chiếu và chiếu hết."
+        "text": "Học chiếu, chiếu hết và khi nào hoà."
       },
       "openings": {
         "place": "Con đường khai cuộc",
@@ -497,7 +498,7 @@
       },
       "tactics": {
         "place": "Núi chiến thuật",
-        "text": "Học chĩa hai mũi, quân bị ghim, tàn cuộc và ván hoà."
+        "text": "Học chĩa hai mũi, quân bị ghim và tàn cuộc."
       },
       "play": {
         "place": "Đấu trường kiện tướng",

@@ -105,6 +105,8 @@ describe('rooms', () => {
     });
     await t.hub.joinRoom(bob, room.code);
     expect(await code(t.hub.addBot(bob, room.id, 1, 'easy'))).toBe('room.not_host');
+    // Only some games have the "beginner" level.
+    expect(await code(t.hub.addBot(alice, room.id, 1, 'beginner'))).toBe('invalid.payload');
     await t.hub.addBot(alice, room.id, 1, 'easy');
     expect(await code(t.hub.addBot(alice, room.id, 1, 'easy'))).toBe('room.seat_taken');
     expect(t.events.rooms.at(-1)?.seats[1]).toEqual({ kind: 'bot', level: 'easy' });

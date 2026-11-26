@@ -20,7 +20,7 @@ describe('chess bot', () => {
   it('plays legal moves at every level', () => {
     const positions = [setup({}), play(['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1c4'])];
     for (const st of positions) {
-      for (const level of ['easy', 'medium', 'hard'] as const) {
+      for (const level of ['easy', 'beginner', 'medium', 'hard'] as const) {
         expect(definition.validateMove(st, st.turn, choose(st, level, 300))).toEqual({ ok: true });
       }
     }
@@ -68,6 +68,53 @@ describe('chess bot', () => {
     expect(takeQueen).toBeLessThan(0.5);
     expect(rate(mate, { from: s('a1'), to: s('a8') })).toBeLessThan(0.25);
   });
+
+  it('beginner sits between easy and medium: it notices things often, but not always', () => {
+    const queen = fen('4k3/8/8/3q4/8/2N5/8/4K3 w - -');
+    const mate = fen('6k1/5ppp/8/8/8/8/8/R5K1 w - -');
+    const rate = (st: ChessState, level: BotLevel, ok: (m: { from: number; to: number }) => boolean) => {
+      let hits = 0;
+      const games = 200;
+      for (let i = 0; i < games; i++) {
+        const m = bot.chooseMove({
+          state: st,
+          seat: st.turn,
+          level,
+          rng: createRng(`rate${i}`, 0),
+          deadlineMs: Date.now() + 200,
+        });
+        if (ok(m)) hits++;
+      }
+      return hits / games;
+    };
+    const takesQueen = (m: { from: number; to: number }) => m.from === s('c3') && m.to === s('d5');
+    const mates = (m: { from: number; to: number }) => m.from === s('a1') && m.to === s('a8');
+    const free = rate(queen, 'beginner', takesQueen);
+    expect(free).toBeGreaterThan(rate(queen, 'easy', takesQueen));
+    expect(free).toBeGreaterThan(0.55);
+    expect(free).toBeLessThan(0.9);
+    const mated = rate(mate, 'beginner', mates);
+    expect(mated).toBeGreaterThan(0.3);
+    expect(mated).toBeLessThan(0.75);
+  }, 120_000);
+
+  it('beginner usually keeps the piece it moves safe', () => {
+    // The black pawns guard b5 and d5: a knight that goes there is lost.
+    const st = fen('4k3/8/2p1p3/8/8/2N5/8/4K3 w - -');
+    let lost = 0;
+    const games = 200;
+    for (let i = 0; i < games; i++) {
+      const m = bot.chooseMove({
+        state: st,
+        seat: st.turn,
+        level: 'beginner',
+        rng: createRng(`safe${i}`, 0),
+        deadlineMs: Date.now() + 200,
+      });
+      if (m.from === s('c3') && (m.to === s('b5') || m.to === s('d5'))) lost++;
+    }
+    expect(lost / games).toBeLessThan(0.15);
+  }, 120_000);
 
   it('medium beats easy', () => {
     const play = (level: BotLevel) => (st: ChessState, seat: Seat, game: number, ply: number) =>

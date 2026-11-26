@@ -3,7 +3,7 @@ import { z } from 'zod';
 /** Bump on breaking changes; the server rejects other versions (docs/05 §7). */
 export const PROTOCOL_VERSION = 1;
 
-export const BotLevelSchema = z.enum(['easy', 'medium', 'hard']);
+export const BotLevelSchema = z.enum(['easy', 'beginner', 'medium', 'hard']);
 export type BotLevel = z.infer<typeof BotLevelSchema>;
 
 export const TimeControlSchema = z.discriminatedUnion('type', [

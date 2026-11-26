@@ -53,6 +53,18 @@ export type { Puzzle, PuzzleTier, SkillPuzzle } from './learn/puzzles';
 export { SKILL_KINDS } from './learn/puzzle-kinds';
 export type { SkillKind } from './learn/puzzle-kinds';
 export { PuzzleRoundView } from './learn/PuzzleRoundView';
+export { MiniGame } from './mini/MiniGame';
+export { MINI_GAME_IDS } from './mini/common';
+export type { MiniGameId } from './mini/common';
+export {
+  isMiniGameId,
+  MINI_LEVELS,
+  MINI_PROGRESS_KEY,
+  miniKey,
+  readMiniProgress,
+  saveMiniStars,
+} from './mini/progress';
+export type { MiniProgress } from './mini/progress';
 export {
   EMPTY_PUZZLE_PROGRESS,
   dateKey,

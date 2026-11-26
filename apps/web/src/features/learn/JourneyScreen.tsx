@@ -107,6 +107,18 @@ export function JourneyScreen() {
           <li className="card journey-stage" data-g={JOURNEY.length + 1}>
             <h2 className="journey-stage-title">
               <span className="journey-stage-number" aria-hidden="true">
+                🎲
+              </span>
+              {t('games.chess.learn.mini.title')}
+            </h2>
+            <p className="text-sm text-[var(--muted)]">{t(`${L}.miniText`)}</p>
+            <Link href="/mini-games" className="btn mt-2" data-testid="journey-mini">
+              {t(`${L}.go`)}
+            </Link>
+          </li>
+          <li className="card journey-stage" data-g={JOURNEY.length + 2}>
+            <h2 className="journey-stage-title">
+              <span className="journey-stage-number" aria-hidden="true">
                 🎮
               </span>
               {t(`${L}.playTitle`)}

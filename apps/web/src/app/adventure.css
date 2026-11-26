@@ -1289,3 +1289,26 @@ html:has(.adv-page) body {
     font-size: 0.875rem;
   }
 }
+
+/* The way into the little games, under the puzzle of the day. */
+.adv-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #e3f6e0, #cfeafd);
+  box-shadow: var(--adv-shadow);
+  color: var(--adv-ink, #1f3a5f);
+}
+@media (min-width: 48rem) {
+  .adv-mini {
+    padding: 2rem 2.5rem;
+  }
+}
+.adv-mini-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+}

@@ -7,6 +7,7 @@ import { MATE_ROUNDS, matingMoves } from './checkmate';
 import { coordRounds, COORD_KINDS, fileOf, rankOf } from './coordinates';
 import { OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from './data';
 import { parseMove, positionsOf } from './logic';
+import { MINI_GAME_IDS } from '../mini/common';
 import { SKILL_KINDS } from './puzzle-kinds';
 import {
   CASTLE_ROUNDS,
@@ -267,6 +268,15 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
     for (const k of Object.keys(get(m.learn, `puzzles.kinds.${kind}`) as object)) {
       // The name and the card text are not read; the marked square is for screen readers.
       if (!['name', 'text', 'marked'].includes(k)) texts(`puzzles.kinds.${kind}.${k}`);
+    }
+  }
+
+  // ---- the little games: the rules (read on request) and everything said while playing
+  for (const k of ['illegal', 'noWay']) say(`mini.${k}`);
+  for (const game of MINI_GAME_IDS) {
+    for (const k of Object.keys(get(m.learn, `mini.${game}`) as object)) {
+      // The name and the card text are shown, not read.
+      if (!['name', 'text', 'prompt'].includes(k)) say(`mini.${game}.${k}`);
     }
   }
 

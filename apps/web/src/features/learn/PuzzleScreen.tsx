@@ -206,9 +206,12 @@ function Menu({
         </ul>
       </section>
 
-      <p>
+      <p className="flex flex-wrap gap-3">
         <Link href="/journey" className="btn">
           {t('journey.home.map')}
+        </Link>
+        <Link href="/mini-games" className="btn">
+          <span aria-hidden="true">🎲</span> {t('mini.title')}
         </Link>
       </p>
     </div>

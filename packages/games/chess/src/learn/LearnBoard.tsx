@@ -24,6 +24,8 @@ export type LearnBoardProps = {
   goal?: number | null;
   /** Draw a star in the goal square ("find the piece that reaches the star"). */
   goalStar?: boolean;
+  /** Stars lying on squares, to be collected. */
+  stars?: ReadonlySet<number>;
   /** Rank number 1–8 to colour across the board (orange), and file index 0–7 (blue): the two lines of a coordinate. */
   rankLine?: number | null;
   fileLine?: number | null;
@@ -48,6 +50,7 @@ export function LearnBoard({
   marks,
   goal = null,
   goalStar = false,
+  stars,
   rankLine = null,
   fileLine = null,
   danger = null,
@@ -99,10 +102,11 @@ export function LearnBoard({
           cellLabel={(display) => {
             const s = toBoard(display);
             const p = board[s];
-            return t('games.chess.cellLabel', {
+            const text = t('games.chess.cellLabel', {
               square: squareName(s),
               piece: p ? label(p) : t('games.chess.empty'),
             });
+            return stars?.has(s) ? `${text}, ⭐` : text;
           }}
           onActivate={(display) => onSquare?.(toBoard(display))}
           cellData={(display) => {
@@ -112,6 +116,7 @@ export function LearnBoard({
               'data-piece': board[s] ?? undefined,
               'data-target': dots?.has(s) || captures?.has(s) ? 'true' : undefined,
               'data-goal': s === goal ? 'true' : undefined,
+              'data-star': stars?.has(s) ? 'true' : undefined,
             };
           }}
           renderCell={(display, geom) => {
@@ -142,6 +147,19 @@ export function LearnBoard({
                     textAnchor="middle"
                     dominantBaseline="central"
                     fontSize={CELL * 0.5}
+                    aria-hidden="true"
+                    pointerEvents="none"
+                  >
+                    ⭐
+                  </text>
+                )}
+                {stars?.has(s) && (
+                  <text
+                    x={cx}
+                    y={cy}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={CELL * 0.55}
                     aria-hidden="true"
                     pointerEvents="none"
                   >

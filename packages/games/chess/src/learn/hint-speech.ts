@@ -1,6 +1,6 @@
 import type { Translator } from '@bg/ui';
 import { squareName } from '../rules/board';
-import type { ChessMove, Position } from '../rules/types';
+import type { ChessMove, Piece } from '../rules/types';
 
 /**
  * The two-level hint of a puzzle, as shown and as read aloud. There are too many piece-and-square sentences to
@@ -8,7 +8,7 @@ import type { ChessMove, Position } from '../rules/types';
  */
 export function hintParts(
   t: Translator,
-  pos: Position,
+  pos: { board: readonly (Piece | null)[] },
   move: ChessMove,
   level: number,
 ): { text: string; parts: string[] } {

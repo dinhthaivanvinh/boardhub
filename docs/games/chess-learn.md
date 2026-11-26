@@ -64,6 +64,21 @@ này xong là xong bài), **xe + vua** là thử thách thêm sau khi xong.
   `two-01`). Server cần bản mới để nhận các id này khi ghi thống kê và đồng bộ.
 - Gợi ý của câu đố được đọc từ các đoạn thu sẵn (`hint-speech.ts`).
 
+## 1f. Trò chơi nhỏ (`/mini-games`, mã ở `mini/`)
+
+Ba trò chỉ có vài quân, **không có vua** nên không dùng engine cờ vua; luật là hàm thuần riêng. Màn nào cũng có Gợi ý,
+Đi lại, Chơi lại và không bị khoá.
+
+- **Mã nhặt sao** (`knight-stars`, 8 màn): nhặt hết sao; không đứng vào ô có tốt đen canh. 3 sao khi đi đường ngắn nhất,
+  2 sao nếu hơn không quá 3 nước, 1 sao khi hoàn thành.
+- **Xe chặn Tốt** (`rook-wall`, 5 màn): ăn hết tốt trước khi một tốt đến hàng cuối; tốt ăn được xe thì thua. Phe tốt đi theo
+  quy tắc cố định (`pawnsReply`): ăn xe, phong cấp, nếu không thì đẩy tốt vào ô an toàn nhất. Tính sao như trên.
+- **Đua Tốt** (`pawn-race`, 3 mức máy): tốt đến hàng cuối trước hoặc ăn hết tốt đối phương thì thắng; đến lượt mà không đi
+  được thì hoà (luật của trò này). Có bắt tốt qua đường. Thắng 3 sao, hoà 1 sao.
+- Test chứng minh mọi màn Mã và Xe giải được; Đua Tốt được kiểm bằng máy đấu máy (bên chơi giỏi thắng được cả 3 mức).
+- Sao lưu **chỉ trên máy này** (`localStorage` `learn.chess.mini.v1`): chưa đồng bộ theo tài khoản, không tính vào cấp bậc
+  và không gửi thống kê.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

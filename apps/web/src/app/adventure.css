@@ -80,10 +80,6 @@ html:has(.adv-home) body {
   gap: 4rem;
   padding-bottom: 3rem;
 }
-.adv-section {
-  width: min(100% - 2rem, 75rem);
-  margin-inline: auto;
-}
 .adv-section-title {
   color: var(--adv-text);
   font-size: clamp(1.5rem, 3.4vw, 2.125rem);

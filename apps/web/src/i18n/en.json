@@ -2,7 +2,6 @@
   "app": {
     "name": "BoardHub",
     "tagline": "Learn and play chess, plus other board games, right in your browser.",
-    "footer": "Chess and board games, free in your browser.",
     "slogan": "Learning chess is fun!",
     "footerLinks": "Links",
     "copyright": "© {year} BoardHub. Learn chess the fun way!"
@@ -396,47 +395,30 @@
     },
     "ctaPlay": "Try a game of chess",
     "path": {
-      "title": "Your learning path",
       "text": "This order is the easiest. Every lesson is short, with pictures, a voice and a chance to try it yourself.",
       "coordinates": {
-        "title": "Meet the board",
-        "text": "Read the names of the squares: number rows, letter columns.",
-        "cta": "Learn coordinates"
+        "title": "Meet the board"
       },
       "pieces": {
-        "title": "Meet the pieces",
-        "text": "How each piece moves: watch, then try.",
-        "cta": "Learn the pieces"
+        "title": "Meet the pieces"
       },
       "capture": {
-        "title": "Capturing and protecting",
-        "text": "Which pieces to take, and how not to lose yours.",
-        "cta": "Learn capturing"
+        "title": "Capturing and protecting"
       },
       "checkmate": {
-        "title": "Check and checkmate",
-        "text": "Save your king in check, then catch the enemy king.",
-        "cta": "Learn checkmate"
+        "title": "Check and checkmate"
       },
       "openings": {
-        "title": "Learn openings",
-        "text": "Famous ways to start a game, explained move by move.",
-        "cta": "Learn openings"
+        "title": "Learn openings"
       },
       "special": {
-        "title": "Special moves",
-        "text": "Castling, en passant and promotion.",
-        "cta": "Learn special moves"
+        "title": "Special moves"
       },
       "tactics": {
-        "title": "Little tricks and endgames",
-        "text": "Forks, pins, two rooks and draws.",
-        "cta": "Learn the tricks"
+        "title": "Little tricks and endgames"
       },
       "play": {
-        "title": "Play for real",
-        "text": "Play the computer at several levels, or a friend.",
-        "cta": "Play now"
+        "title": "Play for real"
       }
     },
     "pieces": {
@@ -450,16 +432,6 @@
         "king": "The most important piece"
       },
       "explore": "Explore"
-    },
-    "more": {
-      "badge": "{n} more games",
-      "title": "Like other games?",
-      "text": "Xiangqi, Caro, O an quan, Sea Battle… Play the computer, friends with a room code, or ranked quick match.",
-      "cta": "See the board games"
-    },
-    "join": {
-      "title": "Got a room code?",
-      "text": "Enter the 6-character code your friend sent to join the room."
     },
     "perks": {
       "age": "For kids from 5 years old",
@@ -565,7 +537,6 @@
     "myAnimal": "My animal",
     "activitiesTitle": "Activities",
     "soon": "Coming soon",
-    "avatarSoon": "Coming soon: pick an animal and dress it up your way: fur colours, eyes, accessories… It will follow you into every session.",
     "how": {
       "title": "How it works",
       "create": {

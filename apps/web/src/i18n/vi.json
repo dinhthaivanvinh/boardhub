@@ -2,7 +2,6 @@
   "app": {
     "name": "BoardHub",
     "tagline": "Học và chơi cờ vua, cùng các board game khác, ngay trên trình duyệt.",
-    "footer": "Cờ vua và các board game, miễn phí trên trình duyệt.",
     "slogan": "Học cờ thật vui!",
     "footerLinks": "Liên kết",
     "copyright": "© {year} BoardHub. Học cờ thật vui!"
@@ -396,47 +395,30 @@
     },
     "ctaPlay": "Chơi thử cờ vua",
     "path": {
-      "title": "Lộ trình học",
       "text": "Học theo thứ tự này sẽ dễ nhất. Mỗi bài ngắn, có hình minh hoạ, giọng đọc và để con tự thử.",
       "coordinates": {
-        "title": "Làm quen bàn cờ",
-        "text": "Đọc tên các ô: hàng số, cột chữ.",
-        "cta": "Học toạ độ"
+        "title": "Làm quen bàn cờ"
       },
       "pieces": {
-        "title": "Làm quen các quân cờ",
-        "text": "Mỗi quân đi như thế nào, xem và tự thử.",
-        "cta": "Học quân cờ"
+        "title": "Làm quen các quân cờ"
       },
       "capture": {
-        "title": "Ăn quân và bảo vệ",
-        "text": "Ăn quân nào, và tránh để quân mình bị ăn.",
-        "cta": "Học ăn quân"
+        "title": "Ăn quân và bảo vệ"
       },
       "checkmate": {
-        "title": "Chiếu và chiếu hết",
-        "text": "Cứu vua khi bị chiếu, rồi tự bắt vua đối phương.",
-        "cta": "Học chiếu hết"
+        "title": "Chiếu và chiếu hết"
       },
       "openings": {
-        "title": "Học khai cuộc",
-        "text": "Những cách mở màn nổi tiếng, giải thích từng nước.",
-        "cta": "Học khai cuộc"
+        "title": "Học khai cuộc"
       },
       "special": {
-        "title": "Nước đi đặc biệt",
-        "text": "Nhập thành, bắt tốt qua đường và phong cấp.",
-        "cta": "Học nước đặc biệt"
+        "title": "Nước đi đặc biệt"
       },
       "tactics": {
-        "title": "Mẹo nhỏ và tàn cuộc",
-        "text": "Chĩa hai mũi, quân bị ghim, hai xe và ván hoà.",
-        "cta": "Học mẹo nhỏ"
+        "title": "Mẹo nhỏ và tàn cuộc"
       },
       "play": {
-        "title": "Chơi thật",
-        "text": "Chơi với máy ở nhiều mức khó, hoặc với bạn bè.",
-        "cta": "Vào chơi"
+        "title": "Chơi thật"
       }
     },
     "pieces": {
@@ -450,16 +432,6 @@
         "king": "Quan trọng nhất"
       },
       "explore": "Khám phá"
-    },
-    "more": {
-      "badge": "{n} game khác",
-      "title": "Thích game khác?",
-      "text": "Cờ tướng, Caro, Ô ăn quan, Bắn tàu… Chơi với máy, với bạn bè qua mã phòng, hoặc ghép trận xếp hạng.",
-      "cta": "Xem các board game"
-    },
-    "join": {
-      "title": "Có mã phòng?",
-      "text": "Nhập mã 6 ký tự bạn bè gửi để vào thẳng phòng."
     },
     "perks": {
       "age": "Dành cho bé từ 5 tuổi",
@@ -565,7 +537,6 @@
     "myAnimal": "Thú của tôi",
     "activitiesTitle": "Các hoạt động",
     "soon": "Sắp ra mắt",
-    "avatarSoon": "Sắp có: chọn một con vật và trang trí theo ý bạn: màu lông, mắt, phụ kiện… Con vật sẽ theo bạn vào mọi phiên.",
     "how": {
       "title": "Cách chơi",
       "create": {

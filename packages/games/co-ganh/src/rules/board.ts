@@ -131,5 +131,3 @@ export function countPieces(board: Board): [number, number] {
   }
   return [red, blue];
 }
-
-export const pointOf = (row: number, col: number) => row * SIZE + col;

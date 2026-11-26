@@ -43,6 +43,3 @@ export function publicPage(input: {
     },
   };
 }
-
-/** Pages that only make sense for one person or one room: kept out of search results. */
-export const PRIVATE: Metadata['robots'] = { index: false, follow: false };

@@ -14,7 +14,6 @@ export const squareOf = (name: string) => sq(8 - Number(name[1]), FILES.indexOf(
 
 export const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 export const colorOf = (p: Piece) => p[0] as Color;
-export const typeOf = (p: Piece) => p[1] as PieceType;
 
 const KNIGHT = [
   [-2, -1],

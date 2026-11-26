@@ -441,38 +441,7 @@ body {
   }
 }
 
-/* ---------- Two areas: portal cards and header menus (ADR-0007) ---------- */
-.area-card {
-  @apply flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-300;
-  border-color: var(--border);
-  background: var(--card);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
-}
-.area-card:hover,
-.area-card:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 48px -20px rgb(0 0 0 / 0.4);
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-}
-.area-card-art {
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: #1e1b4b;
-}
-.area-card-collage {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-}
-.area-card-tile {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-.area-card:hover .area-card-tile {
-  transform: scale(1.06);
-}
+/* ---------- Two areas: header menus (ADR-0007) ---------- */
 .nav-link[data-current='true'] {
   color: var(--fg);
   font-weight: 600;
@@ -502,15 +471,6 @@ body {
 .nav-dropdown-link[aria-current='page'] {
   color: var(--accent);
   font-weight: 600;
-}
-@media (prefers-reduced-motion: reduce) {
-  .area-card,
-  .area-card-tile {
-    transition: none;
-  }
-  .area-card:hover {
-    transform: none;
-  }
 }
 
 /* ---------- Office: avatar studio ---------- */
@@ -1332,15 +1292,6 @@ body {
     transform: translateY(-0.6rem);
   }
 }
-@keyframes home-float {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(0.75rem, 1rem);
-  }
-}
 
 /* ---- Giao diện vui nhộn dùng chung cho cả site (trang chủ, bài học, ván cờ) ---- */
 body {
@@ -1478,12 +1429,7 @@ nav section[data-g='5'] {
 }
 
 /* ---------------------------------------------------------------------------------------------------------
-   Câu đố, hành trình, huy hiệu và chú Mã trên trang chủ. */
-.puzzle-title {
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 900;
-  line-height: 1.15;
-}
+   Câu đố, hành trình và huy hiệu. */
 .puzzle-wait {
   min-height: 60vh;
 }

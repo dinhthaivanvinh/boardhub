@@ -6,7 +6,7 @@
 // packages/bots/src/types.ts
 export interface Bot<S, M> {
   id: string; // 'caro.minimax'
-  levels: BotLevel[]; // ['easy','medium','hard']
+  levels: BotLevel[]; // ['easy','medium','hard']; cờ vua thêm 'beginner'
   chooseMove(input: {
     state: S; // bot ở server nhận full state; xem quy tắc B4 cho game hidden-info
     seat: Seat;
@@ -38,6 +38,14 @@ không gian tìm kiếm (ví dụ Caro chỉ xét các ô trong bán kính 2 qua
 rồi mới import `bot-worker.ts` (loader truyền qua `--import` chưa có hiệu lực với file đầu vào của worker). Worker chết trước
 khi trả lời thì việc được xếp lại; chết liền 3 lần thì runner thôi tạo worker mới, ghi log một lần và cho bot nghĩ trên luồng
 chính (`degraded`), không bao giờ lặp tạo worker vô hạn hay đi nước ngẫu nhiên.
+
+**Mức máy theo game.** Mọi game có `easy`, `medium`, `hard` (`BOT_LEVELS`). `beginner` ("Tập chơi", nằm giữa `easy` và
+`medium`) hiện chỉ cờ vua có. Game muốn có thêm mức thì khai báo trong `levels` của bot **và** `botLevels` ở
+`apps/web/src/games/catalog.ts` (test web so hai danh sách). Server từ chối mức mà bot của game không có; `createBot` gặp mức
+lạ thì chơi như mức đầu tiên, nên không được hiện mức đó cho người chơi.
+
+Cờ vua `beginner` không tìm kiếm: thường ăn quân lời được, thường không đặt quân vừa đi vào chỗ bị mất, thỉnh thoảng thấy
+chiếu hết 1 nước (tỷ lệ ở `BEGINNER`); không để ý quân đứng yên đang bị tấn công. Chọn sẵn của cờ vua là `easy`.
 
 ## 3. Quy tắc
 

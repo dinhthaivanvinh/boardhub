@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
-import { BOT_LEVELS, type BotLevel } from '@bg/bots';
+import type { BotLevel } from '@bg/bots';
 import type { Seat } from '@bg/engine';
-import { GAMES, type GameId } from '@/games/catalog';
+import { botLevelsOf, defaultBotLevelOf, GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { buildPlayUrl, type PlayMode } from '@/game-runtime/match-setup';
 import { errorKey } from '@/game-runtime/error-key';
@@ -83,7 +83,7 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
       setBusy(false);
     }
   };
-  const [level, setLevel] = useState<BotLevel>('medium');
+  const [level, setLevel] = useState<BotLevel>(() => defaultBotLevelOf(gameId));
   const [humanSeat, setHumanSeat] = useState<Seat>(0);
   const [config, setConfig] = useState<Record<string, unknown>>(
     () => definition.configSchema.parse({}) as Record<string, unknown>,
@@ -130,8 +130,8 @@ export function SetupForm({ gameId }: { gameId: GameId }) {
         <>
           <fieldset className="flex flex-col gap-2">
             <legend className="mb-2 text-sm font-medium">{t('setup.level')}</legend>
-            <div className="grid grid-cols-3 gap-2">
-              {BOT_LEVELS.map((l) => (
+            <div className={`grid gap-2 ${botLevelsOf(gameId).length > 3 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+              {botLevelsOf(gameId).map((l) => (
                 <Choice key={l} name="level" checked={level === l} onChange={() => setLevel(l)}>
                   {t(`bot.level.${l}`)}
                 </Choice>

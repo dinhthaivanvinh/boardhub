@@ -2,8 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { BOT_LEVELS, type BotLevel } from '@bg/bots';
-import { GAMES, type GameId } from '@/games/catalog';
+import type { BotLevel } from '@bg/bots';
+import { botLevelsOf, defaultBotLevelOf, GAMES, type GameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import type { RoomApi } from '@/online/use-room';
 import { InviteBox } from './InviteBox';
@@ -15,7 +15,7 @@ export function Lobby({ api }: { api: RoomApi }) {
   const gameId = room.gameId as GameId;
   const { minPlayers } = GAMES[gameId].definition.meta;
   const { PieceIcon } = CLIENT_GAMES[gameId];
-  const [botLevel, setBotLevel] = useState<BotLevel>('medium');
+  const [botLevel, setBotLevel] = useState<BotLevel>(() => defaultBotLevelOf(gameId));
 
   const filled = room.seats.findIndex((s) => s === null);
   const players = filled === -1 ? room.seats.length : filled;
@@ -87,7 +87,7 @@ export function Lobby({ api }: { api: RoomApi }) {
               value={botLevel}
               onChange={(e) => setBotLevel(e.target.value as BotLevel)}
             >
-              {BOT_LEVELS.map((l) => (
+              {botLevelsOf(gameId).map((l) => (
                 <option key={l} value={l}>
                   {t(`bot.level.${l}`)}
                 </option>

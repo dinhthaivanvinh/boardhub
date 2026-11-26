@@ -24,11 +24,16 @@ import reversiVi from '@bg/game-reversi/i18n/vi.json';
 import { definition as xiangqi } from '@bg/game-xiangqi/rules';
 import xiangqiEn from '@bg/game-xiangqi/i18n/en.json';
 import xiangqiVi from '@bg/game-xiangqi/i18n/vi.json';
+import { BOT_LEVELS, type BotLevel } from '@bg/bots';
 import type { AnyGameDefinition } from '@bg/engine';
 
 export interface CatalogEntry {
   definition: AnyGameDefinition;
   messages: { vi: Record<string, unknown>; en: Record<string, unknown> };
+  /** The levels of this game's bot, when it has more than the usual ones. Must match `bot.levels`. */
+  botLevels?: readonly BotLevel[];
+  /** The level chosen before the player picks one (`medium` if not said). */
+  defaultBotLevel?: BotLevel;
 }
 
 const ENTRIES = {
@@ -39,7 +44,13 @@ const ENTRIES = {
   'co-ganh': { definition: coGanh, messages: { vi: coGanhVi, en: coGanhEn } },
   'o-an-quan': { definition: oAnQuan, messages: { vi: oAnQuanVi, en: oAnQuanEn } },
   'ban-tau': { definition: banTau, messages: { vi: banTauVi, en: banTauEn } },
-  chess: { definition: chess, messages: { vi: chessVi, en: chessEn } },
+  chess: {
+    definition: chess,
+    messages: { vi: chessVi, en: chessEn },
+    botLevels: ['easy', 'beginner', 'medium', 'hard'],
+    // The site is for children who are learning.
+    defaultBotLevel: 'easy',
+  },
 } satisfies Record<string, CatalogEntry>;
 
 export type GameId = keyof typeof ENTRIES;
@@ -50,6 +61,9 @@ export const GAME_IDS = Object.keys(GAMES) as GameId[];
 export function isGameId(id: string): id is GameId {
   return Object.hasOwn(GAMES, id);
 }
+
+export const botLevelsOf = (id: GameId): readonly BotLevel[] => GAMES[id].botLevels ?? BOT_LEVELS;
+export const defaultBotLevelOf = (id: GameId): BotLevel => GAMES[id].defaultBotLevel ?? 'medium';
 
 /** MVP games not built yet, shown as "coming soon" on the home page (docs/01 §4). */
 export const UPCOMING_GAMES: readonly string[] = [];

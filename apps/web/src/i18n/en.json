@@ -83,6 +83,7 @@
   "bot": {
     "level": {
       "easy": "Easy",
+      "beginner": "Learner",
       "medium": "Medium",
       "hard": "Hard"
     }

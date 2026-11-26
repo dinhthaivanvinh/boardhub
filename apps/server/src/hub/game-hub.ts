@@ -19,6 +19,7 @@ import type {
   TimeControl,
 } from '@bg/protocol';
 import type { BotRunner } from '../bots/bot-runner';
+import { GAME_BOTS } from '../registry';
 import { clockDeadline, clocksAfterMove, clockViews, initClocks, stopClocks } from '../domain/clocks';
 import type { Actor, MatchRecord, Room, UserOccupant } from '../domain/types';
 import { HubError } from '../errors';
@@ -210,6 +211,8 @@ export class GameHub {
       if (room.ranked) throw new HubError('room.invalid_state', { reason: 'ranked' });
       if (seat >= room.seats.length) throw new HubError('invalid.payload', { field: 'seat' });
       if (room.seats[seat]) throw new HubError('room.seat_taken');
+      const levels = GAME_BOTS[room.gameId]?.levels;
+      if (levels && !levels.includes(level)) throw new HubError('invalid.payload', { field: 'level' });
       room.seats[seat] = { kind: 'bot', level };
     });
   }

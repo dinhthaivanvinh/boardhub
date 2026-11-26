@@ -83,6 +83,7 @@
   "bot": {
     "level": {
       "easy": "Dễ",
+      "beginner": "Tập chơi",
       "medium": "Vừa",
       "hard": "Khó"
     }

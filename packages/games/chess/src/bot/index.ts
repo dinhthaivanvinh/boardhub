@@ -1,5 +1,9 @@
 import { createBot } from '@bg/bots';
-import type { Seat } from '@bg/engine';
+import type { Rng, Seat } from '@bg/engine';
+import { movedPieceIsSafe, winsMaterial } from '../exchange';
+import { isCheckmate } from '../learn/checkmate';
+import { makeMove } from '../rules/board';
+import { positionOf } from '../rules/rules';
 import { definition } from '../rules/definition';
 import type { ChessMove, ChessState, PieceType } from '../rules/types';
 
@@ -114,6 +118,8 @@ const searchBot = createBot({
   orderMoves,
   levels: {
     easy: { algo: 'random', timeMs: 100 },
+    // Not searched: see `beginnerMove` below.
+    beginner: { algo: 'random', timeMs: 500 },
     medium: { algo: 'minimax', timeMs: 1000, maxDepth: 3 },
     hard: { algo: 'minimax', timeMs: 2500, maxDepth: 5, maxBranching: 24 },
   },
@@ -121,6 +127,29 @@ const searchBot = createBot({
 
 /** Chance that the gentle level takes a piece when it can. Low on purpose: a new player should win pieces too. */
 export const GENTLE_CAPTURE_CHANCE = 0.2;
+
+/** How often the `beginner` level notices each thing. Low enough that a child gets chances, too. */
+export const BEGINNER = { mate: 0.5, capture: 0.7, careful: 0.7 };
+
+/**
+ * Between `easy` and `medium`: it usually takes a piece that is there to be won, usually does not put the piece
+ * it moves where it is lost, and now and then sees a mate in one. It plans nothing, and it does not notice that
+ * a piece it left alone is attacked.
+ */
+function beginnerMove(state: ChessState, legal: ChessMove[], rng: Rng): ChessMove {
+  const pos = positionOf(state);
+  if (rng.next() < BEGINNER.mate) {
+    const mate = legal.find((m) => isCheckmate(makeMove(pos, m)));
+    if (mate) return mate;
+  }
+  if (rng.next() < BEGINNER.capture) {
+    const win = winsMaterial(pos);
+    if (win) return win;
+  }
+  const safe = rng.next() < BEGINNER.careful ? legal.filter((m) => movedPieceIsSafe(pos, m)) : [];
+  const pool = safe.length > 0 ? safe : legal;
+  return pool[rng.int(0, pool.length)]!;
+}
 
 /**
  * `easy` is for children who have just learnt the moves: it plays any legal move, and only now and then
@@ -135,6 +164,10 @@ export const bot: typeof searchBot = {
       const captures = legal.filter((m) => input.state.board[m.to] !== null);
       if (captures.length > 0 && input.rng.next() < GENTLE_CAPTURE_CHANCE)
         return captures[input.rng.int(0, captures.length)]!;
+    }
+    if (input.level === 'beginner') {
+      const legal = definition.legalMoves?.(input.state, input.seat) ?? [];
+      if (legal.length > 0) return beginnerMove(input.state, legal, input.rng);
     }
     return searchBot.chooseMove(input);
   },

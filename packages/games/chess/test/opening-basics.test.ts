@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { fromFen, legalMoves, makeMove, squareName } from '../src/rules/board';
 import type { ChessMove, Position } from '../src/rules/types';
+import { winsMaterial } from '../src/exchange';
 import { isCheckmate, matingMoves } from '../src/learn/checkmate';
 import { parseMove, playLine } from '../src/learn/logic';
 import {
@@ -21,7 +22,6 @@ import {
   TRAP_LINE,
   TRAP_SQUARE,
   trapFrames,
-  winsMaterial,
 } from '../src/learn/opening-basics';
 
 const names = (moves: ChessMove[]) => moves.map((m) => squareName(m.from) + squareName(m.to));

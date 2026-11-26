@@ -1,6 +1,6 @@
-import { BOT_LEVELS, type BotLevel } from '@bg/bots';
+import type { BotLevel } from '@bg/bots';
 import type { Seat } from '@bg/engine';
-import { GAMES, type GameId } from '@/games/catalog';
+import { botLevelsOf, defaultBotLevelOf, GAMES, type GameId } from '@/games/catalog';
 
 export type PlayMode = 'local' | 'bot';
 
@@ -24,7 +24,9 @@ const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v
 export function parseMatchSetup(gameId: GameId, params: SearchParams): MatchSetup {
   const mode: PlayMode = first(params.mode) === 'local' ? 'local' : 'bot';
   const levelParam = first(params.level);
-  const level: BotLevel = BOT_LEVELS.includes(levelParam as BotLevel) ? (levelParam as BotLevel) : 'medium';
+  const level: BotLevel = botLevelsOf(gameId).includes(levelParam as BotLevel)
+    ? (levelParam as BotLevel)
+    : defaultBotLevelOf(gameId);
   const humanSeat: Seat = first(params.side) === '1' ? 1 : 0;
 
   const { configSchema } = GAMES[gameId].definition;

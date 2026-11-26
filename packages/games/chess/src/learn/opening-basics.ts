@@ -1,6 +1,6 @@
-import { colOf, describe, legalMoves, makeMove, squareName, squareOf, START_FEN } from '../rules/board';
-import type { ChessMove, PieceType, Position } from '../rules/types';
-import { PIECE_VALUE } from './capture';
+import { colOf, legalMoves, makeMove, squareName, squareOf, START_FEN } from '../rules/board';
+import type { ChessMove, Position } from '../rules/types';
+import { movedPieceIsSafe, winsMaterial } from '../exchange';
 import { matingMoves } from './checkmate';
 import { playLine } from './logic';
 
@@ -13,39 +13,6 @@ const after = (line: string[]): Position => {
   const frames = playLine(START_FEN, line);
   return frames[frames.length - 1]!;
 };
-
-/** The points a move takes off the board. */
-const taken = (pos: Position, move: ChessMove): number => {
-  const piece = describe(pos, move).captured;
-  return piece ? PIECE_VALUE[piece[1] as PieceType] : 0;
-};
-
-/**
- * The points the side to move can win by trading on `square`, counting the whole exchange: each side takes back
- * only while that pays.
- */
-function exchangeGain(pos: Position, square: number): number {
-  let best = 0;
-  for (const m of legalMoves(pos)) {
-    if (m.to !== square) continue;
-    best = Math.max(best, taken(pos, m) - exchangeGain(makeMove(pos, m), square));
-  }
-  return best;
-}
-
-/** Whether the piece that just moved is safe: the other side gains no more on that square than the move took. */
-export function movedPieceIsSafe(pos: Position, move: ChessMove): boolean {
-  return exchangeGain(makeMove(pos, move), move.to) <= taken(pos, move);
-}
-
-/** A capture that leaves the side to move ahead after the whole exchange, or null. */
-export function winsMaterial(pos: Position): ChessMove | null {
-  for (const m of legalMoves(pos)) {
-    const points = taken(pos, m);
-    if (points > 0 && points - exchangeGain(makeMove(pos, m), m.to) > 0) return m;
-  }
-  return null;
-}
 
 // ---------------------------------------------------------------------------------------------------------
 // The three ideas

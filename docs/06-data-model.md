@@ -111,6 +111,14 @@ learn_events                       PK (actor, day, kind, item_id)   việc học
   Giữ 400 ngày. Học trước khi có bảng này không được ghi lại.
 ```
 
+Thêm ở migration `2026_11_26_002_account_visits`:
+
+```
+account_visits                     PK (day, user_id)   tài khoản nào truy cập ngày nào (để admin xem "đó là ai")
+  day text, user_id uuid → users (cascade)             INDEX (user_id)
+  KHÔNG lưu mã trình duyệt: không nối được việc làm lúc chưa đăng nhập với tài khoản. Giữ 90 ngày như daily_visits.
+```
+
 Không có `DATABASE_URL`: `MemoryAdminRepo`, `MemoryVisitRepo` và `MemoryLearnEventRepo`.
 
 Không có `DATABASE_URL` thì server dùng bản trong bộ nhớ (`MemoryUserRepo`, `MemoryHistoryRepo`): chỉ dành cho dev,

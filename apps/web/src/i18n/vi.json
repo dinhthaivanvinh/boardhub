@@ -828,10 +828,8 @@
     "denied": "Trang này chỉ dành cho quản trị viên.",
     "signIn": "Đăng nhập",
     "tabs": {
-      "stats": "Thống kê",
       "open": "Báo cáo mới",
       "resolved": "Đã xử lý",
-      "games": "Game",
       "sanctions": "Đang bị xử lý"
     },
     "empty": {
@@ -877,7 +875,212 @@
       "days": "{count} ngày gần nhất",
       "day": "Ngày",
       "refresh": "Làm mới",
-      "note": "Mỗi trình duyệt được đếm một lần mỗi ngày (giờ Việt Nam), theo mã ngẫu nhiên do trình duyệt tự tạo; không lưu tên, email hay địa chỉ mạng. Một người vào bằng nhiều thiết bị hoặc xoá dữ liệu trình duyệt sẽ được đếm nhiều lần. Người đăng nhập trong ngày được tính ở mức cao nhất của họ."
+      "note": "Mỗi trình duyệt được đếm một lần mỗi ngày (giờ Việt Nam), theo mã ngẫu nhiên do trình duyệt tự tạo; không lưu địa chỉ mạng. Với người dùng tài khoản, hệ thống ghi thêm tài khoản đó đã truy cập ngày nào. Một người vào bằng nhiều thiết bị hoặc xoá dữ liệu trình duyệt sẽ được đếm nhiều lần. Người đăng nhập trong ngày được tính ở mức cao nhất của họ.",
+      "title": "Lượt truy cập",
+      "overRange": "Trong khoảng đã chọn",
+      "chart": "Người truy cập mỗi ngày",
+      "chartHint": "Mỗi người được tính ở một nhóm: mức cao nhất của họ trong ngày",
+      "since": "Dữ liệu truy cập có từ ngày {day}, được giữ 90 ngày.",
+      "none": "Chưa có dữ liệu truy cập.",
+      "export": "Xuất CSV",
+      "unique": {
+        "total": "Người truy cập duy nhất",
+        "anonymous": "Không đăng nhập (duy nhất)",
+        "guest": "Khách (duy nhất)",
+        "registered": "Đã đăng ký (duy nhất)",
+        "sessions": "Phiên truy cập"
+      },
+      "columns": {
+        "total": "Tổng số người",
+        "anonymous": "Chưa đăng nhập",
+        "guest": "Khách",
+        "registered": "Đã đăng ký",
+        "sessions": "Phiên"
+      },
+      "defs": {
+        "title": "Cách tính các số liệu",
+        "unique": {
+          "term": "Người truy cập duy nhất",
+          "text": "Số trình duyệt khác nhau trong cả khoảng, mỗi trình duyệt tính một lần. Con số này nhỏ hơn hoặc bằng tổng các ngày cộng lại."
+        },
+        "sessions": {
+          "term": "Phiên truy cập",
+          "text": "Một lượt dùng liên tục; vắng từ 30 phút rồi quay lại là phiên mới. Những ngày trước khi bắt đầu đếm phiên được tính mỗi người một phiên."
+        },
+        "anonymous": {
+          "term": "Chưa đăng nhập",
+          "text": "Người truy cập không đăng nhập tài khoản nào. Họ không phải là tài khoản khách."
+        },
+        "guest": {
+          "term": "Khách",
+          "text": "Người truy cập đang dùng một tài khoản khách."
+        },
+        "registered": {
+          "term": "Đã đăng ký",
+          "text": "Người truy cập đã đăng nhập tài khoản có email."
+        }
+      },
+      "who": {
+        "hint": "Bấm vào một số để xem đó là ai.",
+        "open": "Xem ai đã truy cập: {label}",
+        "openDay": "Xem ai đã truy cập ngày {day}: {label} ({count})",
+        "title": "Ai đã truy cập",
+        "close": "Đóng",
+        "filter": "Nhóm người truy cập",
+        "range": "Từ {from} đến {to}",
+        "filters": {
+          "total": "Tất cả",
+          "registered": "Đã đăng ký",
+          "guest": "Khách",
+          "anonymous": "Chưa đăng nhập"
+        },
+        "name": "Tên",
+        "email": "Email",
+        "kind": "Loại tài khoản",
+        "days": "Số ngày vào",
+        "lastDay": "Lần gần nhất",
+        "empty": "Không có tài khoản nào trong danh sách này.",
+        "unnamed": "{count} trình duyệt không đăng nhập: không biết đó là ai, vì hệ thống không lưu tên, email hay địa chỉ mạng của người chưa đăng nhập.",
+        "since": "Danh sách tài khoản chỉ được ghi từ ngày {day}. Lượt vào trước đó đã được đếm nhưng không biết là tài khoản nào.",
+        "sinceNever": "Chưa ghi được tài khoản nào. Danh sách có từ lượt truy cập tiếp theo của người đã đăng nhập hoặc dùng tài khoản khách.",
+        "truncated": "Chỉ hiện {count} tài khoản vào gần nhất.",
+        "counting": "Các thẻ số đếm theo trình duyệt, còn danh sách này đếm theo tài khoản. Hai số có thể khác nhau, ví dụ khi một người dùng hai máy. Loại tài khoản là loại hiện tại."
+      }
+    },
+    "retry": "Thử lại",
+    "nav": {
+      "dashboard": "Tổng quan",
+      "visitors": "Lượt truy cập",
+      "reports": "Báo cáo",
+      "settings": "Cài đặt"
+    },
+    "crumbs": {
+      "dashboard": "Tổng quan",
+      "visitors": "Lượt truy cập",
+      "reports": "Báo cáo",
+      "settings": "Cài đặt trò chơi"
+    },
+    "shell": {
+      "brand": "BoardHub Admin",
+      "menu": "Menu quản trị",
+      "breadcrumb": "Vị trí",
+      "collapse": "Thu gọn",
+      "expand": "Mở rộng",
+      "notifications": "Báo cáo cần xử lý: {count}",
+      "profile": "Tài khoản của {name}",
+      "account": "Tài khoản",
+      "site": "Về trang BoardHub",
+      "signOut": "Đăng xuất"
+    },
+    "range": {
+      "label": "Khoảng thời gian",
+      "today": "Hôm nay",
+      "d7": "7 ngày",
+      "d14": "14 ngày",
+      "d30": "30 ngày",
+      "d90": "90 ngày",
+      "custom": "Tùy chọn",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "apply": "Áp dụng",
+      "invalid": "Chọn ngày bắt đầu trước ngày kết thúc, không quá {max} ngày và không ở tương lai."
+    },
+    "delta": {
+      "unknown": "Chưa đủ dữ liệu để so với kỳ trước",
+      "same": "Bằng kỳ trước ({before})",
+      "up": "Tăng {amount}",
+      "down": "Giảm {amount}",
+      "against": "so với kỳ trước ({before})"
+    },
+    "chart": {
+      "table": "Xem bảng số",
+      "day": "Ngày",
+      "noData": "Chưa có dữ liệu trong khoảng này.",
+      "label": "{title}. Dùng phím mũi tên trái, phải để xem từng ngày."
+    },
+    "dashboard": {
+      "title": "Tổng quan",
+      "refresh": "Làm mới",
+      "period": "Từ {from} đến {to} ({days, plural, other {# ngày}})",
+      "learningSince": "Dữ liệu học tập được ghi từ ngày {day}. Những ngày trước đó hiển thị là chưa có dữ liệu.",
+      "learningNone": "Chưa có dữ liệu học tập. Số liệu xuất hiện khi có bé hoàn thành một bài, phần luyện tập hay câu đố.",
+      "cards": {
+        "totalUsers": "Tổng tài khoản",
+        "registered": "Tài khoản đăng ký",
+        "guests": "Tài khoản khách",
+        "learners": "Người học tích cực",
+        "learnersNote": "Có hoàn thành ít nhất một việc trong kỳ",
+        "lessons": "Tổng số bài học",
+        "lessonsNote": "Trong chương trình hiện tại",
+        "completed": "Bài học hoàn thành trong kỳ",
+        "chess": "Ván cờ vua online",
+        "puzzles": "Câu đố giải trong kỳ",
+        "added": "+{count} trong kỳ",
+        "saved": "Các tài khoản đã lưu tổng cộng {count}"
+      },
+      "charts": {
+        "users": "Tăng trưởng tài khoản",
+        "usersHint": "Số tài khoản có đến hết mỗi ngày",
+        "registered": "Đăng ký",
+        "guest": "Khách",
+        "learning": "Hoạt động học mỗi ngày",
+        "learningHint": "Số lượt hoàn thành, mỗi người một lần mỗi ngày cho mỗi nội dung",
+        "lesson": "Bài học",
+        "practice": "Luyện tập",
+        "puzzle": "Câu đố",
+        "learners": "Người học",
+        "completion": "Hoàn thành theo bài học",
+        "completionHint": "Số người đã hoàn thành mỗi bài trong kỳ",
+        "completionEmpty": "Chưa có bài học nào được hoàn thành trong kỳ.",
+        "children": "người",
+        "more": "Xem thêm {count} bài",
+        "chess": "Ván cờ vua mỗi ngày",
+        "chessHint": "Chỉ ván chơi qua máy chủ, gồm cả đấu với máy trong phòng online",
+        "games": "Số ván"
+      },
+      "recent": {
+        "title": "Hoạt động gần đây",
+        "hint": "15 việc mới nhất, không phụ thuộc khoảng thời gian đang lọc",
+        "empty": "Chưa có hoạt động nào.",
+        "bot": "Máy",
+        "visitor": "Bé chưa đăng nhập",
+        "signup": {
+          "registered": "{name} đăng ký tài khoản",
+          "guest": "Tạo tài khoản khách {name}"
+        },
+        "match": "Ván {game}: {players}",
+        "report": "Có báo cáo về {name}: {reason}",
+        "lesson": "{name} hoàn thành bài “{item}”",
+        "practice": "{name} luyện tập xong bài “{item}”",
+        "puzzle": "{name} giải câu đố {item}"
+      },
+      "defs": {
+        "title": "Cách tính các số liệu",
+        "accounts": {
+          "term": "Tài khoản",
+          "text": "Tài khoản đã được tạo trên máy chủ. Tài khoản khách được tạo khi cần chơi online hoặc dùng khu Văn phòng. Người chỉ truy cập mà không đăng nhập không phải là tài khoản. Khách đăng ký thì chuyển thành tài khoản đăng ký."
+        },
+        "learners": {
+          "term": "Người học tích cực",
+          "text": "Số người hoàn thành ít nhất một bài, phần luyện tập hoặc câu đố trong kỳ. Đã đăng nhập thì đếm theo tài khoản; chưa đăng nhập thì đếm theo trình duyệt, nên một bé dùng hai máy được tính hai lần."
+        },
+        "completed": {
+          "term": "Bài học hoàn thành trong kỳ",
+          "text": "Mỗi người và mỗi bài được tính một lần trong kỳ. Dòng \"đã lưu\" là tổng số bài các tài khoản đã lưu từ trước đến nay."
+        },
+        "puzzles": {
+          "term": "Câu đố giải trong kỳ",
+          "text": "Tính như bài học: mỗi người và mỗi câu đố một lần trong kỳ."
+        },
+        "chess": {
+          "term": "Ván cờ vua online",
+          "text": "Tổng số ván cờ vua đã bắt đầu trên máy chủ đến hết kỳ. Ván chơi với máy hoặc hai người ngay trên một trình duyệt không được gửi lên nên không được đếm."
+        },
+        "compare": {
+          "term": "So với kỳ trước",
+          "text": "Kỳ trước dài bằng kỳ đang chọn và kết thúc ngay trước đó. Với số liệu học tập, chỉ so khi kỳ trước đã được ghi đầy đủ."
+        }
+      }
     }
   },
   "authPrompt": {

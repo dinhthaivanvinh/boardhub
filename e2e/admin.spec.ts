@@ -62,9 +62,14 @@ test('a reported player is muted by an admin, then unmuted', async ({ browser })
   await report(alice, 'Lăng mạ, quấy rối');
 
   const admin = await adminPage(browser);
-  await admin.goto('/admin');
-  await admin.getByTestId('admin-tab-open').click();
-  await expect(admin.getByTestId('admin-link')).toBeVisible();
+  // The header of the children's pages leads there for an admin.
+  await admin.goto('/');
+  await admin.getByTestId('admin-link').click();
+  await expect(admin.getByTestId('admin-bell')).toBeVisible();
+  const menu = admin.getByTestId('admin-menu');
+  if (await menu.isVisible()) await menu.click();
+  await admin.getByTestId('admin-nav-reports').click();
+  await expect(admin.getByTestId('admin-tab-open')).toBeVisible();
   const card = reportCard(admin, line);
   await expect(card).toBeVisible();
   await expect(card).toContainText('Lăng mạ, quấy rối');
@@ -98,8 +103,7 @@ test('a banned player is shown why and cannot rejoin', async ({ browser }) => {
   await report(alice, 'Gian lận (dùng máy, phần mềm hỗ trợ)');
 
   const admin = await adminPage(browser);
-  await admin.goto('/admin');
-  await admin.getByTestId('admin-tab-open').click();
+  await admin.goto('/admin/reports');
   const card = reportCard(admin, line);
   await card.getByTestId('admin-duration').selectOption({ label: '24 giờ' });
   await card.getByTestId('admin-ban').click();
@@ -121,8 +125,7 @@ test('the admin page is closed to players', async ({ page }) => {
 
 test('admins see every game with its switch', async ({ browser }) => {
   const admin = await adminPage(browser);
-  await admin.goto('/admin');
-  await admin.getByTestId('admin-tab-games').click();
+  await admin.goto('/admin/settings/games');
   for (const id of ['caro', 'chess', 'xiangqi'])
     await expect(admin.getByTestId(`admin-game-${id}`)).toBeVisible();
 });
@@ -148,7 +151,7 @@ test('the admin sees how many people came today, split by who was signed in', as
   const visitor = await newPlayer(browser);
   await visitor.goto('/');
   const admin = await adminPage(browser);
-  await admin.goto('/admin');
+  await admin.goto('/admin/visitors');
   await expect(admin.getByTestId('admin-stats')).toBeVisible();
   // The pings come a moment after the pages open: read again until they are in.
   await expect(async () => {
@@ -158,4 +161,95 @@ test('the admin sees how many people came today, split by who was signed in', as
     await expect(admin.getByTestId('stats-total')).toContainText(/[1-9]\d*$/);
   }).toPass({ timeout: 15_000 });
   await expect(admin.getByTestId('stats-days').locator('tbody tr')).toHaveCount(14);
+});
+
+test('the dashboard shows real numbers, and the range filter changes what it covers', async ({ browser }) => {
+  const admin = await adminPage(browser);
+  await admin.goto('/admin');
+  await expect(admin.getByTestId('admin-dashboard')).toBeVisible();
+  // The admin's own account at least.
+  await expect(admin.getByTestId('card-registered')).toContainText(/[1-9]/);
+  await expect(admin.getByTestId('admin-recent').locator('li').first()).toBeVisible();
+  // The menu button is for phones only: elsewhere the menu is always there.
+  const narrow = admin.viewportSize()!.width < 768;
+  await expect(admin.getByTestId('admin-menu')).toBeVisible({ visible: narrow });
+  // The frame of the children's pages is not here.
+  await expect(admin.locator('.site-header')).toBeHidden();
+  await expect(admin.locator('.site-footer')).toBeHidden();
+
+  const week = admin.waitForResponse((r) => r.url().includes('/api/admin/overview'));
+  await admin.getByTestId('range-d7').click();
+  expect((await week).status()).toBe(200);
+  await expect(admin.getByTestId('range-d7')).toHaveAttribute('aria-pressed', 'true');
+  await expect(admin.getByText('(7 ngày)')).toBeVisible();
+
+  // A range the wrong way round is refused on the page.
+  await admin.getByTestId('range-custom').click();
+  await admin.getByTestId('range-from').fill('2020-01-01');
+  await admin.getByTestId('range-apply').click();
+  await expect(admin.getByRole('alert').filter({ hasText: 'không quá 90 ngày' })).toBeVisible();
+
+  // Nothing scrolls sideways, whatever the width.
+  const overflow = await admin.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
+test('pressing a visitor number shows who it is', async ({ browser }) => {
+  // A guest who visits, and a visitor who is not signed in.
+  const visitor = await newPlayer(browser);
+  const name = `Khách ${Date.now() % 1_000_000}`;
+  const guest = (await (
+    await visitor.request.post(`${SERVER}/api/auth/guest`, { data: { displayName: name } })
+  ).json()) as Auth;
+  await visitor.request.post(`${SERVER}/api/visit`, {
+    data: { visitorId: `who-${Date.now()}-0123456789` },
+    headers: { authorization: `Bearer ${guest.token}` },
+  });
+  await (await newPlayer(browser)).goto('/');
+
+  const admin = await adminPage(browser);
+  await admin.goto('/admin/visitors');
+  await admin.getByTestId('stats-today-guest').getByRole('button').click();
+  const dialog = admin.getByTestId('visitor-dialog');
+  await expect(dialog.getByTestId('who-guest')).toHaveAttribute('aria-pressed', 'true');
+  await expect(dialog.getByTestId('who-table').getByRole('row').filter({ hasText: name })).toContainText(
+    'Khách',
+  );
+  // Visitors who are not signed in have no names, only a count.
+  await dialog.getByTestId('who-anonymous').click();
+  await expect(dialog.getByTestId('who-unnamed')).toContainText('không biết đó là ai');
+  await expect(dialog.getByTestId('who-table')).toHaveCount(0);
+  await admin.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+
+  // A number in the day table opens the list of that day.
+  await admin.getByTestId('day-total').first().click();
+  await expect(admin.getByTestId('visitor-dialog').getByTestId('who-table')).toContainText(name);
+});
+
+test('the visitor numbers can be saved as a CSV file', async ({ browser }) => {
+  const admin = await adminPage(browser);
+  await admin.goto('/admin/visitors');
+  const download = admin.waitForEvent('download');
+  await admin.getByTestId('stats-export').click();
+  const file = await download;
+  expect(file.suggestedFilename()).toMatch(/^boardhub-visitors-[\d-]+_[\d-]+\.csv$/);
+  const text = await (
+    await file.createReadStream()
+  )
+    .toArray()
+    .then((chunks) => Buffer.concat(chunks).toString());
+  const lines = text.trim().split('\r\n');
+  expect(lines[0]).toContain('Tổng số người');
+  expect(lines).toHaveLength(15);
+});
+
+test('signing out from the admin header goes home and closes the admin area', async ({ browser }) => {
+  const admin = await adminPage(browser);
+  // The session is put back on every new page by the helper, so this checks the page that signed out.
+  await admin.goto('/admin');
+  await admin.getByTestId('admin-profile').click();
+  await admin.getByTestId('admin-logout').click();
+  await expect(admin).toHaveURL(/\/$/);
+  await expect(admin.getByTestId('admin-link')).toBeHidden();
 });

@@ -828,10 +828,8 @@
     "denied": "This page is for admins only.",
     "signIn": "Sign in",
     "tabs": {
-      "stats": "Statistics",
       "open": "New reports",
       "resolved": "Handled",
-      "games": "Games",
       "sanctions": "Sanctioned"
     },
     "empty": {
@@ -877,7 +875,212 @@
       "days": "Last {count} days",
       "day": "Day",
       "refresh": "Refresh",
-      "note": "Each browser is counted once a day (Vietnam time), by a random id the browser makes up; no name, email or network address is stored. Someone using several devices or clearing browser data is counted more than once. Someone who signs in during the day counts at their highest level."
+      "note": "Each browser is counted once a day (Vietnam time), by a random id the browser makes up; no network address is stored. For someone using an account, the day that account visited is also noted. Someone using several devices or clearing browser data is counted more than once. Someone who signs in during the day counts at their highest level.",
+      "title": "Visitors",
+      "overRange": "Over the chosen range",
+      "chart": "Visitors a day",
+      "chartHint": "Each visitor is in one group: the highest they had that day",
+      "since": "Visits are stored from {day} and kept for 90 days.",
+      "none": "No visits stored yet.",
+      "export": "Export CSV",
+      "unique": {
+        "total": "Unique visitors",
+        "anonymous": "Not signed in (unique)",
+        "guest": "Guests (unique)",
+        "registered": "Registered (unique)",
+        "sessions": "Sessions"
+      },
+      "columns": {
+        "total": "Visitors",
+        "anonymous": "Not signed in",
+        "guest": "Guests",
+        "registered": "Registered",
+        "sessions": "Sessions"
+      },
+      "defs": {
+        "title": "How the numbers are counted",
+        "unique": {
+          "term": "Unique visitors",
+          "text": "Different browsers over the whole range, each counted once. It is at most the sum of the days."
+        },
+        "sessions": {
+          "term": "Sessions",
+          "text": "One stretch of use; coming back after 30 minutes away starts a new one. Days from before sessions were counted have one per visitor."
+        },
+        "anonymous": {
+          "term": "Not signed in",
+          "text": "Visitors using no account. They are not guest accounts."
+        },
+        "guest": {
+          "term": "Guests",
+          "text": "Visitors using a guest account."
+        },
+        "registered": {
+          "term": "Registered",
+          "text": "Visitors signed in to an account with an email."
+        }
+      },
+      "who": {
+        "hint": "Press a number to see who it is.",
+        "open": "See who visited: {label}",
+        "openDay": "See who visited on {day}: {label} ({count})",
+        "title": "Who visited",
+        "close": "Close",
+        "filter": "Visitor group",
+        "range": "{from} to {to}",
+        "filters": {
+          "total": "Everyone",
+          "registered": "Registered",
+          "guest": "Guests",
+          "anonymous": "Not signed in"
+        },
+        "name": "Name",
+        "email": "Email",
+        "kind": "Account type",
+        "days": "Days visited",
+        "lastDay": "Last visit",
+        "empty": "No account in this list.",
+        "unnamed": "{count, plural, =1 {1 browser was} other {# browsers were}} not signed in: there is no knowing who, since no name, email or network address is stored for them.",
+        "since": "Accounts are listed from {day}. Earlier visits were counted, but not which account they were.",
+        "sinceNever": "No account has been recorded yet. The list starts with the next visit of someone signed in or using a guest account.",
+        "truncated": "Only the {count} accounts that visited latest are shown.",
+        "counting": "The cards count browsers and this list counts accounts, so the two can differ, for example when one person uses two devices. The account type is the current one."
+      }
+    },
+    "retry": "Try again",
+    "nav": {
+      "dashboard": "Dashboard",
+      "visitors": "Visitors",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "crumbs": {
+      "dashboard": "Dashboard",
+      "visitors": "Visitors",
+      "reports": "Reports",
+      "settings": "Game settings"
+    },
+    "shell": {
+      "brand": "BoardHub Admin",
+      "menu": "Admin menu",
+      "breadcrumb": "Breadcrumb",
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "notifications": "Reports to handle: {count}",
+      "profile": "Account of {name}",
+      "account": "Account",
+      "site": "Back to BoardHub",
+      "signOut": "Sign out"
+    },
+    "range": {
+      "label": "Time range",
+      "today": "Today",
+      "d7": "7 days",
+      "d14": "14 days",
+      "d30": "30 days",
+      "d90": "90 days",
+      "custom": "Custom",
+      "from": "From",
+      "to": "To",
+      "apply": "Apply",
+      "invalid": "Pick a start before the end, at most {max} days and not in the future."
+    },
+    "delta": {
+      "unknown": "Not enough data to compare with the range before",
+      "same": "Same as the range before ({before})",
+      "up": "Up {amount}",
+      "down": "Down {amount}",
+      "against": "from the range before ({before})"
+    },
+    "chart": {
+      "table": "Show the numbers",
+      "day": "Day",
+      "noData": "No data in this range.",
+      "label": "{title}. Use the left and right arrow keys to read each day."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "refresh": "Refresh",
+      "period": "{from} to {to} ({days, plural, =1 {1 day} other {# days}})",
+      "learningSince": "Learning is recorded from {day}. Earlier days show as having no data.",
+      "learningNone": "No learning data yet. It appears when a child finishes a lesson, a practice or a puzzle.",
+      "cards": {
+        "totalUsers": "All accounts",
+        "registered": "Registered accounts",
+        "guests": "Guest accounts",
+        "learners": "Active learners",
+        "learnersNote": "Finished at least one thing in the range",
+        "lessons": "Lessons",
+        "lessonsNote": "In the current curriculum",
+        "completed": "Lessons finished in range",
+        "chess": "Online chess games",
+        "puzzles": "Puzzles solved in range",
+        "added": "+{count} in range",
+        "saved": "Accounts have saved {count} in all"
+      },
+      "charts": {
+        "users": "Account growth",
+        "usersHint": "Accounts that existed at the end of each day",
+        "registered": "Registered",
+        "guest": "Guest",
+        "learning": "Daily learning activity",
+        "learningHint": "Things finished, once per child, item and day",
+        "lesson": "Lessons",
+        "practice": "Practices",
+        "puzzle": "Puzzles",
+        "learners": "Learners",
+        "completion": "Completions by lesson",
+        "completionHint": "Children who finished each lesson in the range",
+        "completionEmpty": "No lesson was finished in this range.",
+        "children": "children",
+        "more": "Show {count} more",
+        "chess": "Chess games a day",
+        "chessHint": "Only games played through the server, bots in online rooms included",
+        "games": "Games"
+      },
+      "recent": {
+        "title": "Recent activity",
+        "hint": "The latest 15 things, whatever range is chosen",
+        "empty": "Nothing has happened yet.",
+        "bot": "Computer",
+        "visitor": "A child who is not signed in",
+        "signup": {
+          "registered": "{name} registered",
+          "guest": "Guest account {name} was made"
+        },
+        "match": "{game}: {players}",
+        "report": "{name} was reported: {reason}",
+        "lesson": "{name} finished “{item}”",
+        "practice": "{name} finished the practice of “{item}”",
+        "puzzle": "{name} solved puzzle {item}"
+      },
+      "defs": {
+        "title": "How the numbers are counted",
+        "accounts": {
+          "term": "Accounts",
+          "text": "Accounts stored on the server. A guest account is made when someone needs to play online or use the office area. A visitor who is not signed in is not an account. A guest who registers becomes a registered account."
+        },
+        "learners": {
+          "term": "Active learners",
+          "text": "People who finished at least one lesson, practice or puzzle in the range. Signed in they are counted by account, otherwise by browser, so a child on two devices counts twice."
+        },
+        "completed": {
+          "term": "Lessons finished in range",
+          "text": "Each person and lesson counts once in the range. \"Saved\" is everything accounts have ever saved."
+        },
+        "puzzles": {
+          "term": "Puzzles solved in range",
+          "text": "Counted like lessons: once per person and puzzle in the range."
+        },
+        "chess": {
+          "term": "Online chess games",
+          "text": "All chess games started on the server up to the end of the range. Games against the computer or between two people in one browser are never sent, so they are not counted."
+        },
+        "compare": {
+          "term": "Against the range before",
+          "text": "The range before has the same length and ends just before this one. Learning numbers are compared only when all of it was recorded."
+        }
+      }
     }
   },
   "authPrompt": {

@@ -126,6 +126,8 @@ describe('admin access', () => {
       ['GET', '/api/admin/sanctions'],
       ['PUT', `/api/admin/users/${id}/sanctions`, { mutedUntil: null }],
       ['GET', '/api/admin/stats'],
+      ['GET', '/api/admin/visitors?from=2026-11-01&to=2026-11-02'],
+      ['GET', '/api/admin/overview?from=2026-11-01&to=2026-11-02'],
     ];
     for (const [method, path, body] of routes) {
       const res = await api(method, path, body, player.token);

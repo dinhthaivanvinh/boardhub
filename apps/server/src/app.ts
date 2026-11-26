@@ -5,6 +5,9 @@ import Fastify from 'fastify';
 import { Redis } from 'ioredis';
 import { Server } from 'socket.io';
 import { MemoryAdminRepo, type AdminRepo } from './admin/admin-repo';
+import { MemoryAnalyticsRepo, type AnalyticsRepo } from './analytics/analytics-repo';
+import { AnalyticsService } from './analytics/analytics-service';
+import { PgAnalyticsRepo } from './db/pg-analytics-repo';
 import { registerAdminRoutes } from './admin/admin-routes';
 import { AdminService } from './admin/admin-service';
 import { AuthService } from './auth/auth-service';
@@ -56,6 +59,7 @@ export interface ServerOverrides {
   adminRepo?: AdminRepo;
   visitRepo?: VisitRepo;
   learnRepo?: LearnEventRepo;
+  analyticsRepo?: AnalyticsRepo;
   /** How often waiting quick-match players are re-checked (widening rating windows). */
   matchSweepMs?: number;
 }
@@ -85,6 +89,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   let adminRepo = overrides.adminRepo;
   let visitRepo = overrides.visitRepo;
   let learnRepo = overrides.learnRepo;
+  let analyticsRepo = overrides.analyticsRepo;
   const missing = [users, history, ratingRepo, officeRepo, adminRepo, visitRepo, learnRepo].some((r) => !r);
   if (missing && config.DATABASE_URL) {
     const db = createDb(config.DATABASE_URL);
@@ -96,6 +101,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     adminRepo ??= new PgAdminRepo(db);
     visitRepo ??= new PgVisitRepo(db);
     learnRepo ??= new PgLearnEventRepo(db);
+    analyticsRepo ??= new PgAnalyticsRepo(db);
     cleanups.push(() => db.destroy());
   }
   users ??= new MemoryUserRepo();
@@ -105,6 +111,13 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   visitRepo ??= new MemoryVisitRepo();
   learnRepo ??= new MemoryLearnEventRepo();
   const ratings = new RatingService(ratingRepo);
+  // In memory, the dashboard reads the in-memory repos; a repo of another sort counts as empty.
+  analyticsRepo ??= new MemoryAnalyticsRepo(
+    users instanceof MemoryUserRepo ? users : new MemoryUserRepo(),
+    history instanceof MemoryHistoryRepo ? history : new MemoryHistoryRepo(),
+    learnRepo instanceof MemoryLearnEventRepo ? learnRepo : new MemoryLearnEventRepo(),
+    adminRepo instanceof MemoryAdminRepo ? adminRepo : new MemoryAdminRepo(),
+  );
 
   const io: IoServer = new Server(app.server, {
     cors: { origin: config.corsOrigins, credentials: true },
@@ -202,6 +215,8 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     admin,
     new VisitService(visitRepo),
     new LearnEventService(learnRepo),
+    new AnalyticsService(analyticsRepo, users),
+    users,
     config.AUTH_RATE_LIMIT * 3,
   );
   const matchmaker = new Matchmaker({

@@ -16,13 +16,15 @@ const today = () => new Date(Date.now() + 7 * 3_600_000).toISOString().slice(0, 
 /**
  * Tells the server that this browser came, for the visitor count of the admin page: once a day, again when
  * someone signs in, and once for every new session (back after 30 minutes away). It sends a random id the
- * browser made up (no cookie, no address, no name) and, when someone is signed in, their token so the server
- * can tell guests and accounts from people who are not signed in. A failed ping is tried again at the next
+ * browser made up (no cookie, no address, no name). When someone is signed in it also sends their token: the
+ * server can then tell guests and accounts from people who are not signed in, and notes, apart from that id,
+ * that the account visited. A failed ping is tried again at the next
  * page. Renders nothing.
  */
 export function VisitPing() {
   const token = useSession((s) => s.token);
   const kind = useSession((s) => s.user?.kind);
+  const userId = useSession((s) => s.user?.id);
   const pathname = usePathname();
   const newSession = useRef(false);
   const touched = useRef(0);
@@ -36,7 +38,7 @@ export function VisitPing() {
   const send = useCallback(() => {
     try {
       touch();
-      const mark = `${today()}:${token ? (kind ?? 'guest') : 'anonymous'}`;
+      const mark = `${today()}:${token ? `${kind ?? 'guest'}:${userId ?? ''}` : 'anonymous'}`;
       const starting = newSession.current;
       if (!starting && window.localStorage.getItem(SENT_KEY) === mark) return;
       newSession.current = false;
@@ -56,7 +58,7 @@ export function VisitPing() {
     } catch {
       /* storage blocked: no count, nothing else */
     }
-  }, [token, kind, touch]);
+  }, [token, kind, userId, touch]);
 
   // On the first page, on every page after it, and after signing in.
   useEffect(() => {

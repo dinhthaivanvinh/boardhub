@@ -161,7 +161,17 @@ export interface DailyVisitsTable {
   sessions: Generated<number>;
 }
 
+/**
+ * Which accounts visited on which day. It holds no browser id, so it cannot tie what a browser did while not
+ * signed in to an account.
+ */
+export interface AccountVisitsTable {
+  day: string;
+  user_id: string;
+}
+
 export interface Database {
+  account_visits: AccountVisitsTable;
   roles: RolesTable;
   user_roles: UserRolesTable;
   learn_events: LearnEventsTable;
@@ -438,6 +448,20 @@ const MIGRATIONS: Record<string, Migration> = {
       await db.schema.alterTable('daily_visits').dropColumn('sessions').execute();
       await db.schema.alterTable('users').dropColumn('last_seen_at').execute();
       for (const t of ['learn_events', 'user_roles', 'roles']) await db.schema.dropTable(t).execute();
+    },
+  },
+  '2026_11_26_002_account_visits': {
+    async up(db) {
+      await db.schema
+        .createTable('account_visits')
+        .addColumn('day', 'text', (c) => c.notNull())
+        .addColumn('user_id', 'uuid', (c) => c.notNull().references('users.id').onDelete('cascade'))
+        .addPrimaryKeyConstraint('account_visits_pk', ['day', 'user_id'])
+        .execute();
+      await db.schema.createIndex('account_visits_user').on('account_visits').column('user_id').execute();
+    },
+    async down(db) {
+      await db.schema.dropTable('account_visits').execute();
     },
   },
   '2026_11_07_001_avatars': {

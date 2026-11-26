@@ -27,6 +27,13 @@ describe('the journey', () => {
     expect(JOURNEY_LESSONS[0]).toBe('coordinates');
   });
 
+  it('teaches the special moves before the openings, which use them', () => {
+    const at = (id: string) => JOURNEY_LESSONS.indexOf(id);
+    expect(at('castling')).toBeGreaterThan(at('draws'));
+    expect(at('tactics')).toBeGreaterThan(at('promotion'));
+    expect(at('italian')).toBeGreaterThan(at('tactics'));
+  });
+
   it('points at the first lesson not done, and at nothing when all are', () => {
     expect(nextLessonId(new Set())).toBe('coordinates');
     expect(nextLessonId(new Set(['coordinates']))).toBe('setup');

@@ -14,9 +14,10 @@ export const JOURNEY: readonly JourneyStage[] = [
   { id: 'start', lessons: [COORDINATES_LESSON_ID, SETUP_LESSON_ID] },
   { id: 'pieces', lessons: PIECE_LESSONS.map((l) => l.id) },
   { id: 'rules', lessons: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID, DRAWS_LESSON_ID] },
-  { id: 'openings', lessons: OPENING_LESSONS.map((l) => l.id) },
+  // Castling and the other special moves are rules: the openings use them, so they come first.
   { id: 'specials', lessons: SPECIAL_LESSONS.map((l) => l.id) },
   { id: 'tactics', lessons: [TACTICS_LESSON_ID] },
+  { id: 'openings', lessons: OPENING_LESSONS.map((l) => l.id) },
 ];
 
 /** Every lesson, in the order a child should take them. */
@@ -93,15 +94,6 @@ export const BADGES: readonly Badge[] = [
   },
   { id: 'rules', icon: '👑', earned: (d) => all(d, [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID]) },
   {
-    id: 'openings',
-    icon: '🚀',
-    earned: (d) =>
-      all(
-        d,
-        OPENING_LESSONS.map((l) => l.id),
-      ),
-  },
-  {
     id: 'specials',
     icon: '✨',
     earned: (d) =>
@@ -111,6 +103,15 @@ export const BADGES: readonly Badge[] = [
       ),
   },
   { id: 'tactics', icon: '🧠', earned: (d) => d.has(TACTICS_LESSON_ID) },
+  {
+    id: 'openings',
+    icon: '🚀',
+    earned: (d) =>
+      all(
+        d,
+        OPENING_LESSONS.map((l) => l.id),
+      ),
+  },
   { id: 'practice5', icon: '💪', earned: (d) => practicesDone(d) >= 5 },
   { id: 'puzzles5', icon: '🧩', earned: (_d, p) => solvedCount(p) >= 5 },
   { id: 'puzzles25', icon: '🎯', earned: (_d, p) => solvedCount(p) >= 25 },

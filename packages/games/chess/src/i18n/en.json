@@ -359,7 +359,7 @@
           "o1": "To get a pawn to the end of the board",
           "o2": "To checkmate the other king",
           "right": "Right! Whoever checkmates the other king first wins.",
-          "wrong": "Not quite. Remember the lesson on catching the king: a king in checkmate loses."
+          "wrong": "Not quite. Remember: when the king is checkmated, the game is lost."
         }
       },
       "allDone": "Well done! You finished this part.",

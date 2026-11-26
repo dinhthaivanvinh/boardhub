@@ -12,17 +12,16 @@ import {
   CoordinatesLesson,
   DRAWS_LESSON_ID,
   DrawsLesson,
+  JOURNEY,
+  JOURNEY_LESSONS,
   SETUP_LESSON_ID,
   SetupLesson,
-  OPENING_LESSONS,
   OpeningLesson,
   openingLesson,
-  PIECE_LESSONS,
   PieceLesson,
   PRACTICE_LESSON_IDS,
   practiceId,
   pieceLesson,
-  SPECIAL_LESSONS,
   SpecialLesson,
   specialLesson,
   TACTICS_LESSON_ID,
@@ -32,20 +31,15 @@ import { lessonName } from './lesson-name';
 import { useDoneLessons, useMarkDone } from './use-progress';
 import { useReducedMotion } from './use-reduced-motion';
 
-/** The order the lessons are meant to be taken in (the home page path). */
-const ORDER: string[] = [
-  COORDINATES_LESSON_ID,
-  SETUP_LESSON_ID,
-  ...PIECE_LESSONS.map((l) => l.id),
-  CAPTURE_LESSON_ID,
-  CHECKMATE_LESSON_ID,
-  DRAWS_LESSON_ID,
-  ...OPENING_LESSONS.map((l) => l.id),
-  ...SPECIAL_LESSONS.map((l) => l.id),
-  TACTICS_LESSON_ID,
-];
-
-type NavGroup = { heading: string; ids: string[] };
+/** The heading of each stage of the journey in the lesson menu. */
+const GROUP_HEADING: Record<string, string> = {
+  start: 'groupStart',
+  pieces: 'piecesHeading',
+  rules: 'groupRules',
+  specials: 'specialsHeading',
+  tactics: 'groupTactics',
+  openings: 'openingsHeading',
+};
 
 /** The piece glyph in front of a piece lesson of the menu; other lessons have no picture. */
 const PIECE_GLYPH: Record<string, string> = {
@@ -62,14 +56,10 @@ function LessonNav({ currentId }: { currentId: string }) {
   const t = useTranslations();
   const done = useDoneLessons();
   const L = 'games.chess.learn';
-  const groups: NavGroup[] = [
-    { heading: t(`${L}.groupStart`), ids: [COORDINATES_LESSON_ID, SETUP_LESSON_ID] },
-    { heading: t(`${L}.piecesHeading`), ids: PIECE_LESSONS.map((l) => l.id) },
-    { heading: t(`${L}.groupRules`), ids: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID, DRAWS_LESSON_ID] },
-    { heading: t(`${L}.openingsHeading`), ids: OPENING_LESSONS.map((l) => l.id) },
-    { heading: t(`${L}.specialsHeading`), ids: SPECIAL_LESSONS.map((l) => l.id) },
-    { heading: t(`${L}.groupTactics`), ids: [TACTICS_LESSON_ID] },
-  ];
+  const groups = JOURNEY.map((stage) => ({
+    heading: t(`${L}.${GROUP_HEADING[stage.id]}`),
+    ids: stage.lessons,
+  }));
   return (
     <nav
       aria-label={t(`${L}.allLessons`)}
@@ -133,7 +123,7 @@ function LessonNav({ currentId }: { currentId: string }) {
 /** The big button at the end of a lesson: on to the next one, or on to playing after the last. */
 function NextLessonLink({ lessonId, secondary = false }: { lessonId: string; secondary?: boolean }) {
   const t = useTranslations();
-  const next = ORDER[ORDER.indexOf(lessonId) + 1];
+  const next = JOURNEY_LESSONS[JOURNEY_LESSONS.indexOf(lessonId) + 1];
   const look = secondary ? 'btn ch-next' : 'btn btn-primary ch-next';
   return next ? (
     <Link href={`/learn/chess/${next}`} className={look}>

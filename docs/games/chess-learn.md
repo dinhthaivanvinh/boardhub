@@ -19,6 +19,12 @@ Trạng thái: Đã làm bản đầu (bài toạ độ, 6 bài quân cờ, bài
   của trình duyệt đúng ngôn ngữ; không có giọng nào phù hợp thì không đọc và hiện lời nhắc cài giọng.
 - **Đọc câu hỏi và đọc kết quả đều bật sẵn** (công tắc nhớ trong trình duyệt). Bài nào cũng có nút **Quay lại** (bước trước, hoặc nước trước ở bài khai cuộc).
 
+## 1b. Thứ tự lộ trình
+
+Làm quen bàn cờ → Quân cờ → Luật (ăn quân, chiếu hết, hoà) → Nước đặc biệt → Mẹo và tàn cuộc → Khai cuộc. Nước đặc biệt đứng
+trước khai cuộc vì các khai cuộc có nhập thành. Thứ tự chỉ khai báo ở `JOURNEY` (`learn/journey.ts`); menu bài học, nút "bài tiếp
+theo", trang Hành trình và bản đồ trang chủ đều lấy từ đó. Tiến độ lưu theo id bài nên đổi thứ tự không làm mất tiến độ.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

@@ -7,6 +7,7 @@ import { coordRounds } from '../src/learn/coordinates';
 import { CoordinatesLesson } from '../src/learn/CoordinatesLesson';
 import { PIECE_LESSONS } from '../src/learn/data';
 import { PieceLesson } from '../src/learn/PieceLesson';
+import { loadVoicePack } from '../src/learn/speech';
 
 const get = (obj: unknown, path: string): unknown =>
   path.split('.').reduce<unknown>((o, k) => (o as Record<string, unknown> | undefined)?.[k], obj);
@@ -46,6 +47,9 @@ function installSpeech() {
   return state;
 }
 
+/** Until the list of recordings has arrived (here: has failed to), a sentence waits for it. */
+const listLoaded = () => loadVoicePack('vi');
+
 beforeEach(() => window.localStorage.clear());
 afterEach(() => {
   cleanup();
@@ -53,9 +57,10 @@ afterEach(() => {
 });
 
 describe('spoken results', () => {
-  it('reads the result after each answer, and again when the same wrong answer is given twice', () => {
+  it('reads the result after each answer, and again when the same wrong answer is given twice', async () => {
     const speech = installSpeech();
     render(<CoordinatesLesson t={tr} animate={false} advanceDelay={0} />);
+    await listLoaded();
     next(); // meet -> rows
     const round = coordRounds('rank')[0]!;
     const wrongSquare = squareName((round.square + 8) % 64); // another row
@@ -124,10 +129,11 @@ describe('spoken results', () => {
     });
   });
 
-  it('piece lesson: the "found 2 of 4" counter is silent, a wrong tap and the end are spoken', () => {
+  it('piece lesson: the "found 2 of 4" counter is silent, a wrong tap and the end are spoken', async () => {
     const speech = installSpeech();
     const lesson = PIECE_LESSONS.find((l) => l.id === 'knight')!;
     render(<PieceLesson lesson={lesson} t={tr} animate={false} />);
+    await listLoaded();
     next(); // meet -> watch
     next(); // watch -> try
     speech.spoken.length = 0;

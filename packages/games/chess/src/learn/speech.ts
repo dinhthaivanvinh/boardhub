@@ -63,7 +63,8 @@ export function loadVoicePack(lang: string): Promise<boolean> {
   if (pending) return pending;
   const request =
     typeof fetch === 'function' && typeof Audio !== 'undefined'
-      ? fetch(`${voiceDir(lang)}/index.json`)
+      ? // Ask every time whether the list changed: a kept copy lacks the sentences of a newer version.
+        fetch(`${voiceDir(lang)}/index.json`, { cache: 'no-cache' })
           .then((r) =>
             r.ok ? (r.json() as Promise<{ files?: unknown }>) : Promise.reject(new Error(String(r.status))),
           )
@@ -95,6 +96,28 @@ let current: HTMLAudioElement | null = null;
 /** Changes whenever something else is said or all is stopped: a sequence then does not go on. */
 let run = 0;
 const audioPlaying = () => current !== null && !current.paused && !current.ended;
+/** The `run` of a sentence waiting for the list of recordings; it counts as being spoken. */
+let queued = -1;
+
+/**
+ * While the list of recordings is on its way, keeps `say` for when it has arrived: until then nobody knows
+ * whether the sentence is recorded, and a browser without a voice for the language would leave it unread. Only
+ * the last sentence asked for is kept. Returns false when there is nothing to wait for.
+ */
+function afterLoading(lang: string, say: () => void): boolean {
+  const pending = loading.get(lang);
+  if (!pending) return false;
+  stopSpeaking();
+  const mine = run;
+  queued = mine;
+  void pending.then(() => {
+    if (mine === run) {
+      queued = -1;
+      say();
+    }
+  });
+  return true;
+}
 
 /** Plays a recording. If the file cannot be played (missing, blocked) the browser voice says it instead. */
 function playFile(url: string, fallback: () => void): void {
@@ -155,6 +178,7 @@ function speakWithBrowser(text: string, lang: string): boolean {
 
 /** Reads the text aloud: from the recording of that sentence if there is one, else with the browser's voice. Returns false when nothing was read. */
 export function speak(text: string, lang: string): boolean {
+  if (afterLoading(lang, () => void speak(text, lang))) return true;
   const key = voiceKey(spellSquares(text, lang));
   if (packs.get(lang)?.has(key) && typeof Audio !== 'undefined') {
     playFile(`${voiceDir(lang)}/${key}.mp3`, () => void speakWithBrowser(text, lang));
@@ -169,6 +193,7 @@ export function speak(text: string, lang: string): boolean {
  * Returns false when nothing was read.
  */
 export function speakParts(parts: readonly string[], lang: string): boolean {
+  if (afterLoading(lang, () => void speakParts(parts, lang))) return true;
   const pack = packs.get(lang);
   const keys = parts.map((p) => voiceKey(spellSquares(p, lang)));
   if (keys.length === 0 || typeof Audio === 'undefined' || !keys.every((k) => pack?.has(k))) {
@@ -209,7 +234,7 @@ export function waitUntilSilent(maxMs = 9000): Promise<void> {
   return new Promise((resolve) => {
     const started = Date.now();
     const check = () => {
-      const busy = audioPlaying() || (canSpeak() && window.speechSynthesis.speaking);
+      const busy = queued === run || audioPlaying() || (canSpeak() && window.speechSynthesis.speaking);
       if (!busy || Date.now() - started > maxMs) resolve();
       else setTimeout(check, 200);
     };

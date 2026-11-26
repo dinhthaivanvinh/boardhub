@@ -122,7 +122,7 @@ describe('pawn race', () => {
         for (let ply = 0; ply < 80 && !pawnResult(s); ply++) {
           const move =
             s.turn === 'w'
-              ? bestPawnMove(s, 6, createRng(`w${game}`, ply))!
+              ? bestPawnMove(s, 5, createRng(`w${game}`, ply))!
               : computerPawnMove(s, level, createRng(`b${game}`, ply))!;
           expect(allMoves(s)).toContainEqual(move);
           s = playPawn(s, move);
@@ -131,7 +131,7 @@ describe('pawn race', () => {
       }
       expect(wins).toBeGreaterThan(0);
     },
-    180_000,
+    60_000,
   );
 });
 

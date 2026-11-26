@@ -211,7 +211,7 @@ function Menu({
           {t('journey.home.map')}
         </Link>
         <Link href="/mini-games" className="btn">
-          <span aria-hidden="true">🎲</span> {t('mini.title')}
+          <span aria-hidden="true">🎈</span> {t('mini.title')}
         </Link>
       </p>
     </div>

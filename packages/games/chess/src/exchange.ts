@@ -2,8 +2,8 @@
  * Who comes out ahead when pieces are traded on one square. Used by the lessons to judge a move and by the
  * gentlest searching level of the bot. It sees the exchange only, not threats further away.
  */
-import { describe, legalMoves, makeMove } from './rules/board';
-import type { ChessMove, PieceType, Position } from './rules/types';
+import { describe, legalMoves, makeMove, other } from './rules/board';
+import type { ChessMove, Color, PieceType, Position } from './rules/types';
 import { PIECE_VALUE } from './learn/capture';
 
 /** The points a move takes off the board. */
@@ -45,4 +45,27 @@ export function winsMaterial(pos: Position): ChessMove | null {
     }
   }
   return best;
+}
+
+/** What the other side would win on each square if it were its turn now: the squares where that is something. */
+export function lossesAt(pos: Position, mine: Color): Map<number, number> {
+  const theirs: Position = { ...pos, turn: other(mine), enPassant: pos.turn === mine ? null : pos.enPassant };
+  const losses = new Map<number, number>();
+  for (const move of legalMoves(theirs)) {
+    const victim = describe(theirs, move).captured;
+    // A check is not a threatened piece: the board shows it already.
+    if (!victim || victim[1] === 'K') continue;
+    const gain = netGain(theirs, move);
+    if (gain > (losses.get(move.to) ?? 0)) losses.set(move.to, gain);
+  }
+  return losses;
+}
+
+/** My pieces that the other side can win, the biggest loss first. */
+export const threatenedSquares = (pos: Position, mine: Color): number[] =>
+  [...lossesAt(pos, mine)].sort((a, b) => b[1] - a[1] || a[0] - b[0]).map(([square]) => square);
+
+/** Points won by a move, less the most the answer can win back on any square. */
+export function swing(pos: Position, move: ChessMove): number {
+  return taken(pos, move) - Math.max(0, ...lossesAt(makeMove(pos, move), pos.turn).values());
 }

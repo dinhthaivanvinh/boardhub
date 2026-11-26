@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import type { VoiceState } from './ReadAloud';
-import { speak } from './speech';
+import { speak, speakParts } from './speech';
 
 /**
  * The line that tells a child how they did. It is also read aloud when it changes, so a child who cannot read
@@ -15,7 +15,10 @@ export function Status({
   nonce = 0,
   speakIt = true,
   className = 'ch-learn-status',
+  parts,
 }: {
+  /** The same sentence in recorded parts, for one that is not recorded whole. */
+  parts?: readonly string[] | undefined;
   text: string;
   voice: VoiceState;
   nonce?: number;
@@ -23,7 +26,10 @@ export function Status({
   className?: string;
 }) {
   useEffect(() => {
-    if (speakIt && voice.results && text) speak(text, voice.lang);
+    if (speakIt && voice.results && text) {
+      if (parts) speakParts(parts, voice.lang);
+      else speak(text, voice.lang);
+    }
     // Only when the text or the nonce changes, not when a setting does.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, nonce]);

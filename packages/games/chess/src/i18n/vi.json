@@ -10,6 +10,7 @@
     "lastHint": "Đây là gợi ý cuối cùng trong ván này.",
     "say": {
       "warn": "Cẩn thận! Quân đang bị đe doạ.",
+      "hintWord": "Gợi ý.",
       "mate": "Có nước chiếu hết!",
       "capture": "Con ăn được quân.",
       "save": "Hãy giữ quân an toàn.",
@@ -801,9 +802,61 @@
     "groupTactics": "Chiến thuật",
     "allLessons": "Tất cả bài học",
     "puzzles": {
+      "kindsHeading": "Luyện từng kỹ năng",
+      "mate1Heading": "Chiếu hết 1 nước",
+      "kinds": {
+        "illegal": "Quân đó không đi được tới ô đó.",
+        "free": {
+          "name": "Quân cho không",
+          "text": "Tìm quân đen ăn được mà không bị thiệt.",
+          "prompt": "Hãy ăn quân đen mà con được lời.",
+          "right": "Đúng rồi! Con được lời một quân.",
+          "why": {
+            "noCapture": "Nước đó chưa ăn quân. Hãy tìm quân đen mà con ăn được lời.",
+            "guarded": "Quân đó có quân khác bảo vệ. Ăn vào con sẽ bị thiệt.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        },
+        "save": {
+          "name": "Cứu quân",
+          "text": "Một quân của con sắp bị ăn. Hãy cứu nó.",
+          "prompt": "Quân có vòng tròn đang gặp nguy. Hãy giữ cho con không mất quân.",
+          "marked": "Quân đang gặp nguy ở ô {square}.",
+          "right": "Giỏi quá! Quân của con đã an toàn.",
+          "why": {
+            "stillDanger": "Con vẫn còn mất quân. Hãy thử cách khác.",
+            "stalemate": "Nước đó làm ván hoà. Hãy thử cách khác.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        },
+        "fork": {
+          "name": "Chĩa hai mũi",
+          "text": "Một nước tấn công hai quân cùng lúc.",
+          "prompt": "Tìm nước chĩa hai mũi để được lời quân.",
+          "right": "Chĩa hai mũi! Đối phương chỉ cứu được một quân.",
+          "why": {
+            "notFork": "Nước đó chưa làm con được lời quân. Hãy tìm nước tấn công hai quân cùng lúc.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        },
+        "mate2": {
+          "name": "Chiếu hết 2 nước",
+          "text": "Nghĩ xa hơn: đi hai nước thì chiếu hết.",
+          "prompt": "Tìm nước đầu tiên để nước sau chiếu hết.",
+          "second": "Bây giờ hãy chiếu hết!",
+          "goOn": "Hay lắm! Xem Đen đáp lại.",
+          "right": "Chiếu hết! Con nghĩ được xa hai nước rồi.",
+          "why": {
+            "notForced": "Sau nước đó Đen còn cách thoát. Hãy tìm nước khác.",
+            "notMate": "Đó chưa phải chiếu hết. Hãy tìm lại.",
+            "stalemate": "Ôi, Vua đen không bị chiếu mà không đi được: ván hoà. Hãy thử lại.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        }
+      },
       "name": "Câu đố chiếu hết",
       "title": "Câu đố cờ vua",
-      "subtitle": "Tìm nước đi để chiếu hết vua đen chỉ trong 1 nước. Mỗi câu giải được là 1 ⭐!",
+      "subtitle": "Luyện chiếu hết, ăn quân, cứu quân và chĩa đôi. Mỗi câu giải được là 1 ⭐!",
       "daily": {
         "title": "Câu đố hôm nay",
         "text": "Mỗi ngày có một câu mới. Giải mỗi ngày để giữ chuỗi ngày liên tiếp nhé!",
@@ -857,7 +910,7 @@
       "done": "Đã xong",
       "allDone": "Bạn đã học hết mọi bài rồi. Giỏi lắm!",
       "puzzlesTitle": "Giải câu đố",
-      "puzzlesText": "Luyện mắt tìm nước chiếu hết, mỗi câu được 1 ⭐.",
+      "puzzlesText": "Luyện chiếu hết, ăn quân, cứu quân và chĩa đôi, mỗi câu được 1 ⭐.",
       "playTitle": "Đấu thử với máy",
       "playText": "Máy này mới tập chơi nên hay đi sai. Bạn cầm quân trắng, ăn những quân máy để hớ nhé!",
       "go": "Đi thôi",

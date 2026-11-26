@@ -5,42 +5,16 @@
 import type { Seat } from '@bg/engine';
 import type { Coach, Translator } from '@bg/ui';
 import { evaluate } from './bot';
-import { netGain } from './exchange';
-import { PIECE_VALUE } from './learn/capture';
+import { lossesAt, swing, threatenedSquares } from './exchange';
 import { isCheckmate, isStalemate, matingMoves } from './learn/checkmate';
 import { loadVoicePack, speakParts, stopSpeaking } from './learn/speech';
-import { describe, legalMoves, makeMove, other, squareName } from './rules/board';
+import { describe, legalMoves, makeMove, squareName } from './rules/board';
 import { colorOfSeat, positionOf } from './rules/rules';
-import type { ChessMove, ChessState, PieceType, Position } from './rules/types';
+import type { ChessMove, ChessState } from './rules/types';
 
-/** What the other side would win on each square if it were its turn now: the squares where that is something. */
-function lossesAt(pos: Position, mine: 'w' | 'b'): Map<number, number> {
-  const theirs: Position = { ...pos, turn: other(mine), enPassant: pos.turn === mine ? null : pos.enPassant };
-  const losses = new Map<number, number>();
-  for (const move of legalMoves(theirs)) {
-    const victim = describe(theirs, move).captured;
-    // A check is not a threatened piece: the board shows it already.
-    if (!victim || victim[1] === 'K') continue;
-    const gain = netGain(theirs, move);
-    if (gain > (losses.get(move.to) ?? 0)) losses.set(move.to, gain);
-  }
-  return losses;
-}
-
-/** My pieces that the other side can win, the biggest loss first. Empty while in check: that comes first. */
-export function threatenedSquares(pos: Position, mine: 'w' | 'b'): number[] {
-  return [...lossesAt(pos, mine)].sort((a, b) => b[1] - a[1] || a[0] - b[0]).map(([square]) => square);
-}
-
+export { threatenedSquares } from './exchange';
 export type HintReason = 'mate' | 'capture' | 'save' | 'good';
 export type ChessHint = { move: ChessMove; reason: HintReason };
-
-/** Points won by a move, less the most the answer can win back on any square. */
-function swing(pos: Position, move: ChessMove, next: Position): number {
-  const victim = describe(pos, move).captured;
-  const won = victim ? PIECE_VALUE[victim[1] as PieceType] : 0;
-  return won - Math.max(0, ...lossesAt(next, pos.turn).values());
-}
 
 /**
  * A move for the side to move: mate if there is one; otherwise one that does not allow a mate in one or a
@@ -58,7 +32,7 @@ export function coachMove(state: ChessState): ChessHint | null {
   let bestScore = -Infinity;
   for (const move of moves) {
     const next = makeMove(pos, move);
-    const material = swing(pos, move, next);
+    const material = swing(pos, move);
     const standing = evaluate({ ...state, board: next.board, inCheck: null }, seat);
     // Material counts for much more than where the pieces stand; the two bad outcomes count for more still.
     let score = material * 10_000 + standing;
@@ -72,7 +46,7 @@ export function coachMove(state: ChessState): ChessHint | null {
   if (!best) return null;
   const next = makeMove(pos, best);
   const victim = describe(pos, best).captured;
-  if (victim && swing(pos, best, next) > 0) return { move: best, reason: 'capture' };
+  if (victim && swing(pos, best) > 0) return { move: best, reason: 'capture' };
   const saved = threats.length > 0 && lossesAt(next, pos.turn).size === 0;
   return { move: best, reason: saved ? 'save' : 'good' };
 }

@@ -10,6 +10,7 @@
     "lastHint": "This is your last hint in this game.",
     "say": {
       "warn": "Careful! A piece is in danger.",
+      "hintWord": "Hint.",
       "mate": "You can checkmate!",
       "capture": "You can win a piece.",
       "save": "Keep your pieces safe.",
@@ -801,9 +802,61 @@
     "groupTactics": "Tactics",
     "allLessons": "All lessons",
     "puzzles": {
+      "kindsHeading": "Practise one skill",
+      "mate1Heading": "Mate in one",
+      "kinds": {
+        "illegal": "That piece cannot go to that square.",
+        "free": {
+          "name": "Free piece",
+          "text": "Find a black piece you can take and come out ahead.",
+          "prompt": "Take the black piece that wins you something.",
+          "right": "Right! You are a piece ahead.",
+          "why": {
+            "noCapture": "That move takes nothing. Find a black piece you can win.",
+            "guarded": "Another piece guards that one. Taking it would cost you.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        },
+        "save": {
+          "name": "Save your piece",
+          "text": "One of your pieces is about to be taken. Save it.",
+          "prompt": "The circled piece is in danger. Do not lose any material.",
+          "marked": "The piece in danger is on {square}.",
+          "right": "Great! Your pieces are safe.",
+          "why": {
+            "stillDanger": "You still lose something. Try another way.",
+            "stalemate": "That move makes it a draw. Try another way.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        },
+        "fork": {
+          "name": "Fork",
+          "text": "One move attacks two pieces at once.",
+          "prompt": "Find the fork that wins material.",
+          "right": "A fork! They can only save one piece.",
+          "why": {
+            "notFork": "That move does not win anything yet. Find a move that attacks two pieces at once.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        },
+        "mate2": {
+          "name": "Mate in two",
+          "text": "Think further: checkmate in two moves.",
+          "prompt": "Find the first move, so that the next one is checkmate.",
+          "second": "Now give checkmate!",
+          "goOn": "Nice! See how Black answers.",
+          "right": "Checkmate! You saw two moves ahead.",
+          "why": {
+            "notForced": "After that move Black can still get away. Find another.",
+            "notMate": "That is not checkmate yet. Look again.",
+            "stalemate": "Oh, the black king is not in check but cannot move: a draw. Try again.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        }
+      },
       "name": "Checkmate puzzles",
       "title": "Chess puzzles",
-      "subtitle": "Find the move that checkmates the black king in just 1 move. Every puzzle you solve is 1 ⭐!",
+      "subtitle": "Practise checkmates, free pieces, saving pieces and forks. Every puzzle solved is 1 ⭐!",
       "daily": {
         "title": "Today's puzzle",
         "text": "A new one every day. Solve one each day to keep your streak going!",
@@ -857,7 +910,7 @@
       "done": "Done",
       "allDone": "You finished every lesson. Great job!",
       "puzzlesTitle": "Solve puzzles",
-      "puzzlesText": "Train your eye to find checkmate. Each puzzle is 1 ⭐.",
+      "puzzlesText": "Practise checkmates, free pieces, saving pieces and forks. Each puzzle is 1 ⭐.",
       "playTitle": "Play the computer",
       "playText": "This computer is just learning, so it often slips. You play White: take the pieces it leaves hanging!",
       "go": "Let's go",

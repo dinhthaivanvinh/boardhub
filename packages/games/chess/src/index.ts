@@ -38,8 +38,21 @@ export { TACTICS_LESSON_ID } from './learn/tactics';
 export { MateRoundView } from './learn/CheckmateLesson';
 export { LearnBoard, LessonLayout } from './learn/LearnBoard';
 export { useVoice } from './learn/voice';
-export { PUZZLES, PUZZLE_TIERS, dailyPuzzle, nextPuzzle, puzzlesOfTier } from './learn/puzzles';
-export type { Puzzle, PuzzleTier } from './learn/puzzles';
+export {
+  PUZZLES,
+  MATE_PUZZLES,
+  SKILL_PUZZLES,
+  PUZZLE_TIERS,
+  dailyPuzzle,
+  nextIn,
+  nextPuzzle,
+  puzzlesOfKind,
+  puzzlesOfTier,
+} from './learn/puzzles';
+export type { Puzzle, PuzzleTier, SkillPuzzle } from './learn/puzzles';
+export { SKILL_KINDS } from './learn/puzzle-kinds';
+export type { SkillKind } from './learn/puzzle-kinds';
+export { PuzzleRoundView } from './learn/PuzzleRoundView';
 export {
   EMPTY_PUZZLE_PROGRESS,
   dateKey,

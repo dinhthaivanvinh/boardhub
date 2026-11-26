@@ -48,6 +48,22 @@ này xong là xong bài), **xe + vua** là thử thách thêm sau khi xong.
 - Gợi ý: có chiếu hết 1 nước thì tô sáng quân rồi ô đến; không có thì nói bước tiếp theo của cách làm (`mateTip`). Không có bộ
   giải tìm nước tốt nhất. Mỗi thế có một đường thắng trong test, nên luôn thắng được trước máy này.
 
+## 1e. Câu đố (`/puzzles`)
+
+- **Chiếu hết 1 nước:** 150 câu, 3 mức (`puzzle-data.ts`, `tools/puzzles/generate.mts`). Câu đố hôm nay chỉ lấy từ đây.
+- **Luyện từng kỹ năng** (`puzzle-kinds.ts`, `PuzzleRoundView.tsx`; 30 câu mỗi loại, `tools/puzzles/generate-kinds.mts`):
+  - `free` Quân cho không: đúng khi sau cả chuỗi đổi quân trên ô đó lời ít nhất bằng một mã; thế nào cũng có một quân "nhử"
+    có người bảo vệ.
+  - `save` Cứu quân: một quân (từ mã trở lên) đang bị đe doạ, được khoanh tròn; đúng khi sau nước đó không còn quân nào
+    bị mất, nước đó không tự thiệt và không cho đối phương chiếu hết ngay (có thể có nhiều đáp án).
+  - `fork` Chĩa hai mũi: quân vừa đi tấn công hai quân lớn, không bị ăn, và đáp thế nào cũng còn lời ít nhất một mã.
+  - `mate2` Chiếu hết 2 nước: đúng một nước đầu; máy chọn câu đáp để lại ít đường chiếu hết nhất, rồi bé chiếu hết.
+- Đáp án luôn do engine tính; test kiểm tra lại từng thế (`isFairPuzzle`). Cách tính quân chỉ nhìn chuỗi đổi trên một ô và
+  một nước đáp, không phải máy phân tích sâu.
+- Mỗi câu 1 ⭐; tiến độ, đồng bộ tài khoản và thống kê dùng chung như câu đố cũ (id `free-01`, `save-01`, `fork-01`,
+  `two-01`). Server cần bản mới để nhận các id này khi ghi thống kê và đồng bộ.
+- Gợi ý của câu đố được đọc từ các đoạn thu sẵn (`hint-speech.ts`).
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

@@ -7,6 +7,7 @@ import { MATE_ROUNDS, matingMoves } from './checkmate';
 import { coordRounds, COORD_KINDS, fileOf, rankOf } from './coordinates';
 import { OPENING_LESSONS, PIECE_LESSONS, SPECIAL_LESSONS } from './data';
 import { parseMove, positionsOf } from './logic';
+import { SKILL_KINDS } from './puzzle-kinds';
 import {
   CASTLE_ROUNDS,
   CENTER_ROUNDS,
@@ -255,6 +256,20 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
   for (const k of ['rooks', 'queenCage', 'queenKing', 'queenMate', 'rookCut', 'rookKing', 'rookCheck'])
     say(`basic-mates.tip.${k}`);
 
+  // ---- the skill puzzles: what each asks, what it answers, and why a move is not it
+  say('puzzles.kinds.illegal');
+  const texts = (path: string) => {
+    const node = get(m.learn, path);
+    if (typeof node === 'string') say(path);
+    else for (const k of Object.keys(node as object)) texts(`${path}.${k}`);
+  };
+  for (const kind of SKILL_KINDS) {
+    for (const k of Object.keys(get(m.learn, `puzzles.kinds.${kind}`) as object)) {
+      // The name and the card text are not read; the marked square is for screen readers.
+      if (!['name', 'text', 'marked'].includes(k)) texts(`puzzles.kinds.${kind}.${k}`);
+    }
+  }
+
   // ---- the "start the challenge" line of a piece or special lesson names the square to reach
   for (const l of PIECE_LESSONS) say('challengeStart', { square: l.challenge.goal });
   for (const l of SPECIAL_LESSONS) say('challengeStart', { square: l.challenge.to });
@@ -293,7 +308,7 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
     if (typeof raw !== 'string') throw new Error(`speech text missing: ${path}`);
     out.add(raw.replace(/\{(\w+)\}/g, (_, k: string) => values[k]!));
   };
-  for (const k of ['warn', 'mate', 'capture', 'save', 'good']) part(`coach.say.${k}`);
+  for (const k of ['warn', 'mate', 'capture', 'save', 'good', 'hintWord']) part(`coach.say.${k}`);
   part('coach.lastHint');
   for (const type of ['K', 'Q', 'R', 'B', 'N', 'P']) part(`pieceNames.${type}`);
   for (let s = 0; s < 64; s++) {

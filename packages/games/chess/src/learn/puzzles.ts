@@ -8,7 +8,6 @@ export const PUZZLE_TIERS: readonly PuzzleTier[] = [1, 2, 3];
 export const PUZZLES: readonly Puzzle[] = PUZZLE_DATA;
 
 export const puzzlesOfTier = (tier: PuzzleTier): Puzzle[] => PUZZLES.filter((p) => p.tier === tier);
-export const puzzleById = (id: string): Puzzle | undefined => PUZZLES.find((p) => p.id === id);
 
 /** The first puzzle of the tier that is not solved yet (the first one when all are solved). */
 export function nextPuzzle(tier: PuzzleTier, solved: ReadonlySet<string>, after?: string): Puzzle | null {

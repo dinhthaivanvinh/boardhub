@@ -33,7 +33,7 @@ export { TACTICS_LESSON_ID } from './learn/tactics';
 export { MateRoundView } from './learn/CheckmateLesson';
 export { LearnBoard, LessonLayout } from './learn/LearnBoard';
 export { useVoice } from './learn/voice';
-export { PUZZLES, PUZZLE_TIERS, dailyPuzzle, nextPuzzle, puzzleById, puzzlesOfTier } from './learn/puzzles';
+export { PUZZLES, PUZZLE_TIERS, dailyPuzzle, nextPuzzle, puzzlesOfTier } from './learn/puzzles';
 export type { Puzzle, PuzzleTier } from './learn/puzzles';
 export {
   EMPTY_PUZZLE_PROGRESS,

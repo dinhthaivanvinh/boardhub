@@ -9,7 +9,7 @@
  * - flute: a pure tone with breath noise and gentle vibrato (doubles as the bamboo "sáo")
  * - clarinet: hollow square wave
  * - harp: plucked, ringing partials (doubles as the "đàn tranh" zither)
- * - timpani: tuned drum with a falling pitch and a soft thump
+ * - timpani: a soft roll on a tuned drum
  * Everything is in seconds and Hz; `vel` is the peak gain of the note.
  */
 
@@ -228,40 +228,6 @@ export function harp(ctx: BaseAudioContext, dest: AudioNode, n: Note, bend = 0) 
     osc.start(n.at);
     osc.stop(n.at + ring + 0.05);
   }
-}
-
-/** One timpani stroke. */
-export function timpani(ctx: BaseAudioContext, dest: AudioNode, noise: AudioBuffer, n: Note) {
-  const env = ctx.createGain();
-  env.gain.setValueAtTime(0.0001, n.at);
-  env.gain.linearRampToValueAtTime(n.vel, n.at + 0.006);
-  env.gain.exponentialRampToValueAtTime(0.0001, n.at + 1.8);
-  env.connect(dest);
-  for (const [ratio, level] of [
-    [1, 1],
-    [1.5, 0.35],
-    [1.98, 0.15],
-  ] as const) {
-    const osc = ctx.createOscillator();
-    osc.frequency.setValueAtTime(n.freq * ratio * 1.02, n.at);
-    osc.frequency.exponentialRampToValueAtTime(n.freq * ratio, n.at + 0.15);
-    const lvl = ctx.createGain();
-    lvl.gain.value = level;
-    osc.connect(lvl).connect(env);
-    osc.start(n.at);
-    osc.stop(n.at + 1.9);
-  }
-  const thump = ctx.createBufferSource();
-  thump.buffer = noise;
-  const lp = ctx.createBiquadFilter();
-  lp.type = 'lowpass';
-  lp.frequency.value = 350;
-  const tl = ctx.createGain();
-  tl.gain.setValueAtTime(n.vel * 0.6, n.at);
-  tl.gain.exponentialRampToValueAtTime(0.0001, n.at + 0.12);
-  thump.connect(lp).connect(tl).connect(dest);
-  thump.start(n.at, Math.random());
-  thump.stop(n.at + 0.15);
 }
 
 /**

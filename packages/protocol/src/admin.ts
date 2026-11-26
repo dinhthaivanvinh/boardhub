@@ -108,7 +108,6 @@ export const VisitPing = z.strictObject({ visitorId: z.string().regex(/^[A-Za-z0
 
 /** Who a visitor was that day: nobody in particular, a guest account, or a registered account. */
 export type VisitorKind = 'anonymous' | 'guest' | 'registered';
-export const VISITOR_KINDS: VisitorKind[] = ['anonymous', 'guest', 'registered'];
 
 /** Distinct visitors of one day (Vietnam time, `YYYY-MM-DD`). A visitor counts once, as the highest kind they had. */
 export interface DayVisits {

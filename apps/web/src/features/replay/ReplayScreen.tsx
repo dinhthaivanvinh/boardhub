@@ -2,7 +2,7 @@
 
 import { BoardStage } from '@/components/BoardStage';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import type { MatchDetail } from '@bg/protocol';
 import { DEFAULT_BOARD_SETTINGS } from '@bg/ui';
@@ -15,6 +15,7 @@ import { GAMES, isGameId } from '@/games/catalog';
 import { CLIENT_GAMES } from '@/games/client-registry';
 import { apiRequest } from '@/online/api';
 import { useSession } from '@/online/session';
+import { useReducedMotion } from '@/features/learn/use-reduced-motion';
 
 type Loaded = { match: MatchDetail; mySeat: number | null; local: LocalInfo | null } | { error: string };
 interface LocalInfo {
@@ -67,6 +68,17 @@ function ReplayView(
   props: { match: MatchDetail; mySeat: number | null; local: LocalInfo | null } | { loaded: Loaded | null },
 ) {
   const t = useTranslations();
+  const locale = useLocale();
+  const reducedMotion = useReducedMotion();
+  // "?review=1" (the button after a game) opens the review straight away.
+  const [reviewing, setReviewing] = useState(false);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('review') === '1') setReviewing(true);
+  }, []);
+  // The review starts at its board, wherever the page that led here was scrolled to.
+  useEffect(() => {
+    if (reviewing) window.scrollTo(0, 0);
+  }, [reviewing]);
   const match = 'match' in props ? props.match : null;
   const mySeat = 'match' in props ? props.mySeat : null;
   const local = 'match' in props ? props.local : null;
@@ -190,6 +202,33 @@ function ReplayView(
     setIndex(Math.max(0, Math.min(last, i)));
   };
 
+  // A review is about one player's moves: it needs to know which seat was theirs.
+  const Review = CLIENT_GAMES[gameId].Review;
+  if (reviewing && Review && mySeat !== null) {
+    return (
+      // The same frame as a lesson: the board on the left, the words in a panel, nothing to scroll on a laptop.
+      <div
+        className="stage-screen lesson-scene mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] gap-3 px-4 py-3 lg:grid-rows-[minmax(0,1fr)]"
+        data-game={gameId}
+      >
+        <BoardStage />
+        <div className="grid min-h-0 grid-cols-[minmax(0,1fr)] gap-3">
+          <div className="stage-aside min-w-0">
+            <Review
+              states={replay.states}
+              moves={match.moves}
+              seat={mySeat}
+              t={t}
+              lang={locale}
+              animate={!reducedMotion}
+              onClose={() => setReviewing(false)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       data-game={gameId}
@@ -288,6 +327,20 @@ function ReplayView(
           </div>
           {index === last && resultText && <p className="font-medium">{resultText}</p>}
         </div>
+
+        {Review && mySeat !== null && (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              setPlaying(false);
+              setReviewing(true);
+            }}
+            data-testid="replay-review"
+          >
+            <span aria-hidden="true">🔍</span> {t(`games.${gameId}.learn.review.open`)}
+          </button>
+        )}
 
         <Link href="/profile" className="text-sm underline underline-offset-4">
           {t('replay.back')}

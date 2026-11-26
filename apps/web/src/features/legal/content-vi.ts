@@ -128,7 +128,7 @@ export const VI: InfoContent = {
               'BoardHub lưu một số thông tin trong bộ nhớ của trình duyệt (local storage và IndexedDB), để trang hoạt động mà không cần tài khoản:',
             ],
             list: [
-              'Tiến độ bài học, luyện tập, câu đố và các ngày đã chơi.',
+              'Tiến độ bài học, luyện tập, câu đố, số sao của các trò chơi nhỏ và các ngày đã chơi.',
               'Lịch sử những ván chơi trên máy hoặc với máy.',
               'Cài đặt âm thanh, giọng đọc và bàn cờ.',
               'Phiên đăng nhập của tài khoản hoặc tên khách, và lựa chọn “không hỏi lại”.',

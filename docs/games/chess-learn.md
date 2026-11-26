@@ -79,6 +79,20 @@ Ba trò chỉ có vài quân, **không có vua** nên không dùng engine cờ v
 - Sao lưu **chỉ trên máy này** (`localStorage` `learn.chess.mini.v1`): chưa đồng bộ theo tài khoản, không tính vào cấp bậc
   và không gửi thống kê.
 
+## 1g. Xem lại ván (`review.ts`, `GameReview.tsx`)
+
+Sau ván cờ vua mà người dùng có một bên của mình: ván với máy (nút ngay sau ván, hoặc ở màn Xem lại) và ván online mình
+chơi (màn Xem lại). Không có ở ván hai người chung một máy.
+
+- Chỉ xét **nước của người đó**, tìm: để đối phương chiếu hết 1 nước (`allowedMate`), làm hoà do hết nước đi khi đang hơn
+  quân (`stalemate`), lỡ chiếu hết 1 nước (`missedMate`), để quân từ mã trở lên bị mất (`hung`), lỡ ăn lời một quân từ mã
+  trở lên (`missedFree`). Mất một tốt thì không nhắc.
+- Hiện **tối đa 2 chỗ** nặng nhất, theo thứ tự xảy ra. Mỗi chỗ: lời giải thích có giọng đọc, xem chuyện gì xảy ra, **đi
+  lại** (mọi nước sửa được lỗi đều nhận, `putsRight`), gợi ý hai mức.
+- Không thấy gì thì nói đúng điều đã kiểm. Chỉ nhìn **một nước đáp**, màn hình ghi rõ giới hạn này; không phải máy phân
+  tích như cờ thủ mạnh.
+- Chạy trong trình duyệt, mỗi nhịp một nước để trang không đứng. Không gửi gì lên server.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

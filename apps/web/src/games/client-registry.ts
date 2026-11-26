@@ -8,8 +8,19 @@ import * as four from '@bg/game-four-in-a-row';
 import * as oAnQuan from '@bg/game-o-an-quan';
 import * as reversi from '@bg/game-reversi';
 import * as xiangqi from '@bg/game-xiangqi';
-import type { BoardProps, Coach, ConfigFieldSpec, MoveSounds, MusicMood } from '@bg/ui';
+import type { BoardProps, Coach, ConfigFieldSpec, MoveSounds, MusicMood, Translator } from '@bg/ui';
 import type { GameId } from './catalog';
+
+/** What a game's review is given: every position of the game, its moves, and the seat the player had. */
+export interface GameReviewProps {
+  states: readonly unknown[];
+  moves: readonly { seat: number; move: unknown }[];
+  seat: number;
+  t: Translator;
+  animate: boolean;
+  lang?: string;
+  onClose(): void;
+}
 
 export interface ClientGameEntry {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,6 +36,8 @@ export interface ClientGameEntry {
   /** Help against the computer, for games that offer it. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   coach?: Coach<any>;
+  /** Going over a finished game with the player, for games that offer it. */
+  Review?: ComponentType<GameReviewProps>;
 }
 
 /** The same shape for every game package. */
@@ -35,6 +48,7 @@ const entry = (pkg: {
   moveSounds: unknown;
   music: MusicMood;
   coach?: unknown;
+  Review?: unknown;
 }): ClientGameEntry => ({
   Board: pkg.Board as ClientGameEntry['Board'],
   configFields: pkg.configFields,
@@ -42,6 +56,7 @@ const entry = (pkg: {
   moveSounds: pkg.moveSounds as ClientGameEntry['moveSounds'],
   music: pkg.music,
   coach: pkg.coach as ClientGameEntry['coach'],
+  ...(pkg.Review ? { Review: pkg.Review as ComponentType<GameReviewProps> } : {}),
 });
 
 export const CLIENT_GAMES: Record<GameId, ClientGameEntry> = {

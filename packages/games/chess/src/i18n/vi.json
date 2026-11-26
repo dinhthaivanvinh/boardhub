@@ -788,6 +788,32 @@
         "draw": "Không còn nước đi: ván hoà."
       }
     },
+    "review": {
+      "title": "Xem lại ván",
+      "close": "Đóng",
+      "working": "Đang xem lại ván… {done}/{total}",
+      "moveNumber": "Nước thứ {n} của ván",
+      "kind": {
+        "allowedMate": "Sau nước này, đối phương chiếu hết được Vua của con.",
+        "stalemate": "Nước này làm Vua đối phương hết đường đi mà không bị chiếu, nên ván hoà.",
+        "missedMate": "Chỗ này con có thể chiếu hết trong một nước.",
+        "hung": "Sau nước này, con có thể bị mất quân.",
+        "missedFree": "Chỗ này con có thể ăn được lời một quân."
+      },
+      "show": "Xem chuyện gì xảy ra",
+      "shownReply": "Đối phương có thể đi như thế này.",
+      "shownMove": "Đây là nước con đã đi.",
+      "retry": "Thử đi lại",
+      "retryPrompt": "Con hãy đi lại nước này cho tốt hơn.",
+      "right": "Đúng rồi! Nước này tốt hơn nhiều.",
+      "wrong": "Chưa phải nước tốt hơn. Con thử lại nhé.",
+      "illegal": "Quân đó không đi được tới ô đó.",
+      "next": "Chỗ tiếp theo",
+      "again": "Xem từ đầu",
+      "clean": "Mình không thấy con bỏ quên quân hay lỡ chiếu hết một nước. Giỏi lắm!",
+      "limits": "Phần này chỉ nhìn trước một nước, nên có thể không thấy những đòn xa hơn.",
+      "open": "Xem lại cùng nhau"
+    },
     "tactics": {
       "name": "Mẹo nhỏ và tàn cuộc",
       "stage": {

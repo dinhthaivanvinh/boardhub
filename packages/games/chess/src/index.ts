@@ -7,6 +7,7 @@ export type { ChessBoardProps } from './ui/Board';
 export { configFields } from './ui/config-fields';
 export { bot } from './bot';
 export { coach } from './coach';
+export { GameReview as Review } from './learn/GameReview';
 export { default as vi } from './i18n/vi.json';
 export { default as en } from './i18n/en.json';
 export { moveSounds, music } from './ui/sounds';

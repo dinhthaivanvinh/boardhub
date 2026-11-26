@@ -280,6 +280,11 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
     }
   }
 
+  // ---- going over a finished game (a piece and square are said from the coach's parts)
+  for (const k of ['allowedMate', 'stalemate', 'missedMate', 'hung', 'missedFree']) say(`review.kind.${k}`);
+  for (const k of ['shownReply', 'shownMove', 'retryPrompt', 'right', 'wrong', 'illegal', 'clean'])
+    say(`review.${k}`);
+
   // ---- the "start the challenge" line of a piece or special lesson names the square to reach
   for (const l of PIECE_LESSONS) say('challengeStart', { square: l.challenge.goal });
   for (const l of SPECIAL_LESSONS) say('challengeStart', { square: l.challenge.to });

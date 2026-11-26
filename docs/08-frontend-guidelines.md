@@ -158,6 +158,8 @@ không tải thêm gì. Khu Văn phòng có âm thanh riêng (`features/office/d
   - **Đọc to** (cài đặt `speakCoach`, bật sẵn): gợi ý được đọc khi bấm; cảnh báo chỉ đọc khi danh sách quân bị đe doạ **đổi**
     (đọc tối đa 2 quân lớn nhất). Có nút "Nghe lại". Câu ghép từ quân và ô quá nhiều để thu trọn, nên `CoachAdvice.speech`
     trả các đoạn đã thu riêng, phát nối nhau bằng `speakParts`; thiếu đoạn nào thì giọng trình duyệt đọc cả câu.
+- **Xem lại ván** (tuỳ game): gói game export `Review` (props `GameReviewProps` ở `client-registry.ts`); màn Xem lại hiện
+  nút khi biết ghế của người xem. Cờ vua: [games/chess-learn.md](games/chess-learn.md) §1g.
 - `BoardProps.playSound`: cho bàn cờ tự diễn nước đi theo thời gian (Ô ăn quan kêu từng viên sỏi, khớp hiệu ứng).
 
 | Cue            | Khi nào                 | Game                        | Âm                                       |

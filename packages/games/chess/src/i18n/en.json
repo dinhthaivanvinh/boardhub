@@ -788,6 +788,32 @@
         "draw": "No move left: a draw."
       }
     },
+    "review": {
+      "title": "Look over the game",
+      "close": "Close",
+      "working": "Looking over the game… {done}/{total}",
+      "moveNumber": "Move {n} of the game",
+      "kind": {
+        "allowedMate": "After this move your king can be checkmated.",
+        "stalemate": "This move leaves the other king with no move and not in check, so it is a draw.",
+        "missedMate": "Here you could give checkmate in one move.",
+        "hung": "After this move you can lose a piece.",
+        "missedFree": "Here you could have won a piece."
+      },
+      "show": "See what could happen",
+      "shownReply": "The other side can play this.",
+      "shownMove": "This is the move you played.",
+      "retry": "Try again",
+      "retryPrompt": "Play a better move from here.",
+      "right": "Right! That is much better.",
+      "wrong": "Not the better move yet. Try again.",
+      "illegal": "That piece cannot go to that square.",
+      "next": "Next moment",
+      "again": "See it from the start",
+      "clean": "I did not see a piece left behind or a mate in one missed. Well done!",
+      "limits": "This looks only one reply ahead, so it can miss things further away.",
+      "open": "Look over it together"
+    },
     "tactics": {
       "name": "Little tricks and endgames",
       "stage": {

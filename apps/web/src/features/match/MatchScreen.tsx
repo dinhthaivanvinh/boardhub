@@ -22,7 +22,7 @@ import { ResultOverlay, type ResultTone } from './ResultOverlay';
 export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSetup }) {
   const t = useTranslations();
   const { definition } = GAMES[gameId];
-  const { Board, PieceIcon, moveSounds, music, coach } = CLIENT_GAMES[gameId];
+  const { Board, PieceIcon, moveSounds, music, coach, Review } = CLIENT_GAMES[gameId];
   const controllers = useMemo(() => controllersFor(setup, definition.meta.minPlayers), [setup, definition]);
   const match = useLocalMatch(gameId, definition, setup.config, controllers);
   const settings = useSettings();
@@ -285,6 +285,12 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
             </div>
           </div>
         </details>
+
+        {match.replayHref && Review && setup.mode === 'bot' && (
+          <Link href={`${match.replayHref}?review=1`} className="btn btn-primary" data-testid="match-review">
+            <span aria-hidden="true">🔍</span> {t(`games.${gameId}.learn.review.open`)}
+          </Link>
+        )}
 
         {match.replayHref && (
           <Link href={match.replayHref} className="btn" data-testid="local-replay">

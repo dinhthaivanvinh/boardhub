@@ -8,6 +8,7 @@ import { evaluate } from './bot';
 import { netGain } from './exchange';
 import { PIECE_VALUE } from './learn/capture';
 import { isCheckmate, isStalemate, matingMoves } from './learn/checkmate';
+import { loadVoicePack, speakParts, stopSpeaking } from './learn/speech';
 import { describe, legalMoves, makeMove, other, squareName } from './rules/board';
 import { colorOfSeat, positionOf } from './rules/rules';
 import type { ChessMove, ChessState, PieceType, Position } from './rules/types';
@@ -76,7 +77,17 @@ export function coachMove(state: ChessState): ChessHint | null {
   return { move: best, reason: saved ? 'save' : 'good' };
 }
 
+/** Only the biggest dangers are read: a long list would not be followed. All are shown. */
+export const SPOKEN_THREATS = 2;
+
 export const coach: Coach<ChessState> = {
+  lastHint: (t) => t('games.chess.coach.lastHint'),
+  voice: {
+    prepare: (lang) => void loadVoicePack(lang),
+    say: (parts, lang) => void speakParts(parts, lang),
+    stop: stopSpeaking,
+  },
+
   warn(view, seat) {
     if (view.status !== 'playing' || view.inCheck === seat) return null;
     const mine = colorOfSeat(seat);
@@ -95,6 +106,15 @@ export const coach: Coach<ChessState> = {
             )
             .join(', '),
         }),
+      speech: (t: Translator) => [
+        t('games.chess.coach.say.warn'),
+        ...cells
+          .slice(0, SPOKEN_THREATS)
+          .flatMap((s) => [
+            t(`games.chess.pieceNames.${view.board[s]![1]}`),
+            t('games.chess.coach.say.at', { square: squareName(s) }),
+          ]),
+      ],
     };
   },
 
@@ -111,6 +131,12 @@ export const coach: Coach<ChessState> = {
           from: squareName(move.from),
           to: squareName(move.to),
         }),
+      speech: (t: Translator) => [
+        t(`games.chess.coach.say.${reason}`),
+        t(`games.chess.pieceNames.${view.board[move.from]![1]}`),
+        t('games.chess.coach.say.from', { square: squareName(move.from) }),
+        t('games.chess.coach.say.to', { square: squareName(move.to) }),
+      ],
     };
   },
 };

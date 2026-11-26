@@ -7,6 +7,17 @@
     "1": "Black"
   },
   "coach": {
+    "lastHint": "This is your last hint in this game.",
+    "say": {
+      "warn": "Careful! A piece is in danger.",
+      "mate": "You can checkmate!",
+      "capture": "You can win a piece.",
+      "save": "Keep your pieces safe.",
+      "good": "Try this move.",
+      "at": "on {square}.",
+      "from": "from {square}",
+      "to": "to {square}."
+    },
     "threatened": "Careful! In danger: {pieces}.",
     "pieceAt": "{piece} on {square}",
     "cellThreatened": "in danger",

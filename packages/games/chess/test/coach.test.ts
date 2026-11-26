@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import vi from '../src/i18n/vi.json';
 import { coach, coachMove, threatenedSquares } from '../src/coach';
 import { fromFen, squareName, START_FEN } from '../src/rules/board';
+import { speechEntries, spokenForm } from '../src/learn/speech-texts';
 import { fen, play, s } from './helpers';
 
 const names = (squares: readonly number[]) => squares.map(squareName);
@@ -71,5 +72,39 @@ describe('the suggested move', () => {
     const advice = coach.hint(st, 0)!;
     expect(names(advice.cells)).toEqual(['c3', 'd5']);
     expect(advice.text(tr)).toBe('Con ăn được quân: Mã từ c3 đến d5.');
+  });
+});
+
+describe('what the coach says aloud', () => {
+  const recorded = new Set(speechEntries('vi').map((e) => e.spoken));
+  const unrecorded = (parts: string[]) => parts.filter((p) => !recorded.has(spokenForm(p, 'vi')));
+
+  it('is made of parts that all have a recording, for every piece, square and reason', () => {
+    const parts = [coach.lastHint(tr), tr('games.chess.coach.say.warn')];
+    for (const reason of ['mate', 'capture', 'save', 'good'])
+      parts.push(tr(`games.chess.coach.say.${reason}`));
+    for (const type of ['K', 'Q', 'R', 'B', 'N', 'P']) parts.push(tr(`games.chess.pieceNames.${type}`));
+    for (let i = 0; i < 64; i++) {
+      for (const k of ['at', 'from', 'to']) {
+        parts.push(tr(`games.chess.coach.say.${k}`, { square: squareName(i) }));
+      }
+    }
+    expect(unrecorded(parts)).toEqual([]);
+  });
+
+  it('reads a hint as the reason, the piece and the two squares', () => {
+    const parts = coach.hint(fen('4k3/8/8/3q4/8/2N5/8/4K3 w - -'), 0)!.speech(tr);
+    expect(parts).toEqual(['Con ăn được quân.', 'Mã', 'từ c3', 'đến d5.']);
+    expect(unrecorded(parts)).toEqual([]);
+  });
+
+  it('reads only the two biggest dangers, though all are shown', () => {
+    // The rook on a8 attacks a3, the pawn on d5 attacks e4, and the bishop on h6 attacks the rook on c1.
+    const advice = coach.warn(fen('r5k1/8/7b/3p4/4Q3/N4P2/8/2R1K3 w - -'), 0)!;
+    expect(advice.cells).toHaveLength(3);
+    const parts = advice.speech(tr);
+    expect(parts).toHaveLength(1 + 2 * 2);
+    expect(parts.slice(0, 3)).toEqual(['Cẩn thận! Quân đang bị đe doạ.', 'Hậu', 'ở e4.']);
+    expect(unrecorded(parts)).toEqual([]);
   });
 });

@@ -39,3 +39,45 @@ test('the warning can be turned off, and stays off', async ({ page }) => {
   await page.getByText('Cài đặt', { exact: false }).first().click();
   await expect(box).not.toBeChecked();
 });
+
+test('three hints a game: the third says it is the last, a new game gives them back', async ({ page }) => {
+  await page.goto('/play/chess?mode=bot&level=easy');
+  const hint = page.getByTestId('coach-hint');
+  const message = page.getByTestId('coach-message');
+  const last = 'Đây là gợi ý cuối cùng trong ván này.';
+  for (const left of [3, 2, 1]) {
+    await expect(hint).toBeEnabled({ timeout: 10_000 });
+    await expect(hint).toContainText(`còn ${left}`);
+    await hint.click();
+    await expect(message).toContainText(/từ [a-h][1-8] đến [a-h][1-8]/);
+    if (left > 1) await expect(message).not.toContainText(last);
+    else await expect(message).toContainText(last);
+    const [from, to] = (await message.textContent())!.match(/từ ([a-h][1-8]) đến ([a-h][1-8])/)!.slice(1);
+    await square(page, from!).click();
+    await square(page, to!).click();
+  }
+  await expect(hint).toContainText('còn 0');
+  await expect(hint).toBeDisabled();
+  // Taking a move back does not give a hint back.
+  await page.getByRole('button', { name: /Đi lại/ }).click();
+  await expect(hint).toContainText('còn 0');
+  await page.getByRole('button', { name: /Ván mới/ }).click();
+  await expect(hint).toContainText('còn 3');
+  await expect(hint).toBeEnabled();
+});
+
+test('a hint is read aloud from the recordings, unless that is turned off', async ({ page }) => {
+  const played: string[] = [];
+  page.on('request', (r) => {
+    if (r.url().endsWith('.mp3') && r.url().includes('/audio/vi-edge/')) played.push(r.url());
+  });
+  await page.goto('/play/chess?mode=bot&level=easy');
+  await page.waitForLoadState('networkidle');
+  await page.getByTestId('coach-hint').click();
+  // The reason, the piece and two squares: the parts load one after the other.
+  await expect.poll(() => new Set(played).size, { timeout: 20_000 }).toBeGreaterThanOrEqual(4);
+
+  await page.getByText('Cài đặt', { exact: false }).first().click();
+  await page.getByRole('checkbox', { name: 'Đọc to cảnh báo và gợi ý' }).uncheck();
+  await expect(page.getByRole('button', { name: /Nghe lại/ })).toHaveCount(0);
+});

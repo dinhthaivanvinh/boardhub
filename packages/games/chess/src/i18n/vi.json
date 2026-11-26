@@ -7,6 +7,17 @@
     "1": "Đen"
   },
   "coach": {
+    "lastHint": "Đây là gợi ý cuối cùng trong ván này.",
+    "say": {
+      "warn": "Cẩn thận! Quân đang bị đe doạ.",
+      "mate": "Có nước chiếu hết!",
+      "capture": "Con ăn được quân.",
+      "save": "Hãy giữ quân an toàn.",
+      "good": "Con thử nước này.",
+      "at": "ở {square}.",
+      "from": "từ {square}",
+      "to": "đến {square}."
+    },
     "threatened": "Cẩn thận! Quân đang bị đe doạ: {pieces}.",
     "pieceAt": "{piece} ở {square}",
     "cellThreatened": "đang bị đe doạ",

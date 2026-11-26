@@ -287,6 +287,19 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
     }
   }
 
+  // ---- help against the computer: sentences said in parts (see speakParts)
+  const part = (path: string, values: Record<string, string> = {}) => {
+    const raw = get(m, path);
+    if (typeof raw !== 'string') throw new Error(`speech text missing: ${path}`);
+    out.add(raw.replace(/\{(\w+)\}/g, (_, k: string) => values[k]!));
+  };
+  for (const k of ['warn', 'mate', 'capture', 'save', 'good']) part(`coach.say.${k}`);
+  part('coach.lastHint');
+  for (const type of ['K', 'Q', 'R', 'B', 'N', 'P']) part(`pieceNames.${type}`);
+  for (let s = 0; s < 64; s++) {
+    for (const k of ['at', 'from', 'to']) part(`coach.say.${k}`, { square: squareName(s) });
+  }
+
   return [...out];
 }
 

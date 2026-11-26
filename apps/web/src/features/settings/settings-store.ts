@@ -7,6 +7,8 @@ import { DEFAULT_BOARD_SETTINGS, type BoardSettings } from '@bg/ui';
 interface AppSettings extends BoardSettings {
   /** Against the computer: point out pieces that are about to be lost (games with a coach). */
   showThreats: boolean;
+  /** Read the warnings and hints aloud. */
+  speakCoach: boolean;
 }
 
 interface SettingsStore extends AppSettings {
@@ -19,16 +21,18 @@ export const useSettings = create<SettingsStore>()(
     (set) => ({
       ...DEFAULT_BOARD_SETTINGS,
       showThreats: true,
+      speakCoach: true,
       update: (patch) => set(patch),
     }),
     {
       name: 'bg-board-settings',
-      partialize: ({ showLegalMoves, animations, coordinates, confirmMove, showThreats }) => ({
+      partialize: ({ showLegalMoves, animations, coordinates, confirmMove, showThreats, speakCoach }) => ({
         showLegalMoves,
         animations,
         coordinates,
         confirmMove,
         showThreats,
+        speakCoach,
       }),
     },
   ),

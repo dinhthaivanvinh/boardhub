@@ -153,6 +153,11 @@ không tải thêm gì. Khu Văn phòng có âm thanh riêng (`features/office/d
   phương ăn thì lời (đã tính cả chuỗi đổi quân trên ô đó; không cảnh báo khi đang bị chiếu), tắt được bằng cài đặt
   `showThreats`; gợi ý là chiếu hết 1 nước nếu có, nếu không thì nước không cho đối phương chiếu hết ngay, lời nhất sau một
   nước đáp. Cả hai chỉ nhìn trước một nước, không thấy đòn xa hơn.
+  - **Mỗi ván 3 gợi ý** (`HINT_LIMIT`, `use-coach.ts`); đi lại không trả lại lượt, "Ván mới" thì đếm lại. Gợi ý cuối kèm câu
+    `coach.lastHint`. Tải lại trang là ván mới nên cũng đếm lại.
+  - **Đọc to** (cài đặt `speakCoach`, bật sẵn): gợi ý được đọc khi bấm; cảnh báo chỉ đọc khi danh sách quân bị đe doạ **đổi**
+    (đọc tối đa 2 quân lớn nhất). Có nút "Nghe lại". Câu ghép từ quân và ô quá nhiều để thu trọn, nên `CoachAdvice.speech`
+    trả các đoạn đã thu riêng, phát nối nhau bằng `speakParts`; thiếu đoạn nào thì giọng trình duyệt đọc cả câu.
 - `BoardProps.playSound`: cho bàn cờ tự diễn nước đi theo thời gian (Ô ăn quan kêu từng viên sỏi, khớp hiệu ứng).
 
 | Cue            | Khi nào                 | Game                        | Âm                                       |

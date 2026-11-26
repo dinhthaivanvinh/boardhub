@@ -7,6 +7,8 @@ import {
   loadVoicePack,
   resetVoicePacks,
   speak,
+  speakParts,
+  stopSpeaking,
   voiceStatus,
   waitUntilSilent,
 } from '../src/learn/speech';
@@ -157,6 +159,33 @@ describe('the recorded voice', () => {
     expect(hasVoicePack('en')).toBe(false);
     expect(speak('Correct!', 'en')).toBe(true);
     expect(said).toEqual(['Correct!']);
+  });
+
+  it('plays the parts of a sentence one after the other, and stops when told', async () => {
+    const played = installAudio();
+    installBrowserVoice([]);
+    const keys = ['Mã', 'ở bê 6.', 'từ bê 1'].map(voiceKey);
+    installFetch(keys);
+    await loadVoicePack('vi');
+
+    expect(speakParts(['Mã', 'ở b6.', 'từ b1'], 'vi')).toBe(true);
+    expect(played).toHaveLength(1);
+    played[0]!.el.finish();
+    expect(played.map((p) => p.url)).toEqual(keys.slice(0, 2).map((k) => `/audio/vi-edge/${k}.mp3`));
+    stopSpeaking();
+    played[1]!.el.finish();
+    expect(played).toHaveLength(2);
+  });
+
+  it('the browser voice reads the whole sentence when a part has no file', async () => {
+    const played = installAudio();
+    const said = installBrowserVoice([{ lang: 'vi-VN', name: 'Vietnamese' }]);
+    installFetch([voiceKey('Mã')]);
+    await loadVoicePack('vi');
+
+    expect(speakParts(['Mã', 'ở b6.'], 'vi')).toBe(true);
+    expect(played).toEqual([]);
+    expect(said).toEqual(['Mã ở bê 6.']);
   });
 
   it('looks for the recordings once, not at every sentence', async () => {

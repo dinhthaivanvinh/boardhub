@@ -90,7 +90,9 @@
   },
   "match": {
     "coach": {
-      "hint": "Gợi ý một nước",
+      "hint": "Gợi ý một nước (còn {left})",
+      "again": "Nghe lại",
+      "speak": "Đọc to cảnh báo và gợi ý",
       "showThreats": "Cảnh báo quân đang bị đe doạ"
     },
     "you": "Bạn",

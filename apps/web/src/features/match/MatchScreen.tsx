@@ -92,6 +92,8 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
     seat: viewer,
     active: isMyTurn,
     showWarnings: settings.showThreats,
+    speak: settings.speakCoach,
+    gameKey: snapshot.seed,
   });
   const sound = useGameSound({ view, moveSounds, music, outcome: result ? tone : null });
   // A refused move gets a soft "no".
@@ -194,10 +196,10 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
               type="button"
               className="btn"
               onClick={help.askHint}
-              disabled={!isMyTurn || snapshot.result !== null || help.hintShown}
+              disabled={!isMyTurn || snapshot.result !== null || help.hintShown || help.hintsLeft === 0}
               data-testid="coach-hint"
             >
-              <span aria-hidden="true">💡</span> {t('match.coach.hint')}
+              <span aria-hidden="true">💡</span> {t('match.coach.hint', { left: help.hintsLeft })}
             </button>
             {/* Always there, so screen readers hear what appears in it. */}
             <div aria-live="polite" data-testid="coach-message">
@@ -206,6 +208,11 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
                   {help.messages.map((message) => (
                     <p key={message}>{message}</p>
                   ))}
+                  {help.sayAgain && (
+                    <button type="button" className="btn self-start text-sm" onClick={help.sayAgain}>
+                      <span aria-hidden="true">🔊</span> {t('match.coach.again')}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -253,6 +260,17 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
                     onChange={(e) => settings.update({ showThreats: e.target.checked })}
                   />
                   {t('match.coach.showThreats')}
+                </label>
+              )}
+              {help.available && (
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="size-4 accent-[var(--accent)]"
+                    checked={settings.speakCoach}
+                    onChange={(e) => settings.update({ speakCoach: e.target.checked })}
+                  />
+                  {t('match.coach.speak')}
                 </label>
               )}
               <label className="flex items-center gap-2">

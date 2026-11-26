@@ -92,6 +92,8 @@ export function resetVoicePacks(): void {
 }
 
 let current: HTMLAudioElement | null = null;
+/** Changes whenever something else is said or all is stopped: a sequence then does not go on. */
+let run = 0;
 const audioPlaying = () => current !== null && !current.paused && !current.ended;
 
 /** Plays a recording. If the file cannot be played (missing, blocked) the browser voice says it instead. */
@@ -161,7 +163,40 @@ export function speak(text: string, lang: string): boolean {
   return speakWithBrowser(text, lang);
 }
 
+/**
+ * Reads a sentence made of parts (a piece, then a square…), for sentences too many to record whole. The parts
+ * play one after the other from their recordings; if any has none, the browser voice reads the whole sentence.
+ * Returns false when nothing was read.
+ */
+export function speakParts(parts: readonly string[], lang: string): boolean {
+  const pack = packs.get(lang);
+  const keys = parts.map((p) => voiceKey(spellSquares(p, lang)));
+  if (keys.length === 0 || typeof Audio === 'undefined' || !keys.every((k) => pack?.has(k))) {
+    stopSpeaking();
+    return speakWithBrowser(parts.join(' '), lang);
+  }
+  stopSpeaking();
+  const mine = run;
+  const play = (i: number) => {
+    if (mine !== run || i >= keys.length) return;
+    const audio = new Audio(`${voiceDir(lang)}/${keys[i]}.mp3`);
+    current = audio;
+    audio.addEventListener('ended', () => {
+      if (current === audio) current = null;
+      play(i + 1);
+    });
+    void audio.play().catch(() => {
+      if (mine !== run) return;
+      current = null;
+      speakWithBrowser(parts.slice(i).join(' '), lang);
+    });
+  };
+  play(0);
+  return true;
+}
+
 export function stopSpeaking(): void {
+  run++;
   if (current) {
     current.pause();
     current = null;

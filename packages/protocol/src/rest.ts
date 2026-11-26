@@ -22,7 +22,7 @@ export interface PublicUser {
   kind: UserKind;
   displayName: string;
   email: string | null;
-  /** Can open /admin (server config ADMIN_EMAILS). */
+  /** Can open /admin (has the super_admin role). */
   admin: boolean;
 }
 

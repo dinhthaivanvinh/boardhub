@@ -13,6 +13,8 @@ export interface UserRecord {
 export interface UserRepo {
   create(user: Omit<UserRecord, 'createdAt'>): Promise<UserRecord>;
   findById(id: string): Promise<UserRecord | null>;
+  /** Sets when the account was last used. */
+  touch(id: string, at: number): Promise<void>;
   findByEmail(email: string): Promise<UserRecord | null>;
   findManyByIds(ids: string[]): Promise<UserRecord[]>;
   update(id: string, patch: Partial<Omit<UserRecord, 'id' | 'createdAt'>>): Promise<UserRecord | null>;
@@ -82,6 +84,11 @@ export class MemoryUserRepo implements UserRepo {
   readonly users = new Map<string, UserRecord>();
   readonly avatars = new Map<string, unknown>();
   readonly learnProgress = new Map<string, unknown>();
+  readonly lastSeen = new Map<string, number>();
+
+  async touch(id: string, at: number) {
+    if (this.users.has(id)) this.lastSeen.set(id, at);
+  }
 
   async getLearnProgress(id: string) {
     return this.learnProgress.get(id) ?? null;

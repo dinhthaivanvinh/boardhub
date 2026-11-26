@@ -35,6 +35,7 @@ beforeAll(async () => {
       BOT_WORKERS: '0',
       BOT_DELAY_MS: '0',
       ADMIN_EMAILS: 'Boss@Example.com, other@example.com',
+      ADMIN_SELF_REGISTER: 'true',
     }),
   );
   await server.app.listen({ port: 0, host: '127.0.0.1' });
@@ -113,7 +114,27 @@ async function roomWithChat(line: string) {
 }
 
 describe('admin access', () => {
-  it('only accounts on ADMIN_EMAILS may use /api/admin', async () => {
+  // A permission check that is not awaited would let the request through: every route is tried.
+  it('refuses a signed-in player on every admin route', async () => {
+    const player = await registered('Curious');
+    const id = '00000000-0000-4000-8000-0000000000aa';
+    const routes: [string, string, unknown?][] = [
+      ['GET', '/api/admin/games'],
+      ['PUT', '/api/admin/games/caro', { enabled: false }],
+      ['GET', '/api/admin/reports'],
+      ['POST', `/api/admin/reports/${id}/resolve`, { action: 'dismiss' }],
+      ['GET', '/api/admin/sanctions'],
+      ['PUT', `/api/admin/users/${id}/sanctions`, { mutedUntil: null }],
+      ['GET', '/api/admin/stats'],
+    ];
+    for (const [method, path, body] of routes) {
+      const res = await api(method, path, body, player.token);
+      expect([method, path, res.status, res.body]).toEqual([method, path, 403, { code: 'admin.required' }]);
+    }
+    expect((await api<GamesStatus>('GET', '/api/games/status')).body.disabled).not.toContain('caro');
+  });
+
+  it('only super admins may use /api/admin', async () => {
     expect((await api('GET', '/api/admin/games')).status).toBe(401);
     const g = await guest('Nobody');
     expect((await api('GET', '/api/admin/games', undefined, g.token)).status).toBe(403);
@@ -370,6 +391,7 @@ describe('AdminService', () => {
       now: () => now,
       newId: () => `00000000-0000-4000-9000-${String(++ids).padStart(12, '0')}`,
     });
+    expect(await service.bootstrapSuperAdmins()).toBe(1);
     return { service, admin, p, q, advance: (ms: number) => (now += ms), now: () => now };
   }
 
@@ -393,6 +415,56 @@ describe('AdminService', () => {
       'report.self',
     );
     await expect(service.setGameEnabled(p, 'caro', false)).rejects.toThrow('admin.required');
-    expect(service.isAdmin(admin)).toBe(true);
+    expect(await service.isAdmin(admin)).toBe(true);
+  });
+});
+
+describe('first super admin', () => {
+  const env = { LOG_LEVEL: 'silent', BOT_WORKERS: '0', ADMIN_EMAILS: 'boss@example.com, late@example.com' };
+  const account = (users: MemoryUserRepo, id: string, email: string) =>
+    users.create({ id, kind: 'registered', displayName: 'Boss', email, passwordHash: null });
+
+  it('is the registered account on ADMIN_EMAILS, given at start-up', async () => {
+    const users = new MemoryUserRepo();
+    const boss = await account(users, '00000000-0000-4000-8000-000000000011', 'boss@example.com');
+    const built = await buildServer(loadConfig(env), { users });
+    expect(await built.admin.isAdmin(boss)).toBe(true);
+    await built.close();
+  });
+
+  it('is not given again once somebody has the role: listing an address later grants nothing', async () => {
+    const users = new MemoryUserRepo();
+    const adminRepo = new MemoryAdminRepo();
+    await adminRepo.grantRole('00000000-0000-4000-8000-000000000012', 'super_admin');
+    const late = await account(users, '00000000-0000-4000-8000-000000000013', 'late@example.com');
+    const built = await buildServer(loadConfig(env), { users, adminRepo });
+    expect(await built.admin.isAdmin(late)).toBe(false);
+    await built.close();
+  });
+
+  it('cannot be taken by signing up with a listed address', async () => {
+    const built = await buildServer(loadConfig(env));
+    const sign = (email: string) =>
+      built.app.inject({
+        method: 'POST',
+        url: '/api/auth/register',
+        payload: { email, password: 'secret-123', displayName: 'Stranger' },
+      });
+    const taken = await sign('Boss@Example.com');
+    expect([taken.statusCode, taken.json()]).toEqual([409, { code: 'auth.email_taken' }]);
+    const other = await sign('someone@example.com');
+    expect(other.json<AuthResponse>().user.admin).toBe(false);
+    await built.close();
+  });
+
+  it('never lets production hand out the role at sign-up', () => {
+    expect(() =>
+      loadConfig({
+        NODE_ENV: 'production',
+        JWT_SECRET: 'x'.repeat(32),
+        CORS_ORIGIN: 'https://example.com',
+        ADMIN_SELF_REGISTER: 'true',
+      }),
+    ).toThrow('ADMIN_SELF_REGISTER');
   });
 });

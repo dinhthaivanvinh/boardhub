@@ -25,6 +25,8 @@ import { registerStatsRoutes } from './stats/stats-routes';
 import { MemoryVisitRepo, type VisitRepo } from './stats/visit-repo';
 import { VisitService } from './stats/visit-service';
 import { PgVisitRepo } from './db/pg-visit-repo';
+import { PgLearnEventRepo } from './db/pg-learn-repo';
+import { LearnEventService, MemoryLearnEventRepo, type LearnEventRepo } from './stats/learn-events';
 import { attachGateway, createNotifier, type IoServer } from './realtime/gateway';
 import { GAME_DEFS } from './registry';
 import { attachOfficeGateway, createOfficeNotifier, type OfficeNamespace } from './office/office-gateway';
@@ -53,6 +55,7 @@ export interface ServerOverrides {
   officeRepo?: OfficeRepo;
   adminRepo?: AdminRepo;
   visitRepo?: VisitRepo;
+  learnRepo?: LearnEventRepo;
   /** How often waiting quick-match players are re-checked (widening rating windows). */
   matchSweepMs?: number;
 }
@@ -81,7 +84,9 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   let officeRepo = overrides.officeRepo;
   let adminRepo = overrides.adminRepo;
   let visitRepo = overrides.visitRepo;
-  if ((!users || !history || !ratingRepo || !officeRepo || !adminRepo || !visitRepo) && config.DATABASE_URL) {
+  let learnRepo = overrides.learnRepo;
+  const missing = [users, history, ratingRepo, officeRepo, adminRepo, visitRepo, learnRepo].some((r) => !r);
+  if (missing && config.DATABASE_URL) {
     const db = createDb(config.DATABASE_URL);
     await migrateToLatest(db);
     users ??= new PgUserRepo(db);
@@ -90,6 +95,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     officeRepo ??= new PgOfficeRepo(db);
     adminRepo ??= new PgAdminRepo(db);
     visitRepo ??= new PgVisitRepo(db);
+    learnRepo ??= new PgLearnEventRepo(db);
     cleanups.push(() => db.destroy());
   }
   users ??= new MemoryUserRepo();
@@ -97,6 +103,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   ratingRepo ??= new MemoryRatingRepo();
   adminRepo ??= new MemoryAdminRepo();
   visitRepo ??= new MemoryVisitRepo();
+  learnRepo ??= new MemoryLearnEventRepo();
   const ratings = new RatingService(ratingRepo);
 
   const io: IoServer = new Server(app.server, {
@@ -145,6 +152,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     users,
     gameIds: Object.keys(GAME_DEFS),
     adminEmails: config.adminEmails,
+    adminSelfRegister: config.ADMIN_SELF_REGISTER === 'true',
     roomChat: async (code) => {
       const roomId = await store.roomIdByCode(code);
       return roomId ? store.getChat(roomId) : [];
@@ -157,6 +165,13 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
       await matchmakerRef?.leave(userId);
     },
   });
+  const granted = await admin.bootstrapSuperAdmins();
+  if (granted !== null) {
+    // No addresses in the log.
+    if (granted > 0) app.log.info({ granted }, 'first super admin granted from ADMIN_EMAILS');
+    else
+      app.log.warn('no super admin yet: sign up first, then list that address in ADMIN_EMAILS and restart');
+  }
   const isGameEnabled = (gameId: string) => admin.isGameEnabled(gameId);
 
   const hub = new GameHub({
@@ -175,11 +190,20 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
   const auth = new AuthService(users, new TokenService(config.JWT_SECRET), {
     isBanned: (id) => admin.isBanned(id),
     isAdmin: (u) => admin.isAdmin(u),
+    mayRegister: (email) => admin.mayRegister(email),
+    onRegistered: (u) => admin.onRegistered(u),
   });
   registerRoutes(app, auth, new HistoryService(history, users), users, config.AUTH_RATE_LIMIT);
   registerCompetitiveRoutes(app, { auth, ratings: ratingRepo, users, store, games: GAME_DEFS });
   registerAdminRoutes(app, auth, admin);
-  registerStatsRoutes(app, auth, admin, new VisitService(visitRepo), config.AUTH_RATE_LIMIT * 3);
+  registerStatsRoutes(
+    app,
+    auth,
+    admin,
+    new VisitService(visitRepo),
+    new LearnEventService(learnRepo),
+    config.AUTH_RATE_LIMIT * 3,
+  );
   const matchmaker = new Matchmaker({
     store,
     hub,

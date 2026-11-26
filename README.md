@@ -128,18 +128,24 @@ phone or another computer on the same network, and online rooms and office sessi
 The server reads environment variables. Every one is optional in development. See
 [`apps/server/.env.example`](apps/server/.env.example).
 
-| Variable                       | Default            | Purpose                                                                       |
-| ------------------------------ | ------------------ | ----------------------------------------------------------------------------- |
-| `PORT` / `HOST`                | `4000` / `0.0.0.0` | where the game server listens                                                 |
-| `DATABASE_URL`                 | in memory          | PostgreSQL for users, history, ratings, reports                               |
-| `REDIS_URL`                    | in memory          | live rooms, timers, quick-match queue; needed to run several server processes |
-| `JWT_SECRET`                   | dev value          | **required in production**, 32+ characters                                    |
-| `CORS_ORIGIN`                  | any origin         | **required in production**: the web app's origin(s), comma-separated          |
-| `ADMIN_EMAILS`                 | none               | comma-separated emails of registered accounts allowed to open `/admin`        |
-| `GRACE_MS`                     | `60000`            | how long a disconnected player keeps their seat                               |
-| `AUTH_RATE_LIMIT`              | `20`               | sign-in, sign-up and guest requests per minute from one address (HTTP 429)    |
-| `BOT_DELAY_MS` / `BOT_WORKERS` | `1200` / `2`       | bot pause before moving / bot worker threads (`0` = main thread)              |
-| `LOG_LEVEL`                    | `info`             | `fatal` … `trace`, or `silent`                                                |
+| Variable                       | Default            | Purpose                                                                                                                                    |
+| ------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PORT` / `HOST`                | `4000` / `0.0.0.0` | where the game server listens                                                                                                              |
+| `DATABASE_URL`                 | in memory          | PostgreSQL for users, history, ratings, reports                                                                                            |
+| `REDIS_URL`                    | in memory          | live rooms, timers, quick-match queue; needed to run several server processes                                                              |
+| `JWT_SECRET`                   | dev value          | **required in production**, 32+ characters                                                                                                 |
+| `CORS_ORIGIN`                  | any origin         | **required in production**: the web app's origin(s), comma-separated                                                                       |
+| `ADMIN_EMAILS`                 | none               | first super admins: while there is none, listed **registered** accounts get the role at start-up. Nobody can sign up with a listed address |
+| `ADMIN_SELF_REGISTER`          | `false`            | dev and tests only: signing up with a listed address grants the role (refused in production)                                               |
+| `GRACE_MS`                     | `60000`            | how long a disconnected player keeps their seat                                                                                            |
+| `AUTH_RATE_LIMIT`              | `20`               | sign-in, sign-up and guest requests per minute from one address (HTTP 429)                                                                 |
+| `BOT_DELAY_MS` / `BOT_WORKERS` | `1200` / `2`       | bot pause before moving / bot worker threads (`0` = main thread)                                                                           |
+| `LOG_LEVEL`                    | `info`             | `fatal` … `trace`, or `silent`                                                                                                             |
+
+**Admin access.** `/admin` is open to accounts with the `super_admin` role (table `user_roles`). To set up the first
+one: sign up on the site, then put that email in `ADMIN_EMAILS` and restart the server. Once a super admin exists the
+list grants nothing, and removing an email from it does not take a role away: until there is a page for roles, delete
+the row in `user_roles`. On your own machine, `ADMIN_SELF_REGISTER=true` lets you sign up with a listed address.
 
 The web app reads these at build time:
 

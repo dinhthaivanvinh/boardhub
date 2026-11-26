@@ -13,6 +13,33 @@ export interface UsersTable {
   avatar: ColumnType<unknown, never, string | null>;
   /** Learning progress (lessons done, puzzles solved, days played), validated by @bg/protocol. Written as JSON text. */
   learn_progress: ColumnType<unknown, never, string | null>;
+  /** When the account was last used (written at most every few minutes); null if not since this was added. */
+  last_seen_at: ColumnType<Date | null, never, Date | null>;
+}
+
+export interface RolesTable {
+  id: string;
+}
+
+/** Which account has which admin role. */
+export interface UserRolesTable {
+  user_id: string;
+  role_id: string;
+  /** The admin who granted it; null when the server did (first super admin). */
+  granted_by: string | null;
+  granted_at: Date;
+}
+
+/** One lesson, practice or puzzle finished by someone on a day, as it happens. */
+export interface LearnEventsTable {
+  /** `YYYY-MM-DD` as text, Vietnam time. */
+  day: string;
+  /** `u:<user id>` when signed in, else `v:<random browser id>`. */
+  actor: string;
+  user_id: string | null;
+  kind: 'lesson' | 'practice' | 'puzzle';
+  item_id: string;
+  created_at: Date;
 }
 
 export interface MatchesTable {
@@ -130,9 +157,14 @@ export interface DailyVisitsTable {
   day: string;
   visitor_id: string;
   kind: 'anonymous' | 'guest' | 'registered';
+  /** How many separate visits that day (a new one after 30 minutes away). */
+  sessions: Generated<number>;
 }
 
 export interface Database {
+  roles: RolesTable;
+  user_roles: UserRolesTable;
+  learn_events: LearnEventsTable;
   daily_visits: DailyVisitsTable;
   game_settings: GameSettingsTable;
   player_reports: PlayerReportsTable;
@@ -363,6 +395,49 @@ const MIGRATIONS: Record<string, Migration> = {
     },
     async down(db) {
       await db.schema.dropTable('daily_visits').execute();
+    },
+  },
+  '2026_11_26_001_admin_roles_activity': {
+    async up(db) {
+      await db.schema
+        .createTable('roles')
+        .addColumn('id', 'text', (c) => c.primaryKey())
+        .execute();
+      await sql`insert into roles (id) values ('super_admin'), ('content_manager'), ('moderator'), ('analyst')`.execute(
+        db,
+      );
+      await db.schema
+        .createTable('user_roles')
+        .addColumn('user_id', 'uuid', (c) => c.notNull().references('users.id').onDelete('cascade'))
+        .addColumn('role_id', 'text', (c) => c.notNull().references('roles.id'))
+        .addColumn('granted_by', 'uuid')
+        .addColumn('granted_at', 'timestamptz', (c) => c.notNull())
+        .addPrimaryKeyConstraint('user_roles_pk', ['user_id', 'role_id'])
+        .execute();
+      await db.schema.createIndex('user_roles_role').on('user_roles').column('role_id').execute();
+      await db.schema.alterTable('users').addColumn('last_seen_at', 'timestamptz').execute();
+      await db.schema
+        .createTable('learn_events')
+        .addColumn('day', 'text', (c) => c.notNull())
+        .addColumn('actor', 'text', (c) => c.notNull())
+        .addColumn('user_id', 'uuid', (c) => c.references('users.id').onDelete('cascade'))
+        .addColumn('kind', 'text', (c) => c.notNull())
+        .addColumn('item_id', 'text', (c) => c.notNull())
+        .addColumn('created_at', 'timestamptz', (c) => c.notNull())
+        .addPrimaryKeyConstraint('learn_events_pk', ['actor', 'day', 'kind', 'item_id'])
+        .execute();
+      await db.schema.createIndex('learn_events_day').on('learn_events').column('day').execute();
+      await db.schema.createIndex('learn_events_user').on('learn_events').column('user_id').execute();
+      // Days counted before this change had at least one visit each.
+      await db.schema
+        .alterTable('daily_visits')
+        .addColumn('sessions', 'integer', (c) => c.notNull().defaultTo(1))
+        .execute();
+    },
+    async down(db) {
+      await db.schema.alterTable('daily_visits').dropColumn('sessions').execute();
+      await db.schema.alterTable('users').dropColumn('last_seen_at').execute();
+      for (const t of ['learn_events', 'user_roles', 'roles']) await db.schema.dropTable(t).execute();
     },
   },
   '2026_11_07_001_avatars': {

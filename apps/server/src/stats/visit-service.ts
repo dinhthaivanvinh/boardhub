@@ -19,9 +19,9 @@ export class VisitService {
     private readonly now: () => number = Date.now,
   ) {}
 
-  async record(visitorId: string, kind: VisitorKind): Promise<void> {
+  async record(visitorId: string, kind: VisitorKind, newSession = false): Promise<void> {
     const today = dayOf(this.now());
-    await this.repo.record(today, visitorId, kind);
+    await this.repo.record(today, visitorId, kind, newSession);
     // Old days are dropped once per day and process, by the first visit.
     if (this.prunedFor !== today) {
       this.prunedFor = today;

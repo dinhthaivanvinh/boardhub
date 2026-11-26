@@ -1,4 +1,4 @@
-import type { ReportAction, ReportEvidenceLine, ReportReason, UserSanctions } from '@bg/protocol';
+import type { ReportAction, ReportEvidenceLine, ReportReason, RoleId, UserSanctions } from '@bg/protocol';
 
 /** One player report as stored (docs/06 §1, player_reports). */
 export interface StoredReport {
@@ -34,8 +34,14 @@ export interface StoredSanctions extends UserSanctions {
   userId: string;
 }
 
-/** Game switches, reports and sanctions (M4b). Games without a row are enabled. */
+/** Admin roles, game switches, reports and sanctions (M4b). Games without a row are enabled. */
 export interface AdminRepo {
+  rolesOf(userId: string): Promise<RoleId[]>;
+  /** Granting a role the user already has changes nothing. `by` is null when the server grants it itself. */
+  grantRole(userId: string, role: RoleId, by: string | null, at: number): Promise<void>;
+  /** True when at least one user has the role. */
+  roleTaken(role: RoleId): Promise<boolean>;
+
   gameSettings(): Promise<StoredGameSetting[]>;
   setGameEnabled(gameId: string, enabled: boolean, by: string, at: number): Promise<void>;
 
@@ -62,6 +68,19 @@ export class MemoryAdminRepo implements AdminRepo {
   readonly games = new Map<string, StoredGameSetting>();
   readonly reports = new Map<string, StoredReport>();
   readonly sanctions = new Map<string, StoredSanctions>();
+  readonly roles = new Map<string, Set<RoleId>>();
+
+  async rolesOf(userId: string) {
+    return [...(this.roles.get(userId) ?? [])];
+  }
+
+  async grantRole(userId: string, role: RoleId) {
+    this.roles.set(userId, (this.roles.get(userId) ?? new Set<RoleId>()).add(role));
+  }
+
+  async roleTaken(role: RoleId) {
+    return [...this.roles.values()].some((set) => set.has(role));
+  }
 
   async gameSettings() {
     return [...this.games.values()].map((g) => ({ ...g }));

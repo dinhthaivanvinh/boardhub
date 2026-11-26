@@ -24,7 +24,23 @@ describe('visit statistics (service)', () => {
     await svc.record('c'.repeat(16), 'registered'); // signed in later the same day
     await svc.record('c'.repeat(16), 'anonymous'); // and a later ping without the token does not lower it
     const { today } = await svc.stats(7);
-    expect(today).toEqual({ day: '2026-11-25', anonymous: 1, guest: 1, registered: 1, total: 3 });
+    expect(today).toEqual({
+      day: '2026-11-25',
+      anonymous: 1,
+      guest: 1,
+      registered: 1,
+      total: 3,
+      sessions: 3,
+    });
+  });
+
+  it('counts a session more each time a visitor comes back after being away', async () => {
+    const svc = new VisitService(new MemoryVisitRepo(), () => at);
+    await svc.record('a'.repeat(16), 'anonymous', true); // the first visit of the day is one session
+    await svc.record('a'.repeat(16), 'registered'); // signing in is not a new one
+    await svc.record('a'.repeat(16), 'registered', true);
+    await svc.record('b'.repeat(16), 'guest');
+    expect((await svc.stats(1)).today).toMatchObject({ total: 2, registered: 1, sessions: 3 });
   });
 
   it('lists the days before today newest first, with zeros, and forgets old days', async () => {
@@ -54,6 +70,7 @@ describe('visit statistics (HTTP)', () => {
         LOG_LEVEL: 'silent',
         BOT_WORKERS: '0',
         ADMIN_EMAILS: 'boss@example.com',
+        ADMIN_SELF_REGISTER: 'true',
         AUTH_RATE_LIMIT: '1000',
       }),
     );

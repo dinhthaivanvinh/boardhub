@@ -43,8 +43,16 @@ test('solving a puzzle earns a star, a streak day, and is remembered', async ({ 
   await expect(page.getByRole('grid')).toBeVisible();
   await expect(page.getByRole('grid').getByRole('gridcell')).toHaveCount(64);
 
+  // The server is told what was just solved, for the learning statistics, with or without an account.
+  const counted = page.waitForResponse((r) => r.url().endsWith('/api/learn-events'));
   await solvePuzzle(page);
   await expect(page.getByTestId('puzzle-after')).toContainText('1 ⭐');
+  const ping = await counted;
+  expect(ping.status()).toBe(200);
+  expect(ping.request().postDataJSON()).toMatchObject({
+    kind: 'puzzle',
+    itemId: expect.stringMatching(/^t1-/),
+  });
 
   await page.getByRole('button', { name: 'Về danh sách câu đố' }).first().click();
   await expect(page.getByTestId('stat-stars')).toHaveText('1 ⭐');

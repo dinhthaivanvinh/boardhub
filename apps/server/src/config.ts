@@ -19,8 +19,13 @@ const EnvSchema = z.object({
   BOT_DELAY_MS: z.coerce.number().int().min(0).default(1200),
   /** 0 = run bots on the main thread. */
   BOT_WORKERS: z.coerce.number().int().min(0).default(2),
-  /** Comma-separated emails of registered accounts that may open /admin (M4b). */
+  /**
+   * Comma-separated emails. While nobody has the super_admin role, the registered accounts listed here get it
+   * at start-up. Nobody can sign up with a listed address.
+   */
   ADMIN_EMAILS: z.string().default(''),
+  /** Dev and tests only: signing up with a listed address is allowed and grants super_admin. */
+  ADMIN_SELF_REGISTER: z.enum(['true', 'false']).default('false'),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
 });
 
@@ -37,6 +42,10 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   }
   if (!parsed.CORS_ORIGIN && parsed.NODE_ENV === 'production') {
     throw new Error('CORS_ORIGIN is required in production');
+  }
+  if (parsed.ADMIN_SELF_REGISTER === 'true' && parsed.NODE_ENV === 'production') {
+    // Sign-up does not verify addresses: this would hand admin rights to whoever signs up first.
+    throw new Error('ADMIN_SELF_REGISTER is not allowed in production');
   }
   return {
     ...parsed,

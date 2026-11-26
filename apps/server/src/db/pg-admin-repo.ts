@@ -1,5 +1,5 @@
 import { sql, type Kysely, type Selectable } from 'kysely';
-import type { ReportAction } from '@bg/protocol';
+import type { ReportAction, RoleId } from '@bg/protocol';
 import type {
   AdminRepo,
   NewReport,
@@ -35,6 +35,33 @@ function toSanctions(row: Selectable<UserSanctionsTable>): StoredSanctions {
 
 export class PgAdminRepo implements AdminRepo {
   constructor(private readonly db: Kysely<Database>) {}
+
+  async rolesOf(userId: string) {
+    const rows = await this.db
+      .selectFrom('user_roles')
+      .select('role_id')
+      .where('user_id', '=', userId)
+      .execute();
+    return rows.map((r) => r.role_id as RoleId);
+  }
+
+  async grantRole(userId: string, role: RoleId, by: string | null, at: number) {
+    await this.db
+      .insertInto('user_roles')
+      .values({ user_id: userId, role_id: role, granted_by: by, granted_at: new Date(at) })
+      .onConflict((oc) => oc.columns(['user_id', 'role_id']).doNothing())
+      .execute();
+  }
+
+  async roleTaken(role: RoleId) {
+    const row = await this.db
+      .selectFrom('user_roles')
+      .select('user_id')
+      .where('role_id', '=', role)
+      .limit(1)
+      .executeTakeFirst();
+    return row !== undefined;
+  }
 
   async gameSettings() {
     const rows = await this.db.selectFrom('game_settings').selectAll().execute();

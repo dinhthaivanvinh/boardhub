@@ -1,6 +1,6 @@
 # 06 — Data Model
 
-> Cập nhật: 2026-11-05 (M2). Dùng **Kysely + pg** thay cho Prisma, xem [ADR-0004](adr/0004-kysely-and-optional-services.md).
+> Cập nhật: 2026-11-26 (vai trò admin, dữ liệu hoạt động). Dùng **Kysely + pg** thay cho Prisma, xem [ADR-0004](adr/0004-kysely-and-optional-services.md).
 
 ## 1. PostgreSQL
 
@@ -85,7 +85,33 @@ daily_visits                       PK (day, visitor_id)   thống kê người d
   Giữ 90 ngày; ngày cũ bị xoá khi có lượt vào đầu tiên của mỗi ngày.
 ```
 
-Không có `DATABASE_URL`: `MemoryAdminRepo` và `MemoryVisitRepo`.
+Thêm ở migration `2026_11_26_001_admin_roles_activity` ([ADR-0013](adr/0013-admin-roles-and-activity-data.md)):
+
+```
+roles                              id text PK: super_admin | content_manager | moderator | analyst (migration tạo sẵn)
+
+user_roles                         PK (user_id, role_id)   vai trò admin của từng tài khoản
+  user_id → users (cascade), role_id → roles
+  granted_by uuid null (null = server tự cấp Super Admin đầu tiên), granted_at       INDEX (role_id)
+
+users.last_seen_at                 timestamptz null: lần dùng tài khoản gần nhất (ghi tối đa 5 phút một lần);
+                                   null nếu chưa dùng từ khi có cột này
+
+daily_visits.sessions              integer, mặc định 1: số phiên trong ngày (vắng từ 30 phút rồi quay lại là phiên mới).
+                                   Dòng có trước migration được tính là 1
+
+learn_events                       PK (actor, day, kind, item_id)   việc học đã hoàn thành, ghi lúc xảy ra
+  day text                         YYYY-MM-DD theo giờ Việt Nam
+  actor text                       'u:<user id>' khi đã đăng nhập, ngược lại 'v:<mã ngẫu nhiên của trình duyệt>'
+  user_id uuid null → users (cascade)
+  kind text                        lesson | practice | puzzle
+  item_id text                     chỉ id có trong nội dung học
+  created_at timestamptz           lần đầu trong ngày
+  INDEX (day), (user_id)
+  Giữ 400 ngày. Học trước khi có bảng này không được ghi lại.
+```
+
+Không có `DATABASE_URL`: `MemoryAdminRepo`, `MemoryVisitRepo` và `MemoryLearnEventRepo`.
 
 Không có `DATABASE_URL` thì server dùng bản trong bộ nhớ (`MemoryUserRepo`, `MemoryHistoryRepo`): chỉ dành cho dev,
 mất khi khởi động lại. Ván `local` và ván với bot ở trình duyệt không lưu lên server.

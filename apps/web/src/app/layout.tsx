@@ -15,6 +15,7 @@ import { BannedBanner } from '@/features/admin/BannedBanner';
 import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
 import { MobileNav } from '@/features/settings/MobileNav';
 import { NavMenus } from '@/features/settings/NavMenus';
+import { HomeLink } from '@/features/home/HomeLink';
 import { TIME_ZONE } from '@/i18n/messages';
 import { NAV_LINKS } from '@/features/settings/nav-links';
 import './globals.css';
@@ -61,10 +62,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={TIME_ZONE}>
           <header className="site-header">
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-              <Link href="/" className="site-brand flex items-center gap-2 font-bold tracking-tight">
+              <HomeLink className="site-brand flex items-center gap-2 font-bold tracking-tight">
                 <Logo size={40} />
                 {t('name')}
-              </Link>
+              </HomeLink>
               <span className="site-slogan" aria-hidden="true">
                 {t('slogan')}
               </span>
@@ -84,10 +85,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
           <footer className="site-footer">
             <div className="site-footer-inner">
-              <span className="site-footer-brand">
+              <HomeLink className="site-footer-brand">
                 <Logo size={28} />
                 {t('name')}
-              </span>
+              </HomeLink>
               <nav aria-label={t('footerLinks')} className="site-footer-links">
                 {FOOTER_LINKS.map((l) => (
                   <Link key={l.href} href={l.href}>

@@ -668,6 +668,47 @@
       "done": "Con đã biết chặn chiếu hết nhanh. Nhớ để ý ô f7!",
       "fun": "Hậu ra sớm hay bị đuổi. Vừa chặn đòn vừa đưa quân ra là con được lợi."
     },
+    "basic-mates": {
+      "name": "Chiếu hết đến cùng",
+      "stage": {
+        "meet": "Cách làm",
+        "rooks": "Hai Xe",
+        "queen": "Hậu và Vua",
+        "done": "Xong"
+      },
+      "meet": "Khi đối phương chỉ còn Vua, con phải biết chiếu hết cho đến cùng. Bí quyết là ép Vua đen ra mép bàn, và luôn để ý đừng làm ván thành hoà.",
+      "intro": {
+        "rooks": "Hai Xe thay phiên nhau: một Xe chặn đường, Xe kia chiếu. Vua đen phải lùi dần ra mép bàn.",
+        "queen": "Trước hết dùng Hậu ép Vua đen ra mép. Rồi đưa Vua của con đến giúp. Cuối cùng mới chiếu hết.",
+        "rook": "Thử thách khó: dùng Xe cắt đường, đưa Vua đến gần, rồi chiếu khi hai Vua đối mặt nhau."
+      },
+      "prompt": {
+        "rooks": "Dùng hai Xe để chiếu hết Vua đen.",
+        "queen": "Dùng Hậu và Vua để chiếu hết Vua đen.",
+        "rook": "Dùng Xe và Vua để chiếu hết Vua đen."
+      },
+      "tip": {
+        "rooks": "Cho một Xe giữ đường ngay cạnh Vua đen, rồi dùng Xe kia chiếu. Nếu Vua đen đến gần một Xe, hãy chuyển Xe đó sang phía xa.",
+        "queenCage": "Đặt Hậu cách Vua đen một bước Mã. Vua đen sẽ bị ép dần ra mép.",
+        "queenKing": "Vua đen đã ở mép. Giữ Hậu lại và đưa Vua của con đến gần. Nhớ chừa cho Vua đen một ô để đi.",
+        "queenMate": "Hai Vua đã gần nhau. Hãy tìm ô để Hậu chiếu hết.",
+        "rookCut": "Dùng Xe cắt bàn cờ để Vua đen còn ít chỗ hơn, rồi đưa Vua của con đến gần.",
+        "rookKing": "Vua đen đã ở mép. Đưa Vua của con đến đối mặt, cách một ô, và giữ Xe ở xa.",
+        "rookCheck": "Hai Vua đang đối mặt. Hãy chiếu bằng Xe."
+      },
+      "illegal": "Quân đó không đi được tới ô đó.",
+      "right": "Chiếu hết! Con giỏi quá!",
+      "stalemate": "Ôi, Vua đen không bị chiếu mà cũng không đi được: ván hoà. Con hãy đi lại nước này.",
+      "lost": "Vua đen ăn được quân của con. Con hãy đi lại nước này.",
+      "tooLong": "Đi hơi lâu rồi. Mình xếp lại bàn cờ nhé. Bấm Gợi ý nếu cần.",
+      "mateNow": "Có nước chiếu hết ngay! Hãy tìm nước đó.",
+      "moves": "Số nước con đã đi: {count}",
+      "restart": "Xếp lại bàn cờ",
+      "challenge": "Thử thách thêm: Xe và Vua",
+      "allDone": "Con làm được rồi! Bấm Tiếp tục.",
+      "done": "Con đã biết chiếu hết đến cùng bằng hai Xe, và bằng Hậu với Vua.",
+      "fun": "Mẹo: trước mỗi nước, hãy nhìn xem Vua đen còn đường đi không."
+    },
     "tactics": {
       "name": "Mẹo nhỏ và tàn cuộc",
       "stage": {

@@ -668,6 +668,47 @@
       "done": "You can stop the quick checkmate. Keep an eye on f7!",
       "fun": "An early queen often gets chased. Defend while bringing pieces out and you come out ahead."
     },
+    "basic-mates": {
+      "name": "Checkmate to the end",
+      "stage": {
+        "meet": "The way",
+        "rooks": "Two rooks",
+        "queen": "Queen and king",
+        "done": "Done"
+      },
+      "meet": "When the other side has only a king left, you must know how to finish with checkmate. The secret is to push the black king to the edge, and to take care the game does not become a draw.",
+      "intro": {
+        "rooks": "Two rooks take turns: one cuts off the way, the other gives check. The black king has to step back to the edge.",
+        "queen": "First push the black king to the edge with your queen. Then bring your king to help. Only then give checkmate.",
+        "rook": "A hard challenge: cut the king off with your rook, bring your king close, then give check when the kings face each other."
+      },
+      "prompt": {
+        "rooks": "Checkmate the black king with two rooks.",
+        "queen": "Checkmate the black king with your queen and king.",
+        "rook": "Checkmate the black king with your rook and king."
+      },
+      "tip": {
+        "rooks": "Let one rook hold the line next to the black king, then check with the other. If the king comes close to a rook, move that rook far away.",
+        "queenCage": "Put your queen a knight's step from the black king. The king will be pushed to the edge.",
+        "queenKing": "The black king is on the edge. Leave the queen there and bring your king closer. Leave the black king a square to move to.",
+        "queenMate": "The kings are close. Find the square where your queen gives checkmate.",
+        "rookCut": "Use your rook to cut the board so the black king has less room, then bring your king closer.",
+        "rookKing": "The black king is on the edge. Bring your king to face it, one square apart, and keep the rook far away.",
+        "rookCheck": "The kings face each other. Give check with your rook."
+      },
+      "illegal": "That piece cannot go to that square.",
+      "right": "Checkmate! Great job!",
+      "stalemate": "Oh, the black king is not in check but cannot move: a draw. Take that move again.",
+      "lost": "The black king can take your piece. Take that move again.",
+      "tooLong": "That is taking a while. Let us set up the board again. Tap Hint if you need it.",
+      "mateNow": "You can checkmate right now! Find the move.",
+      "moves": "Moves you have made: {count}",
+      "restart": "Set up the board again",
+      "challenge": "Extra challenge: rook and king",
+      "allDone": "You did it! Tap Continue.",
+      "done": "You can finish with checkmate using two rooks, and using a queen and king.",
+      "fun": "Tip: before every move, check that the black king still has somewhere to go."
+    },
     "tactics": {
       "name": "Little tricks and endgames",
       "stage": {

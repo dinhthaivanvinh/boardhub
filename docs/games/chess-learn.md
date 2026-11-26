@@ -36,6 +36,18 @@ vua nhí" chỉ đòi 21 bài có từ lúc huy hiệu ra đời (`MASTER_LESSON
   quay lại f3 sau ...g6 → đấu lại từ đầu. Nước chặn đúng là nước sau đó Trắng không còn chiếu hết 1 nước và không có chuỗi đổi
   quân nào trên một ô làm Đen lỗ (`defenceVerdict`). Cách kiểm này chỉ nhìn đổi quân ngay lập tức, không tính đòn xa hơn.
 
+## 1d. Bài Chiếu hết đến cùng (`basic-mates`, `learn/basic-mates.ts`, `BasicMatesLesson.tsx`)
+
+Đứng sau bài Mẹo nhỏ. Bé cầm Trắng chơi nhiều nước liền để chiếu hết vua đen đơn độc: **hai xe** rồi **hậu + vua** (hai thế
+này xong là xong bài), **xe + vua** là thử thách thêm sau khi xong.
+
+- Máy giữ vua đen (`defenderMove`, kết quả cố định theo thế cờ): ăn quân không ai bảo vệ; nếu không thì tránh bị chiếu hết ngay
+  ở nước sau, rồi chọn chỗ rộng, gần giữa. Chỉ nhìn một nước nên không phải phòng thủ hoàn hảo.
+- Nước làm hoà do hết nước đi, hoặc để vua đen ăn mất quân: diễn ra, giải thích, rồi lùi **đúng nước đó**.
+- Quá số nước giới hạn (`limit`) thì xếp lại bàn; luôn có nút xếp lại.
+- Gợi ý: có chiếu hết 1 nước thì tô sáng quân rồi ô đến; không có thì nói bước tiếp theo của cách làm (`mateTip`). Không có bộ
+  giải tìm nước tốt nhất. Mỗi thế có một đường thắng trong test, nên luôn thắng được trước máy này.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

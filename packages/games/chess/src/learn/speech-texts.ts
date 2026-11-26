@@ -237,6 +237,24 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
     say('hintTo', { from: squareName(move.from), square: squareName(move.to) });
   }
 
+  // ---- playing on to checkmate
+  for (const k of [
+    'meet',
+    'illegal',
+    'right',
+    'stalemate',
+    'lost',
+    'tooLong',
+    'mateNow',
+    'allDone',
+    'done',
+    'fun',
+  ])
+    say(`basic-mates.${k}`);
+  for (const k of ['rooks', 'queen', 'rook']) say(`basic-mates.prompt.${k}`);
+  for (const k of ['rooks', 'queenCage', 'queenKing', 'queenMate', 'rookCut', 'rookKing', 'rookCheck'])
+    say(`basic-mates.tip.${k}`);
+
   // ---- the "start the challenge" line of a piece or special lesson names the square to reach
   for (const l of PIECE_LESSONS) say('challengeStart', { square: l.challenge.goal });
   for (const l of SPECIAL_LESSONS) say('challengeStart', { square: l.challenge.to });

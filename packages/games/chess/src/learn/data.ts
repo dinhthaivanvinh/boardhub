@@ -1,4 +1,5 @@
 import type { Color, PieceType } from '../rules/types';
+import { BASIC_MATES_LESSON_ID } from './basic-mates';
 import { DRAWS_LESSON_ID, SETUP_LESSON_ID } from './basics';
 import { CAPTURE_LESSON_ID } from './capture';
 import { CHECKMATE_LESSON_ID } from './checkmate';
@@ -147,6 +148,7 @@ export const LESSON_IDS = [
   ...OPENING_LESSONS.map((l) => l.id),
   ...SPECIAL_LESSONS.map((l) => l.id),
   TACTICS_LESSON_ID,
+  BASIC_MATES_LESSON_ID,
 ] as const;
 export type LessonId = (typeof LESSON_IDS)[number];
 

@@ -32,6 +32,7 @@ describe('the journey', () => {
     const at = (id: string) => JOURNEY_LESSONS.indexOf(id);
     expect(at('castling')).toBeGreaterThan(at('draws'));
     expect(at('tactics')).toBeGreaterThan(at('promotion'));
+    expect(at('basic-mates')).toBe(at('tactics') + 1);
     expect(at('opening-basics')).toBeGreaterThan(at('tactics'));
     expect(at('early-mate')).toBe(at('opening-basics') + 1);
     expect(at('italian')).toBe(at('early-mate') + 1);

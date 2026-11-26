@@ -1,3 +1,4 @@
+import { BASIC_MATES_LESSON_ID } from './basic-mates';
 import { DRAWS_LESSON_ID, SETUP_LESSON_ID } from './basics';
 import { CAPTURE_LESSON_ID } from './capture';
 import { CHECKMATE_LESSON_ID } from './checkmate';
@@ -17,7 +18,7 @@ export const JOURNEY: readonly JourneyStage[] = [
   { id: 'rules', lessons: [CAPTURE_LESSON_ID, CHECKMATE_LESSON_ID, DRAWS_LESSON_ID] },
   // Castling and the other special moves are rules: the openings use them, so they come first.
   { id: 'specials', lessons: SPECIAL_LESSONS.map((l) => l.id) },
-  { id: 'tactics', lessons: [TACTICS_LESSON_ID] },
+  { id: 'tactics', lessons: [TACTICS_LESSON_ID, BASIC_MATES_LESSON_ID] },
   {
     id: 'openings',
     // The three ideas and the trap first; the named openings after them are for later.

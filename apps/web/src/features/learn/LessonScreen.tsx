@@ -4,6 +4,8 @@ import { BoardStage } from '@/components/BoardStage';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import {
+  BASIC_MATES_LESSON_ID,
+  BasicMatesLesson,
   CAPTURE_LESSON_ID,
   CaptureLesson,
   CHECKMATE_LESSON_ID,
@@ -258,6 +260,9 @@ export function LessonScreen({ lessonId }: { lessonId: string }) {
           )}
           {lessonId === EARLY_MATE_LESSON_ID && (
             <EarlyMateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
+          )}
+          {lessonId === BASIC_MATES_LESSON_ID && (
+            <BasicMatesLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />
           )}
           {lessonId === CHECKMATE_LESSON_ID && (
             <CheckmateLesson t={t} animate={!reduced} onComplete={markDone} lang={locale} footer={footer} />

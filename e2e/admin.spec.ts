@@ -174,7 +174,8 @@ test('the dashboard shows real numbers, and the range filter changes what it cov
   const narrow = admin.viewportSize()!.width < 768;
   await expect(admin.getByTestId('admin-menu')).toBeVisible({ visible: narrow });
   // The frame of the children's pages is not here.
-  await expect(admin.locator('.site-header, .site-footer')).toHaveCount(0);
+  await expect(admin.locator('.site-header')).toBeHidden();
+  await expect(admin.locator('.site-footer')).toBeHidden();
 
   const week = admin.waitForResponse((r) => r.url().includes('/api/admin/overview'));
   await admin.getByTestId('range-d7').click();

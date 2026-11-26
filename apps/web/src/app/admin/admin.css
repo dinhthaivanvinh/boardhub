@@ -71,6 +71,13 @@
   color: var(--muted);
 }
 
+/* The admin area has a frame of its own: the header and footer of the children's pages are not shown. Done
+   in CSS so that nothing changes in how those pages run. */
+body:has(.admin) > .site-header,
+body:has(.admin) > .site-footer {
+  display: none;
+}
+
 /* ---------------------------------------------------------------- the way in */
 
 .admin-gate {

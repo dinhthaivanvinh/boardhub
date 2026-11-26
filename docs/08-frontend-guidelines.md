@@ -195,8 +195,8 @@ Cài đặt (`bg-sound` trong `localStorage`): hiệu ứng bật 70 %, nhạc n
 
 ## Khu quản trị (`/admin`)
 
-- Giao diện tách riêng: `app/admin/layout.tsx` + `features/admin/AdminShell.tsx`; header/footer của trang cho bé nằm trong
-  `SiteChrome` và được ẩn dưới `/admin`. CSS gắn vào `.admin` (`app/admin/admin.css`), chỉ có nền sáng.
+- Giao diện tách riêng: `app/admin/layout.tsx` + `features/admin/AdminShell.tsx`; header/footer của trang cho bé được ẩn
+  bằng CSS (`body:has(.admin)`). CSS gắn vào `.admin` (`app/admin/admin.css`), chỉ có nền sáng.
 - Thành phần dùng chung ở `features/admin/ui/`: `StatCard`, `Delta`, `RangeFilter`, `TimeChart`, `RankBars`, `PageHeader`,
   `Panel`, `useLoad`, `ErrorLine`, `Loading`.
 - Biểu đồ là SVG tự viết. Mỗi biểu đồ có bảng số đi kèm, dùng bàn phím đọc được, màu theo thứ tự cố định

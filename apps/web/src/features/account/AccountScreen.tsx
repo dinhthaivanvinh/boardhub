@@ -1,5 +1,6 @@
 'use client';
 
+import { ParentNote } from '@/features/legal/ParentNote';
 import { useTranslations } from 'next-intl';
 import { PageBanner } from '@/features/home/PageBanner';
 import { useEffect, useState, type FormEvent } from 'react';
@@ -186,6 +187,7 @@ export function AccountScreen() {
                 className={input}
               />
             </label>
+            {tab === 'register' && <ParentNote />}
             <button type="submit" className="btn btn-primary self-start">
               {t(`account.${tab}`)}
             </button>

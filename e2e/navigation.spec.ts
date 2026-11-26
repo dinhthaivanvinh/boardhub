@@ -43,6 +43,39 @@ test('the Office and Party areas are out of the menus but their pages still work
   await expect(page.getByRole('heading', { level: 1, name: 'Văn phòng' })).toBeVisible();
 });
 
+test('the footer lists the places to explore, each with its real address', async ({ page }) => {
+  await page.goto('/about');
+  const explore = page.getByRole('navigation', { name: 'Khám phá' });
+  for (const [link, path] of [
+    ['Học cờ', '/learn/chess/coordinates'],
+    ['Câu đố', '/puzzles'],
+    ['Hành trình', '/journey'],
+    ['Chơi cờ vua', '/games/chess'],
+    ['Board game', '/board-games'],
+  ] as const) {
+    await expect(explore.getByRole('link', { name: link })).toHaveAttribute('href', path);
+  }
+  await expect(explore.getByRole('link')).toHaveCount(5);
+  await explore.getByRole('link', { name: 'Board game' }).click();
+  await expect(page).toHaveURL(/\/board-games$/);
+});
+
+test('the footer leads to the pages about the site', async ({ page }) => {
+  await page.goto('/');
+  const info = page.getByRole('navigation', { name: 'Thông tin' });
+  await expect(info.getByRole('link')).toHaveCount(4);
+  for (const [link, path, heading] of [
+    ['Giới thiệu', '/about', 'Giới thiệu BoardHub'],
+    ['Liên hệ', '/contact', 'Liên hệ'],
+    ['Quyền riêng tư', '/privacy', 'Chính sách quyền riêng tư'],
+    ['Điều khoản', '/terms', 'Điều khoản sử dụng'],
+  ] as const) {
+    await info.getByRole('link', { name: link }).click();
+    await expect(page).toHaveURL(new RegExp(`${path}$`));
+    await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
+  }
+});
+
 test('a missing room points back to the board games', async ({ page }) => {
   await page.goto('/room/ZZZZZZ');
   await expect(page.getByRole('link', { name: 'Về danh mục game' })).toHaveAttribute('href', '/board-games');

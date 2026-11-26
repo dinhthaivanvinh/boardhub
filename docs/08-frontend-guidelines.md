@@ -123,6 +123,7 @@ Trang chủ (`apps/web/src/app/page.tsx`) và header dùng bộ kiểu trong `ap
 
 ## 9. SEO
 
+- **Trang thông tin** (`/about`, `/contact`, `/privacy`, `/terms`, link ở chân trang): nội dung dài nằm ở `features/legal/content-{vi,en}.ts` (chỉ server render, không gửi theo file message); tên người vận hành và email liên hệ ở `site-info.ts`. Đổi dữ liệu thu thập, thời gian lưu hoặc người được xem thì sửa `/privacy` cả hai ngôn ngữ, `LEGAL_UPDATED` và [quy trình xóa dữ liệu](admin/data-requests.md).
 - **Lớp render:** trang công khai (`/`, `/board-games`, `/games/[id]`, `/office`, `/leaderboard`, `/live`) render nội dung chính
   ở server: tiêu đề, mô tả, luật chơi, bảng xếp hạng (fetch ở server, `GAME_SERVER_INTERNAL_URL` nếu cần, cache 60 s).
   Phần cần `localStorage` hoặc socket là "đảo" client bên trong; chỉ màn chơi/phòng/tài khoản dùng `ssr: false`.

@@ -912,50 +912,127 @@ html:has(.adv-home) body {
   height: 12rem;
 }
 
-/* ---- Footer ---- */
+/* ---- Footer: always light, like the floating header ---- */
 .site-footer {
+  --footer-line: #d3e3f6;
   margin-top: 2rem;
-  background: var(--card);
-  border-top: 1px solid var(--border);
-  color: var(--fg);
+  background: var(--adv-bg);
+  border-top: 1px solid var(--footer-line);
+  color: var(--adv-text);
 }
+/* The same edges as the header's content. */
 .site-footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  width: min(100% - 2rem, 75rem);
+  width: min(100% - 1rem, 72rem);
   margin-inline: auto;
-  padding-block: 1.5rem;
+  padding: 2.5rem 1rem 1.25rem;
+}
+.site-footer-main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem 1.5rem;
+}
+.site-footer-about {
+  position: relative;
+  /* as wide as the text, so the piece stays next to it */
+  max-width: 22rem;
+  grid-column: 1 / -1;
 }
 .site-footer-brand {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 2.5rem;
   color: var(--adv-blue-dark);
-  font-size: 1.125rem;
+  font-size: 1.375rem;
   font-weight: 800;
 }
-.site-footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1rem;
-  font-weight: 700;
+.site-footer-slogan {
+  margin-top: 0.25rem;
+  font-size: 1.0625rem;
+  font-weight: 800;
 }
-.site-footer-links a {
+.site-footer-text {
+  max-width: 22rem;
+  margin-top: 0.5rem;
+  color: var(--adv-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+.site-footer-piece {
+  position: absolute;
+  top: -0.5rem;
+  right: 0;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.site-footer-column h2 {
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  font-weight: 800;
+}
+.site-footer-column a {
   display: inline-flex;
   align-items: center;
   min-height: 2.5rem;
-  color: var(--fg);
+  color: var(--adv-text);
+  font-size: 0.9375rem;
+  font-weight: 600;
   text-decoration: none;
+  transition: color 0.2s;
 }
-.site-footer-links a:hover {
-  color: var(--adv-blue);
+.site-footer-column a:hover {
+  color: var(--adv-blue-dark);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
 }
-.site-footer-copy {
+.site-footer a:focus-visible {
+  outline: 2px solid var(--adv-blue);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+.site-footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--footer-line);
+  padding-top: 1rem;
   color: var(--adv-muted);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+/* Very narrow screens: the two groups of links one under the other. */
+@media (max-width: 18.75rem) {
+  .site-footer-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (min-width: 40rem) {
+  .site-footer-main {
+    grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  .site-footer-about {
+    grid-column: auto;
+  }
+  .site-footer-bottom {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 2rem;
+    text-align: left;
+  }
+}
+@media (min-width: 64rem) {
+  .site-footer-main {
+    gap: 3rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-footer-column a {
+    transition: none;
+  }
 }
 
 /* ---- The other pages (puzzles, journey, chess set-up) in the same look ---- */

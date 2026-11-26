@@ -59,7 +59,7 @@ test('host, projector and phones: create, join, lock, absent people, kick', asyn
   await expect(an.getByText('Phiên đã khoá hoặc bạn đã được mời ra.')).toBeVisible();
 });
 
-test('the portal code box opens an office session', async ({ browser }) => {
+test('the code box on the board games page opens an office session', async ({ browser }) => {
   const host = await newPage(browser);
   await host.goto('/office/new');
   await host.getByRole('button', { name: 'Tạo phiên' }).click();
@@ -67,7 +67,7 @@ test('the portal code box opens an office session', async ({ browser }) => {
   const code = (await host.getByTestId('host-code').textContent())!.trim();
 
   const guest = await newPage(browser);
-  await guest.goto('/');
+  await guest.goto('/board-games');
   await guest.getByLabel(/Có mã phòng/).fill(code);
   await guest.getByRole('button', { name: 'Vào phòng' }).click();
   await expect(guest).toHaveURL(new RegExp(`/office/s/${code}$`));

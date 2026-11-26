@@ -16,7 +16,7 @@ const EnvSchema = z.object({
   /** Sign-in, sign-up and guest requests allowed per minute from one address. */
   AUTH_RATE_LIMIT: z.coerce.number().int().min(1).default(20),
   GRACE_MS: z.coerce.number().int().min(1_000).default(60_000),
-  BOT_DELAY_MS: z.coerce.number().int().min(0).default(400),
+  BOT_DELAY_MS: z.coerce.number().int().min(0).default(1200),
   /** 0 = run bots on the main thread. */
   BOT_WORKERS: z.coerce.number().int().min(0).default(2),
   /** Comma-separated emails of registered accounts that may open /admin (M4b). */

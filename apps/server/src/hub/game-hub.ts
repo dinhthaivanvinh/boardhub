@@ -103,7 +103,7 @@ export class GameHub {
     this.newSeed = o.newSeed ?? randomUUID;
     this.newCode = o.newCode ?? randomRoomCode;
     this.graceMs = o.graceMs ?? 60_000;
-    this.botDelayMs = o.botDelayMs ?? 400;
+    this.botDelayMs = o.botDelayMs ?? 1200;
   }
 
   // ---------------------------------------------------------------- rooms

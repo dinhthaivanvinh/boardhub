@@ -8,8 +8,8 @@ import { saveLocalMatch, toLocalRecord } from './local-history';
 import { LocalMatch, newSeed } from './local-match';
 import type { SeatController } from './match-setup';
 
-/** Minimum time a bot "thinks", so its moves don't appear instantly (rule B7). */
-export const BOT_MIN_DELAY_MS = 450;
+/** Minimum time a bot "thinks" (rule B7): long enough for a young child to notice that the computer moves. */
+export const BOT_MIN_DELAY_MS = 1200;
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

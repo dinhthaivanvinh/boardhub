@@ -41,15 +41,15 @@ chính (`degraded`), không bao giờ lặp tạo worker vô hạn hay đi nư�
 
 ## 3. Quy tắc
 
-| #   | Quy tắc                                                                                           |
-| --- | ------------------------------------------------------------------------------------------------- |
-| B1  | Bot chỉ dùng `ctx.rng`, không dùng `Math.random`, để tái hiện được lỗi                            |
-| B2  | Bot phải tôn trọng `deadlineMs`; iterative deepening trả về kết quả tốt nhất tìm được khi hết giờ |
-| B3  | Bot luôn trả về một nước nằm trong `legalMoves`; khi gặp lỗi thì fallback sang `randomBot`        |
-| B4  | Bot của game `hidden-info` chỉ được đọc `playerView(state, seat)`, không được "nhìn trộm"         |
-| B5  | Bot ở server chạy trong worker thread; bot ở client chạy trong Web Worker                         |
-| B6  | Cấp độ "dễ" phải thua được: thêm xác suất chọn nước kém (ví dụ 30%)                               |
-| B7  | Thêm độ trễ hiển thị 300–800 ms ở UI để nước đi của bot trông tự nhiên (không làm ở trong bot)    |
+| #   | Quy tắc                                                                                                            |
+| --- | ------------------------------------------------------------------------------------------------------------------ |
+| B1  | Bot chỉ dùng `ctx.rng`, không dùng `Math.random`, để tái hiện được lỗi                                             |
+| B2  | Bot phải tôn trọng `deadlineMs`; iterative deepening trả về kết quả tốt nhất tìm được khi hết giờ                  |
+| B3  | Bot luôn trả về một nước nằm trong `legalMoves`; khi gặp lỗi thì fallback sang `randomBot`                         |
+| B4  | Bot của game `hidden-info` chỉ được đọc `playerView(state, seat)`, không được "nhìn trộm"                          |
+| B5  | Bot ở server chạy trong worker thread; bot ở client chạy trong Web Worker                                          |
+| B6  | Cấp độ "dễ" phải thua được: thêm xác suất chọn nước kém (ví dụ 30%)                                                |
+| B7  | Bot trả lời sau ít nhất 1,2 giây (web và phòng online), để trẻ nhỏ kịp nhận ra máy đang đi (không làm ở trong bot) |
 
 ## 4. Cấu hình cấp độ gợi ý
 

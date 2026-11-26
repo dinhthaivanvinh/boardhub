@@ -23,10 +23,6 @@
     transform: translateY(-10px);
   }
 }
-.area-card-art-party {
-  background: #7f1d1d;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .party-art-lantern,
   .party-art-note {

@@ -16,12 +16,13 @@ import { playSound } from '@/sound/play';
 import { SoundControls } from '@/sound/SoundControls';
 import { useGameSound } from '@/sound/use-game-sound';
 import { resultDetail } from './result-detail';
+import { useCoach } from './use-coach';
 import { ResultOverlay, type ResultTone } from './ResultOverlay';
 
 export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSetup }) {
   const t = useTranslations();
   const { definition } = GAMES[gameId];
-  const { Board, PieceIcon, moveSounds, music } = CLIENT_GAMES[gameId];
+  const { Board, PieceIcon, moveSounds, music, coach } = CLIENT_GAMES[gameId];
   const controllers = useMemo(() => controllersFor(setup, definition.meta.minPlayers), [setup, definition]);
   const match = useLocalMatch(gameId, definition, setup.config, controllers);
   const settings = useSettings();
@@ -82,6 +83,16 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           : t('match.overlay.wins', { player: seatName(winner ?? 0) });
 
   const view = definition.playerView(snapshot.state, viewer);
+  // Only against the computer: between two people it would not be fair.
+  const help = useCoach({
+    coach: setup.mode === 'bot' ? coach : undefined,
+    state: snapshot.state,
+    version: snapshot.version,
+    view,
+    seat: viewer,
+    active: isMyTurn,
+    showWarnings: settings.showThreats,
+  });
   const sound = useGameSound({ view, moveSounds, music, outcome: result ? tone : null });
   // A refused move gets a soft "no".
   useEffect(() => {
@@ -128,6 +139,7 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           onMove={match.play}
           settings={settings}
           t={t}
+          assist={help.assist}
         />
         <ResultOverlay
           show={result !== null}
@@ -176,6 +188,30 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
           })}
         </ul>
 
+        {help.available && (
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              className="btn"
+              onClick={help.askHint}
+              disabled={!isMyTurn || snapshot.result !== null || help.hintShown}
+              data-testid="coach-hint"
+            >
+              <span aria-hidden="true">💡</span> {t('match.coach.hint')}
+            </button>
+            {/* Always there, so screen readers hear what appears in it. */}
+            <div aria-live="polite" data-testid="coach-message">
+              {help.messages.length > 0 && (
+                <div className="card flex flex-col gap-1 py-2 text-sm font-medium">
+                  {help.messages.map((message) => (
+                    <p key={message}>{message}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-3 gap-2">
           <button type="button" className="btn" onClick={match.undo} disabled={!match.canUndo}>
             ↶ {t('match.actions.undo')}
@@ -208,6 +244,17 @@ export function MatchScreen({ gameId, setup }: { gameId: GameId; setup: MatchSet
                 />
                 {t('match.settings.confirmMove')}
               </label>
+              {help.available && (
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="size-4 accent-[var(--accent)]"
+                    checked={settings.showThreats}
+                    onChange={(e) => settings.update({ showThreats: e.target.checked })}
+                  />
+                  {t('match.coach.showThreats')}
+                </label>
+              )}
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"

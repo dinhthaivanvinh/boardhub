@@ -6,6 +6,18 @@
     "0": "White",
     "1": "Black"
   },
+  "coach": {
+    "threatened": "Careful! In danger: {pieces}.",
+    "pieceAt": "{piece} on {square}",
+    "cellThreatened": "in danger",
+    "cellHint": "suggested move",
+    "hint": {
+      "mate": "You can checkmate: {piece} from {from} to {to}!",
+      "capture": "You can win a piece: {piece} from {from} to {to}.",
+      "save": "Keep your pieces safe: {piece} from {from} to {to}.",
+      "good": "Try this move: {piece} from {from} to {to}."
+    }
+  },
   "pieceNames": {
     "K": "King",
     "Q": "Queen",

@@ -43,6 +43,27 @@
   fill: rgb(220 38 38 / 0.55);
   filter: blur(2px);
 }
+.ch-hint {
+  fill: rgb(34 197 94 / 0.28);
+  stroke: #15803d;
+  stroke-width: 4;
+}
+.ch-warn-ring {
+  fill: none;
+  stroke: #ea580c;
+  stroke-width: 4;
+  stroke-dasharray: 9 5;
+}
+.ch-warn-badge {
+  fill: #ea580c;
+  stroke: #fff;
+  stroke-width: 2;
+}
+.ch-warn text {
+  fill: #fff;
+  font-weight: 800;
+  font-size: 20px;
+}
 .ch-target {
   fill: rgb(0 0 0 / 0.25);
 }

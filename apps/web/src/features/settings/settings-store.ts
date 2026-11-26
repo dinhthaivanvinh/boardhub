@@ -4,8 +4,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { DEFAULT_BOARD_SETTINGS, type BoardSettings } from '@bg/ui';
 
-interface SettingsStore extends BoardSettings {
-  update(patch: Partial<BoardSettings>): void;
+interface AppSettings extends BoardSettings {
+  /** Against the computer: point out pieces that are about to be lost (games with a coach). */
+  showThreats: boolean;
+}
+
+interface SettingsStore extends AppSettings {
+  update(patch: Partial<AppSettings>): void;
 }
 
 /** Board settings, kept in localStorage. Only used in client-only screens. */
@@ -13,15 +18,17 @@ export const useSettings = create<SettingsStore>()(
   persist(
     (set) => ({
       ...DEFAULT_BOARD_SETTINGS,
+      showThreats: true,
       update: (patch) => set(patch),
     }),
     {
       name: 'bg-board-settings',
-      partialize: ({ showLegalMoves, animations, coordinates, confirmMove }) => ({
+      partialize: ({ showLegalMoves, animations, coordinates, confirmMove, showThreats }) => ({
         showLegalMoves,
         animations,
         coordinates,
         confirmMove,
+        showThreats,
       }),
     },
   ),

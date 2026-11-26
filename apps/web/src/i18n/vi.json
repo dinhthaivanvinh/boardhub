@@ -89,6 +89,10 @@
     }
   },
   "match": {
+    "coach": {
+      "hint": "Gợi ý một nước",
+      "showThreats": "Cảnh báo quân đang bị đe doạ"
+    },
     "you": "Bạn",
     "player": "Người chơi {n}",
     "bot": "Máy ({level})",

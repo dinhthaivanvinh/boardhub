@@ -6,6 +6,18 @@
     "0": "Trắng",
     "1": "Đen"
   },
+  "coach": {
+    "threatened": "Cẩn thận! Quân đang bị đe doạ: {pieces}.",
+    "pieceAt": "{piece} ở {square}",
+    "cellThreatened": "đang bị đe doạ",
+    "cellHint": "nước được gợi ý",
+    "hint": {
+      "mate": "Có nước chiếu hết: {piece} từ {from} đến {to}!",
+      "capture": "Con ăn được quân: {piece} từ {from} đến {to}.",
+      "save": "Hãy giữ quân an toàn: {piece} từ {from} đến {to}.",
+      "good": "Con thử nước này: {piece} từ {from} đến {to}."
+    }
+  },
   "pieceNames": {
     "K": "Vua",
     "Q": "Hậu",

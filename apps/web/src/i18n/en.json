@@ -89,6 +89,10 @@
     }
   },
   "match": {
+    "coach": {
+      "hint": "Suggest a move",
+      "showThreats": "Warn me when a piece is in danger"
+    },
     "you": "You",
     "player": "Player {n}",
     "bot": "Computer ({level})",

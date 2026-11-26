@@ -8,7 +8,7 @@ import * as four from '@bg/game-four-in-a-row';
 import * as oAnQuan from '@bg/game-o-an-quan';
 import * as reversi from '@bg/game-reversi';
 import * as xiangqi from '@bg/game-xiangqi';
-import type { BoardProps, ConfigFieldSpec, MoveSounds, MusicMood } from '@bg/ui';
+import type { BoardProps, Coach, ConfigFieldSpec, MoveSounds, MusicMood } from '@bg/ui';
 import type { GameId } from './catalog';
 
 export interface ClientGameEntry {
@@ -22,6 +22,9 @@ export interface ClientGameEntry {
   moveSounds: MoveSounds<any>;
   /** Background music style. */
   music: MusicMood;
+  /** Help against the computer, for games that offer it. */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  coach?: Coach<any>;
 }
 
 /** The same shape for every game package. */
@@ -31,12 +34,14 @@ const entry = (pkg: {
   PieceIcon: ComponentType<{ seat: number; size?: number }>;
   moveSounds: unknown;
   music: MusicMood;
+  coach?: unknown;
 }): ClientGameEntry => ({
   Board: pkg.Board as ClientGameEntry['Board'],
   configFields: pkg.configFields,
   PieceIcon: pkg.PieceIcon,
   moveSounds: pkg.moveSounds as ClientGameEntry['moveSounds'],
   music: pkg.music,
+  coach: pkg.coach as ClientGameEntry['coach'],
 });
 
 export const CLIENT_GAMES: Record<GameId, ClientGameEntry> = {

@@ -29,6 +29,7 @@ export function Board({
   orientation,
   settings,
   t,
+  assist,
 }: ChessBoardProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [promoting, setPromoting] = useState<{ from: number; to: number } | null>(null);
@@ -51,6 +52,8 @@ export function Board({
   const targets = new Set(selected === null ? [] : moves.filter((m) => m.from === selected).map((m) => m.to));
   const checkedKing = view.inCheck === null ? -1 : kingSquare(view.board, colorOfSeat(view.inCheck));
   const last = view.lastMove;
+  const warned = new Set(assist?.warn);
+  const hinted = new Set(assist?.hint);
 
   const pieceLabel = (p: Piece) =>
     t('games.chess.pieceLabel', {
@@ -141,10 +144,15 @@ export function Board({
           cellLabel={(display) => {
             const s = toBoard(display);
             const p = view.board[s];
-            return t('games.chess.cellLabel', {
+            const label = t('games.chess.cellLabel', {
               square: squareName(s),
               piece: p ? pieceLabel(p) : t('games.chess.empty'),
             });
+            const notes = [
+              warned.has(s) ? t('games.chess.coach.cellThreatened') : '',
+              hinted.has(s) ? t('games.chess.coach.cellHint') : '',
+            ].filter(Boolean);
+            return notes.length > 0 ? `${label}, ${notes.join(', ')}` : label;
           }}
           onActivate={activate}
           cellData={(display) => {
@@ -156,6 +164,8 @@ export function Board({
               'data-target': targets.has(s) ? 'true' : undefined,
               'data-last': last && (s === last.from || s === last.to) ? 'true' : undefined,
               'data-check': s === checkedKing ? 'true' : undefined,
+              'data-threatened': warned.has(s) ? 'true' : undefined,
+              'data-hint': hinted.has(s) ? 'true' : undefined,
             };
           }}
           renderCell={(display, geom) => {
@@ -171,6 +181,15 @@ export function Board({
                 {s === selected && (
                   <rect className="ch-selected-sq" x={geom.x} y={geom.y} width={CELL} height={CELL} />
                 )}
+                {hinted.has(s) && (
+                  <rect
+                    className="ch-hint"
+                    x={geom.x + 3}
+                    y={geom.y + 3}
+                    width={CELL - 6}
+                    height={CELL - 6}
+                  />
+                )}
                 {p && !sliding.has(s) && (
                   <PieceShape piece={p} cx={cx} cy={cy + 1} className={pieceClass(s)} />
                 )}
@@ -184,7 +203,7 @@ export function Board({
             );
           }}
           overlay={
-            last ? (
+            last || warned.size > 0 ? (
               <>
                 {rookMove && view.board[rookMove.to] && (
                   <SlidingPiece
@@ -200,7 +219,7 @@ export function Board({
                     />
                   </SlidingPiece>
                 )}
-                {view.board[last.to] && (
+                {last && view.board[last.to] && (
                   <SlidingPiece
                     key={view.moveCount}
                     from={centre(last.from)}
@@ -215,6 +234,28 @@ export function Board({
                     />
                   </SlidingPiece>
                 )}
+                {[...warned].map((s) => {
+                  const { x, y } = centre(s);
+                  return (
+                    <g key={`warn${s}`} className="ch-warn" aria-hidden="true" pointerEvents="none">
+                      <circle className="ch-warn-ring" cx={x} cy={y} r={CELL * 0.46} />
+                      <circle
+                        className="ch-warn-badge"
+                        cx={x + CELL * 0.31}
+                        cy={y - CELL * 0.31}
+                        r={CELL * 0.16}
+                      />
+                      <text
+                        x={x + CELL * 0.31}
+                        y={y - CELL * 0.31}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                      >
+                        !
+                      </text>
+                    </g>
+                  );
+                })}
               </>
             ) : undefined
           }

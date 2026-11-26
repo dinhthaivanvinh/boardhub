@@ -1,12 +1,19 @@
 {
   "app": {
+    "footerExplore": "Khám phá",
+    "footerAbout": "Khám phá thế giới cờ vua, rèn luyện tư duy và chinh phục những thử thách trí tuệ mỗi ngày.",
+    "footerTagline": "Được tạo nên dành cho những người yêu thích tư duy và trò chơi trí tuệ.",
+    "footerInfo": "Thông tin",
     "name": "BoardHub",
     "tagline": "Học và chơi cờ vua, cùng các board game khác, ngay trên trình duyệt.",
     "slogan": "Học cờ thật vui!",
-    "footerLinks": "Liên kết",
     "copyright": "© {year} BoardHub. Học cờ thật vui!"
   },
   "nav": {
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "privacy": "Quyền riêng tư",
+    "terms": "Điều khoản",
     "home": "Trang chủ",
     "language": "Ngôn ngữ",
     "account": "Tài khoản",
@@ -194,6 +201,8 @@
     "empty": "Chưa có tin nhắn nào."
   },
   "account": {
+    "parentNote": "Bé hãy nhờ bố mẹ đăng ký giúp nhé.",
+    "privacyLink": "Chính sách quyền riêng tư",
     "title": "Tài khoản",
     "guestNote": "Bạn đang chơi với tư cách khách. Đăng ký để giữ tên và lịch sử ván đấu khi đổi máy.",
     "registeredAs": "Đã đăng nhập: {email}",

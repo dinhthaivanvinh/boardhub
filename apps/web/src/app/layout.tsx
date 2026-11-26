@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import Link from 'next/link';
 import { Nunito } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
@@ -16,14 +15,10 @@ import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
 import { MobileNav } from '@/features/settings/MobileNav';
 import { NavMenus } from '@/features/settings/NavMenus';
 import { HomeLink } from '@/features/home/HomeLink';
+import { Logo } from '@/features/home/Logo';
+import { SiteFooter } from '@/features/home/SiteFooter';
 import { TIME_ZONE } from '@/i18n/messages';
-import { NAV_LINKS } from '@/features/settings/nav-links';
 import './globals.css';
-
-const FOOTER_LINKS = [
-  { href: '/', key: 'home' as const },
-  ...NAV_LINKS.map((l) => ({ href: l.href, key: l.key })),
-];
 
 /** A round, friendly face for a young audience; the system fonts stay as the fallback. */
 const rounded = Nunito({ subsets: ['latin', 'vietnamese'], display: 'swap', variable: '--font-rounded' });
@@ -55,7 +50,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const locale = await getLocale();
   const messages = await getMessages();
   const t = await getTranslations('app');
-  const tn = await getTranslations('nav');
   return (
     <html lang={locale} className={rounded.variable}>
       <body>
@@ -83,37 +77,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <ProgressSync />
           <VisitPing />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
-          <footer className="site-footer">
-            <div className="site-footer-inner">
-              <HomeLink className="site-footer-brand">
-                <Logo size={28} />
-                {t('name')}
-              </HomeLink>
-              <nav aria-label={t('footerLinks')} className="site-footer-links">
-                {FOOTER_LINKS.map((l) => (
-                  <Link key={l.href} href={l.href}>
-                    {tn(l.key)}
-                  </Link>
-                ))}
-              </nav>
-              <span className="site-footer-copy">{t('copyright', { year: new Date().getFullYear() })}</span>
-            </div>
-          </footer>
+          <SiteFooter />
         </NextIntlClientProvider>
       </body>
     </html>
-  );
-}
-
-/** Four tiles in the colours of the pieces: the BoardHub mark. */
-function Logo({ size = 26 }: { size?: number }) {
-  return (
-    <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden="true">
-      <rect x="2" y="2" width="13" height="13" rx="4" fill="#f97316" />
-      <rect x="17" y="2" width="13" height="13" rx="4" fill="#1d4ed8" />
-      <rect x="2" y="17" width="13" height="13" rx="4" fill="#15803d" />
-      <rect x="17" y="17" width="13" height="13" rx="4" fill="#b91c1c" />
-      <circle cx="23.5" cy="23.5" r="3.5" fill="#fff" opacity="0.9" />
-    </svg>
   );
 }

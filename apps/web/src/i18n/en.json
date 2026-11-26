@@ -1,12 +1,19 @@
 {
   "app": {
+    "footerExplore": "Explore",
+    "footerAbout": "Discover the world of chess, train your thinking and take on new brain challenges every day.",
+    "footerTagline": "Made for people who love thinking and brain games.",
+    "footerInfo": "Information",
     "name": "BoardHub",
     "tagline": "Learn and play chess, plus other board games, right in your browser.",
     "slogan": "Learning chess is fun!",
-    "footerLinks": "Links",
     "copyright": "© {year} BoardHub. Learn chess the fun way!"
   },
   "nav": {
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
     "home": "Home",
     "language": "Language",
     "account": "Account",
@@ -194,6 +201,8 @@
     "empty": "No messages yet."
   },
   "account": {
+    "parentNote": "Children: please ask a parent to register for you.",
+    "privacyLink": "Privacy policy",
     "title": "Account",
     "guestNote": "You are playing as a guest. Sign up to keep your name and game history across devices.",
     "registeredAs": "Signed in as {email}",

@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useId, useState, type FormEvent } from 'react';
 import type { AuthResponse } from '@bg/protocol';
+import { ParentNote } from '@/features/legal/ParentNote';
 import { errorKey } from '@/game-runtime/error-key';
 import { apiRequest } from '@/online/api';
 import { createGuest, rememberGuestChoice, useSession } from '@/online/session';
@@ -107,6 +108,7 @@ export function AuthPanel({ headingLevel = 2 }: { headingLevel?: 2 | 3 }) {
               className={input}
             />
           </label>
+          {tab === 'register' && <ParentNote />}
           <button
             type="submit"
             className="btn btn-primary self-start"

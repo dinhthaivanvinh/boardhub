@@ -1,4 +1,11 @@
-import type { AdminStats, VisitorKind } from '@bg/protocol';
+import {
+  addDays,
+  daysOf,
+  previousRange,
+  type AdminStats,
+  type DateRange,
+  type VisitorKind,
+} from '@bg/protocol';
 import type { VisitRepo } from './visit-repo';
 
 /** Vietnam has no daylight saving: a fixed +7 hours. */
@@ -29,10 +36,26 @@ export class VisitService {
     }
   }
 
-  async stats(days: number): Promise<AdminStats> {
+  /** The last `days` days, ending today. */
+  lastDays(days: number): DateRange {
     const n = Math.min(Math.max(Math.floor(days) || 14, 1), KEEP_DAYS);
-    const list = Array.from({ length: n }, (_, i) => dayOf(this.now() - i * DAY_MS));
-    const rows = await this.repo.counts(list);
-    return { today: rows[0]!, days: rows };
+    const to = dayOf(this.now());
+    return { from: addDays(to, 1 - n), to };
+  }
+
+  async stats(range: DateRange): Promise<AdminStats> {
+    const today = dayOf(this.now());
+    const before = previousRange(range);
+    const since = await this.repo.since();
+    // Older days are deleted: comparing with a range that is partly gone would show a false rise.
+    const kept = dayOf(this.now() - KEEP_DAYS * DAY_MS);
+    const comparable = since !== null && before.from >= since && before.from >= kept;
+    const [[now], days, unique, previous] = await Promise.all([
+      this.repo.counts([today]),
+      this.repo.counts(daysOf(range).reverse()),
+      this.repo.totals(range.from, range.to),
+      comparable ? this.repo.totals(before.from, before.to) : null,
+    ]);
+    return { today: now!, days, range, unique, previous, since };
   }
 }

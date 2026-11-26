@@ -23,7 +23,7 @@ describe('visit statistics (service)', () => {
     await svc.record('c'.repeat(16), 'anonymous');
     await svc.record('c'.repeat(16), 'registered'); // signed in later the same day
     await svc.record('c'.repeat(16), 'anonymous'); // and a later ping without the token does not lower it
-    const { today } = await svc.stats(7);
+    const { today } = await svc.stats(svc.lastDays(7));
     expect(today).toEqual({
       day: '2026-11-25',
       anonymous: 1,
@@ -40,7 +40,7 @@ describe('visit statistics (service)', () => {
     await svc.record('a'.repeat(16), 'registered'); // signing in is not a new one
     await svc.record('a'.repeat(16), 'registered', true);
     await svc.record('b'.repeat(16), 'guest');
-    expect((await svc.stats(1)).today).toMatchObject({ total: 2, registered: 1, sessions: 3 });
+    expect((await svc.stats(svc.lastDays(1))).today).toMatchObject({ total: 2, registered: 1, sessions: 3 });
   });
 
   it('lists the days before today newest first, with zeros, and forgets old days', async () => {
@@ -50,7 +50,7 @@ describe('visit statistics (service)', () => {
     await svc.record('a'.repeat(16), 'guest');
     now = at;
     await svc.record('b'.repeat(16), 'anonymous');
-    const { days } = await svc.stats(3);
+    const { days } = await svc.stats(svc.lastDays(3));
     expect(days.map((d) => [d.day, d.total])).toEqual([
       ['2026-11-25', 1],
       ['2026-11-24', 0],

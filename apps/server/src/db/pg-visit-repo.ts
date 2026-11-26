@@ -1,6 +1,6 @@
 import { sql, type Kysely } from 'kysely';
 import type { VisitorKind } from '@bg/protocol';
-import { emptyDay, type VisitRepo } from '../stats/visit-repo';
+import { emptyDay, noVisitors, type VisitRepo } from '../stats/visit-repo';
 import type { Database } from './database';
 
 export class PgVisitRepo implements VisitRepo {
@@ -45,6 +45,38 @@ export class PgVisitRepo implements VisitRepo {
       }
       return out;
     });
+  }
+
+  async totals(from: string, to: string) {
+    const res = await sql<{ rank: number; n: string; sessions: string }>`
+      select rank, count(*) as n, sum(sessions) as sessions
+      from (
+        select visitor_id,
+          max(case kind when 'registered' then 2 when 'guest' then 1 else 0 end) as rank,
+          sum(sessions) as sessions
+        from daily_visits
+        where day >= ${from} and day <= ${to}
+        group by visitor_id
+      ) as visitors
+      group by rank
+    `.execute(this.db);
+    const out = noVisitors();
+    const kinds = ['anonymous', 'guest', 'registered'] as const;
+    for (const r of res.rows) {
+      const n = Number(r.n);
+      out[kinds[r.rank]!] += n;
+      out.total += n;
+      out.sessions += Number(r.sessions);
+    }
+    return out;
+  }
+
+  async since() {
+    const row = await this.db
+      .selectFrom('daily_visits')
+      .select(sql<string | null>`min(day)`.as('day'))
+      .executeTakeFirstOrThrow();
+    return row.day;
   }
 
   async prune(day: string) {

@@ -16,6 +16,7 @@ import { LanguageSwitcher } from '@/features/settings/LanguageSwitcher';
 import { MobileNav } from '@/features/settings/MobileNav';
 import { NavMenus } from '@/features/settings/NavMenus';
 import { HomeLink } from '@/features/home/HomeLink';
+import { SiteChrome } from '@/features/settings/SiteChrome';
 import { TIME_ZONE } from '@/i18n/messages';
 import { NAV_LINKS } from '@/features/settings/nav-links';
 import './globals.css';
@@ -60,45 +61,49 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={locale} className={rounded.variable}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={TIME_ZONE}>
-          <header className="site-header">
-            <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-              <HomeLink className="site-brand flex items-center gap-2 font-bold tracking-tight">
-                <Logo size={40} />
-                {t('name')}
-              </HomeLink>
-              <span className="site-slogan" aria-hidden="true">
-                {t('slogan')}
-              </span>
-              <div className="flex items-center gap-2 sm:gap-4">
-                <NavMenus />
-                <AdminLink />
-                <AccountLink />
-                {LANGUAGE_CHOICE && <LanguageSwitcher />}
-                <MobileNav />
+          <SiteChrome>
+            <header className="site-header">
+              <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+                <HomeLink className="site-brand flex items-center gap-2 font-bold tracking-tight">
+                  <Logo size={40} />
+                  {t('name')}
+                </HomeLink>
+                <span className="site-slogan" aria-hidden="true">
+                  {t('slogan')}
+                </span>
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <NavMenus />
+                  <AdminLink />
+                  <AccountLink />
+                  {LANGUAGE_CHOICE && <LanguageSwitcher />}
+                  <MobileNav />
+                </div>
               </div>
-            </div>
-          </header>
+            </header>
+          </SiteChrome>
           <BannedBanner />
           <AuthPrompt />
           <ProgressSync />
           <VisitPing />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
-          <footer className="site-footer">
-            <div className="site-footer-inner">
-              <HomeLink className="site-footer-brand">
-                <Logo size={28} />
-                {t('name')}
-              </HomeLink>
-              <nav aria-label={t('footerLinks')} className="site-footer-links">
-                {FOOTER_LINKS.map((l) => (
-                  <Link key={l.href} href={l.href}>
-                    {tn(l.key)}
-                  </Link>
-                ))}
-              </nav>
-              <span className="site-footer-copy">{t('copyright', { year: new Date().getFullYear() })}</span>
-            </div>
-          </footer>
+          <SiteChrome>
+            <footer className="site-footer">
+              <div className="site-footer-inner">
+                <HomeLink className="site-footer-brand">
+                  <Logo size={28} />
+                  {t('name')}
+                </HomeLink>
+                <nav aria-label={t('footerLinks')} className="site-footer-links">
+                  {FOOTER_LINKS.map((l) => (
+                    <Link key={l.href} href={l.href}>
+                      {tn(l.key)}
+                    </Link>
+                  ))}
+                </nav>
+                <span className="site-footer-copy">{t('copyright', { year: new Date().getFullYear() })}</span>
+              </div>
+            </footer>
+          </SiteChrome>
         </NextIntlClientProvider>
       </body>
     </html>

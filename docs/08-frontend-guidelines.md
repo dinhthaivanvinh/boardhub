@@ -192,3 +192,14 @@ quân ≈ 0,33 (thấp hơn khoảng 12 dB); tiếng nổ lớn nhất ≈ 0,88.
 Cài đặt (`bg-sound` trong `localStorage`): hiệu ứng bật 70 %, nhạc nền bật 50 %; bảng "Âm thanh" có ở mọi màn chơi.
 Âm thanh chỉ là phần thêm: mọi thông tin vẫn có trên màn hình. E2E bật `localStorage["bg-sound-debug"]="1"` để đọc
 `window.__bgSounds`.
+
+## Khu quản trị (`/admin`)
+
+- Giao diện tách riêng: `app/admin/layout.tsx` + `features/admin/AdminShell.tsx`; header/footer của trang cho bé nằm trong
+  `SiteChrome` và được ẩn dưới `/admin`. CSS gắn vào `.admin` (`app/admin/admin.css`), chỉ có nền sáng.
+- Thành phần dùng chung ở `features/admin/ui/`: `StatCard`, `Delta`, `RangeFilter`, `TimeChart`, `RankBars`, `PageHeader`,
+  `Panel`, `useLoad`, `ErrorLine`, `Loading`.
+- Biểu đồ là SVG tự viết. Mỗi biểu đồ có bảng số đi kèm, dùng bàn phím đọc được, màu theo thứ tự cố định
+  `--chart-1..3`. Không dùng hai trục; số đo khác loại chỉ đưa vào bảng.
+- Số chưa thu thập hiện "—", không hiện 0.
+- Menu chỉ liệt kê trang đã có.

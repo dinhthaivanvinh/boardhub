@@ -1,6 +1,14 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify';
-import { LearnEventPing, VisitPing, type VisitorKind } from '@bg/protocol';
+import {
+  DateRangeQuery,
+  LearnEventPing,
+  VisitPing,
+  vnDay,
+  type DateRange,
+  type VisitorKind,
+} from '@bg/protocol';
 import type { AdminService } from '../admin/admin-service';
+import type { AnalyticsService } from '../analytics/analytics-service';
 import type { AuthService } from '../auth/auth-service';
 import { HubError } from '../errors';
 import type { LearnEventService } from './learn-events';
@@ -11,13 +19,21 @@ const bearer = (req: FastifyRequest) => {
   return header?.startsWith('Bearer ') ? header.slice(7) : undefined;
 };
 
-/** The visit and learning pings (public) and the admin statistics (docs/05 §2.1). */
+/** A range asked for by the admin pages: well formed, at most 90 days, not in the future. */
+function rangeOf(query: unknown): DateRange {
+  const res = DateRangeQuery.safeParse(query);
+  if (!res.success || res.data.to > vnDay(Date.now())) throw new HubError('invalid.payload');
+  return res.data;
+}
+
+/** The visit and learning pings (public), the dashboard and the visitor statistics (docs/05 §2.1). */
 export function registerStatsRoutes(
   app: FastifyInstance,
   auth: AuthService,
   admin: AdminService,
   visits: VisitService,
   learning: LearnEventService,
+  analytics: AnalyticsService,
   pingsPerMinute: number,
 ) {
   const limited = { config: { rateLimit: { max: pingsPerMinute, timeWindow: '1 minute' } } };
@@ -43,10 +59,21 @@ export function registerStatsRoutes(
     return { ok: true };
   });
 
-  app.get<{ Querystring: { days?: string } }>('/api/admin/stats', async (req) => {
+  const requireAdmin = async (req: FastifyRequest) => {
     const user = await auth.authenticate(bearer(req));
     if (!user) throw new HubError('auth.required');
     await admin.requireAdmin(user);
-    return visits.stats(Number(req.query.days ?? 14));
+  };
+
+  app.get<{ Querystring: { days?: string; from?: string; to?: string } }>('/api/admin/stats', async (req) => {
+    await requireAdmin(req);
+    const { days, from, to } = req.query;
+    // `days` is the older form of the request: the last n days.
+    return visits.stats(from || to ? rangeOf(req.query) : visits.lastDays(Number(days ?? 14)));
+  });
+
+  app.get('/api/admin/overview', async (req) => {
+    await requireAdmin(req);
+    return analytics.overview(rangeOf(req.query));
   });
 }

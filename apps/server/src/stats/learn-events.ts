@@ -29,6 +29,11 @@ export interface LearnEventRepo {
 export class MemoryLearnEventRepo implements LearnEventRepo {
   private readonly rows = new Map<string, LearnEvent>();
 
+  /** Everything stored, for the in-memory dashboard. */
+  all(): LearnEvent[] {
+    return [...this.rows.values()].map((e) => ({ ...e }));
+  }
+
   async record(e: LearnEvent) {
     const key = [e.actor, e.day, e.kind, e.itemId].join('|');
     if (!this.rows.has(key)) this.rows.set(key, { ...e });

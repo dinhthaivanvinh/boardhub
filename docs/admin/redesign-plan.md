@@ -1,6 +1,6 @@
 # Kế hoạch nâng cấp trang Admin
 
-> Lập ngày 2026-11-26. Trạng thái: **đã duyệt; GĐ0 đã làm** (xem [ADR-0013](../adr/0013-admin-roles-and-activity-data.md)). Nguồn yêu cầu: bản mô tả "Complete Admin Dashboard Redesign".
+> Lập ngày 2026-11-26. Trạng thái: **đã duyệt; GĐ0 và GĐ1 đã làm** (xem [ADR-0013](../adr/0013-admin-roles-and-activity-data.md)). Nguồn yêu cầu: bản mô tả "Complete Admin Dashboard Redesign".
 
 ## 1. Hiện trạng (đã đọc từ code)
 
@@ -115,6 +115,10 @@ Mỗi mục là một PR. Cỡ: S nhỏ, M vừa, L lớn.
   (chặn công thức trong ô CSV).
 
 Biểu đồ dùng dữ liệu mới ghi "có dữ liệu từ ngày …", không vẽ số 0 giả cho quá khứ.
+
+Khi làm GĐ1: không có thẻ "Người dùng hoạt động" theo khoảng ngày, vì `last_seen_at` chỉ giữ lần gần nhất; thẻ
+"Người học tích cực" dùng `learn_events`. Ô tìm kiếm trên header để GĐ2 (khi có trang Người dùng). Dữ liệu truy cập vẫn
+giữ 90 ngày, nên khoảng dài hơn 45 ngày không có số so với kỳ trước.
 
 ### GĐ2 — Người dùng, câu đố, học tập
 

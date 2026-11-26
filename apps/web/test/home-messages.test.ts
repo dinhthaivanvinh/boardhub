@@ -37,7 +37,7 @@ describe('home page messages', () => {
   }
 
   it('the navigation and home texts are the same in vi and en', () => {
-    for (const ns of ['nav', 'portal'] as const) {
+    for (const ns of ['nav', 'portal', 'admin'] as const) {
       expect(flat(en[ns]).sort(), ns).toEqual(flat(vi[ns]).sort());
     }
   });

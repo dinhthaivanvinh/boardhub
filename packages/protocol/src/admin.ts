@@ -143,8 +143,117 @@ export interface DayVisits {
   sessions: number;
 }
 
-/** GET /api/admin/stats: today and the days before it, newest first. */
+// Admin dashboard (docs/05 §2.1). Every day is a `YYYY-MM-DD` in Vietnam time.
+
+/** The longest range a dashboard or statistics request may cover. */
+export const MAX_RANGE_DAYS = 90;
+const DAY_MS = 86_400_000;
+/** Vietnam has no daylight saving: a fixed +7 hours. */
+const VN_OFFSET_MS = 7 * 3_600_000;
+
+export interface DateRange {
+  from: string;
+  to: string;
+}
+
+/** The day of a moment, in Vietnam time. */
+export const vnDay = (at: number): string => new Date(at + VN_OFFSET_MS).toISOString().slice(0, 10);
+/** The first moment of a Vietnam day. */
+export const vnDayStart = (day: string): number => Date.parse(day + 'T00:00:00Z') - VN_OFFSET_MS;
+export const addDays = (day: string, n: number): string =>
+  new Date(Date.parse(day + 'T00:00:00Z') + n * DAY_MS).toISOString().slice(0, 10);
+/** How many days the range has, both ends included. */
+export const spanDays = (r: DateRange): number =>
+  Math.round((Date.parse(r.to) - Date.parse(r.from)) / DAY_MS) + 1;
+/** Every day of the range, oldest first. */
+export const daysOf = (r: DateRange): string[] =>
+  Array.from({ length: Math.max(0, spanDays(r)) }, (_, i) => addDays(r.from, i));
+/** The range of the same length that ends the day before this one starts. */
+export const previousRange = (r: DateRange): DateRange => ({
+  from: addDays(r.from, -spanDays(r)),
+  to: addDays(r.from, -1),
+});
+
+const Day = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  // rejects days that do not exist, such as 2026-02-31
+  .refine((d) => !Number.isNaN(Date.parse(d + 'T00:00:00Z')) && addDays(d, 0) === d);
+
+export const DateRangeQuery = z
+  .object({ from: Day, to: Day })
+  .refine((r) => r.from <= r.to && spanDays(r) <= MAX_RANGE_DAYS);
+
+/** Distinct visitors over a range: each counts once, as the highest kind they had in it. */
+export interface VisitorTotals {
+  total: number;
+  anonymous: number;
+  guest: number;
+  registered: number;
+  sessions: number;
+}
+
+/** GET /api/admin/stats: today, and the days of the range (newest first). */
 export interface AdminStats {
   today: DayVisits;
   days: DayVisits[];
+  range: DateRange;
+  unique: VisitorTotals;
+  /** The same for the range just before; null when the stored days do not cover all of it. */
+  previous: VisitorTotals | null;
+  /** The first day with any stored visit, or null. */
+  since: string | null;
+}
+
+/** A number with the one for the range just before (null when it cannot be known). */
+export interface Compared {
+  value: number;
+  previous: number | null;
+}
+
+/** Accounts that exist at the end of the range, and how many of them were made in it. */
+export interface AccountMetric {
+  total: number;
+  added: Compared;
+}
+
+export interface OverviewDay {
+  day: string;
+  /** Accounts that exist at the end of this day. */
+  registered: number;
+  guest: number;
+  chessGames: number;
+  /** Learning numbers are null before they started being collected. */
+  learners: number | null;
+  lesson: number | null;
+  practice: number | null;
+  puzzle: number | null;
+}
+
+export type AdminActivity =
+  | { type: 'signup'; at: number; name: string; kind: 'guest' | 'registered' }
+  | { type: 'match'; at: number; gameId: string; players: (string | null)[] }
+  | { type: 'report'; at: number; name: string; reason: ReportReason }
+  | { type: 'learn'; at: number; name: string | null; kind: LearnKind; itemId: string };
+
+/** GET /api/admin/overview?from&to */
+export interface AdminOverview {
+  range: DateRange;
+  accounts: { all: AccountMetric; registered: AccountMetric; guest: AccountMetric };
+  /** Children (accounts, or browsers when not signed in) who finished something in the range. */
+  learners: Compared;
+  /** Lessons in the curriculum. */
+  lessonsTotal: number;
+  /** Lessons finished in the range, one per child and lesson; `saved` counts what accounts have ever saved. */
+  completedLessons: Compared & { saved: number };
+  solvedPuzzles: Compared & { saved: number };
+  /** Chess games played through the server, up to the end of the range. */
+  chess: { total: number; started: Compared };
+  /** The first day learning was recorded, or null when nothing has been yet. */
+  learningSince: string | null;
+  days: OverviewDay[];
+  /** How many children finished each lesson in the range, most first. */
+  lessons: { itemId: string; learners: number }[];
+  /** The latest things that happened, newest first (not limited to the range). */
+  recent: AdminActivity[];
 }

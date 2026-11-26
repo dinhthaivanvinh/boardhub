@@ -1,4 +1,4 @@
-import type { DayVisits, VisitorKind } from '@bg/protocol';
+import type { DayVisits, VisitorKind, VisitorTotals } from '@bg/protocol';
 
 const RANK: Record<VisitorKind, number> = { anonymous: 0, guest: 1, registered: 2 };
 
@@ -8,9 +8,21 @@ export interface VisitRepo {
   record(day: string, visitorId: string, kind: VisitorKind, newSession?: boolean): Promise<void>;
   /** One row per given day, in the same order, zeros for a day nobody came. */
   counts(days: string[]): Promise<DayVisits[]>;
+  /** Distinct visitors of all the days from `from` to `to`, each as the highest kind they had. */
+  totals(from: string, to: string): Promise<VisitorTotals>;
+  /** The first day with a stored visit, or null. */
+  since(): Promise<string | null>;
   /** Forget every day before `day`. */
   prune(day: string): Promise<void>;
 }
+
+export const noVisitors = (): VisitorTotals => ({
+  total: 0,
+  anonymous: 0,
+  guest: 0,
+  registered: 0,
+  sessions: 0,
+});
 
 export const emptyDay = (day: string): DayVisits => ({
   day,
@@ -44,6 +56,28 @@ export class MemoryVisitRepo implements VisitRepo {
       }
       return out;
     });
+  }
+
+  async totals(from: string, to: string) {
+    const best = new Map<string, VisitorKind>();
+    const out = noVisitors();
+    for (const [day, visitors] of this.rows) {
+      if (day < from || day > to) continue;
+      for (const [id, { kind, sessions }] of visitors) {
+        const old = best.get(id);
+        if (old === undefined || RANK[kind] > RANK[old]) best.set(id, kind);
+        out.sessions += sessions;
+      }
+    }
+    for (const kind of best.values()) {
+      out[kind]++;
+      out.total++;
+    }
+    return out;
+  }
+
+  async since() {
+    return [...this.rows.keys()].sort()[0] ?? null;
   }
 
   async prune(day: string) {

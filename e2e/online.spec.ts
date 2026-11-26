@@ -101,8 +101,8 @@ test('an unknown room code shows a friendly message', async ({ page }) => {
   await expect(page.getByText('Không tìm thấy phòng ZZZZZZ')).toBeVisible();
 });
 
-test('the home page join box opens a room by code', async ({ page }) => {
-  await page.goto('/');
+test('the join box on the board games page opens a room by code', async ({ page }) => {
+  await page.goto('/board-games');
   await page.getByLabel(/Có mã phòng/).fill('ab12cd');
   await page.getByRole('button', { name: 'Vào phòng' }).click();
   await expect(page).toHaveURL(/\/room\/AB12CD$/);

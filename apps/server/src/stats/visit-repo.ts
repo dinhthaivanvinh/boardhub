@@ -2,6 +2,13 @@ import type { DayVisits, VisitorKind, VisitorTotals } from '@bg/protocol';
 
 const RANK: Record<VisitorKind, number> = { anonymous: 0, guest: 1, registered: 2 };
 
+/** The days of a range on which an account visited. */
+export interface AccountDays {
+  userId: string;
+  days: number;
+  lastDay: string;
+}
+
 /** Distinct visitors per day. A visitor is stored once a day, as the highest kind they had that day. */
 export interface VisitRepo {
   /** `newSession` adds one session to a visitor already counted that day; the first record is one session. */
@@ -12,6 +19,12 @@ export interface VisitRepo {
   totals(from: string, to: string): Promise<VisitorTotals>;
   /** The first day with a stored visit, or null. */
   since(): Promise<string | null>;
+  /** Notes that this account visited on this day. */
+  recordAccount(day: string, userId: string): Promise<void>;
+  /** The accounts that visited from `from` to `to`, latest visit first, at most `limit`. */
+  accounts(from: string, to: string, limit: number): Promise<AccountDays[]>;
+  /** The first day with a stored account visit, or null. */
+  accountsSince(): Promise<string | null>;
   /** Forget every day before `day`. */
   prune(day: string): Promise<void>;
 }
@@ -35,6 +48,28 @@ export const emptyDay = (day: string): DayVisits => ({
 
 export class MemoryVisitRepo implements VisitRepo {
   private readonly rows = new Map<string, Map<string, { kind: VisitorKind; sessions: number }>>();
+
+  private readonly accountRows = new Map<string, Set<string>>();
+
+  async recordAccount(day: string, userId: string) {
+    this.accountRows.set(day, (this.accountRows.get(day) ?? new Set<string>()).add(userId));
+  }
+
+  async accounts(from: string, to: string, limit: number) {
+    const found = new Map<string, AccountDays>();
+    for (const day of [...this.accountRows.keys()].sort()) {
+      if (day < from || day > to) continue;
+      for (const userId of this.accountRows.get(day)!)
+        found.set(userId, { userId, days: (found.get(userId)?.days ?? 0) + 1, lastDay: day });
+    }
+    return [...found.values()]
+      .sort((a, b) => b.lastDay.localeCompare(a.lastDay) || a.userId.localeCompare(b.userId))
+      .slice(0, limit);
+  }
+
+  async accountsSince() {
+    return [...this.accountRows.keys()].sort()[0] ?? null;
+  }
 
   async record(day: string, visitorId: string, kind: VisitorKind, newSession = false) {
     const visitors = this.rows.get(day) ?? new Map<string, { kind: VisitorKind; sessions: number }>();
@@ -82,5 +117,6 @@ export class MemoryVisitRepo implements VisitRepo {
 
   async prune(day: string) {
     for (const d of [...this.rows.keys()]) if (d < day) this.rows.delete(d);
+    for (const d of [...this.accountRows.keys()]) if (d < day) this.accountRows.delete(d);
   }
 }

@@ -194,6 +194,39 @@ test('the dashboard shows real numbers, and the range filter changes what it cov
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test('pressing a visitor number shows who it is', async ({ browser }) => {
+  // A guest who visits, and a visitor who is not signed in.
+  const visitor = await newPlayer(browser);
+  const name = `Khách ${Date.now() % 1_000_000}`;
+  const guest = (await (
+    await visitor.request.post(`${SERVER}/api/auth/guest`, { data: { displayName: name } })
+  ).json()) as Auth;
+  await visitor.request.post(`${SERVER}/api/visit`, {
+    data: { visitorId: `who-${Date.now()}-0123456789` },
+    headers: { authorization: `Bearer ${guest.token}` },
+  });
+  await (await newPlayer(browser)).goto('/');
+
+  const admin = await adminPage(browser);
+  await admin.goto('/admin/visitors');
+  await admin.getByTestId('stats-today-guest').getByRole('button').click();
+  const dialog = admin.getByTestId('visitor-dialog');
+  await expect(dialog.getByTestId('who-guest')).toHaveAttribute('aria-pressed', 'true');
+  await expect(dialog.getByTestId('who-table').getByRole('row').filter({ hasText: name })).toContainText(
+    'Khách',
+  );
+  // Visitors who are not signed in have no names, only a count.
+  await dialog.getByTestId('who-anonymous').click();
+  await expect(dialog.getByTestId('who-unnamed')).toContainText('không biết đó là ai');
+  await expect(dialog.getByTestId('who-table')).toHaveCount(0);
+  await admin.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+
+  // A number in the day table opens the list of that day.
+  await admin.getByTestId('day-total').first().click();
+  await expect(admin.getByTestId('visitor-dialog').getByTestId('who-table')).toContainText(name);
+});
+
 test('the visitor numbers can be saved as a CSV file', async ({ browser }) => {
   const admin = await adminPage(browser);
   await admin.goto('/admin/visitors');

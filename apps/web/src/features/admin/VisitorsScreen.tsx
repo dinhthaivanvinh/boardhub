@@ -2,13 +2,14 @@
 
 import { useFormatter, useTranslations } from 'next-intl';
 import { useCallback, useState } from 'react';
-import { daysOf, type AdminStats, type DayVisits } from '@bg/protocol';
+import { daysOf, type AdminStats, type DateRange, type DayVisits } from '@bg/protocol';
 import { adminStats } from '@/online/admin-api';
 import { downloadCsv } from './csv';
 import { SERIES, TimeChart } from './ui/charts';
 import { ErrorLine, Loading, PageHeader, Panel, useLoad } from './ui/common';
 import { initialRange, RangeFilter } from './ui/RangeFilter';
-import { StatCard } from './ui/StatCard';
+import { OpenButton, StatCard } from './ui/StatCard';
+import { VisitorDialog, type VisitorFilter, type VisitorQuestion } from './VisitorDialog';
 
 const KINDS = ['anonymous', 'guest', 'registered'] as const;
 const COLUMNS = ['total', ...KINDS, 'sessions'] as const;
@@ -19,6 +20,8 @@ export function VisitorsScreen() {
   const [choice, setChoice] = useState(() => initialRange('d14'));
   const load = useCallback(() => adminStats(choice.range), [choice]);
   const { data, error, loading, reload } = useLoad(load);
+  const [question, setQuestion] = useState<VisitorQuestion | null>(null);
+  const ask: Ask = (range, filter) => setQuestion({ range, filter });
 
   return (
     <>
@@ -32,15 +35,20 @@ export function VisitorsScreen() {
         !error && <Loading />
       ) : (
         <div className="admin-stack" data-testid="admin-stats">
-          <Today today={data.today} />
+          <Today today={data.today} ask={ask} />
           <RangeFilter value={choice} onChange={setChoice} />
-          <Range data={data} loading={loading} />
+          <Range data={data} loading={loading} ask={ask} />
         </div>
       )}
       <Definitions />
+      {question && <VisitorDialog question={question} onClose={() => setQuestion(null)} />}
     </>
   );
 }
+
+/** Opens the list of who is behind a number. */
+type Ask = (range: DateRange, filter: VisitorFilter) => void;
+const oneDay = (day: string): DateRange => ({ from: day, to: day });
 
 function useDayText() {
   const format = useFormatter();
@@ -48,7 +56,7 @@ function useDayText() {
 }
 
 /** Today's numbers, whatever range is chosen below. */
-function Today({ today }: { today: DayVisits }) {
+function Today({ today, ask }: { today: DayVisits; ask: Ask }) {
   const t = useTranslations('admin.stats');
   const format = useFormatter();
   const day = useDayText();
@@ -57,6 +65,7 @@ function Today({ today }: { today: DayVisits }) {
       <h2 id="stats-today">
         {t('today')} · {day(today.day)}
       </h2>
+      <p className="admin-muted">{t('who.hint')}</p>
       <div className="admin-cards">
         {(['total', ...KINDS] as const).map((k) => (
           <div
@@ -66,6 +75,7 @@ function Today({ today }: { today: DayVisits }) {
           >
             <div className="admin-stat-head">{t(k)}</div>
             <div className="admin-stat-value">{format.number(today[k])}</div>
+            <OpenButton label={t('who.open', { label: t(k) })} run={() => ask(oneDay(today.day), k)} />
           </div>
         ))}
       </div>
@@ -74,7 +84,7 @@ function Today({ today }: { today: DayVisits }) {
   );
 }
 
-function Range({ data, loading }: { data: AdminStats; loading: boolean }) {
+function Range({ data, loading, ask }: { data: AdminStats; loading: boolean; ask: Ask }) {
   const t = useTranslations('admin.stats');
   const day = useDayText();
   const byDay = new Map(data.days.map((d) => [d.day, d]));
@@ -112,6 +122,12 @@ function Range({ data, loading }: { data: AdminStats; loading: boolean }) {
               value={data.unique[key]}
               compared={compared(key)}
               testId={`range-${key}-total`}
+              {...(key !== 'sessions' && {
+                open: {
+                  label: t('who.open', { label: t(`unique.${key}`) }),
+                  run: () => ask(data.range, key),
+                },
+              })}
             />
           ))}
         </div>
@@ -162,7 +178,26 @@ function Range({ data, loading }: { data: AdminStats; loading: boolean }) {
                   <th scope="row">{day(d.day)}</th>
                   {COLUMNS.map((c) => (
                     <td key={c} className="num">
-                      {known(d.day) ? d[c] : '—'}
+                      {!known(d.day) ? (
+                        '—'
+                      ) : c !== 'sessions' && d[c] > 0 ? (
+                        <button
+                          type="button"
+                          className="admin-link-button"
+                          aria-haspopup="dialog"
+                          aria-label={t('who.openDay', {
+                            label: t(`columns.${c}`),
+                            day: day(d.day),
+                            count: d[c],
+                          })}
+                          onClick={() => ask(oneDay(d.day), c)}
+                          data-testid={`day-${c}`}
+                        >
+                          {d[c]}
+                        </button>
+                      ) : (
+                        d[c]
+                      )}
                     </td>
                   ))}
                 </tr>

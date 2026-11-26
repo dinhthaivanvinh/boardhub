@@ -875,7 +875,7 @@
       "days": "{count} ngày gần nhất",
       "day": "Ngày",
       "refresh": "Làm mới",
-      "note": "Mỗi trình duyệt được đếm một lần mỗi ngày (giờ Việt Nam), theo mã ngẫu nhiên do trình duyệt tự tạo; không lưu tên, email hay địa chỉ mạng. Một người vào bằng nhiều thiết bị hoặc xoá dữ liệu trình duyệt sẽ được đếm nhiều lần. Người đăng nhập trong ngày được tính ở mức cao nhất của họ.",
+      "note": "Mỗi trình duyệt được đếm một lần mỗi ngày (giờ Việt Nam), theo mã ngẫu nhiên do trình duyệt tự tạo; không lưu địa chỉ mạng. Với người dùng tài khoản, hệ thống ghi thêm tài khoản đó đã truy cập ngày nào. Một người vào bằng nhiều thiết bị hoặc xoá dữ liệu trình duyệt sẽ được đếm nhiều lần. Người đăng nhập trong ngày được tính ở mức cao nhất của họ.",
       "title": "Lượt truy cập",
       "overRange": "Trong khoảng đã chọn",
       "chart": "Người truy cập mỗi ngày",
@@ -919,6 +919,32 @@
           "term": "Đã đăng ký",
           "text": "Người truy cập đã đăng nhập tài khoản có email."
         }
+      },
+      "who": {
+        "hint": "Bấm vào một số để xem đó là ai.",
+        "open": "Xem ai đã truy cập: {label}",
+        "openDay": "Xem ai đã truy cập ngày {day}: {label} ({count})",
+        "title": "Ai đã truy cập",
+        "close": "Đóng",
+        "filter": "Nhóm người truy cập",
+        "range": "Từ {from} đến {to}",
+        "filters": {
+          "total": "Tất cả",
+          "registered": "Đã đăng ký",
+          "guest": "Khách",
+          "anonymous": "Chưa đăng nhập"
+        },
+        "name": "Tên",
+        "email": "Email",
+        "kind": "Loại tài khoản",
+        "days": "Số ngày vào",
+        "lastDay": "Lần gần nhất",
+        "empty": "Không có tài khoản nào trong danh sách này.",
+        "unnamed": "{count} trình duyệt không đăng nhập: không biết đó là ai, vì hệ thống không lưu tên, email hay địa chỉ mạng của người chưa đăng nhập.",
+        "since": "Danh sách tài khoản chỉ được ghi từ ngày {day}. Lượt vào trước đó đã được đếm nhưng không biết là tài khoản nào.",
+        "sinceNever": "Chưa ghi được tài khoản nào. Danh sách có từ lượt truy cập tiếp theo của người đã đăng nhập hoặc dùng tài khoản khách.",
+        "truncated": "Chỉ hiện {count} tài khoản vào gần nhất.",
+        "counting": "Các thẻ số đếm theo trình duyệt, còn danh sách này đếm theo tài khoản. Hai số có thể khác nhau, ví dụ khi một người dùng hai máy. Loại tài khoản là loại hiện tại."
       }
     },
     "retry": "Thử lại",

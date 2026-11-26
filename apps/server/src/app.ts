@@ -216,6 +216,7 @@ export async function buildServer(config: ServerConfig, overrides: ServerOverrid
     new VisitService(visitRepo),
     new LearnEventService(learnRepo),
     new AnalyticsService(analyticsRepo, users),
+    users,
     config.AUTH_RATE_LIMIT * 3,
   );
   const matchmaker = new Matchmaker({

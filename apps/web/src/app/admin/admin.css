@@ -462,6 +462,58 @@ body:has(.admin) > .site-footer {
   color: var(--danger);
 }
 
+.admin .admin-stat {
+  position: relative;
+}
+.admin-stat-open {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  cursor: pointer;
+}
+/* a mark that the card can be pressed */
+.admin-stat-open::after {
+  content: '›';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  color: var(--accent);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.admin .admin-stat:has(.admin-stat-open:hover) {
+  border-color: var(--primary);
+}
+.admin-link-button {
+  min-width: 2rem;
+  min-height: 1.75rem;
+  color: var(--accent);
+  font-weight: 700;
+  text-align: right;
+  text-decoration: underline;
+}
+
+.admin .admin-dialog {
+  width: min(48rem, calc(100% - 1.5rem));
+  max-height: calc(100dvh - 3rem);
+  margin: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  color: var(--fg);
+  padding: 0;
+}
+.admin-dialog::backdrop {
+  background: rgb(36 59 90 / 0.45);
+}
+.admin-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1.125rem;
+}
+
 /* ---------------------------------------------------------------- charts */
 
 .admin-charts {

@@ -11,6 +11,7 @@ import type { AdminService } from '../admin/admin-service';
 import type { AnalyticsService } from '../analytics/analytics-service';
 import type { AuthService } from '../auth/auth-service';
 import { HubError } from '../errors';
+import type { UserRepo } from '../store/repos';
 import type { LearnEventService } from './learn-events';
 import type { VisitService } from './visit-service';
 
@@ -34,6 +35,7 @@ export function registerStatsRoutes(
   visits: VisitService,
   learning: LearnEventService,
   analytics: AnalyticsService,
+  users: UserRepo,
   pingsPerMinute: number,
 ) {
   const limited = { config: { rateLimit: { max: pingsPerMinute, timeWindow: '1 minute' } } };
@@ -45,8 +47,9 @@ export function registerStatsRoutes(
   app.post('/api/visit', limited, async (req) => {
     const parsed = VisitPing.safeParse(req.body ?? {});
     if (!parsed.success) throw new HubError('invalid.payload');
-    const kind: VisitorKind = (await signedIn(req))?.kind ?? 'anonymous';
-    await visits.record(parsed.data.visitorId, kind, parsed.data.newSession);
+    const user = await signedIn(req);
+    const kind: VisitorKind = user?.kind ?? 'anonymous';
+    await visits.record(parsed.data.visitorId, kind, parsed.data.newSession, user?.id ?? null);
     return { ok: true };
   });
 
@@ -70,6 +73,12 @@ export function registerStatsRoutes(
     const { days, from, to } = req.query;
     // `days` is the older form of the request: the last n days.
     return visits.stats(from || to ? rangeOf(req.query) : visits.lastDays(Number(days ?? 14)));
+  });
+
+  // Names and emails: admins only.
+  app.get('/api/admin/visitors', async (req) => {
+    await requireAdmin(req);
+    return visits.who(rangeOf(req.query), users);
   });
 
   app.get('/api/admin/overview', async (req) => {

@@ -25,6 +25,19 @@ export function Delta({ label, compared }: { label?: string; compared: Compared 
   );
 }
 
+/** Covers a card: the card stays plain markup and the whole of it can be pressed. */
+export function OpenButton({ label, run }: { label: string; run(): void }) {
+  return (
+    <button
+      type="button"
+      className="admin-stat-open"
+      aria-haspopup="dialog"
+      aria-label={label}
+      onClick={run}
+    />
+  );
+}
+
 export function StatCard({
   icon,
   label,
@@ -32,6 +45,7 @@ export function StatCard({
   note,
   compared,
   testId,
+  open,
 }: {
   icon: IconName;
   label: string;
@@ -40,6 +54,8 @@ export function StatCard({
   note?: string;
   compared?: Compared;
   testId?: string;
+  /** Makes the whole card a way to see what is behind the number; `label` names the button. */
+  open?: { label: string; run(): void };
 }) {
   const format = useFormatter();
   return (
@@ -53,6 +69,7 @@ export function StatCard({
       <div className="admin-stat-value">{value === null ? '—' : format.number(value)}</div>
       {note && <p className="admin-stat-note">{note}</p>}
       {compared && value !== null && <Delta compared={compared} />}
+      {open && <OpenButton {...open} />}
     </div>
   );
 }

@@ -18,6 +18,7 @@ async function clean() {
   await db.deleteFrom('matches').where('id', '=', matchId).execute();
   await db.deleteFrom('learn_events').where('day', 'like', '1995-%').execute();
   await db.deleteFrom('daily_visits').where('day', 'like', '1995-%').execute();
+  await db.deleteFrom('account_visits').where('day', 'like', '1995-%').execute();
   await db
     .deleteFrom('users')
     .where('id', 'in', [...ids])
@@ -125,6 +126,21 @@ describe('dashboard queries in Postgres', () => {
     const match = recent.find((r) => r.type === 'match' && r.at === on('1995-03-11', 1));
     // Only checked when the shared database is small enough for 1995 to be among the latest.
     if (match) expect(match).toMatchObject({ players: [ids[2], null] });
+  });
+
+  it('lists the accounts that visited, once each, latest visit first', async () => {
+    const visits = new PgVisitRepo(db);
+    // the accounts made by the first test
+    await visits.recordAccount('1995-04-01', ids[0]);
+    await visits.recordAccount('1995-04-02', ids[2]);
+    await visits.recordAccount('1995-04-03', ids[2]);
+    await visits.recordAccount('1995-04-03', ids[2]);
+    expect(await visits.accounts('1995-04-01', '1995-04-03', 10)).toEqual([
+      { userId: ids[2], days: 2, lastDay: '1995-04-03' },
+      { userId: ids[0], days: 1, lastDay: '1995-04-01' },
+    ]);
+    expect(await visits.accounts('1995-04-01', '1995-04-03', 1)).toHaveLength(1);
+    expect(await visits.accountsSince()).toBe('1995-04-01');
   });
 
   it('counts a visitor once over a range, as the highest kind, with all sessions', async () => {

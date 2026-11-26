@@ -79,7 +79,38 @@ export class PgVisitRepo implements VisitRepo {
     return row.day;
   }
 
+  async recordAccount(day: string, userId: string) {
+    await this.db
+      .insertInto('account_visits')
+      .values({ day, user_id: userId })
+      .onConflict((oc) => oc.columns(['day', 'user_id']).doNothing())
+      .execute();
+  }
+
+  async accounts(from: string, to: string, limit: number) {
+    const rows = await this.db
+      .selectFrom('account_visits')
+      .select(['user_id', sql<string>`count(*)`.as('days'), sql<string>`max(day)`.as('last_day')])
+      .where('day', '>=', from)
+      .where('day', '<=', to)
+      .groupBy('user_id')
+      .orderBy(sql`max(day)`, 'desc')
+      .orderBy('user_id')
+      .limit(limit)
+      .execute();
+    return rows.map((r) => ({ userId: r.user_id, days: Number(r.days), lastDay: r.last_day }));
+  }
+
+  async accountsSince() {
+    const row = await this.db
+      .selectFrom('account_visits')
+      .select(sql<string | null>`min(day)`.as('day'))
+      .executeTakeFirstOrThrow();
+    return row.day;
+  }
+
   async prune(day: string) {
+    await this.db.deleteFrom('account_visits').where('day', '<', day).execute();
     await this.db.deleteFrom('daily_visits').where('day', '<', day).execute();
   }
 }

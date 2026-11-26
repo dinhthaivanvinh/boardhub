@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { vnDayStart, type AdminOverview, type AdminStats, type AuthResponse, vnDay } from '@bg/protocol';
+import {
+  vnDay,
+  vnDayStart,
+  type AdminOverview,
+  type AdminStats,
+  type AuthResponse,
+  type VisitorList,
+} from '@bg/protocol';
 import { MemoryAdminRepo } from '../src/admin/admin-repo';
 import { MemoryAnalyticsRepo } from '../src/analytics/analytics-repo';
 import { AnalyticsService } from '../src/analytics/analytics-service';
@@ -165,6 +172,81 @@ describe('visitor numbers over a range', () => {
     expect(s.since).toBe('2026-11-08');
     expect((await svc.stats({ from: '2026-11-10', to: '2026-11-11' })).previous).toMatchObject({ total: 1 });
     expect(s.days.map((d) => d.day)).toEqual(['2026-11-12', '2026-11-11', '2026-11-10']);
+  });
+});
+
+describe('who visited', () => {
+  it('names each account once over a range, latest first, and keeps no browser id with it', async () => {
+    const users = new MemoryUserRepo();
+    const make = (id: string, kind: 'guest' | 'registered', name: string, email: string | null) =>
+      users.create({ id, kind, displayName: name, email, passwordHash: null });
+    await make('u-an', 'registered', 'An', 'an@example.com');
+    await make('u-bi', 'guest', 'Bi', null);
+    let now = on('2026-11-10');
+    const repo = new MemoryVisitRepo();
+    const svc = new VisitService(repo, () => now);
+    await svc.record('a'.repeat(16), 'registered', false, 'u-an');
+    await svc.record('b'.repeat(16), 'guest', false, 'u-bi');
+    now = on('2026-11-11');
+    await svc.record('a'.repeat(16), 'registered', false, 'u-an');
+    await svc.record('c'.repeat(16), 'registered', false, 'u-an'); // the same account on a second browser
+    await svc.record('d'.repeat(16), 'anonymous');
+    const range = { from: '2026-11-10', to: '2026-11-11' };
+    const list = await svc.who(range, users);
+    expect(list.accounts).toEqual([
+      { id: 'u-an', name: 'An', email: 'an@example.com', kind: 'registered', days: 2, lastDay: '2026-11-11' },
+      { id: 'u-bi', name: 'Bi', email: null, kind: 'guest', days: 1, lastDay: '2026-11-10' },
+    ]);
+    expect(list.browsers).toMatchObject({ total: 4, anonymous: 1, guest: 1, registered: 2 });
+    expect([list.since, list.truncated]).toEqual(['2026-11-10', false]);
+    expect((await svc.who(range, users, 1)).truncated).toBe(true);
+    expect(
+      (await svc.who({ from: '2026-11-11', to: '2026-11-11' }, users)).accounts.map((a) => a.name),
+    ).toEqual(['An']);
+    // what is stored about the account is the day and the account, nothing about the browser
+    expect(await repo.accounts(range.from, range.to, 10)).toEqual([
+      { userId: 'u-an', days: 2, lastDay: '2026-11-11' },
+      { userId: 'u-bi', days: 1, lastDay: '2026-11-10' },
+    ]);
+  });
+
+  it('takes the account from the token of the ping, and shows it to the admin', async () => {
+    const server = await buildServer(
+      loadConfig({
+        LOG_LEVEL: 'silent',
+        BOT_WORKERS: '0',
+        ADMIN_EMAILS: 'boss@example.com',
+        ADMIN_SELF_REGISTER: 'true',
+      }),
+    );
+    const call = (method: 'GET' | 'POST', url: string, payload?: object, token?: string) =>
+      server.app.inject({
+        method,
+        url,
+        ...(payload && { payload }),
+        headers: token ? { authorization: `Bearer ${token}` } : {},
+      });
+    const boss = (
+      await call('POST', '/api/auth/register', {
+        email: 'boss@example.com',
+        password: 'secret-123',
+        displayName: 'Boss',
+      })
+    ).json<AuthResponse>();
+    const guest = (await call('POST', '/api/auth/guest', { displayName: 'Bé Na' })).json<AuthResponse>();
+    await call('POST', '/api/visit', { visitorId: 'g'.repeat(20) }, guest.token);
+    await call('POST', '/api/visit', { visitorId: 'x'.repeat(20) });
+    const today = vnDay(Date.now());
+    const res = await call('GET', `/api/admin/visitors?from=${today}&to=${today}`, undefined, boss.token);
+    const list = res.json<VisitorList>();
+    expect(list.accounts).toEqual([
+      { id: guest.user.id, name: 'Bé Na', email: null, kind: 'guest', days: 1, lastDay: today },
+    ]);
+    expect(list.browsers).toMatchObject({ total: 2, anonymous: 1, guest: 1 });
+    expect(
+      (await call('GET', `/api/admin/visitors?from=${today}&to=${today}`, undefined, guest.token)).statusCode,
+    ).toBe(403);
+    await server.close();
   });
 });
 

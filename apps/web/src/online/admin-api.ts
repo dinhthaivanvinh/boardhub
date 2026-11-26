@@ -11,6 +11,7 @@ import type {
   ReportResolvePayload,
   SanctionedUser,
   UserSanctions,
+  VisitorList,
 } from '@bg/protocol';
 import { apiRequest } from './api';
 import { ensureToken, useSession } from './session';
@@ -45,6 +46,9 @@ const rangeQuery = (r: DateRange) => 'from=' + r.from + '&to=' + r.to;
 
 export const adminStats = (range: DateRange) =>
   apiRequest<AdminStats>('GET', '/api/admin/stats?' + rangeQuery(range), undefined, token());
+
+export const adminVisitors = (range: DateRange) =>
+  apiRequest<VisitorList>('GET', '/api/admin/visitors?' + rangeQuery(range), undefined, token());
 
 export const adminOverview = (range: DateRange) =>
   apiRequest<AdminOverview>('GET', '/api/admin/overview?' + rangeQuery(range), undefined, token());

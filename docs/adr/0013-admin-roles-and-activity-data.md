@@ -20,6 +20,9 @@ Server production chạy trên Render gói free, không có shell để cấp qu
    tài khoản, chưa thì theo mã ngẫu nhiên của trình duyệt; hai loại không được nối với nhau. Chỉ lưu id nội dung học và
    thời điểm. Giữ 400 ngày.
 4. Thêm `users.last_seen_at` và số phiên trong `daily_visits`.
+5. Để admin biết ai đã truy cập, lượt vào của người dùng tài khoản được ghi thêm vào `account_visits` (ngày, tài
+   khoản), tách khỏi `daily_visits`: hai bảng không có khoá chung, nên mã trình duyệt không bị gắn với tài khoản. Người
+   chưa đăng nhập vẫn không có danh tính. Tên và email chỉ trả cho admin. Giữ 90 ngày.
 
 ## Phương án đã cân nhắc
 

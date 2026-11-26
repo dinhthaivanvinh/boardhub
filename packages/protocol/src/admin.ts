@@ -205,6 +205,35 @@ export interface AdminStats {
   since: string | null;
 }
 
+/** An account that visited during a range. */
+export interface VisitorAccount {
+  id: string;
+  name: string;
+  /** null for a guest account. */
+  email: string | null;
+  /** What the account is now (a guest may have registered since). */
+  kind: 'guest' | 'registered';
+  /** Days of the range it visited on, and the latest of them. */
+  days: number;
+  lastDay: string;
+}
+
+/**
+ * GET /api/admin/visitors?from&to: who is behind the visitor numbers. Only accounts can be named. The other
+ * numbers count browsers, so one account used on two of them is one row here.
+ */
+export interface VisitorList {
+  range: DateRange;
+  /** Latest visit first. */
+  accounts: VisitorAccount[];
+  /** True when there are more accounts than the list holds. */
+  truncated: boolean;
+  /** The browsers counted in the range; the ones not signed in cannot be named. */
+  browsers: VisitorTotals;
+  /** The first day accounts were recorded, or null. */
+  since: string | null;
+}
+
 /** A number with the one for the range just before (null when it cannot be known). */
 export interface Compared {
   value: number;

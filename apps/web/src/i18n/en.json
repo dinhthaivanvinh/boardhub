@@ -875,7 +875,7 @@
       "days": "Last {count} days",
       "day": "Day",
       "refresh": "Refresh",
-      "note": "Each browser is counted once a day (Vietnam time), by a random id the browser makes up; no name, email or network address is stored. Someone using several devices or clearing browser data is counted more than once. Someone who signs in during the day counts at their highest level.",
+      "note": "Each browser is counted once a day (Vietnam time), by a random id the browser makes up; no network address is stored. For someone using an account, the day that account visited is also noted. Someone using several devices or clearing browser data is counted more than once. Someone who signs in during the day counts at their highest level.",
       "title": "Visitors",
       "overRange": "Over the chosen range",
       "chart": "Visitors a day",
@@ -919,6 +919,32 @@
           "term": "Registered",
           "text": "Visitors signed in to an account with an email."
         }
+      },
+      "who": {
+        "hint": "Press a number to see who it is.",
+        "open": "See who visited: {label}",
+        "openDay": "See who visited on {day}: {label} ({count})",
+        "title": "Who visited",
+        "close": "Close",
+        "filter": "Visitor group",
+        "range": "{from} to {to}",
+        "filters": {
+          "total": "Everyone",
+          "registered": "Registered",
+          "guest": "Guests",
+          "anonymous": "Not signed in"
+        },
+        "name": "Name",
+        "email": "Email",
+        "kind": "Account type",
+        "days": "Days visited",
+        "lastDay": "Last visit",
+        "empty": "No account in this list.",
+        "unnamed": "{count, plural, =1 {1 browser was} other {# browsers were}} not signed in: there is no knowing who, since no name, email or network address is stored for them.",
+        "since": "Accounts are listed from {day}. Earlier visits were counted, but not which account they were.",
+        "sinceNever": "No account has been recorded yet. The list starts with the next visit of someone signed in or using a guest account.",
+        "truncated": "Only the {count} accounts that visited latest are shown.",
+        "counting": "The cards count browsers and this list counts accounts, so the two can differ, for example when one person uses two devices. The account type is the current one."
       }
     },
     "retry": "Try again",

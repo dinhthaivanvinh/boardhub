@@ -98,12 +98,12 @@ describe('what the coach says aloud', () => {
     expect(unrecorded(parts)).toEqual([]);
   });
 
-  it('reads only the two biggest dangers, though all are shown', () => {
+  it('reads every danger it shows, the biggest loss first', () => {
     // The rook on a8 attacks a3, the pawn on d5 attacks e4, and the bishop on h6 attacks the rook on c1.
     const advice = coach.warn(fen('r5k1/8/7b/3p4/4Q3/N4P2/8/2R1K3 w - -'), 0)!;
     expect(advice.cells).toHaveLength(3);
     const parts = advice.speech(tr);
-    expect(parts).toHaveLength(1 + 2 * 2);
+    expect(parts).toHaveLength(1 + 2 * 3);
     expect(parts.slice(0, 3)).toEqual(['Cẩn thận! Quân đang bị đe doạ.', 'Hậu', 'ở e4.']);
     expect(unrecorded(parts)).toEqual([]);
   });

@@ -369,9 +369,7 @@ export function MateRoundView(
   if (!solved && !busy && target && hint >= 1) hinted.add(target.from);
   if (!solved && !busy && target && hint >= 2) hinted.add(target.to);
   const parts =
-    props.spokenInParts && !message && hint >= 1 && target
-      ? hintParts(t, b.pos, target, hint).parts
-      : undefined;
+    props.spokenInParts && !message && hint >= 1 && target ? hintParts(t, target, hint).parts : undefined;
   return (
     <LessonLayout
       board={

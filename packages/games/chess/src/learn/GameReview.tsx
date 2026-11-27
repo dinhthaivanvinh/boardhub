@@ -267,7 +267,7 @@ function MomentView({
             onClick={() => {
               const level = hint + 1;
               setHint(level);
-              say(hintParts(t, start, moment.better, level));
+              say(hintParts(t, moment.better, level));
             }}
           >
             {t('games.chess.learn.hint')}

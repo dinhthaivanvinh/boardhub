@@ -51,9 +51,6 @@ export function coachMove(state: ChessState): ChessHint | null {
   return { move: best, reason: saved ? 'save' : 'good' };
 }
 
-/** Only the biggest dangers are read: a long list would not be followed. All are shown. */
-export const SPOKEN_THREATS = 2;
-
 export const coach: Coach<ChessState> = {
   lastHint: (t) => t('games.chess.coach.lastHint'),
   voice: {
@@ -82,12 +79,11 @@ export const coach: Coach<ChessState> = {
         }),
       speech: (t: Translator) => [
         t('games.chess.coach.say.warn'),
-        ...cells
-          .slice(0, SPOKEN_THREATS)
-          .flatMap((s) => [
-            t(`games.chess.pieceNames.${view.board[s]![1]}`),
-            t('games.chess.coach.say.at', { square: squareName(s) }),
-          ]),
+        // Every piece the words name is read.
+        ...cells.flatMap((s) => [
+          t(`games.chess.pieceNames.${view.board[s]![1]}`),
+          t('games.chess.coach.say.at', { square: squareName(s) }),
+        ]),
       ],
     };
   },

@@ -120,7 +120,7 @@ export function PuzzleRoundView(props: RoundProps<SkillRound> & { after?: ReactN
   if (!solved && !busy && suggest && hint >= 1) hinted.add(suggest.from);
   if (!solved && !busy && suggest && hint >= 2) hinted.add(suggest.to);
   const hintShown = !message && hint > 0 && suggest && !busy;
-  const shownHint = hintShown ? hintParts(t, pos, suggest, hint) : null;
+  const shownHint = hintShown ? hintParts(t, suggest, hint) : null;
   const mated = solved && isCheckmate(pos) ? kingSquare(pos.board, 'b') : null;
   const board = slide ? pos.board.map((p, i) => (i === slide.to ? null : p)) : pos.board;
 

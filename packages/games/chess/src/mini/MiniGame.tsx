@@ -268,7 +268,7 @@ export function MiniGame({ game, level, t, animate, lang = 'vi', onWon, footer, 
   const hinted = new Set<number>(
     hint ? (hint.level > 1 ? [hint.move.from, hint.move.to] : [hint.move.from]) : [],
   );
-  const shownHint = hint && !message ? hintParts(t, state.pawns, hint.move, hint.level) : null;
+  const shownHint = hint && !message ? hintParts(t, hint.move, hint.level) : null;
   const board = slide ? state.pawns.board.map((p, i) => (i === slide.to ? null : p)) : state.pawns.board;
   const knightNote =
     game === 'knight-stars' && state.stars.length > 0

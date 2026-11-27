@@ -10,7 +10,6 @@
     "lastHint": "This is your last hint in this game.",
     "say": {
       "warn": "Careful! A piece is in danger.",
-      "hintWord": "Hint.",
       "mate": "You can checkmate!",
       "capture": "You can win a piece.",
       "save": "Keep your pieces safe.",
@@ -255,6 +254,10 @@
         "sum1": "The c3 and e3 pawns protect the d4 pawn.",
         "sum2": "The same set-up works in many games."
       }
+    },
+    "hintSteps": {
+      "from": "Hint: tap the piece on {from},",
+      "to": "then move it to {to}."
     },
     "hintFrom": "Hint: tap the piece on square {square}.",
     "hintTo": "Hint: tap the piece on {from}, then move it to {square}.",

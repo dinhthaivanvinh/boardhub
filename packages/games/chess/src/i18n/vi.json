@@ -10,7 +10,6 @@
     "lastHint": "Đây là gợi ý cuối cùng trong ván này.",
     "say": {
       "warn": "Cẩn thận! Quân đang bị đe doạ.",
-      "hintWord": "Gợi ý.",
       "mate": "Có nước chiếu hết!",
       "capture": "Con ăn được quân.",
       "save": "Hãy giữ quân an toàn.",
@@ -255,6 +254,10 @@
         "sum1": "Tốt c3 và e3 bảo vệ tốt d4.",
         "sum2": "Cùng một cách mở màn dùng được trong nhiều ván."
       }
+    },
+    "hintSteps": {
+      "from": "Gợi ý: bấm vào quân ở ô {from},",
+      "to": "rồi đi tới ô {to}."
     },
     "hintFrom": "Gợi ý: hãy bấm vào quân ở ô {square}.",
     "hintTo": "Gợi ý: bấm vào quân ở ô {from}, rồi đi tới ô {square}.",

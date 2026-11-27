@@ -10,7 +10,8 @@ export const canSpeak = () => typeof window !== 'undefined' && 'speechSynthesis'
 
 /**
  * Vietnamese voices read "d" and "g" both as "dê". Spell the files with their Vietnamese letter names instead
- * ("đê", "giê"), and "e4" as "e 4" so the voice says the letter and then the number.
+ * ("đê", "giê"), and "e4" as "e 4" so the voice says the letter and then the number. A star picture is given as
+ * a word: a voice reads the picture by its name in the character table ("sao trắng vừa").
  */
 const VI_LETTERS: Record<string, string> = {
   a: 'a',
@@ -23,10 +24,12 @@ const VI_LETTERS: Record<string, string> = {
   h: 'hát',
 };
 export const spellSquares = (text: string, lang = 'vi') =>
-  text.replace(
-    /\b([a-h])([1-8])\b/g,
-    (_, file: string, rank: string) => `${lang === 'en' ? file : VI_LETTERS[file]} ${rank}`,
-  );
+  text
+    .replace(/⭐/g, lang === 'en' ? 'stars' : 'ngôi sao')
+    .replace(
+      /\b([a-h])([1-8])\b/g,
+      (_, file: string, rank: string) => `${lang === 'en' ? file : VI_LETTERS[file]} ${rank}`,
+    );
 
 const localeOf = (lang: string) => (lang === 'en' ? 'en-US' : 'vi-VN');
 

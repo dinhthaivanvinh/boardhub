@@ -323,11 +323,20 @@ export function speechTexts(lang: 'vi' | 'en'): string[] {
     if (typeof raw !== 'string') throw new Error(`speech text missing: ${path}`);
     out.add(raw.replace(/\{(\w+)\}/g, (_, k: string) => values[k]!));
   };
-  for (const k of ['warn', 'mate', 'capture', 'save', 'good', 'hintWord']) part(`coach.say.${k}`);
+  for (const k of ['warn', 'mate', 'capture', 'save', 'good']) part(`coach.say.${k}`);
   part('coach.lastHint');
   for (const type of ['K', 'Q', 'R', 'B', 'N', 'P']) part(`pieceNames.${type}`);
   for (let s = 0; s < 64; s++) {
     for (const k of ['at', 'from', 'to']) part(`coach.say.${k}`, { square: squareName(s) });
+  }
+
+  // ---- the two hints of positions with no recording of their own (see hintParts): the first is one sentence,
+  // the second, with too many pairs of squares to record, is two halves
+  for (let s = 0; s < 64; s++) {
+    const square = squareName(s);
+    say('checkmate.mate.hint1', { from: square });
+    say('hintSteps.from', { from: square });
+    say('hintSteps.to', { to: square });
   }
 
   return [...out];

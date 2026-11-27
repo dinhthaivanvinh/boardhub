@@ -156,8 +156,10 @@ không tải thêm gì. Khu Văn phòng có âm thanh riêng (`features/office/d
   - **Mỗi ván 3 gợi ý** (`HINT_LIMIT`, `use-coach.ts`); đi lại không trả lại lượt, "Ván mới" thì đếm lại. Gợi ý cuối kèm câu
     `coach.lastHint`. Tải lại trang là ván mới nên cũng đếm lại.
   - **Đọc to** (cài đặt `speakCoach`, bật sẵn): gợi ý được đọc khi bấm; cảnh báo chỉ đọc khi danh sách quân bị đe doạ **đổi**
-    (đọc tối đa 2 quân lớn nhất). Có nút "Nghe lại". Câu ghép từ quân và ô quá nhiều để thu trọn, nên `CoachAdvice.speech`
+    (đọc đủ mọi quân đang hiện chữ). Có nút "Nghe lại". Câu ghép từ quân và ô quá nhiều để thu trọn, nên `CoachAdvice.speech`
     trả các đoạn đã thu riêng, phát nối nhau bằng `speakParts`; thiếu đoạn nào thì giọng trình duyệt đọc cả câu.
+    **Lời đọc phải đúng từng từ với chữ hiển thị** (test `spoken-matches-shown.test.ts`), kể cả gợi ý của câu đố, trò
+    chơi nhỏ và xem lại ván (`hintParts`).
 - **Xem lại ván** (tuỳ game): gói game export `Review` (props `GameReviewProps` ở `client-registry.ts`); màn Xem lại hiện
   nút khi biết ghế của người xem. Cờ vua: [games/chess-learn.md](games/chess-learn.md) §1g.
 - `BoardProps.playSound`: cho bàn cờ tự diễn nước đi theo thời gian (Ô ăn quan kêu từng viên sỏi, khớp hiệu ứng).

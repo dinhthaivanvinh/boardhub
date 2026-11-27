@@ -89,6 +89,12 @@
     }
   },
   "match": {
+    "coach": {
+      "hint": "Gợi ý một nước (còn {left})",
+      "again": "Nghe lại",
+      "speak": "Đọc to cảnh báo và gợi ý",
+      "showThreats": "Cảnh báo quân đang bị đe doạ"
+    },
     "you": "Bạn",
     "player": "Người chơi {n}",
     "bot": "Máy ({level})",
@@ -396,6 +402,11 @@
     }
   },
   "portal": {
+    "mini": {
+      "title": "Trò chơi nhỏ",
+      "text": "Mã nhặt sao, Xe chặn Tốt, Đua Tốt: vừa chơi vừa tập đi quân.",
+      "cta": "Chơi ngay"
+    },
     "title": "Bắt đầu hành trình trở thành kiện tướng nhí!",
     "tagline": "Học cờ vua thật vui, khám phá những bí mật thú vị và chinh phục từng thử thách cùng chúng mình!",
     "ctaLearn": "Bắt đầu học ngay",

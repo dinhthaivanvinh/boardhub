@@ -6,6 +6,29 @@
     "0": "White",
     "1": "Black"
   },
+  "coach": {
+    "lastHint": "This is your last hint in this game.",
+    "say": {
+      "warn": "Careful! A piece is in danger.",
+      "mate": "You can checkmate!",
+      "capture": "You can win a piece.",
+      "save": "Keep your pieces safe.",
+      "good": "Try this move.",
+      "at": "on {square}.",
+      "from": "from {square}",
+      "to": "to {square}."
+    },
+    "threatened": "Careful! In danger: {pieces}.",
+    "pieceAt": "{piece} on {square}",
+    "cellThreatened": "in danger",
+    "cellHint": "suggested move",
+    "hint": {
+      "mate": "You can checkmate: {piece} from {from} to {to}!",
+      "capture": "You can win a piece: {piece} from {from} to {to}.",
+      "save": "Keep your pieces safe: {piece} from {from} to {to}.",
+      "good": "Try this move: {piece} from {from} to {to}."
+    }
+  },
   "pieceNames": {
     "K": "King",
     "Q": "Queen",
@@ -231,6 +254,10 @@
         "sum1": "The c3 and e3 pawns protect the d4 pawn.",
         "sum2": "The same set-up works in many games."
       }
+    },
+    "hintSteps": {
+      "from": "Hint: tap the piece on {from},",
+      "to": "then move it to {to}."
     },
     "hintFrom": "Hint: tap the piece on square {square}.",
     "hintTo": "Hint: tap the piece on {from}, then move it to {square}.",
@@ -709,6 +736,87 @@
       "done": "You can finish with checkmate using two rooks, and using a queen and king.",
       "fun": "Tip: before every move, check that the black king still has somewhere to go."
     },
+    "mini": {
+      "title": "Little games",
+      "subtitle": "Play with just a few pieces to learn to move them well. Every level gives up to 3 stars.",
+      "level": "Level {n}",
+      "pawnLevel": {
+        "1": "A new computer",
+        "2": "A steady computer",
+        "3": "A strong computer"
+      },
+      "stars": "{n}/{total} ⭐",
+      "choose": "Choose a level",
+      "back": "Back to the games",
+      "next": "Next level",
+      "undo": "Take back",
+      "restart": "Start again",
+      "moves": "Moves you have made: {count}",
+      "starsLeft": "{count} stars left",
+      "starsEarned": "You got {count} stars",
+      "illegal": "That piece cannot go to that square.",
+      "noWay": "It is hard to win from here. Tap Take back or Start again.",
+      "knight-stars": {
+        "name": "Star knight",
+        "text": "Jump the knight around to collect every star.",
+        "intro": "The knight moves in an L. Jump to every star. The knight may not stop on a square a black pawn watches.",
+        "prompt": "Collect all the stars in as few moves as you can.",
+        "guarded": "A black pawn watches that square. The knight may not go there.",
+        "collected": "You got a star!",
+        "won3": "Wonderful! You took the shortest way.",
+        "won2": "Well done! There is a slightly shorter way.",
+        "won1": "You got every star! Try again to find a shorter way."
+      },
+      "rook-wall": {
+        "name": "Rook against pawns",
+        "text": "One rook against a whole team of pawns.",
+        "intro": "You have one rook. Take every black pawn before one of them reaches the last row. Careful: pawns capture the rook diagonally.",
+        "prompt": "Take all the black pawns.",
+        "took": "You caught a pawn!",
+        "caught": "A pawn took your rook. Tap Take back and try another way.",
+        "queened": "A black pawn reached the last row. Tap Take back and try another way.",
+        "won3": "Wonderful! You won the shortest way.",
+        "won2": "Well done! You stopped the whole team.",
+        "won1": "You won! Try again to win faster."
+      },
+      "pawn-race": {
+        "name": "Pawn race",
+        "text": "The first pawn across the board wins.",
+        "intro": "There are only pawns. The first to bring a pawn to the other side wins. Taking all the other pawns wins too. If you cannot move at your turn, it is a draw.",
+        "prompt": "Bring a white pawn to the last row.",
+        "wonReached": "Your pawn got there first. You win!",
+        "wonAll": "You took every black pawn. You win!",
+        "lostReached": "A black pawn got there first. Try again.",
+        "lostAll": "All your pawns were taken. Try again.",
+        "draw": "No move left: a draw."
+      }
+    },
+    "review": {
+      "title": "Look over the game",
+      "close": "Close",
+      "working": "Looking over the game… {done}/{total}",
+      "moveNumber": "Move {n} of the game",
+      "kind": {
+        "allowedMate": "After this move your king can be checkmated.",
+        "stalemate": "This move leaves the other king with no move and not in check, so it is a draw.",
+        "missedMate": "Here you could give checkmate in one move.",
+        "hung": "After this move you can lose a piece.",
+        "missedFree": "Here you could have won a piece."
+      },
+      "show": "See what could happen",
+      "shownReply": "The other side can play this.",
+      "shownMove": "This is the move you played.",
+      "retry": "Try again",
+      "retryPrompt": "Play a better move from here.",
+      "right": "Right! That is much better.",
+      "wrong": "Not the better move yet. Try again.",
+      "illegal": "That piece cannot go to that square.",
+      "next": "Next moment",
+      "again": "See it from the start",
+      "clean": "I did not see a piece left behind or a mate in one missed. Well done!",
+      "limits": "This looks only one reply ahead, so it can miss things further away.",
+      "open": "Look over it together"
+    },
     "tactics": {
       "name": "Little tricks and endgames",
       "stage": {
@@ -778,9 +886,61 @@
     "groupTactics": "Tactics",
     "allLessons": "All lessons",
     "puzzles": {
+      "kindsHeading": "Practise one skill",
+      "mate1Heading": "Mate in one",
+      "kinds": {
+        "illegal": "That piece cannot go to that square.",
+        "free": {
+          "name": "Free piece",
+          "text": "Find a black piece you can take and come out ahead.",
+          "prompt": "Take the black piece that wins you something.",
+          "right": "Right! You are a piece ahead.",
+          "why": {
+            "noCapture": "That move takes nothing. Find a black piece you can win.",
+            "guarded": "Another piece guards that one. Taking it would cost you.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        },
+        "save": {
+          "name": "Save your piece",
+          "text": "One of your pieces is about to be taken. Save it.",
+          "prompt": "The circled piece is in danger. Do not lose any material.",
+          "marked": "The piece in danger is on {square}.",
+          "right": "Great! Your pieces are safe.",
+          "why": {
+            "stillDanger": "You still lose something. Try another way.",
+            "stalemate": "That move makes it a draw. Try another way.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        },
+        "fork": {
+          "name": "Fork",
+          "text": "One move attacks two pieces at once.",
+          "prompt": "Find the fork that wins material.",
+          "right": "A fork! They can only save one piece.",
+          "why": {
+            "notFork": "That move does not win anything yet. Find a move that attacks two pieces at once.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        },
+        "mate2": {
+          "name": "Mate in two",
+          "text": "Think further: checkmate in two moves.",
+          "prompt": "Find the first move, so that the next one is checkmate.",
+          "second": "Now give checkmate!",
+          "goOn": "Nice! See how Black answers.",
+          "right": "Checkmate! You saw two moves ahead.",
+          "why": {
+            "notForced": "After that move Black can still get away. Find another.",
+            "notMate": "That is not checkmate yet. Look again.",
+            "stalemate": "Oh, the black king is not in check but cannot move: a draw. Try again.",
+            "allowsMate": "Careful! After that your king is checkmated."
+          }
+        }
+      },
       "name": "Checkmate puzzles",
       "title": "Chess puzzles",
-      "subtitle": "Find the move that checkmates the black king in just 1 move. Every puzzle you solve is 1 ⭐!",
+      "subtitle": "Practise checkmates, free pieces, saving pieces and forks. Every puzzle solved is 1 ⭐!",
       "daily": {
         "title": "Today's puzzle",
         "text": "A new one every day. Solve one each day to keep your streak going!",
@@ -834,7 +994,8 @@
       "done": "Done",
       "allDone": "You finished every lesson. Great job!",
       "puzzlesTitle": "Solve puzzles",
-      "puzzlesText": "Train your eye to find checkmate. Each puzzle is 1 ⭐.",
+      "miniText": "Star knight, rook against pawns, pawn race.",
+      "puzzlesText": "Practise checkmates, free pieces, saving pieces and forks. Each puzzle is 1 ⭐.",
       "playTitle": "Play the computer",
       "playText": "This computer is just learning, so it often slips. You play White: take the pieces it leaves hanging!",
       "go": "Let's go",

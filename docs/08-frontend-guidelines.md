@@ -147,6 +147,21 @@ không tải thêm gì. Khu Văn phòng có âm thanh riêng (`features/office/d
 - `moveSounds(before, after): SoundCue[]`: hàm thuần, nhận hai **view** của người xem (không lộ thông tin ẩn), chỉ được gọi khi
   `moveCount` tăng đúng 1 (đi lại, resync, tải lại trang thì im lặng). Export từ package game, đăng ký trong `client-registry.ts`.
 - `music: 'calm' | 'folk' | 'sea'`: kiểu nhạc nền.
+- **Trợ giúp khi chơi với máy** (tuỳ game): gói game export `coach: Coach<View>` (`warn` sau mỗi nước, `hint` khi bấm nút),
+  trả `CoachAdvice { cells, text(t) }`. App đưa ô vào `BoardProps.assist` và hiện chữ dưới trạng thái ván (không chỉ dựa vào
+  màu). Chỉ bật ở chế độ `bot`; game không có `coach` thì không đổi gì. Cờ vua (`coach.ts`): cảnh báo quân bên mình mà đối
+  phương ăn thì lời (đã tính cả chuỗi đổi quân trên ô đó; không cảnh báo khi đang bị chiếu), tắt được bằng cài đặt
+  `showThreats`; gợi ý là chiếu hết 1 nước nếu có, nếu không thì nước không cho đối phương chiếu hết ngay, lời nhất sau một
+  nước đáp. Cả hai chỉ nhìn trước một nước, không thấy đòn xa hơn.
+  - **Mỗi ván 3 gợi ý** (`HINT_LIMIT`, `use-coach.ts`); đi lại không trả lại lượt, "Ván mới" thì đếm lại. Gợi ý cuối kèm câu
+    `coach.lastHint`. Tải lại trang là ván mới nên cũng đếm lại.
+  - **Đọc to** (cài đặt `speakCoach`, bật sẵn): gợi ý được đọc khi bấm; cảnh báo chỉ đọc khi danh sách quân bị đe doạ **đổi**
+    (đọc đủ mọi quân đang hiện chữ). Có nút "Nghe lại". Câu ghép từ quân và ô quá nhiều để thu trọn, nên `CoachAdvice.speech`
+    trả các đoạn đã thu riêng, phát nối nhau bằng `speakParts`; thiếu đoạn nào thì giọng trình duyệt đọc cả câu.
+    **Lời đọc phải đúng từng từ với chữ hiển thị** (test `spoken-matches-shown.test.ts`), kể cả gợi ý của câu đố, trò
+    chơi nhỏ và xem lại ván (`hintParts`).
+- **Xem lại ván** (tuỳ game): gói game export `Review` (props `GameReviewProps` ở `client-registry.ts`); màn Xem lại hiện
+  nút khi biết ghế của người xem. Cờ vua: [games/chess-learn.md](games/chess-learn.md) §1g.
 - `BoardProps.playSound`: cho bàn cờ tự diễn nước đi theo thời gian (Ô ăn quan kêu từng viên sỏi, khớp hiệu ứng).
 
 | Cue            | Khi nào                 | Game                        | Âm                                       |

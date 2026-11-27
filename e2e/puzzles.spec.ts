@@ -174,3 +174,39 @@ test('the home page does not scroll sideways', async ({ page }) => {
   const wider = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
   expect(wider).toBe(false);
 });
+
+for (const kind of ['free', 'save', 'fork', 'mate2'] as const) {
+  test(`a "${kind}" puzzle can be solved with its hints, and earns a star`, async ({ page }) => {
+    await page.goto('/puzzles');
+    await page.getByTestId(`puzzle-kind-${kind}`).click();
+    await expect(page.getByRole('grid')).toBeVisible();
+    const line = page.locator('.stage-aside [role="status"]').first();
+    const hint = page.getByRole('button', { name: /Gợi ý/ });
+    /** Asks for both hints and plays what they say. */
+    const followHints = async () => {
+      await expect(hint).toBeEnabled({ timeout: 15_000 });
+      await hint.click();
+      await hint.click();
+      await expect(line).toContainText(/tới ô [a-h][1-8]/);
+      const text = await line.innerText();
+      const from = /ô ([a-h][1-8])/.exec(text)![1]!;
+      const to = /tới ô ([a-h][1-8])/.exec(text)![1]!;
+      await page.locator(`[data-square="${from}"]`).click();
+      await page.locator(`[data-square="${to}"]`).click();
+    };
+    await followHints();
+    if (kind === 'mate2') {
+      await expect(page.getByTestId('mate-prompt')).toContainText('Bây giờ hãy chiếu hết!', {
+        timeout: 15_000,
+      });
+      await followHints();
+    }
+    await expect(page.getByTestId('puzzle-after')).toContainText('1 ⭐');
+    const wider = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+    expect(wider).toBe(false);
+    await page.getByRole('button', { name: 'Câu tiếp theo' }).click();
+    await expect(page.getByTestId('puzzle-after')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Về danh sách câu đố' }).first().click();
+    await expect(page.getByText('Đã giải 1/30 câu')).toHaveCount(1);
+  });
+}

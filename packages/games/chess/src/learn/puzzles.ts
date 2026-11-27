@@ -1,17 +1,32 @@
+import type { SkillKind } from './puzzle-kinds';
+import { SKILL_PUZZLE_DATA } from './puzzle-kinds-data';
 import { PUZZLE_DATA } from './puzzle-data';
 
 /** A "mate in one" puzzle: White to move, find the checkmate. Easy (1) to hard (3). */
 export type PuzzleTier = 1 | 2 | 3;
 export type Puzzle = { id: string; tier: PuzzleTier; fen: string };
+/** A puzzle that trains one skill (see puzzle-kinds.ts). White to move. */
+export type SkillPuzzle = { id: string; kind: SkillKind; fen: string };
 
 export const PUZZLE_TIERS: readonly PuzzleTier[] = [1, 2, 3];
-export const PUZZLES: readonly Puzzle[] = PUZZLE_DATA;
+export const MATE_PUZZLES: readonly Puzzle[] = PUZZLE_DATA;
+export const SKILL_PUZZLES: readonly SkillPuzzle[] = SKILL_PUZZLE_DATA;
+/** Every puzzle, for what counts them all: stars, badges, saved progress and statistics. */
+export const PUZZLES: readonly { id: string; fen: string }[] = [...MATE_PUZZLES, ...SKILL_PUZZLES];
 
-export const puzzlesOfTier = (tier: PuzzleTier): Puzzle[] => PUZZLES.filter((p) => p.tier === tier);
+export const puzzlesOfTier = (tier: PuzzleTier): Puzzle[] => MATE_PUZZLES.filter((p) => p.tier === tier);
+export const puzzlesOfKind = (kind: SkillKind): SkillPuzzle[] => SKILL_PUZZLES.filter((p) => p.kind === kind);
 
 /** The first puzzle of the tier that is not solved yet (the first one when all are solved). */
-export function nextPuzzle(tier: PuzzleTier, solved: ReadonlySet<string>, after?: string): Puzzle | null {
-  const list = puzzlesOfTier(tier);
+export const nextPuzzle = (tier: PuzzleTier, solved: ReadonlySet<string>, after?: string): Puzzle | null =>
+  nextIn(puzzlesOfTier(tier), solved, after);
+
+/** The same for any list of puzzles. */
+export function nextIn<T extends { id: string }>(
+  list: readonly T[],
+  solved: ReadonlySet<string>,
+  after?: string,
+): T | null {
   const start = after ? list.findIndex((p) => p.id === after) + 1 : 0;
   const order = [...list.slice(start), ...list.slice(0, start)];
   return order.find((p) => !solved.has(p.id)) ?? null;

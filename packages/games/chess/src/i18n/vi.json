@@ -6,6 +6,29 @@
     "0": "Trắng",
     "1": "Đen"
   },
+  "coach": {
+    "lastHint": "Đây là gợi ý cuối cùng trong ván này.",
+    "say": {
+      "warn": "Cẩn thận! Quân đang bị đe doạ.",
+      "mate": "Có nước chiếu hết!",
+      "capture": "Con ăn được quân.",
+      "save": "Hãy giữ quân an toàn.",
+      "good": "Con thử nước này.",
+      "at": "ở {square}.",
+      "from": "từ {square}",
+      "to": "đến {square}."
+    },
+    "threatened": "Cẩn thận! Quân đang bị đe doạ: {pieces}.",
+    "pieceAt": "{piece} ở {square}",
+    "cellThreatened": "đang bị đe doạ",
+    "cellHint": "nước được gợi ý",
+    "hint": {
+      "mate": "Có nước chiếu hết: {piece} từ {from} đến {to}!",
+      "capture": "Con ăn được quân: {piece} từ {from} đến {to}.",
+      "save": "Hãy giữ quân an toàn: {piece} từ {from} đến {to}.",
+      "good": "Con thử nước này: {piece} từ {from} đến {to}."
+    }
+  },
   "pieceNames": {
     "K": "Vua",
     "Q": "Hậu",
@@ -231,6 +254,10 @@
         "sum1": "Tốt c3 và e3 bảo vệ tốt d4.",
         "sum2": "Cùng một cách mở màn dùng được trong nhiều ván."
       }
+    },
+    "hintSteps": {
+      "from": "Gợi ý: bấm vào quân ở ô {from},",
+      "to": "rồi đi tới ô {to}."
     },
     "hintFrom": "Gợi ý: hãy bấm vào quân ở ô {square}.",
     "hintTo": "Gợi ý: bấm vào quân ở ô {from}, rồi đi tới ô {square}.",
@@ -709,6 +736,87 @@
       "done": "Con đã biết chiếu hết đến cùng bằng hai Xe, và bằng Hậu với Vua.",
       "fun": "Mẹo: trước mỗi nước, hãy nhìn xem Vua đen còn đường đi không."
     },
+    "mini": {
+      "title": "Trò chơi nhỏ",
+      "subtitle": "Chơi với vài quân cờ để đi quân thật khéo. Màn nào cũng được tối đa 3 sao.",
+      "level": "Màn {n}",
+      "pawnLevel": {
+        "1": "Máy mới tập",
+        "2": "Máy biết chơi",
+        "3": "Máy giỏi"
+      },
+      "stars": "{n}/{total} ⭐",
+      "choose": "Chọn màn",
+      "back": "Về danh sách trò chơi",
+      "next": "Màn tiếp theo",
+      "undo": "Đi lại",
+      "restart": "Chơi lại",
+      "moves": "Số nước con đã đi: {count}",
+      "starsLeft": "Còn {count} ngôi sao",
+      "starsEarned": "Con được {count} sao",
+      "illegal": "Quân đó không đi được tới ô đó.",
+      "noWay": "Từ thế này khó thắng rồi. Con hãy bấm Đi lại hoặc Chơi lại.",
+      "knight-stars": {
+        "name": "Mã nhặt sao",
+        "text": "Cho Mã nhảy đi nhặt hết các ngôi sao.",
+        "intro": "Mã đi hình chữ L. Hãy cho Mã nhảy đến tất cả các ngôi sao. Mã không được đứng ở ô mà Tốt đen đang canh.",
+        "prompt": "Nhặt hết sao với càng ít nước càng tốt.",
+        "guarded": "Ô đó có Tốt đen canh. Mã không được đứng vào.",
+        "collected": "Được một ngôi sao!",
+        "won3": "Tuyệt vời! Con đi đường ngắn nhất.",
+        "won2": "Giỏi lắm! Còn đường ngắn hơn một chút.",
+        "won1": "Con nhặt hết sao rồi! Thử lại để tìm đường ngắn hơn nhé."
+      },
+      "rook-wall": {
+        "name": "Xe chặn Tốt",
+        "text": "Một Xe chống lại cả đội Tốt.",
+        "intro": "Con có một Xe. Hãy ăn hết Tốt đen trước khi có quân Tốt nào đi đến hàng cuối. Cẩn thận: Tốt đen ăn chéo được Xe.",
+        "prompt": "Ăn hết Tốt đen.",
+        "took": "Bắt được một Tốt!",
+        "caught": "Tốt đen ăn mất Xe rồi. Con bấm Đi lại để thử cách khác nhé.",
+        "queened": "Tốt đen đến được hàng cuối. Con bấm Đi lại để thử cách khác nhé.",
+        "won3": "Tuyệt vời! Con thắng bằng đường ngắn nhất.",
+        "won2": "Giỏi lắm! Con đã chặn được cả đội Tốt.",
+        "won1": "Con thắng rồi! Thử lại để thắng nhanh hơn nhé."
+      },
+      "pawn-race": {
+        "name": "Đua Tốt",
+        "text": "Tốt của ai đến đích trước thì thắng.",
+        "intro": "Chỉ có các quân Tốt. Ai đưa được một Tốt sang hàng cuối bên kia trước thì thắng. Ăn hết Tốt của đối phương cũng thắng. Đến lượt mà không đi được nước nào thì hoà.",
+        "prompt": "Đưa một Tốt trắng đến hàng cuối.",
+        "wonReached": "Tốt của con về đích trước. Con thắng rồi!",
+        "wonAll": "Con ăn hết Tốt đen. Con thắng rồi!",
+        "lostReached": "Tốt đen về đích trước. Con thử lại nhé.",
+        "lostAll": "Tốt của con bị ăn hết. Con thử lại nhé.",
+        "draw": "Không còn nước đi: ván hoà."
+      }
+    },
+    "review": {
+      "title": "Xem lại ván",
+      "close": "Đóng",
+      "working": "Đang xem lại ván… {done}/{total}",
+      "moveNumber": "Nước thứ {n} của ván",
+      "kind": {
+        "allowedMate": "Sau nước này, đối phương chiếu hết được Vua của con.",
+        "stalemate": "Nước này làm Vua đối phương hết đường đi mà không bị chiếu, nên ván hoà.",
+        "missedMate": "Chỗ này con có thể chiếu hết trong một nước.",
+        "hung": "Sau nước này, con có thể bị mất quân.",
+        "missedFree": "Chỗ này con có thể ăn được lời một quân."
+      },
+      "show": "Xem chuyện gì xảy ra",
+      "shownReply": "Đối phương có thể đi như thế này.",
+      "shownMove": "Đây là nước con đã đi.",
+      "retry": "Thử đi lại",
+      "retryPrompt": "Con hãy đi lại nước này cho tốt hơn.",
+      "right": "Đúng rồi! Nước này tốt hơn nhiều.",
+      "wrong": "Chưa phải nước tốt hơn. Con thử lại nhé.",
+      "illegal": "Quân đó không đi được tới ô đó.",
+      "next": "Chỗ tiếp theo",
+      "again": "Xem từ đầu",
+      "clean": "Mình không thấy con bỏ quên quân hay lỡ chiếu hết một nước. Giỏi lắm!",
+      "limits": "Phần này chỉ nhìn trước một nước, nên có thể không thấy những đòn xa hơn.",
+      "open": "Xem lại cùng nhau"
+    },
     "tactics": {
       "name": "Mẹo nhỏ và tàn cuộc",
       "stage": {
@@ -778,9 +886,61 @@
     "groupTactics": "Chiến thuật",
     "allLessons": "Tất cả bài học",
     "puzzles": {
+      "kindsHeading": "Luyện từng kỹ năng",
+      "mate1Heading": "Chiếu hết 1 nước",
+      "kinds": {
+        "illegal": "Quân đó không đi được tới ô đó.",
+        "free": {
+          "name": "Quân cho không",
+          "text": "Tìm quân đen ăn được mà không bị thiệt.",
+          "prompt": "Hãy ăn quân đen mà con được lời.",
+          "right": "Đúng rồi! Con được lời một quân.",
+          "why": {
+            "noCapture": "Nước đó chưa ăn quân. Hãy tìm quân đen mà con ăn được lời.",
+            "guarded": "Quân đó có quân khác bảo vệ. Ăn vào con sẽ bị thiệt.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        },
+        "save": {
+          "name": "Cứu quân",
+          "text": "Một quân của con sắp bị ăn. Hãy cứu nó.",
+          "prompt": "Quân có vòng tròn đang gặp nguy. Hãy giữ cho con không mất quân.",
+          "marked": "Quân đang gặp nguy ở ô {square}.",
+          "right": "Giỏi quá! Quân của con đã an toàn.",
+          "why": {
+            "stillDanger": "Con vẫn còn mất quân. Hãy thử cách khác.",
+            "stalemate": "Nước đó làm ván hoà. Hãy thử cách khác.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        },
+        "fork": {
+          "name": "Chĩa hai mũi",
+          "text": "Một nước tấn công hai quân cùng lúc.",
+          "prompt": "Tìm nước chĩa hai mũi để được lời quân.",
+          "right": "Chĩa hai mũi! Đối phương chỉ cứu được một quân.",
+          "why": {
+            "notFork": "Nước đó chưa làm con được lời quân. Hãy tìm nước tấn công hai quân cùng lúc.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        },
+        "mate2": {
+          "name": "Chiếu hết 2 nước",
+          "text": "Nghĩ xa hơn: đi hai nước thì chiếu hết.",
+          "prompt": "Tìm nước đầu tiên để nước sau chiếu hết.",
+          "second": "Bây giờ hãy chiếu hết!",
+          "goOn": "Hay lắm! Xem Đen đáp lại.",
+          "right": "Chiếu hết! Con nghĩ được xa hai nước rồi.",
+          "why": {
+            "notForced": "Sau nước đó Đen còn cách thoát. Hãy tìm nước khác.",
+            "notMate": "Đó chưa phải chiếu hết. Hãy tìm lại.",
+            "stalemate": "Ôi, Vua đen không bị chiếu mà không đi được: ván hoà. Hãy thử lại.",
+            "allowsMate": "Cẩn thận! Đi như vậy Vua của con bị chiếu hết."
+          }
+        }
+      },
       "name": "Câu đố chiếu hết",
       "title": "Câu đố cờ vua",
-      "subtitle": "Tìm nước đi để chiếu hết vua đen chỉ trong 1 nước. Mỗi câu giải được là 1 ⭐!",
+      "subtitle": "Luyện chiếu hết, ăn quân, cứu quân và chĩa đôi. Mỗi câu giải được là 1 ⭐!",
       "daily": {
         "title": "Câu đố hôm nay",
         "text": "Mỗi ngày có một câu mới. Giải mỗi ngày để giữ chuỗi ngày liên tiếp nhé!",
@@ -834,7 +994,8 @@
       "done": "Đã xong",
       "allDone": "Bạn đã học hết mọi bài rồi. Giỏi lắm!",
       "puzzlesTitle": "Giải câu đố",
-      "puzzlesText": "Luyện mắt tìm nước chiếu hết, mỗi câu được 1 ⭐.",
+      "miniText": "Mã nhặt sao, Xe chặn Tốt, Đua Tốt.",
+      "puzzlesText": "Luyện chiếu hết, ăn quân, cứu quân và chĩa đôi, mỗi câu được 1 ⭐.",
       "playTitle": "Đấu thử với máy",
       "playText": "Máy này mới tập chơi nên hay đi sai. Bạn cầm quân trắng, ăn những quân máy để hớ nhé!",
       "go": "Đi thôi",

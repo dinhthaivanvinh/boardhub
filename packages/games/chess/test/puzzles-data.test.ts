@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { fromFen, inCheck, legalMoves, makeMove } from '../src/rules/board';
 import { matingMoves } from '../src/learn/checkmate';
-import { dailyPuzzle, nextPuzzle, PUZZLES, puzzlesOfTier } from '../src/learn/puzzles';
+import { dailyPuzzle, MATE_PUZZLES, nextPuzzle, puzzlesOfTier } from '../src/learn/puzzles';
 
 const day = (month: number, d: number) =>
   `2026-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
@@ -9,12 +9,12 @@ const day = (month: number, d: number) =>
 describe('mate-in-one puzzles', () => {
   it('has enough puzzles in every tier, with unique ids and positions', () => {
     for (const tier of [1, 2, 3] as const) expect(puzzlesOfTier(tier).length).toBeGreaterThanOrEqual(40);
-    expect(new Set(PUZZLES.map((p) => p.id)).size).toBe(PUZZLES.length);
-    expect(new Set(PUZZLES.map((p) => p.fen)).size).toBe(PUZZLES.length);
+    expect(new Set(MATE_PUZZLES.map((p) => p.id)).size).toBe(MATE_PUZZLES.length);
+    expect(new Set(MATE_PUZZLES.map((p) => p.fen)).size).toBe(MATE_PUZZLES.length);
   });
 
   it('every puzzle: White to move, nobody in check, no promotion, and a mate exists', () => {
-    for (const { id, fen } of PUZZLES) {
+    for (const { id, fen } of MATE_PUZZLES) {
       const pos = fromFen(fen);
       expect(pos.turn, id).toBe('w');
       expect(inCheck(pos.board, 'b'), id).toBe(false);

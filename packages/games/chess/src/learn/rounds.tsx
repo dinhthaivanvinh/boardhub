@@ -104,8 +104,11 @@ export function Panel({
   message,
   extra,
   nonce = 0,
+  parts,
   props,
 }: {
+  /** The message in recorded parts (see Status). */
+  parts?: readonly string[] | undefined;
   kind: string;
   prompt: string;
   progress: string;
@@ -123,7 +126,7 @@ export function Panel({
       </p>
       <ReadAloud text={prompt} voice={props.voice} t={props.t} />
       {extra}
-      <Status voice={props.voice} text={message} nonce={nonce} />
+      <Status voice={props.voice} text={message} nonce={nonce} parts={parts} />
     </>
   );
 }

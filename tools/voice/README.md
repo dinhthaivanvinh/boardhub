@@ -31,6 +31,12 @@ những câu không còn được đọc và ghi lại `index.json`. Muốn đ�
 
 Tiếng Anh chưa có file thu sẵn: dùng giọng của trình duyệt.
 
+## Danh sách file (`index.json`) luôn được kiểm tra lại
+
+Trang hỏi server mỗi lần xem `index.json` có đổi không (`no-cache` ở cả header lẫn lệnh `fetch`). Nếu dùng bản đã lưu,
+các câu mới của phiên bản mới sẽ không được tìm thấy và trên máy không có giọng Việt thì bị bỏ qua, không đọc gì.
+Câu được yêu cầu đọc trong lúc danh sách đang tải sẽ đợi danh sách về rồi mới đọc.
+
 ## Tại sao thư mục tên `vi-edge`
 
 Trình duyệt giữ file mp3 một ngày (và CDN có thể giữ lâu hơn). Tên file chỉ phụ thuộc vào câu chữ, nên nếu tạo lại file

@@ -89,6 +89,12 @@
     }
   },
   "match": {
+    "coach": {
+      "hint": "Suggest a move ({left} left)",
+      "again": "Hear it again",
+      "speak": "Read warnings and hints aloud",
+      "showThreats": "Warn me when a piece is in danger"
+    },
     "you": "You",
     "player": "Player {n}",
     "bot": "Computer ({level})",
@@ -396,6 +402,11 @@
     }
   },
   "portal": {
+    "mini": {
+      "title": "Little games",
+      "text": "Star knight, rook against pawns, pawn race: play and learn to move your pieces.",
+      "cta": "Play now"
+    },
     "title": "Start your journey to become a little chess champion!",
     "tagline": "Learn chess the fun way, discover its secrets and beat one challenge after another with us!",
     "ctaLearn": "Start learning now",

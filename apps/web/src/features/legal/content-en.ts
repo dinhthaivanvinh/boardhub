@@ -125,7 +125,7 @@ export const EN: InfoContent = {
               'BoardHub keeps some information in your browser’s storage (local storage and IndexedDB), so it works without an account:',
             ],
             list: [
-              'Progress in lessons, practice and puzzles, and the days played.',
+              'Progress of lessons, practice and puzzles, the stars of the little games, and the days you played.',
               'The history of games played on the device or against the computer.',
               'Sound, voice and board settings.',
               'The sign-in session of an account or guest name, and the “do not ask again” choice.',

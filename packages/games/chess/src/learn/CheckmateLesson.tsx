@@ -20,6 +20,7 @@ import {
   matingMoves,
   rescueKind,
 } from './checkmate';
+import { hintParts } from './hint-speech';
 import { LearnBoard, LessonLayout } from './LearnBoard';
 import { movesFrom, targetsFrom } from './logic';
 import { DoneCard, LessonHeader } from './LessonChrome';
@@ -297,7 +298,13 @@ function JudgeRoundView(props: RoundProps<JudgeRound>) {
 
 /** Find the move that gives checkmate. A move that does not is played out, so the child sees the king escape. */
 /** `after` is shown in place of the hint button once the round is solved (e.g. a button to the next puzzle). */
-export function MateRoundView(props: RoundProps<MateRound> & { after?: ReactNode }) {
+export function MateRoundView(
+  props: RoundProps<MateRound> & {
+    after?: ReactNode;
+    /** For positions whose hints have no recording of their own (the puzzles): read them from parts. */
+    spokenInParts?: boolean;
+  },
+) {
   const { round, progress, t, c, animate, delay, onSolved } = props;
   const start = useMemo(() => fromFen(round.fen), [round]);
   const mates = useMemo(() => matingMoves(start), [start]);
@@ -361,6 +368,8 @@ export function MateRoundView(props: RoundProps<MateRound> & { after?: ReactNode
   const target = mates[0];
   if (!solved && !busy && target && hint >= 1) hinted.add(target.from);
   if (!solved && !busy && target && hint >= 2) hinted.add(target.to);
+  const parts =
+    props.spokenInParts && !message && hint >= 1 && target ? hintParts(t, target, hint).parts : undefined;
   return (
     <LessonLayout
       board={
@@ -385,6 +394,7 @@ export function MateRoundView(props: RoundProps<MateRound> & { after?: ReactNode
         prompt={c('prompt.mate')}
         progress={progress}
         message={message || (hint >= 1 && target ? hintText(c, hint, target) : '')}
+        parts={parts}
         extra={
           solved ? (
             props.after

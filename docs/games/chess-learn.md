@@ -48,6 +48,51 @@ này xong là xong bài), **xe + vua** là thử thách thêm sau khi xong.
 - Gợi ý: có chiếu hết 1 nước thì tô sáng quân rồi ô đến; không có thì nói bước tiếp theo của cách làm (`mateTip`). Không có bộ
   giải tìm nước tốt nhất. Mỗi thế có một đường thắng trong test, nên luôn thắng được trước máy này.
 
+## 1e. Câu đố (`/puzzles`)
+
+- **Chiếu hết 1 nước:** 150 câu, 3 mức (`puzzle-data.ts`, `tools/puzzles/generate.mts`). Câu đố hôm nay chỉ lấy từ đây.
+- **Luyện từng kỹ năng** (`puzzle-kinds.ts`, `PuzzleRoundView.tsx`; 30 câu mỗi loại, `tools/puzzles/generate-kinds.mts`):
+  - `free` Quân cho không: đúng khi sau cả chuỗi đổi quân trên ô đó lời ít nhất bằng một mã; thế nào cũng có một quân "nhử"
+    có người bảo vệ.
+  - `save` Cứu quân: một quân (từ mã trở lên) đang bị đe doạ, được khoanh tròn; đúng khi sau nước đó không còn quân nào
+    bị mất, nước đó không tự thiệt và không cho đối phương chiếu hết ngay (có thể có nhiều đáp án).
+  - `fork` Chĩa hai mũi: quân vừa đi tấn công hai quân lớn, không bị ăn, và đáp thế nào cũng còn lời ít nhất một mã.
+  - `mate2` Chiếu hết 2 nước: đúng một nước đầu; máy chọn câu đáp để lại ít đường chiếu hết nhất, rồi bé chiếu hết.
+- Đáp án luôn do engine tính; test kiểm tra lại từng thế (`isFairPuzzle`). Cách tính quân chỉ nhìn chuỗi đổi trên một ô và
+  một nước đáp, không phải máy phân tích sâu.
+- Mỗi câu 1 ⭐; tiến độ, đồng bộ tài khoản và thống kê dùng chung như câu đố cũ (id `free-01`, `save-01`, `fork-01`,
+  `two-01`). Server cần bản mới để nhận các id này khi ghi thống kê và đồng bộ.
+- Gợi ý của câu đố được đọc từ các đoạn thu sẵn (`hint-speech.ts`).
+
+## 1f. Trò chơi nhỏ (`/mini-games`, mã ở `mini/`)
+
+Ba trò chỉ có vài quân, **không có vua** nên không dùng engine cờ vua; luật là hàm thuần riêng. Màn nào cũng có Gợi ý,
+Đi lại, Chơi lại và không bị khoá.
+
+- **Mã nhặt sao** (`knight-stars`, 8 màn): nhặt hết sao; không đứng vào ô có tốt đen canh. 3 sao khi đi đường ngắn nhất,
+  2 sao nếu hơn không quá 3 nước, 1 sao khi hoàn thành.
+- **Xe chặn Tốt** (`rook-wall`, 5 màn): ăn hết tốt trước khi một tốt đến hàng cuối; tốt ăn được xe thì thua. Phe tốt đi theo
+  quy tắc cố định (`pawnsReply`): ăn xe, phong cấp, nếu không thì đẩy tốt vào ô an toàn nhất. Tính sao như trên.
+- **Đua Tốt** (`pawn-race`, 3 mức máy): tốt đến hàng cuối trước hoặc ăn hết tốt đối phương thì thắng; đến lượt mà không đi
+  được thì hoà (luật của trò này). Có bắt tốt qua đường. Thắng 3 sao, hoà 1 sao.
+- Test chứng minh mọi màn Mã và Xe giải được; Đua Tốt được kiểm bằng máy đấu máy (bên chơi giỏi thắng được cả 3 mức).
+- Sao lưu **chỉ trên máy này** (`localStorage` `learn.chess.mini.v1`): chưa đồng bộ theo tài khoản, không tính vào cấp bậc
+  và không gửi thống kê.
+
+## 1g. Xem lại ván (`review.ts`, `GameReview.tsx`)
+
+Sau ván cờ vua mà người dùng có một bên của mình: ván với máy (nút ngay sau ván, hoặc ở màn Xem lại) và ván online mình
+chơi (màn Xem lại). Không có ở ván hai người chung một máy.
+
+- Chỉ xét **nước của người đó**, tìm: để đối phương chiếu hết 1 nước (`allowedMate`), làm hoà do hết nước đi khi đang hơn
+  quân (`stalemate`), lỡ chiếu hết 1 nước (`missedMate`), để quân từ mã trở lên bị mất (`hung`), lỡ ăn lời một quân từ mã
+  trở lên (`missedFree`). Mất một tốt thì không nhắc.
+- Hiện **tối đa 2 chỗ** nặng nhất, theo thứ tự xảy ra. Mỗi chỗ: lời giải thích có giọng đọc, xem chuyện gì xảy ra, **đi
+  lại** (mọi nước sửa được lỗi đều nhận, `putsRight`), gợi ý hai mức.
+- Không thấy gì thì nói đúng điều đã kiểm. Chỉ nhìn **một nước đáp**, màn hình ghi rõ giới hạn này; không phải máy phân
+  tích như cờ thủ mạnh.
+- Chạy trong trình duyệt, mỗi nhịp một nước để trang không đứng. Không gửi gì lên server.
+
 ## 2. Tính năng 1: Giới thiệu quân cờ
 
 Thứ tự bài: Tốt → Xe → Tượng → Mã → Hậu → Vua. Sau đó các bài đặc biệt: bắt tốt qua đường, nhập thành, phong cấp.

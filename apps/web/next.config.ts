@@ -29,7 +29,7 @@ const config: NextConfig = {
   // The round "N" tool button of `next dev` covers the lesson menu; it is not part of the site.
   devIndicators: false,
   // The pre-recorded lesson voice (public/audio): a sentence's file is named after its text, so it can be kept for
-  // a day; the list of files is checked more often.
+  // a day; the list of files is checked each time, or a new version's sentences would not be found.
   // There is no list of lessons any more: the home page has the path.
   async redirects() {
     return [{ source: '/learn/chess', destination: '/', permanent: false }];
@@ -52,7 +52,7 @@ const config: NextConfig = {
       },
       {
         source: '/audio/:lang/index.json',
-        headers: [{ key: 'Cache-Control', value: 'public, max-age=300, stale-while-revalidate=86400' }],
+        headers: [{ key: 'Cache-Control', value: 'no-cache' }],
       },
     ];
   },

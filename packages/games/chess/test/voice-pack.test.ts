@@ -7,6 +7,8 @@ import {
   loadVoicePack,
   resetVoicePacks,
   speak,
+  speakParts,
+  stopSpeaking,
   voiceStatus,
   waitUntilSilent,
 } from '../src/learn/speech';
@@ -157,6 +159,80 @@ describe('the recorded voice', () => {
     expect(hasVoicePack('en')).toBe(false);
     expect(speak('Correct!', 'en')).toBe(true);
     expect(said).toEqual(['Correct!']);
+  });
+
+  it('plays the parts of a sentence one after the other, and stops when told', async () => {
+    const played = installAudio();
+    installBrowserVoice([]);
+    const keys = ['Mã', 'ở bê 6.', 'từ bê 1'].map(voiceKey);
+    installFetch(keys);
+    await loadVoicePack('vi');
+
+    expect(speakParts(['Mã', 'ở b6.', 'từ b1'], 'vi')).toBe(true);
+    expect(played).toHaveLength(1);
+    played[0]!.el.finish();
+    expect(played.map((p) => p.url)).toEqual(keys.slice(0, 2).map((k) => `/audio/vi-edge/${k}.mp3`));
+    stopSpeaking();
+    played[1]!.el.finish();
+    expect(played).toHaveLength(2);
+  });
+
+  it('the browser voice reads the whole sentence when a part has no file', async () => {
+    const played = installAudio();
+    const said = installBrowserVoice([{ lang: 'vi-VN', name: 'Vietnamese' }]);
+    installFetch([voiceKey('Mã')]);
+    await loadVoicePack('vi');
+
+    expect(speakParts(['Mã', 'ở b6.'], 'vi')).toBe(true);
+    expect(played).toEqual([]);
+    expect(said).toEqual(['Mã ở bê 6.']);
+  });
+
+  // A screen asks its first question as it appears, while the list is still on its way. The browser here has
+  // voices but none for Vietnamese, so falling back to it would leave the question unread.
+  it('a sentence asked for while the list is loading is played once it has arrived', async () => {
+    const played = installAudio();
+    const said = installBrowserVoice([{ lang: 'en-US', name: 'English' }]);
+    installFetch([KEY]);
+    const loaded = loadVoicePack('vi');
+
+    expect(speak(SENTENCE, 'vi')).toBe(true);
+    let silent = false;
+    void waitUntilSilent().then(() => (silent = true));
+    expect(silent).toBe(false); // it is still to be said
+    await loaded;
+    await waitFor(() => played.length === 1);
+    expect(played.map((p) => p.url)).toEqual([`/audio/vi-edge/${KEY}.mp3`]);
+    expect(said).toEqual([]);
+  });
+
+  it('only the last sentence asked for while loading is said, and none after being told to stop', async () => {
+    const played = installAudio();
+    installBrowserVoice([]);
+    installFetch([KEY, voiceKey('Mã')]);
+    let loaded = loadVoicePack('vi');
+    speak(SENTENCE, 'vi');
+    speakParts(['Mã'], 'vi');
+    await loaded;
+    await new Promise((r) => setTimeout(r, 0));
+    expect(played.map((p) => p.url)).toEqual([`/audio/vi-edge/${voiceKey('Mã')}.mp3`]);
+
+    resetVoicePacks();
+    played.length = 0;
+    loaded = loadVoicePack('vi');
+    speak(SENTENCE, 'vi');
+    stopSpeaking();
+    await loaded;
+    await new Promise((r) => setTimeout(r, 0));
+    expect(played).toEqual([]);
+  });
+
+  // A kept copy of the list would not name the sentences added by a new version of the site.
+  it('asks the server whether the list has changed before using a kept copy', async () => {
+    installAudio();
+    installFetch([KEY]);
+    await loadVoicePack('vi');
+    expect(globalThis.fetch).toHaveBeenCalledWith('/audio/vi-edge/index.json', { cache: 'no-cache' });
   });
 
   it('looks for the recordings once, not at every sentence', async () => {

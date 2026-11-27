@@ -36,8 +36,20 @@ beforeEach(() => {
   });
 });
 
+/**
+ * A sentence read in parts (see `speakParts`) reaches the browser voice joined, as there are no files here: it is
+ * fine only when it splits entirely into sentences that each have a recording.
+ */
+function isRecorded(text: string): boolean {
+  if (allowed.has(text)) return true;
+  for (let at = text.indexOf(' '); at !== -1; at = text.indexOf(' ', at + 1)) {
+    if (allowed.has(text.slice(0, at)) && isRecorded(text.slice(at + 1))) return true;
+  }
+  return false;
+}
+
 afterEach(() => {
-  const unknown = recorded.filter((text) => !allowed.has(text));
+  const unknown = recorded.filter((text) => !isRecorded(text));
   recorded.length = 0;
   if (unknown.length > 0) {
     throw new Error(

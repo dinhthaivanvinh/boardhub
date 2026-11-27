@@ -117,6 +117,18 @@ export default async function HomePage() {
           <DailyChallenge />
         </section>
 
+        <section aria-labelledby="home-mini" className="adv-mini">
+          <div>
+            <h2 id="home-mini" className="adv-mini-title">
+              {t('mini.title')}
+            </h2>
+            <p>{t('mini.text')}</p>
+          </div>
+          <Link href="/mini-games" className="adv-btn adv-btn-primary" data-testid="home-mini-go">
+            {t('mini.cta')}
+          </Link>
+        </section>
+
         <section aria-labelledby="home-play">
           <h2 id="home-play" className="adv-section-title">
             {t('play.title')}
